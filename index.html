@@ -3,18 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Connect with Tomás</title>
-  <script src="https://platform.linkedin.com/in.js" type="text/javascript">
-    lang: en_US
+  <title>Connecting you to Tomás…</title>
+  <!-- Instant redirect -->
+  <script>
+    window.location.href = 
+      "https://www.linkedin.com/messaging/thread/new/"
+      + "?recipients=urn:li:fs_miniProfile:ACoAACffLcgBzgUcIVt6-5XMXKMBB7TF4QU9gKA"
+      + "&message=Hey%20Tom%C3%A1s%2C%20I%27d%20love%20to%20connect%20and%20share%20insights%21";
   </script>
 </head>
 <body>
-  <h1>Connect with Tomás on LinkedIn</h1>
-  <script type="IN/MemberProfile"
-          data-id="https://www.linkedin.com/in/tomasmbatalha/"
-          data-format="inline"
-          data-text="Connect with me on LinkedIn"
-          data-invite-message="Hey Tomás, I’d love to connect and share insights!">
+  <p>Redirecting you to LinkedIn…</p>
+  <p>If you’re not automatically redirected, <a id="link" href="#">
+    click here to connect with Tomás
+  </a>.</p>
+  <script>
+    // Set the fallback link
+    document.getElementById("link").href = window.location.href;
   </script>
 </body>
 </html>
