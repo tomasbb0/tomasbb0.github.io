@@ -184,66 +184,33 @@
         height: 180px;
       }
 
-      /* ===== LOADER ===== */
-      .loading-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: #000;
-        z-index: 10000;
-        display: flex; /* Changed from none to flex */
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 0;
-      }
-      .loading-overlay.visible {
-        display: flex;
-      }
-      .loading-overlay.fade-out {
-        animation: fadeOutOverlay 0.5s ease 3.5s forwards; /* Added delay */
-      }
-      @keyframes fadeOutOverlay {
-        from { opacity: 1; }
-        to { opacity: 0; pointer-events: none; }
-      }
-      .loading-logo {
-        transform: scale(2.5);
-        margin-bottom: 24px;
-      }
-       .loading-overlay.visible .loading-logo {
-        animation: logoZoomOut 0.8s cubic-bezier(0.16, 1, 0.3, 1) 2.2s forwards;
-      }
-      .loading-logo .logo-b {
+      /* ===== HERO LOGO DRAW ANIMATION ===== */
+      .hero-logo .logo-b {
         stroke-dasharray: 400;
         stroke-dashoffset: 400;
-      }
-      .loading-overlay.visible .loading-logo .logo-b {
         animation: drawB 1s ease-out 0.3s forwards;
       }
-      .loading-logo .logo-b-bar {
+      .hero-logo .logo-b-bar {
         stroke-dasharray: 38;
         stroke-dashoffset: 38;
-      }
-      .loading-overlay.visible .loading-logo .logo-b-bar {
         animation: drawBbar 0.3s ease-out 0.9s forwards;
       }
-      .loading-logo .logo-l {
+      .hero-logo .logo-l {
         stroke-dasharray: 160;
         stroke-dashoffset: 160;
-      }
-      .loading-overlay.visible .loading-logo .logo-l {
         animation: drawL 0.7s ease-out 1.1s forwards;
       }
-       @keyframes logoZoomOut {
-        0% {
-          transform: scale(2.5);
-        }
-        100% {
-          transform: scale(1);
-        }
+      @keyframes drawB {
+        from { stroke-dashoffset: 400; }
+        to { stroke-dashoffset: 0; }
+      }
+      @keyframes drawBbar {
+        from { stroke-dashoffset: 38; }
+        to { stroke-dashoffset: 0; }
+      }
+      @keyframes drawL {
+        from { stroke-dashoffset: 160; }
+        to { stroke-dashoffset: 0; }
       }
 
       /* ===== HERO ===== */
@@ -1228,38 +1195,6 @@
     </style>
   </head>
   <body>
-    <!-- Loading Overlay -->
-    <div id="loading-overlay" class="loading-overlay visible">
-      <div class="loading-logo">
-        <svg viewBox="-2 -2 100 114" width="72" height="78" fill="none">
-          <path
-            class="logo-b"
-            d="M10,6 L48,6 L58,16 L58,38 L48,48 L58,58 L58,84 L48,96 L10,96 Z"
-            stroke="#ffffff"
-            stroke-width="2.5"
-            fill="none"
-            stroke-linejoin="miter"
-          />
-          <line
-            class="logo-b-bar"
-            x1="10"
-            y1="48"
-            x2="48"
-            y2="48"
-            stroke="#ffffff"
-            stroke-width="2.5"
-          />
-          <polyline
-            class="logo-l"
-            points="70,4 70,70 48,96 92,96"
-            stroke="#ffffff"
-            stroke-width="2.5"
-            fill="none"
-            stroke-linejoin="miter"
-          />
-        </svg>
-      </div>
-    </div>
     <canvas class="bg-canvas" id="heroWave"></canvas>
 
     <!-- NAV -->
@@ -2481,31 +2416,12 @@
         if (e.key === "Escape") closeAgentModal();
       });
 
-      window.addEventListener("load", () => {
-        const loadingOverlay = document.getElementById("loading-overlay");
-        setTimeout(() => {
-          loadingOverlay.classList.add("fade-out");
-        }, 2500); // Start fade out before animation ends
-      });
-
       function setLang(lang) {
         document.documentElement.lang = lang;
         document.querySelectorAll("[data-en][data-pt]").forEach(function (el) {
           var text = el.getAttribute("data-" + lang);
           if (text) {
-            // For elements with child nodes (like the LinkedIn button with SVG), only update text nodes
-            if (el.children.length > 0) {
-              // Find the last text node and update it
-              var nodes = el.childNodes;
-              for (var i = nodes.length - 1; i >= 0; i--) {
-                if (nodes[i].nodeType === 3 && nodes[i].textContent.trim()) {
-                  nodes[i].textContent = text;
-                  break;
-                }
-              }
-            } else {
-              el.innerHTML = text;
-            }
+            el.innerHTML = text;
           }
         });
         // Toggle active class on buttons
