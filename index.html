@@ -48,6 +48,27 @@
         background: var(--bg);
         color: var(--text);
         min-height: 100vh;
+        overflow-x: hidden;
+        scroll-behavior: smooth;
+      }
+      /* Full-page scroll snap for sections */
+      html {
+        scroll-snap-type: y proximity;
+      }
+      .hero, .products, .about, .tech, .cta-section {
+        scroll-snap-align: start;
+      }
+      /* Section reveal animation base */
+      .section-reveal {
+        opacity: 0;
+        transform: translateY(60px) scale(0.97);
+        transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+                    transform 1s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+      .section-reveal.revealed {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
         -webkit-font-smoothing: antialiased;
       }
       .container {
@@ -1084,7 +1105,7 @@
       </section>
 
       <!-- PRODUCTS -->
-      <section class="products" id="products">
+      <section class="products section-reveal" id="products">
         <div class="container">
           <span class="section-label">Products</span>
           <h2 class="section-title">What I've built.</h2>
@@ -1101,7 +1122,7 @@
             >
               <div class="product-header">
                 <div class="product-icon green has-logo">
-                  <img src="logos/jobpilot.svg" alt="JobPilot AI" />
+                  <img src="logos/jobpilot.png" alt="JobPilot AI" />
                 </div>
                 <span class="badge-live">Live</span>
               </div>
@@ -1514,7 +1535,7 @@
       </section>
 
       <!-- ABOUT -->
-      <section class="about" id="about">
+      <section class="about section-reveal" id="about">
         <div class="container">
           <div class="about-grid">
             <div class="about-text">
@@ -1562,7 +1583,7 @@
       </section>
 
       <!-- TECH STACK -->
-      <section class="tech" id="stack">
+      <section class="tech section-reveal" id="stack">
         <div class="container" style="text-align: center">
           <span class="section-label">Stack</span>
           <h2 class="section-title">Technologies I work with</h2>
@@ -1590,7 +1611,7 @@
       </section>
 
       <!-- CTA -->
-      <section class="cta-section">
+      <section class="cta-section section-reveal">
         <div class="container">
           <div class="cta-box">
             <h2>Let's build something together.</h2>
@@ -1981,7 +2002,11 @@
             var px = ((x + 0.5) * 100).toFixed(0);
             var py = ((y + 0.5) * 100).toFixed(0);
             card.style.background =
-              "radial-gradient(circle at " + px + "% " + py + "%, rgba(16,185,129,0.06), transparent 60%), var(--surface)";
+              "radial-gradient(circle at " +
+              px +
+              "% " +
+              py +
+              "%, rgba(16,185,129,0.06), transparent 60%), var(--surface)";
           });
           card.addEventListener("mouseleave", function () {
             card.style.transform = "";
@@ -2043,11 +2068,28 @@
             fadeObserver.observe(el);
           });
 
+        // Full section reveal on scroll
+        var sectionRevealObserver = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("revealed");
+                sectionRevealObserver.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.08, rootMargin: "0px 0px -80px 0px" },
+        );
+        document.querySelectorAll(".section-reveal").forEach(function (s) {
+          sectionRevealObserver.observe(s);
+        });
+
         // Smooth parallax scrolling for hero + floating BL watermark
         var hero = document.querySelector(".hero-content");
         var heroSection = document.querySelector(".hero");
         var blWatermark = document.getElementById("blWatermark");
-        var totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+        var totalHeight =
+          document.documentElement.scrollHeight - window.innerHeight;
 
         window.addEventListener(
           "scroll",
@@ -2075,7 +2117,15 @@
               var xShift = Math.cos(scrollPct * Math.PI * 3) * 50;
               var opacity = 0.025 + Math.sin(scrollPct * Math.PI) * 0.02;
               blWatermark.style.transform =
-                "translate(calc(-50% + " + xShift + "px), calc(-50% + " + yShift + "px)) rotate(" + rotation + "deg) scale(" + scale + ")";
+                "translate(calc(-50% + " +
+                xShift +
+                "px), calc(-50% + " +
+                yShift +
+                "px)) rotate(" +
+                rotation +
+                "deg) scale(" +
+                scale +
+                ")";
               blWatermark.style.opacity = opacity;
             }
           },
