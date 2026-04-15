@@ -351,7 +351,7 @@
 
       /* ===== PRODUCTS ===== */
       .products {
-        padding: 100px 0;
+        padding: 100px 32px;
         background: rgba(255, 255, 255, 0.001);
         backdrop-filter: blur(3px) saturate(120%);
         -webkit-backdrop-filter: blur(3px) saturate(120%);
@@ -727,7 +727,7 @@
 
       /* ===== ABOUT ===== */
       .about {
-        padding: 100px 0;
+        padding: 100px 32px;
         background: rgba(255, 255, 255, 0.001);
         backdrop-filter: blur(3px) saturate(120%);
         -webkit-backdrop-filter: blur(3px) saturate(120%);
@@ -782,7 +782,7 @@
 
       /* ===== TECH ===== */
       .tech {
-        padding: 80px 0;
+        padding: 80px 32px;
         background: rgba(255, 255, 255, 0.001);
         backdrop-filter: blur(3px) saturate(120%);
         -webkit-backdrop-filter: blur(3px) saturate(120%);
@@ -808,7 +808,7 @@
 
       /* ===== CTA ===== */
       .cta-section {
-        padding: 80px 0;
+        padding: 80px 32px;
         text-align: center;
         background: rgba(255, 255, 255, 0.001);
         backdrop-filter: blur(3px) saturate(120%);
@@ -889,7 +889,7 @@
 
       /* ===== TEAM / ORG CHART ===== */
       .team {
-        padding: 100px 0;
+        padding: 100px 32px;
         background: rgba(255, 255, 255, 0.001);
         backdrop-filter: blur(3px) saturate(120%);
         -webkit-backdrop-filter: blur(3px) saturate(120%);
@@ -1278,6 +1278,13 @@
       <!-- HERO -->
       <section class="hero">
         <div class="container">
+          <div class="hero-logo">
+            <svg viewBox="-2 -2 100 114" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path class="logo-b" d="M10,6 L48,6 L58,16 L58,38 L48,48 L58,58 L58,84 L48,96 L10,96 Z" stroke="#ffffff" stroke-width="2.5" fill="none" stroke-linejoin="miter" stroke-linecap="butt"/>
+              <line class="logo-b-bar" x1="10" y1="48" x2="48" y2="48" stroke="#ffffff" stroke-width="2.5"/>
+              <polyline class="logo-l" points="70,4 70,70 48,96 92,96" stroke="#ffffff" stroke-width="2.5" fill="none" stroke-linejoin="miter" stroke-linecap="butt"/>
+            </svg>
+          </div>
           <div class="hero-badge" style="display: none">
             &#9889; Building in public · Lisbon, Portugal
           </div>
@@ -1288,10 +1295,10 @@
             Strategy. Technology.<br /><em>Results.</em>
           </h1>
           <p
-            data-en="I'm Tomás Batalha. I run The Burnay Labs — a holding company with two pillars: strategic consulting for businesses seeking growth, and technology ventures that ship real products. From AI-powered platforms to education tools."
-            data-pt="Sou o Tomás Batalha. Dirijo a The Burnay Labs — uma holding com dois pilares: consultoria estratégica para empresas que procuram crescimento e ventures tecnológicas que lançam produtos reais. De plataformas com IA a ferramentas de educação."
+            data-en="I'm Tomás Batalha. I run The Burnay Labs. a holding company with two pillars: strategic consulting for businesses seeking growth, and technology ventures that ship real products. From AI-powered platforms to education tools."
+            data-pt="Sou o Tomás Batalha. Dirijo a The Burnay Labs. uma holding com dois pilares: consultoria estratégica para empresas que procuram crescimento e ventures tecnológicas que lançam produtos reais. De plataformas com IA a ferramentas de educação."
           >
-            I'm Tomás Batalha. I run The Burnay Labs — a holding company with
+            I'm Tomás Batalha. I run The Burnay Labs. a holding company with
             two pillars: strategic consulting for businesses seeking growth, and
             technology ventures that ship real products. From AI-powered
             platforms to education tools.
@@ -1324,13 +1331,13 @@
               >
             </div>
             <div class="hero-stat">
-              <strong>4</strong
+              <strong>7</strong
               ><span data-en="Live & Shipped" data-pt="Ao Vivo & Lançados"
                 >Live &amp; Shipped</span
               >
             </div>
             <div class="hero-stat">
-              <strong>9</strong
+              <strong>5</strong
               ><span data-en="In Beta" data-pt="Em Beta">In Beta</span>
             </div>
             <div class="hero-stat">
@@ -1366,7 +1373,7 @@
             deliver results.
           </p>
           <div class="products-grid">
-            <!-- JobPilot AI — LIVE -->
+            <!-- JobPilot AI. LIVE -->
             <a
               href="https://jobpilot.pt"
               target="_blank"
@@ -1402,7 +1409,7 @@
               </span>
             </a>
 
-            <!-- Maktub — LIVE (Confidential) -->
+            <!-- Maktub. LIVE (Confidential) -->
             <div class="product-card featured product-card-div parallax-card">
               <div class="product-header">
                 <div class="product-icon green has-logo">
@@ -1435,7 +1442,7 @@
               </span>
             </div>
 
-            <!-- Mr Blue — LIVE (Confidential) -->
+            <!-- Mr Blue. LIVE (Confidential) -->
             <div class="product-card featured product-card-div parallax-card">
               <div class="product-header">
                 <div class="product-icon green has-logo">
@@ -1468,16 +1475,17 @@
               </span>
             </div>
 
-            <!-- TopResume.ai — BETA -->
-            <div
-              onclick="openModal('topresume')"
-              class="product-card parallax-card"
+            <!-- TopResume.ai. LIVE -->
+            <a
+              href="https://theburnaylabs.pt/cv-platform/"
+              target="_blank"
+              class="product-card featured parallax-card"
             >
               <div class="product-header">
                 <div class="product-icon purple has-logo">
                   <img src="logos/topresume.svg" alt="TopResume.ai" />
                 </div>
-                <span class="badge-beta">Beta</span>
+                <span class="badge-live">Live</span>
               </div>
               <h3>TopResume.ai</h3>
               <p class="product-desc">
@@ -1491,19 +1499,12 @@
                 <span class="product-tag">Editor</span>
               </div>
               <span class="product-link">
-                Learn More
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path d="M7 17L17 7M17 7H7M17 7v10" />
-                </svg>
+                theburnaylabs.pt/cv-platform
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10" /></svg>
               </span>
-            </div>
+            </a>
 
-            <!-- The Burnay Labs Education — LIVE -->
+            <!-- The Burnay Labs Education. LIVE -->
             <a
               href="https://theburnaylabs.pt/burnaylabs-site/"
               target="_blank"
@@ -1539,7 +1540,7 @@
               </span>
             </a>
 
-            <!-- VendasIA — BETA -->
+            <!-- VendasIA. BETA -->
             <div
               onclick="openModal('vendasia')"
               class="product-card parallax-card"
@@ -1574,7 +1575,7 @@
               </span>
             </div>
 
-            <!-- MBA Coach — BETA -->
+            <!-- MBA Coach. BETA -->
             <div
               onclick="openModal('mbacoach')"
               class="product-card parallax-card"
@@ -1609,16 +1610,17 @@
               </span>
             </div>
 
-            <!-- LifeOrganizer — BETA -->
-            <div
-              onclick="openModal('lifeorganizer')"
-              class="product-card parallax-card"
+            <!-- LifeOrganizer. LIVE -->
+            <a
+              href="https://theburnaylabs.pt/lifeorganizer/"
+              target="_blank"
+              class="product-card featured parallax-card"
             >
               <div class="product-header">
                 <div class="product-icon blue has-logo">
                   <img src="logos/lifeorganizer.svg" alt="LifeOrganizer" />
                 </div>
-                <span class="badge-beta">Beta</span>
+                <span class="badge-live">Live</span>
               </div>
               <h3>LifeOrganizer</h3>
               <p class="product-desc">
@@ -1632,19 +1634,12 @@
                 <span class="product-tag">CRM</span>
               </div>
               <span class="product-link">
-                Learn More
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path d="M7 17L17 7M17 7H7M17 7v10" />
-                </svg>
+                theburnaylabs.pt/lifeorganizer
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10" /></svg>
               </span>
-            </div>
+            </a>
 
-            <!-- EmCasa — BETA -->
+            <!-- EmCasa. BETA -->
             <div
               onclick="openModal('emcasa')"
               class="product-card parallax-card"
@@ -1677,7 +1672,7 @@
               </span>
             </div>
 
-            <!-- Sleep Diary — LIVE -->
+            <!-- Sleep Diary. LIVE -->
             <a
               href="https://theburnaylabs.pt/sleep-diary/"
               target="_blank"
@@ -1713,7 +1708,7 @@
               </span>
             </a>
 
-            <!-- MemoryCleaner — BETA -->
+            <!-- MemoryCleaner. BETA -->
             <div
               onclick="openModal('memorycleaner')"
               class="product-card parallax-card"
@@ -1748,7 +1743,7 @@
               </span>
             </div>
 
-            <!-- Browser Agent — BETA -->
+            <!-- Browser Agent. BETA -->
             <div
               onclick="openModal('browseragent')"
               class="product-card parallax-card"
@@ -1798,20 +1793,20 @@
                 Hi, I'm Tomás.
               </h2>
               <p
-                data-en="I'm the founder of The Burnay Labs — a holding company based in Lisbon, Portugal. We operate across two pillars: strategic consulting that helps businesses unlock growth, and technology ventures that ship real products to market."
-                data-pt="Sou o fundador da The Burnay Labs — uma holding baseada em Lisboa, Portugal. Operamos em dois pilares: consultoria estratégica que ajuda empresas a desbloquear crescimento, e ventures tecnológicas que lançam produtos reais para o mercado."
+                data-en="I'm the founder of The Burnay Labs. a holding company based in Lisbon, Portugal. We operate across two pillars: strategic consulting that helps businesses unlock growth, and technology ventures that ship real products to market."
+                data-pt="Sou o fundador da The Burnay Labs. uma holding baseada em Lisboa, Portugal. Operamos em dois pilares: consultoria estratégica que ajuda empresas a desbloquear crescimento, e ventures tecnológicas que lançam produtos reais para o mercado."
               >
-                I'm the founder of The Burnay Labs — a holding company based in
+                I'm the founder of The Burnay Labs. a holding company based in
                 Lisbon, Portugal. We operate across two pillars: strategic
                 consulting that helps businesses unlock growth, and technology
                 ventures that ship real products to market.
               </p>
               <p
-                data-en="On the consulting side, I advise on strategy, operations, and digital transformation — helping companies move faster and make better decisions. On the tech side, I design, build, and ship software products end-to-end, from idea to production."
-                data-pt="No lado de consultoria, aconselho em estratégia, operações e transformação digital — ajudando empresas a mover-se mais rápido e tomar melhores decisões. No lado tecnológico, desenho, construo e lanço produtos de software de ponta a ponta."
+                data-en="On the consulting side, I advise on strategy, operations, and digital transformation. helping companies move faster and make better decisions. On the tech side, I design, build, and ship software products end-to-end, from idea to production."
+                data-pt="No lado de consultoria, aconselho em estratégia, operações e transformação digital. ajudando empresas a mover-se mais rápido e tomar melhores decisões. No lado tecnológico, desenho, construo e lanço produtos de software de ponta a ponta."
               >
                 On the consulting side, I advise on strategy, operations, and
-                digital transformation — helping companies move faster and make
+                digital transformation. helping companies move faster and make
                 better decisions. On the tech side, I design, build, and ship
                 software products end-to-end, from idea to production.
               </p>
@@ -2120,16 +2115,16 @@
 
     <script>
       var agentData = {
-        oracle: { emoji:'🧠', name:'Oracle', role:'VP Strategy & Mentor', desc:"Tomás's personal strategic advisor. Thinks about the big picture — economy, AI industry trends, geopolitics, cultural shifts — and distills it into advice that shapes the entire company's direction. Mentors subsidiary VP Strategies (currently Prism) with macro-level insights.", tags:['Strategic Advice','AI Industry Trends','Innovation','Cross-subsidiary'], reportsTo:'Tomás' },
+        oracle: { emoji:'🧠', name:'Oracle', role:'VP Strategy & Mentor', desc:"Tomás's personal strategic advisor. Thinks about the big picture. economy, AI industry trends, geopolitics, cultural shifts. and distills it into advice that shapes the entire company's direction. Mentors subsidiary VP Strategies (currently Prism) with macro-level insights.", tags:['Strategic Advice','AI Industry Trends','Innovation','Cross-subsidiary'], reportsTo:'Tomás' },
         atlas: { emoji:'🏛️', name:'Atlas', role:'COO / Right Hand', desc:"The operational backbone. Tracks every agent's health, code commits, and performance across ALL subsidiaries. Produces daily operational reports so Tomás always knows what's working and what's broken. Can talk to every single agent.", tags:['Ops Oversight','Agent Health','Commit Tracking','Daily Reports'], reportsTo:'Tomás' },
-        sage: { emoji:'📋', name:'Sage', role:'Secretary / PA', desc:"Tomás's personal assistant. Handles everything Tomás doesn't want to do manually — calendar management, message triage across WhatsApp/Gmail/LinkedIn/Telegram, meeting scheduling, and reminders. Keeps Tomás organized and on time.", tags:['Calendar Mgmt','Message Triage','Meeting Scheduling','Reminders'], reportsTo:'Tomás' },
+        sage: { emoji:'📋', name:'Sage', role:'Secretary / PA', desc:"Tomás's personal assistant. Handles everything Tomás doesn't want to do manually. calendar management, message triage across WhatsApp/Gmail/LinkedIn/Telegram, meeting scheduling, and reminders. Keeps Tomás organized and on time.", tags:['Calendar Mgmt','Message Triage','Meeting Scheduling','Reminders'], reportsTo:'Tomás' },
         iris: { emoji:'👁️', name:'Iris', role:'Browser Contextualizer', desc:"The team's EYES on the web. Runs a stealth Chromium browser with anti-fingerprint tech and auto-captcha solving. Any agent that needs to see, analyze, or interact with a web page calls Iris. She writes automation skills and maps web elements.", tags:['Web Analysis','Browser Automation','Captcha Solving','Stealth Browsing'], reportsTo:'Shared Resource' },
-        hera: { emoji:'👩‍💼', name:'Hera', role:'HR & Onboarding', desc:"Creates new agents from scratch — sets up their workspace files, configures them in openclaw.json, registers them on platforms (Discord, Telegram, Supabase), and announces them to the entire team. When a new hire joins, Hera makes sure everyone knows.", tags:['Agent Onboarding','Platform Setup','Team Announcements','Config Files'], reportsTo:'Tomás' },
-        sentinel: { emoji:'🔧', name:'Sentinel', role:'Tech Ops / SRE', desc:"The technical firefighter. Collects error reports from every agent across every subsidiary. Aggregates them into a daily error digest for Tomás — categorized by severity, frequency, and affected systems. Handles DevOps, debugging, and system reliability.", tags:['Error Reports','DevOps','Debugging','System Reliability'], reportsTo:'Tomás' },
+        hera: { emoji:'👩‍💼', name:'Hera', role:'HR & Onboarding', desc:"Creates new agents from scratch. sets up their workspace files, configures them in openclaw.json, registers them on platforms (Discord, Telegram, Supabase), and announces them to the entire team. When a new hire joins, Hera makes sure everyone knows.", tags:['Agent Onboarding','Platform Setup','Team Announcements','Config Files'], reportsTo:'Tomás' },
+        sentinel: { emoji:'🔧', name:'Sentinel', role:'Tech Ops / SRE', desc:"The technical firefighter. Collects error reports from every agent across every subsidiary. Aggregates them into a daily error digest for Tomás. categorized by severity, frequency, and affected systems. Handles DevOps, debugging, and system reliability.", tags:['Error Reports','DevOps','Debugging','System Reliability'], reportsTo:'Tomás' },
         rex: { emoji:'⭐', name:'Rex', role:'CEO, JobPilot AI', desc:"The hands-on boss of JobPilot AI. Runs daily operations, coordinates his team (Prism, Kit, Scout, Echo), executes on product decisions, and reports to Tomás. Has direct access to all holding-level agents when needed. Manages the Chrome extension's growth and competitive positioning.", tags:['Extension Growth','Review Strategy','Daily Operations','Team Mgmt'], reportsTo:'Tomás' },
-        prism: { emoji:'💎', name:'Prism', role:'VP Strategy, JobPilot AI', desc:"Rex's strategic right hand. Doesn't just advise — actively DIRECTS what Rex should build, prioritize, and pivot to. Takes Scout's competitive data and Oracle's macro insights and turns them into clear, decisive product strategy.", tags:['Roadmap','Data-Driven Strategy','Product Direction','Market Analysis'], reportsTo:'Rex' },
+        prism: { emoji:'💎', name:'Prism', role:'VP Strategy, JobPilot AI', desc:"Rex's strategic right hand. Doesn't just advise. actively DIRECTS what Rex should build, prioritize, and pivot to. Takes Scout's competitive data and Oracle's macro insights and turns them into clear, decisive product strategy.", tags:['Roadmap','Data-Driven Strategy','Product Direction','Market Analysis'], reportsTo:'Rex' },
         kit: { emoji:'📝', name:'Kit', role:'Review Exchange Intern', desc:"The diligent intern who handles the daily grind of Extension Booster review exchanges. Opens the dashboard, finds extensions to review, drafts genuine reviews, submits them, and tracks completion. Learning from Rex's feedback to write better reviews every time.", tags:['Review Drafts','Chrome Web Store','Extension Booster','Quality Control'], reportsTo:'Rex' },
-        scout: { emoji:'🔍', name:'Scout', role:'Intelligence Analyst', desc:"The spy. Watches competitors, monitors JobPilot AI's own reviews, tracks Chrome Web Store trends, and delivers raw intelligence to Rex and Prism. Doesn't make strategic calls — just surfaces the data so Prism and Rex can act on it.", tags:['Competitor Analysis','Market Data','Review Monitoring','Trend Tracking'], reportsTo:'Rex' },
+        scout: { emoji:'🔍', name:'Scout', role:'Intelligence Analyst', desc:"The spy. Watches competitors, monitors JobPilot AI's own reviews, tracks Chrome Web Store trends, and delivers raw intelligence to Rex and Prism. Doesn't make strategic calls. just surfaces the data so Prism and Rex can act on it.", tags:['Competitor Analysis','Market Data','Review Monitoring','Trend Tracking'], reportsTo:'Rex' },
         echo: { emoji:'📢', name:'Echo', role:'Marketing & Growth', desc:"The megaphone. Creates content, manages social media presence, handles community outreach, and drives user acquisition for JobPilot AI. Takes direction from Prism's strategy and Rex's approval to produce blog posts, social copy, and marketing campaigns.", tags:['Content Creation','Social Media','Community Outreach','User Acquisition'], reportsTo:'Rex' }
       };
 
@@ -2396,7 +2391,7 @@
           logo: null,
           emoji: "🎸",
           color: "#f59e0b",
-          desc: '"Concertos em Casa" — Home concert booking platform. Connect music lovers with artists for intimate, private performances in residential settings across Portugal.',
+          desc: '"Concertos em Casa". Home concert booking platform. Connect music lovers with artists for intimate, private performances in residential settings across Portugal.',
           features: [
             "Artist profiles with genre, style, and availability",
             "Venue matching based on space, acoustics, and capacity",
@@ -2512,7 +2507,7 @@
 
       // ── Parallax / Scroll Animations ──
       (function () {
-        // Parallax tilt on cards — VERY strong
+        // Parallax tilt on cards. VERY strong
         document.querySelectorAll(".parallax-card").forEach(function (card) {
           card.addEventListener("mousemove", function (e) {
             const rect = card.getBoundingClientRect();
