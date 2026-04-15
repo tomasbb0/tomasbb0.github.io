@@ -56,15 +56,20 @@
       html {
         scroll-snap-type: y proximity;
       }
-      .hero, .products, .about, .tech, .cta-section {
+      .hero,
+      .products,
+      .about,
+      .tech,
+      .cta-section {
         scroll-snap-align: start;
       }
       /* Section reveal animation base */
       .section-reveal {
         opacity: 0;
         transform: translateY(60px) scale(0.97);
-        transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
-                    transform 1s cubic-bezier(0.22, 1, 0.36, 1);
+        transition:
+          opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+          transform 1s cubic-bezier(0.22, 1, 0.36, 1);
       }
       .section-reveal.revealed {
         opacity: 1;
@@ -206,16 +211,28 @@
         animation: drawL 0.7s ease-out 1.1s forwards;
       }
       @keyframes drawB {
-        from { stroke-dashoffset: 400; }
-        to { stroke-dashoffset: 0; }
+        from {
+          stroke-dashoffset: 400;
+        }
+        to {
+          stroke-dashoffset: 0;
+        }
       }
       @keyframes drawBbar {
-        from { stroke-dashoffset: 38; }
-        to { stroke-dashoffset: 0; }
+        from {
+          stroke-dashoffset: 38;
+        }
+        to {
+          stroke-dashoffset: 0;
+        }
       }
       @keyframes drawL {
-        from { stroke-dashoffset: 160; }
-        to { stroke-dashoffset: 0; }
+        from {
+          stroke-dashoffset: 160;
+        }
+        to {
+          stroke-dashoffset: 0;
+        }
       }
 
       /* ===== HERO ===== */
@@ -673,8 +690,6 @@
         opacity: 1;
       }
 
-
-
       /* ===== PARALLAX SECTIONS ===== */
       .parallax-section {
         transform: translateY(40px);
@@ -905,7 +920,9 @@
         border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: var(--radius);
         padding: 36px 28px;
-        box-shadow: 0 4px 24px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.06);
+        box-shadow:
+          0 4px 24px rgba(0, 0, 0, 0.25),
+          inset 0 1px 0 rgba(255, 255, 255, 0.06);
         transition: all 0.4s ease;
       }
       .team-card-left {
@@ -917,11 +934,17 @@
         transform-origin: left center;
       }
       .team-card:hover {
-        border-color: rgba(255,255,255,0.18);
-        box-shadow: 0 8px 32px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.1);
+        border-color: rgba(255, 255, 255, 0.18);
+        box-shadow:
+          0 8px 32px rgba(0, 0, 0, 0.35),
+          inset 0 1px 0 rgba(255, 255, 255, 0.1);
       }
-      .team-card-left:hover { transform: rotateY(1deg) translateY(-2px); }
-      .team-card-right:hover { transform: rotateY(-1deg) translateY(-2px); }
+      .team-card-left:hover {
+        transform: rotateY(1deg) translateY(-2px);
+      }
+      .team-card-right:hover {
+        transform: rotateY(-1deg) translateY(-2px);
+      }
       .org-chart {
         display: flex;
         flex-direction: column;
@@ -955,7 +978,11 @@
         transform: translateY(-2px);
       }
       .org-node-ceo {
-        background: linear-gradient(135deg, rgba(16,185,129,0.08), rgba(139,92,246,0.08));
+        background: linear-gradient(
+          135deg,
+          rgba(16, 185, 129, 0.08),
+          rgba(139, 92, 246, 0.08)
+        );
         border-color: var(--green);
         padding: 18px 28px;
         cursor: default;
@@ -992,7 +1019,7 @@
         padding-top: 20px;
       }
       .org-branch::before {
-        content: '';
+        content: "";
         position: absolute;
         top: 0;
         left: 25%;
@@ -1034,7 +1061,7 @@
         border-radius: 50%;
         object-fit: cover;
         border: 3px solid var(--border2);
-        box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
       }
       .team-about h2 {
         font-size: 28px;
@@ -1062,13 +1089,15 @@
         display: none;
         position: fixed;
         inset: 0;
-        background: rgba(0,0,0,0.7);
+        background: rgba(0, 0, 0, 0.7);
         backdrop-filter: blur(8px);
         z-index: 10000;
         align-items: center;
         justify-content: center;
       }
-      .agent-modal-overlay.active { display: flex; }
+      .agent-modal-overlay.active {
+        display: flex;
+      }
       .agent-modal {
         background: var(--surface);
         border: 1px solid var(--border2);
@@ -1091,14 +1120,18 @@
         cursor: pointer;
         transition: color 0.2s;
       }
-      .agent-modal-close:hover { color: var(--white); }
+      .agent-modal-close:hover {
+        color: var(--white);
+      }
       .agent-modal-header {
         display: flex;
         align-items: center;
         gap: 16px;
         margin-bottom: 20px;
       }
-      .agent-modal-emoji { font-size: 48px; }
+      .agent-modal-emoji {
+        font-size: 48px;
+      }
       .agent-modal-title h3 {
         font-size: 24px;
         font-weight: 800;
@@ -1127,9 +1160,9 @@
         border-radius: 8px;
         font-size: 12px;
         font-weight: 600;
-        background: rgba(16,185,129,0.1);
+        background: rgba(16, 185, 129, 0.1);
         color: var(--green);
-        border: 1px solid rgba(16,185,129,0.2);
+        border: 1px solid rgba(16, 185, 129, 0.2);
       }
 
       /* ===== LANGUAGE TOGGLE ===== */
@@ -1137,7 +1170,7 @@
         display: flex;
         align-items: center;
         gap: 4px;
-        background: rgba(255,255,255,0.06);
+        background: rgba(255, 255, 255, 0.06);
         border: 1px solid var(--border);
         border-radius: 8px;
         padding: 2px;
@@ -1173,10 +1206,12 @@
         .team-layout {
           grid-template-columns: 1fr;
         }
-        .team-card-left, .team-card-right {
+        .team-card-left,
+        .team-card-right {
           transform: none;
         }
-        .team-card-left:hover, .team-card-right:hover {
+        .team-card-left:hover,
+        .team-card-right:hover {
           transform: translateY(-4px);
         }
       }
@@ -1644,7 +1679,7 @@
 
             <!-- LifeOrganizer. LIVE -->
             <a
-              href="https://theburnaylabs.pt/lifeorganizer/"
+              href="https://lifeorg-app.web.app"
               target="_blank"
               class="product-card featured parallax-card"
             >
@@ -1666,7 +1701,7 @@
                 <span class="product-tag">CRM</span>
               </div>
               <span class="product-link">
-                theburnaylabs.pt/lifeorganizer
+                lifeorg-app.web.app
                 <svg
                   viewBox="0 0 24 24"
                   fill="none"
@@ -1880,11 +1915,11 @@
                 >
               </div>
               <div class="about-stat-card">
-                <strong>0</strong>
+                <strong>100%</strong>
                 <span
-                  data-en="VC Dollars Raised"
-                  data-pt="Euros de VC Levantados"
-                  >VC Dollars Raised</span
+                  data-en="Solo Built!!"
+                  data-pt="Construído a solo!!"
+                  >Solo Built!!</span
                 >
               </div>
             </div>
