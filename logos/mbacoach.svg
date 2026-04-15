@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a"/>
+      <stop offset="100%" style="stop-color:#1e293b"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b"/>
+      <stop offset="100%" style="stop-color:#d97706"/>
+    </linearGradient>
+  </defs>
+  <!-- Background -->
+  <rect width="512" height="512" rx="96" fill="url(#bg)"/>
+  <!-- Graduation cap -->
+  <polygon points="256,120 160,170 256,220 352,170" fill="url(#gold)" opacity="0.95"/>
+  <polygon points="256,220 160,170 160,210 256,260 352,210 352,170" fill="#b45309" opacity="0.6"/>
+  <!-- Cap top -->
+  <rect x="240" y="104" width="32" height="16" rx="4" fill="url(#gold)"/>
+  <!-- Tassel -->
+  <line x1="352" y1="170" x2="372" y2="220" stroke="url(#gold)" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="374" cy="226" r="8" fill="url(#gold)"/>
+  <!-- AI sparkle -->
+  <g transform="translate(340, 130)">
+    <path d="M0,-14 L3,-3 L14,0 L3,3 L0,14 L-3,3 L-14,0 L-3,-3 Z" fill="#f59e0b" opacity="0.8"/>
+  </g>
+  <g transform="translate(370, 150) scale(0.6)">
+    <path d="M0,-14 L3,-3 L14,0 L3,3 L0,14 L-3,3 L-14,0 L-3,-3 Z" fill="#f59e0b" opacity="0.5"/>
+  </g>
+  <!-- Text: MBA -->
+  <text x="256" y="350" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-weight="800" font-size="80" fill="#ffffff" letter-spacing="-2">MBA</text>
+  <!-- Text: Coach.ai -->
+  <text x="256" y="420" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-weight="600" font-size="52" letter-spacing="-1">
+    <tspan fill="#ffffff">Coach</tspan><tspan fill="url(#gold)">.ai</tspan>
+  </text>
+</svg>

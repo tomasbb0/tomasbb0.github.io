@@ -1,18 +1,1480 @@
-<style>
-      .libutton {
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Burnay Labs · Products by Tomás Batalha</title>
+    <meta
+      name="description"
+      content="Software products built by Tomás Batalha. From AI-powered job search tools to language learning platforms. Shipping real products, fast."
+    />
+    <link rel="canonical" href="https://theburnaylabs.pt" />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-2 -2 100 114' fill='none'%3E%3Cpath d='M10,6 L48,6 L58,16 L58,38 L48,48 L58,58 L58,84 L48,96 L10,96 Z' stroke='%23fafafa' stroke-width='2.5' fill='none' stroke-linejoin='miter'/%3E%3Cline x1='10' y1='48' x2='48' y2='48' stroke='%23fafafa' stroke-width='2.5'/%3E%3Cpolyline points='70,4 70,70 48,96 92,96' stroke='%23fafafa' stroke-width='2.5' fill='none' stroke-linejoin='miter'/%3E%3C/svg%3E"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      :root {
+        --bg: #0a0a0a;
+        --surface: #111;
+        --surface2: #1a1a1a;
+        --border: rgba(255, 255, 255, 0.08);
+        --border2: rgba(255, 255, 255, 0.12);
+        --text: #e5e5e5;
+        --muted: #888;
+        --white: #fff;
+        --green: #10b981;
+        --green-dark: #059669;
+        --green-glow: rgba(16, 185, 129, 0.15);
+        --purple: #8b5cf6;
+        --purple-dark: #7c3aed;
+        --purple-glow: rgba(139, 92, 246, 0.15);
+        --gold: #f59e0b;
+        --gold-dark: #d97706;
+        --gold-glow: rgba(245, 158, 11, 0.12);
+        --blue: #3b82f6;
+        --blue-glow: rgba(59, 130, 246, 0.15);
+        --radius: 12px;
+      }
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+        -webkit-font-smoothing: antialiased;
+      }
+      .container {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      /* ===== NAV ===== */
+      nav {
+        position: fixed;
+        top: 12px;
+        left: 20px;
+        right: 20px;
+        width: auto;
+        z-index: 100;
+        background: rgba(255, 255, 255, 0.001);
+        backdrop-filter: blur(3px) saturate(120%);
+        -webkit-backdrop-filter: blur(3px) saturate(120%);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 16px;
+      }
+      .nav-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 64px;
+      }
+      .nav-logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 700;
+        font-size: 18px;
+        color: var(--white);
+      }
+      .nav-logo-icon {
+        width: 36px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .nav-logo-icon svg {
+        width: 36px;
+        height: 40px;
+      }
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 28px;
+      }
+      .nav-links a {
+        font-size: 14px;
+        color: var(--muted);
+        font-weight: 500;
+        transition: color 0.2s;
+      }
+      .nav-links a:hover {
+        color: var(--white);
+      }
+      .nav-auth {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .btn-ghost {
+        padding: 8px 16px;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--muted);
+        border: 1px solid var(--border2);
+        border-radius: 8px;
+        background: transparent;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: inline-block;
+      }
+      .btn-ghost:hover {
+        color: var(--white);
+        border-color: rgba(255, 255, 255, 0.25);
+      }
+      .btn-green {
+        padding: 8px 20px;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--white);
+        background: var(--green);
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: inline-block;
+      }
+      .btn-green:hover {
+        background: var(--green-dark);
+        transform: translateY(-1px);
+      }
+
+      /* ===== ANIMATED BL LOGO ===== */
+      .hero-logo {
+        width: 120px;
+        height: 130px;
+        margin: 0 auto 32px;
+      }
+      .hero-logo svg {
+        width: 120px;
+        height: 130px;
+      }
+      .hero-logo .logo-b {
+        stroke-dasharray: 400;
+        stroke-dashoffset: 400;
+        animation: drawB 1s ease-out 0.3s forwards;
+      }
+      .hero-logo .logo-b-bar {
+        stroke-dasharray: 38;
+        stroke-dashoffset: 38;
+        animation: drawBbar 0.3s ease-out 0.9s forwards;
+      }
+      .hero-logo .logo-l {
+        stroke-dasharray: 160;
+        stroke-dashoffset: 160;
+        animation: drawL 0.7s ease-out 1.1s forwards;
+      }
+      @keyframes drawB {
+        from { stroke-dashoffset: 400; }
+        to { stroke-dashoffset: 0; }
+      }
+      @keyframes drawBbar {
+        from { stroke-dashoffset: 38; }
+        to { stroke-dashoffset: 0; }
+      }
+      @keyframes drawL {
+        from { stroke-dashoffset: 160; }
+        to { stroke-dashoffset: 0; }
+      }
+
+      /* ===== HERO ===== */
+      .hero {
+        padding: 140px 0 100px;
+        text-align: center;
+        position: relative;
+      }
+      .bg-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        pointer-events: none;
+        z-index: 0;
+      }
+      main {
+        position: relative;
+        z-index: 1;
+      }
+      .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 14px;
+        background: var(--green-glow);
+        border: 1px solid rgba(16, 185, 129, 0.25);
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--green);
+        margin-bottom: 28px;
+      }
+      .hero h1 {
+        font-size: clamp(36px, 5vw, 64px);
+        font-weight: 800;
+        line-height: 1.1;
+        margin-bottom: 20px;
+        color: var(--white);
+      }
+      .hero h1 em {
+        font-style: normal;
+        background: linear-gradient(135deg, var(--green), #34d399);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .hero p {
+        font-size: 18px;
+        color: var(--muted);
+        max-width: 560px;
+        margin: 0 auto 36px;
+        line-height: 1.7;
+      }
+      .hero-buttons {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .hero-buttons .btn-green {
+        padding: 14px 28px;
+        font-size: 15px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .hero-buttons .btn-outline {
+        padding: 14px 28px;
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--text);
+        border: 1px solid var(--border2);
+        border-radius: 8px;
+        background: transparent;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: inline-block;
+      }
+      .hero-buttons .btn-outline:hover {
+        border-color: rgba(255, 255, 255, 0.3);
+        color: var(--white);
+      }
+      .hero-stats {
+        display: flex;
+        gap: 48px;
+        justify-content: center;
+        margin-top: 56px;
+        flex-wrap: wrap;
+      }
+      .hero-stat {
+        text-align: center;
+      }
+      .hero-stat strong {
+        font-size: 28px;
+        font-weight: 800;
+        color: var(--white);
+        display: block;
+      }
+      .hero-stat span {
+        font-size: 13px;
+        color: var(--muted);
+      }
+
+      /* ===== SECTION SHARED ===== */
+      .section-label {
+        display: inline-block;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: var(--green);
+        margin-bottom: 12px;
+      }
+      .section-title {
+        font-size: clamp(28px, 3.5vw, 44px);
+        font-weight: 800;
+        color: var(--white);
+        margin-bottom: 16px;
+      }
+      .section-desc {
+        font-size: 16px;
+        color: var(--muted);
+        max-width: 520px;
+        line-height: 1.7;
+        margin-bottom: 48px;
+      }
+
+      /* ===== PRODUCTS ===== */
+      .products {
+        padding: 100px 0;
+        background: rgba(255, 255, 255, 0.001);
+        backdrop-filter: blur(3px) saturate(120%);
+        -webkit-backdrop-filter: blur(3px) saturate(120%);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 24px;
+        margin: 12px 20px;
+      }
+      .products-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
+      .product-card {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: var(--radius);
+        padding: 28px;
+        transition:
+          border-color 0.3s,
+          box-shadow 0.3s,
+          transform 0.3s;
+        box-shadow:
+          0 4px 24px rgba(0, 0, 0, 0.25),
+          inset 0 1px 0 rgba(255, 255, 255, 0.06);
+        position: relative;
         display: flex;
         flex-direction: column;
+      }
+      .product-card:hover {
+        border-color: rgba(255, 255, 255, 0.18);
+        box-shadow:
+          0 8px 32px rgba(0, 0, 0, 0.35),
+          inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        transform: translateY(-2px);
+      }
+      .product-card.featured {
+        border-color: var(--green);
+        box-shadow:
+          0 0 40px var(--green-glow),
+          inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      }
+      .product-card.featured:hover {
+        box-shadow:
+          0 0 60px var(--green-glow),
+          0 8px 32px rgba(0, 0, 0, 0.35);
+      }
+      .product-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        margin-bottom: 16px;
+      }
+      .product-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
         justify-content: center;
-        padding: 7px;
-        text-align: center;
-        outline: none;
-        text-decoration: none !important;
-        color: #ffffff !important;
-        width: 200px;
-        height: 32px;
+        font-size: 22px;
+        overflow: hidden;
+      }
+      .product-icon img {
+        width: 100%;
+        height: 100%;
+        border-radius: 10px;
+        object-fit: cover;
+      }
+      .product-icon.has-logo {
+        background: none !important;
+      }
+      .product-card-div {
+        cursor: default;
+      }
+      .confidential-note {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        margin-top: 16px;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--muted);
+        font-style: italic;
+      }
+      .confidential-note svg {
+        width: 14px;
+        height: 14px;
+      }
+      .product-icon.green {
+        background: var(--green-glow);
+      }
+      .product-icon.purple {
+        background: var(--purple-glow);
+      }
+      .product-icon.gold {
+        background: var(--gold-glow);
+      }
+      .product-icon.blue {
+        background: var(--blue-glow);
+      }
+      .badge-beta {
+        padding: 3px 10px;
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border-radius: 12px;
+        background: var(--purple-glow);
+        border: 1px solid rgba(139, 92, 246, 0.3);
+        color: var(--purple);
+      }
+      .badge-live {
+        padding: 3px 10px;
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border-radius: 12px;
+        background: var(--green-glow);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        color: var(--green);
+      }
+      .product-card h3 {
+        font-size: 17px;
+        font-weight: 700;
+        color: var(--white);
+        margin-bottom: 8px;
+      }
+      .product-card .product-desc {
+        font-size: 13px;
+        color: var(--muted);
+        line-height: 1.6;
+        flex: 1;
+      }
+      .product-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 16px;
+      }
+      .product-tag {
+        font-size: 11px;
+        padding: 4px 10px;
         border-radius: 16px;
-        background-color: #0A66C2;
-        font-family: "SF Pro Text", Helvetica, sans-serif;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        color: var(--muted);
+      }
+      .product-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        margin-top: 16px;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--green);
+        transition: gap 0.2s;
+      }
+      .product-link:hover {
+        gap: 8px;
+      }
+      .product-link svg {
+        width: 14px;
+        height: 14px;
+      }
+
+      /* ===== ABOUT ===== */
+      .about {
+        padding: 100px 0;
+        background: rgba(255, 255, 255, 0.001);
+        backdrop-filter: blur(3px) saturate(120%);
+        -webkit-backdrop-filter: blur(3px) saturate(120%);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 24px;
+        margin: 12px 20px;
+      }
+      .about-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 48px;
+        align-items: center;
+      }
+      .about-text h2 {
+        font-size: clamp(28px, 3.5vw, 40px);
+        font-weight: 800;
+        color: var(--white);
+        margin-bottom: 20px;
+      }
+      .about-text p {
+        font-size: 15px;
+        color: var(--muted);
+        line-height: 1.8;
+        margin-bottom: 16px;
+      }
+      .about-stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+      .about-stat-card {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: var(--radius);
+        padding: 24px;
+        text-align: center;
+        box-shadow:
+          0 4px 24px rgba(0, 0, 0, 0.25),
+          inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      }
+      .about-stat-card strong {
+        font-size: 32px;
+        font-weight: 800;
+        color: var(--white);
+        display: block;
+        margin-bottom: 4px;
+      }
+      .about-stat-card span {
+        font-size: 13px;
+        color: var(--muted);
+      }
+
+      /* ===== TECH ===== */
+      .tech {
+        padding: 80px 0;
+        background: rgba(255, 255, 255, 0.001);
+        backdrop-filter: blur(3px) saturate(120%);
+        -webkit-backdrop-filter: blur(3px) saturate(120%);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 24px;
+        margin: 12px 20px;
+      }
+      .tech-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+        margin-top: 32px;
+      }
+      .tech-tag {
+        background: rgba(255, 255, 255, 0.06);
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 13px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: var(--text);
+      }
+
+      /* ===== CTA ===== */
+      .cta-section {
+        padding: 80px 0;
+        text-align: center;
+        background: rgba(255, 255, 255, 0.001);
+        backdrop-filter: blur(3px) saturate(120%);
+        -webkit-backdrop-filter: blur(3px) saturate(120%);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 24px;
+        margin: 12px 20px;
+      }
+      .cta-box {
+        background: linear-gradient(
+          135deg,
+          rgba(16, 185, 129, 0.12),
+          rgba(139, 92, 246, 0.12)
+        );
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        padding: 60px 40px;
+        box-shadow:
+          0 8px 32px rgba(0, 0, 0, 0.3),
+          inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      }
+      .cta-box h2 {
+        font-size: clamp(28px, 3vw, 40px);
+        font-weight: 800;
+        color: var(--white);
+        margin-bottom: 12px;
+      }
+      .cta-box p {
+        font-size: 16px;
+        color: var(--muted);
+        margin-bottom: 28px;
+        max-width: 480px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .cta-buttons {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      /* ===== FOOTER ===== */
+      footer {
+        padding: 48px 0;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(255, 255, 255, 0.001);
+        backdrop-filter: blur(3px) saturate(120%);
+        -webkit-backdrop-filter: blur(3px) saturate(120%);
+        border-radius: 24px;
+        margin: 12px 20px;
+        position: relative;
+        z-index: 1;
+      }
+      .footer-inner {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 16px;
+      }
+      .footer-inner p {
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .footer-links {
+        display: flex;
+        gap: 20px;
+      }
+      .footer-links a {
+        font-size: 13px;
+        color: var(--muted);
+        transition: color 0.2s;
+      }
+      .footer-links a:hover {
+        color: var(--white);
+      }
+
+      /* ===== RESPONSIVE ===== */
+      @media (max-width: 900px) {
+        .products-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .about-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      @media (max-width: 640px) {
+        .products-grid {
+          grid-template-columns: 1fr;
+        }
+        .nav-links {
+          display: none;
+        }
+        .hero-stats {
+          gap: 28px;
+        }
+        .hero h1 {
+          font-size: 32px;
+        }
+        .about-stats {
+          grid-template-columns: 1fr;
+        }
       }
     </style>
-<a class="libutton" href="https://www.linkedin.com/build-relation/newsletter-follow?entityUrn=7328942771992465408" target="_blank">Subscribe on LinkedIn</a>
+  </head>
+  <body>
+    <canvas class="bg-canvas" id="heroWave"></canvas>
+
+    <!-- NAV -->
+    <nav>
+      <div class="container nav-inner">
+        <a href="/" class="nav-logo">
+          <div class="nav-logo-icon">
+            <svg
+              viewBox="-2 -2 100 114"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M10,6 L48,6 L58,16 L58,38 L48,48 L58,58 L58,84 L48,96 L10,96 Z"
+                stroke="white"
+                stroke-width="3"
+                fill="none"
+                stroke-linejoin="miter"
+              />
+              <line
+                x1="10"
+                y1="48"
+                x2="48"
+                y2="48"
+                stroke="white"
+                stroke-width="3"
+              />
+              <polyline
+                points="70,4 70,70 48,96 92,96"
+                stroke="white"
+                stroke-width="3"
+                fill="none"
+                stroke-linejoin="miter"
+              />
+            </svg>
+          </div>
+          The Burnay Labs
+        </a>
+        <div class="nav-links">
+          <a href="#products">Products</a>
+          <a href="#about">About</a>
+          <a href="#stack">Stack</a>
+          <a href="https://education.theburnaylabs.pt">Education</a>
+        </div>
+        <div class="nav-auth">
+          <a
+            href="https://github.com/tomasbb0"
+            target="_blank"
+            class="btn-ghost"
+            >GitHub</a
+          >
+          <a
+            href="https://linkedin.com/in/tomasmbatalha"
+            target="_blank"
+            class="btn-green"
+            >Connect</a
+          >
+        </div>
+      </div>
+    </nav>
+
+    <main>
+      <!-- HERO -->
+      <section class="hero">
+        <div class="container">
+          <div class="hero-logo">
+            <svg viewBox="-2 -2 100 114" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path class="logo-b" d="M10,6 L48,6 L58,16 L58,38 L48,48 L58,58 L58,84 L48,96 L10,96 Z" stroke="#ffffff" stroke-width="2.5" fill="none" stroke-linejoin="miter" stroke-linecap="butt" />
+              <line class="logo-b-bar" x1="10" y1="48" x2="48" y2="48" stroke="#ffffff" stroke-width="2.5" />
+              <polyline class="logo-l" points="70,4 70,70 48,96 92,96" stroke="#ffffff" stroke-width="2.5" fill="none" stroke-linejoin="miter" stroke-linecap="butt" />
+            </svg>
+          </div>
+          <div class="hero-badge">
+            &#9889; Building in public · Lisbon, Portugal
+          </div>
+          <h1>Build. Ship.<br /><em>Repeat.</em></h1>
+          <p>
+            I'm Tomás Batalha. I build software products that solve real
+            problems. From AI-powered job search tools to language
+            learning platforms. Fast iteration, real users, shipped code.
+          </p>
+          <div class="hero-buttons">
+            <a href="#products" class="btn-green">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path d="M13 2L4 14h7l-2 8 9-12h-7l2-8z" />
+              </svg>
+              See Products
+            </a>
+            <a href="#about" class="btn-outline">About Me</a>
+          </div>
+          <div class="hero-stats">
+            <div class="hero-stat">
+              <strong>12+</strong><span>Products Built</span>
+            </div>
+            <div class="hero-stat">
+              <strong>3</strong><span>Live &amp; Shipped</span>
+            </div>
+            <div class="hero-stat"><strong>9</strong><span>In Beta</span></div>
+            <div class="hero-stat">
+              <strong>100%</strong><span>Solo-Built</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PRODUCTS -->
+      <section class="products" id="products">
+        <div class="container">
+          <span class="section-label">Products</span>
+          <h2 class="section-title">What I've built.</h2>
+          <p class="section-desc">
+            Each product started with a real problem. Some are live, some are in
+            beta. All are built to ship.
+          </p>
+          <div class="products-grid">
+            <!-- JobPilot AI — LIVE -->
+            <a
+              href="https://jobpilot.pt"
+              target="_blank"
+              class="product-card featured"
+            >
+              <div class="product-header">
+                <div class="product-icon green has-logo">
+                  <img src="logos/jobpilot.svg" alt="JobPilot AI" />
+                </div>
+                <span class="badge-live">Live</span>
+              </div>
+              <h3>JobPilot AI</h3>
+              <p class="product-desc">
+                The complete AI job search Chrome extension. Discover matching
+                jobs, autofill every application, generate cover letters, and
+                track it all. Across 50+ ATS platforms.
+              </p>
+              <div class="product-tags">
+                <span class="product-tag">Chrome Extension</span>
+                <span class="product-tag">AI</span>
+                <span class="product-tag">SaaS</span>
+              </div>
+              <span class="product-link">
+                jobpilot.pt
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M7 17L17 7M17 7H7M17 7v10" />
+                </svg>
+              </span>
+            </a>
+
+            <!-- Maktub — LIVE (Confidential) -->
+            <div class="product-card featured product-card-div">
+              <div class="product-header">
+                <div class="product-icon green has-logo">
+                  <img src="logos/maktub.png" alt="Maktub" />
+                </div>
+                <span class="badge-live">Live</span>
+              </div>
+              <h3>Maktub</h3>
+              <p class="product-desc">
+                Expense management platform for music management companies.
+                Real-time dashboard, artist-level tracking, visual charts, and
+                multi-investor expense categorization. Zero dependencies.
+              </p>
+              <div class="product-tags">
+                <span class="product-tag">Finance</span>
+                <span class="product-tag">Music Industry</span>
+                <span class="product-tag">Dashboard</span>
+              </div>
+              <span class="confidential-note">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                  <path d="M7 11V7a5 5 0 0110 0v4" />
+                </svg>
+                Internal platform &middot; Confidential
+              </span>
+            </div>
+
+            <!-- Mr Blue — LIVE (Confidential) -->
+            <div class="product-card featured product-card-div">
+              <div class="product-header">
+                <div class="product-icon green has-logo">
+                  <img src="logos/mrblue.png" alt="Mr Blue" />
+                </div>
+                <span class="badge-live">Live</span>
+              </div>
+              <h3>Mr Blue</h3>
+              <p class="product-desc">
+                Google Reviews scraper and aggregator. Enter a brand, discover
+                store locations via Google Maps, filter reviews by stars, dates
+                and keywords, then aggregate everything into one copyable block.
+              </p>
+              <div class="product-tags">
+                <span class="product-tag">AI</span>
+                <span class="product-tag">Scraping</span>
+                <span class="product-tag">Google Maps</span>
+              </div>
+              <span class="confidential-note">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                  <path d="M7 11V7a5 5 0 0110 0v4" />
+                </svg>
+                Internal platform &middot; Confidential
+              </span>
+            </div>
+
+            <!-- TopResume.ai — BETA -->
+            <a
+              href="https://github.com/tomasbb0/topresume.ai"
+              target="_blank"
+              class="product-card"
+            >
+              <div class="product-header">
+                <div class="product-icon purple has-logo">
+                  <img src="logos/topresume.svg" alt="TopResume.ai" />
+                </div>
+                <span class="badge-beta">Beta</span>
+              </div>
+              <h3>TopResume.ai</h3>
+              <p class="product-desc">
+                AI-powered CV editor platform. Write, edit, and optimize your
+                resume with real-time AI assistance. Modern editor with
+                templates, sections, and instant PDF export.
+              </p>
+              <div class="product-tags">
+                <span class="product-tag">AI</span>
+                <span class="product-tag">Careers</span>
+                <span class="product-tag">Editor</span>
+              </div>
+              <span class="product-link">
+                View Project
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M7 17L17 7M17 7H7M17 7v10" />
+                </svg>
+              </span>
+            </a>
+
+            <!-- The Burnay Labs Education — BETA -->
+            <a
+              href="https://education.theburnaylabs.pt"
+              target="_blank"
+              class="product-card"
+            >
+              <div class="product-header">
+                <div class="product-icon purple has-logo">
+                  <img src="logos/burnaylabs.svg" alt="The Burnay Labs" />
+                </div>
+                <span class="badge-beta">Beta</span>
+              </div>
+              <h3>The Burnay Labs Education</h3>
+              <p class="product-desc">
+                Portuguese language tutoring platform for young learners.
+                Teacher dashboard with 12 interactive games, curriculum
+                tracking, vocab tools, and student progress analytics.
+              </p>
+              <div class="product-tags">
+                <span class="product-tag">EdTech</span>
+                <span class="product-tag">Games</span>
+                <span class="product-tag">Firebase</span>
+              </div>
+              <span class="product-link">
+                education.theburnaylabs.pt
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M7 17L17 7M17 7H7M17 7v10" />
+                </svg>
+              </span>
+            </a>
+
+            <!-- VendasIA — BETA -->
+            <a
+              href="https://github.com/tomasbb0/vendas-ia"
+              target="_blank"
+              class="product-card"
+            >
+              <div class="product-header">
+                <div class="product-icon purple has-logo">
+                  <img src="logos/vendasia.svg" alt="VendasIA" />
+                </div>
+                <span class="badge-beta">Beta</span>
+              </div>
+              <h3>VendasIA</h3>
+              <p class="product-desc">
+                AI sales toolkit for modern teams. Autonomous SDR agent that
+                generates personalized Portuguese B2B messages at scale, plus an
+                M&A CRM with AI-powered deal analysis.
+              </p>
+              <div class="product-tags">
+                <span class="product-tag">AI</span>
+                <span class="product-tag">Sales</span>
+                <span class="product-tag">B2B</span>
+              </div>
+              <span class="product-link">
+                View Project
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M7 17L17 7M17 7H7M17 7v10" />
+                </svg>
+              </span>
+            </a>
+
+            <!-- MBA Coach — BETA -->
+            <a
+              href="https://github.com/tomasbb0/MBACoach"
+              target="_blank"
+              class="product-card"
+            >
+              <div class="product-header">
+                <div class="product-icon gold has-logo">
+                  <img src="logos/mbacoach.svg" alt="MBA Coach" />
+                </div>
+                <span class="badge-beta">Beta</span>
+              </div>
+              <h3>MBA Coach</h3>
+              <p class="product-desc">
+                AI-powered MBA coaching platform. Personalized preparation for
+                MBA applications with competitive research, market analysis, and
+                structured guidance through the entire process.
+              </p>
+              <div class="product-tags">
+                <span class="product-tag">AI</span>
+                <span class="product-tag">Education</span>
+                <span class="product-tag">Coaching</span>
+              </div>
+              <span class="product-link">
+                View Project
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M7 17L17 7M17 7H7M17 7v10" />
+                </svg>
+              </span>
+            </a>
+
+            <!-- LifeOrganizer — BETA -->
+            <a
+              href="https://github.com/tomasbb0/LifeOrganizer"
+              target="_blank"
+              class="product-card"
+            >
+              <div class="product-header">
+                <div class="product-icon blue has-logo">
+                  <img src="logos/lifeorganizer.svg" alt="LifeOrganizer" />
+                </div>
+                <span class="badge-beta">Beta</span>
+              </div>
+              <h3>LifeOrganizer</h3>
+              <p class="product-desc">
+                Personal life management platform. Tracks communications across
+                WhatsApp, Gmail, and Instagram, maps relationships with
+                frequency analysis, and keeps you balanced with smart alerts.
+              </p>
+              <div class="product-tags">
+                <span class="product-tag">Productivity</span>
+                <span class="product-tag">AI</span>
+                <span class="product-tag">CRM</span>
+              </div>
+              <span class="product-link">
+                View Project
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M7 17L17 7M17 7H7M17 7v10" />
+                </svg>
+              </span>
+            </a>
+
+            <!-- EmCasa — BETA -->
+            <a
+              href="https://github.com/tomasbb0/EmCasa-website"
+              target="_blank"
+              class="product-card"
+            >
+              <div class="product-header">
+                <div class="product-icon gold">&#127928;</div>
+                <span class="badge-beta">Beta</span>
+              </div>
+              <h3>EmCasa</h3>
+              <p class="product-desc">
+                Home concert booking platform. "Concertos em Casa".
+                Connect music lovers with artists for intimate, private
+                performances in residential settings across Portugal.
+              </p>
+              <div class="product-tags">
+                <span class="product-tag">Marketplace</span>
+                <span class="product-tag">Music</span>
+                <span class="product-tag">Events</span>
+              </div>
+              <span class="product-link">
+                View Project
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M7 17L17 7M17 7H7M17 7v10" />
+                </svg>
+              </span>
+            </a>
+
+            <!-- Sleep Diary — BETA -->
+            <a
+              href="https://github.com/tomasbb0/sleep-diary"
+              target="_blank"
+              class="product-card"
+            >
+              <div class="product-header">
+                <div class="product-icon purple has-logo">
+                  <img src="logos/sleep-diary.svg" alt="Diário de Sono" />
+                </div>
+                <span class="badge-beta">Beta</span>
+              </div>
+              <h3>Diário de Sono</h3>
+              <p class="product-desc">
+                Sleep tracking app. Log your sleep patterns, analyze habits over
+                time, and get personalized recommendations to improve sleep
+                quality. Beautiful, calming interface.
+              </p>
+              <div class="product-tags">
+                <span class="product-tag">Health</span>
+                <span class="product-tag">Tracking</span>
+                <span class="product-tag">Analytics</span>
+              </div>
+              <span class="product-link">
+                View Project
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M7 17L17 7M17 7H7M17 7v10" />
+                </svg>
+              </span>
+            </a>
+
+            <!-- MemoryCleaner — BETA -->
+            <a
+              href="https://github.com/tomasbb0/MemoryCleaner"
+              target="_blank"
+              class="product-card"
+            >
+              <div class="product-header">
+                <div class="product-icon green has-logo">
+                  <img src="logos/memorycleaner.svg" alt="MemoryCleaner" />
+                </div>
+                <span class="badge-beta">Beta</span>
+              </div>
+              <h3>MemoryCleaner</h3>
+              <p class="product-desc">
+                Smart macOS memory optimizer. Lives in your menu bar with
+                Tinder-style recommendation cards. Swipe to keep or kill
+                processes, freeing up RAM instantly.
+              </p>
+              <div class="product-tags">
+                <span class="product-tag">macOS</span>
+                <span class="product-tag">Utility</span>
+                <span class="product-tag">Python</span>
+              </div>
+              <span class="product-link">
+                View Project
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M7 17L17 7M17 7H7M17 7v10" />
+                </svg>
+              </span>
+            </a>
+
+            <!-- Browser Agent — BETA -->
+            <a
+              href="https://github.com/tomasbb0/browser-agent"
+              target="_blank"
+              class="product-card"
+            >
+              <div class="product-header">
+                <div class="product-icon blue has-logo">
+                  <img src="logos/browser-agent.svg" alt="Browser Agent" />
+                </div>
+                <span class="badge-beta">Beta</span>
+              </div>
+              <h3>Browser Agent</h3>
+              <p class="product-desc">
+                AI browser automation agent with visible navigation and chat
+                interface. Control a real Chromium browser with natural language,
+                powered by GPT-4o via browser-use.
+              </p>
+              <div class="product-tags">
+                <span class="product-tag">AI</span>
+                <span class="product-tag">Automation</span>
+                <span class="product-tag">CLI</span>
+              </div>
+              <span class="product-link">
+                View Project
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M7 17L17 7M17 7H7M17 7v10" />
+                </svg>
+              </span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ABOUT -->
+      <section class="about" id="about">
+        <div class="container">
+          <div class="about-grid">
+            <div class="about-text">
+              <span class="section-label">About</span>
+              <h2>Hi, I'm Tomás.</h2>
+              <p>
+                I'm a builder based in Lisbon, Portugal. I design, develop, and
+                ship software products end-to-end, from idea to
+                production. My stack is whatever gets the job done fastest:
+                vanilla JS for speed, Python for AI, Firebase for backend,
+                Chrome APIs for extensions.
+              </p>
+              <p>
+                I believe in learning by building. Every product in this
+                portfolio started as a real problem I wanted to solve. Some grew
+                into tools that thousands use. Others are still finding their
+                audience.
+              </p>
+              <p>
+                When I'm not coding, I'm teaching Portuguese to kids around the
+                world through The Burnay Labs Education platform, or exploring
+                AI-powered automation workflows.
+              </p>
+            </div>
+            <div class="about-stats">
+              <div class="about-stat-card">
+                <strong>12+</strong>
+                <span>Products Shipped</span>
+              </div>
+              <div class="about-stat-card">
+                <strong>5M+</strong>
+                <span>Actions Powered</span>
+              </div>
+              <div class="about-stat-card">
+                <strong>50+</strong>
+                <span>Platforms Supported</span>
+              </div>
+              <div class="about-stat-card">
+                <strong>0</strong>
+                <span>VC Dollars Raised</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TECH STACK -->
+      <section class="tech" id="stack">
+        <div class="container" style="text-align: center">
+          <span class="section-label">Stack</span>
+          <h2 class="section-title">Technologies I work with</h2>
+          <div class="tech-tags">
+            <span class="tech-tag">JavaScript</span>
+            <span class="tech-tag">TypeScript</span>
+            <span class="tech-tag">Python</span>
+            <span class="tech-tag">HTML / CSS</span>
+            <span class="tech-tag">Node.js</span>
+            <span class="tech-tag">React</span>
+            <span class="tech-tag">Firebase</span>
+            <span class="tech-tag">Firestore</span>
+            <span class="tech-tag">Chrome Extensions</span>
+            <span class="tech-tag">OpenAI API</span>
+            <span class="tech-tag">Gemini API</span>
+            <span class="tech-tag">Anthropic API</span>
+            <span class="tech-tag">Electron</span>
+            <span class="tech-tag">GitHub Pages</span>
+            <span class="tech-tag">Render</span>
+            <span class="tech-tag">Playwright</span>
+            <span class="tech-tag">WebAudio API</span>
+            <span class="tech-tag">SpeechSynthesis</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section class="cta-section">
+        <div class="container">
+          <div class="cta-box">
+            <h2>Let's build something together.</h2>
+            <p>
+              Whether you have a product idea, need technical help, or just want
+              to connect. I'm always open to conversations.
+            </p>
+            <div class="cta-buttons">
+              <a
+                href="https://linkedin.com/in/tomasmbatalha"
+                target="_blank"
+                class="btn-green"
+                style="
+                  padding: 14px 32px;
+                  font-size: 15px;
+                  display: inline-flex;
+                  align-items: center;
+                  gap: 8px;
+                "
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6zM2 9h4v12H2zM4 6a2 2 0 110-4 2 2 0 010 4z"
+                  />
+                </svg>
+                Connect on LinkedIn
+              </a>
+              <a
+                href="https://github.com/tomasbb0"
+                target="_blank"
+                class="btn-outline"
+                style="padding: 14px 32px; font-size: 15px"
+                >View GitHub</a
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- HERO WAVE ANIMATION -->
+    <script>
+      (function () {
+        const canvas = document.getElementById("heroWave");
+        if (!canvas) return;
+        const ctx = canvas.getContext("2d");
+        let W, H, dpr, cols, rows, raf;
+        const SP = 24;
+        const BASE_R = 1.2;
+        let time = 0;
+        let mouse = { x: -9999, y: -9999, on: false };
+        let bursts = [];
+
+        function init() {
+          dpr = Math.min(window.devicePixelRatio || 1, 2);
+          W = window.innerWidth;
+          H = window.innerHeight;
+          canvas.width = W * dpr;
+          canvas.height = H * dpr;
+          canvas.style.width = W + "px";
+          canvas.style.height = H + "px";
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+          cols = Math.ceil(W / SP) + 2;
+          rows = Math.ceil(H / SP) + 2;
+        }
+
+        function draw() {
+          ctx.clearRect(0, 0, W, H);
+          time += 0.025;
+
+          for (let i = bursts.length - 1; i >= 0; i--) {
+            bursts[i].life -= 0.015;
+            if (bursts[i].life <= 0) bursts.splice(i, 1);
+          }
+
+          for (let row = 0; row < rows; row++) {
+            for (let col = 0; col < cols; col++) {
+              const bx = col * SP - SP * 0.5;
+              const by = row * SP - SP * 0.5;
+
+              const w1 = Math.sin(bx * 0.02 + time * 0.8) * 7;
+              const w2 = Math.sin(by * 0.025 + time * 0.6) * 6;
+              const w3 = Math.sin((bx + by) * 0.015 + time * 1.1) * 5;
+              const w4 = Math.cos(bx * 0.03 - by * 0.02 + time * 0.5) * 4;
+
+              let ox = w1 * 0.5 + w4 * 0.3;
+              let oy = w2 * 0.5 + w3 * 0.4;
+
+              const bri =
+                Math.sin(bx * 0.018 + time * 0.7) * 0.5 +
+                Math.sin(by * 0.022 + time * 0.9) * 0.3 +
+                Math.sin((bx - by) * 0.012 + time * 1.3) * 0.2;
+              let a = 0.06 + (bri * 0.5 + 0.5) * 0.12;
+              let r = BASE_R + (bri * 0.5 + 0.5) * 0.8;
+
+              if (mouse.on) {
+                const dx = bx + ox - mouse.x;
+                const dy = by + oy - mouse.y;
+                const d = Math.sqrt(dx * dx + dy * dy);
+                if (d < 140) {
+                  const f = 1 - d / 140;
+                  const f2 = f * f;
+                  ox += (dx / (d || 1)) * f2 * 35;
+                  oy += (dy / (d || 1)) * f2 * 35;
+                }
+              }
+
+              for (let j = 0; j < bursts.length; j++) {
+                const b = bursts[j];
+                const dx = bx - b.x;
+                const dy = by - b.y;
+                const d = Math.sqrt(dx * dx + dy * dy);
+                const reach = b.str * (1 - b.life * 0.4);
+                if (d < reach) {
+                  const f = (1 - d / reach) * b.life;
+                  ox += (dx / (d || 1)) * f * 30;
+                  oy += (dy / (d || 1)) * f * 30;
+                  a += f * 0.2;
+                  r += f * 0.8;
+                }
+              }
+
+              ctx.beginPath();
+              ctx.arc(bx + ox, by + oy, Math.max(r, 0.5), 0, Math.PI * 2);
+              ctx.fillStyle = "rgba(255,255,255," + Math.min(a, 0.5) + ")";
+              ctx.fill();
+            }
+          }
+          raf = requestAnimationFrame(draw);
+        }
+
+        document.addEventListener("mousemove", function (e) {
+          mouse.x = e.clientX;
+          mouse.y = e.clientY;
+          mouse.on = true;
+        });
+        document.addEventListener("mouseleave", function () {
+          mouse.on = false;
+          mouse.x = -9999;
+          mouse.y = -9999;
+        });
+        document.addEventListener("click", function (e) {
+          bursts.push({ x: e.clientX, y: e.clientY, str: 200, life: 1 });
+        });
+
+        const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+        if (!mq.matches) {
+          init();
+          draw();
+          window.addEventListener("resize", init);
+        }
+      })();
+    </script>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="container footer-inner">
+        <p>
+          &copy; 2026 Tomás Batalha &middot;
+          <a href="https://theburnaylabs.pt">theburnaylabs.pt</a>
+        </p>
+        <div class="footer-links">
+          <a href="https://github.com/tomasbb0" target="_blank">GitHub</a>
+          <a href="https://linkedin.com/in/tomasmbatalha" target="_blank"
+            >LinkedIn</a
+          >
+          <a href="https://education.theburnaylabs.pt">Education Platform</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
