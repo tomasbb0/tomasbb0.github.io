@@ -153,13 +153,13 @@
 
       /* ===== ANIMATED BL LOGO ===== */
       .hero-logo {
-        width: 120px;
-        height: 130px;
+        width: 200px;
+        height: 220px;
         margin: 0 auto 32px;
       }
       .hero-logo svg {
-        width: 120px;
-        height: 130px;
+        width: 200px;
+        height: 220px;
       }
       .hero-logo .logo-b {
         stroke-dasharray: 400;
@@ -656,6 +656,26 @@
         opacity: 1;
       }
 
+      /* ===== PARALLAX FLOATING BL LOGO ===== */
+      .parallax-bl-watermark {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 60vw;
+        height: 60vw;
+        max-width: 700px;
+        max-height: 700px;
+        pointer-events: none;
+        z-index: 0;
+        opacity: 0.03;
+        transition: opacity 0.3s;
+      }
+      .parallax-bl-watermark svg {
+        width: 100%;
+        height: 100%;
+      }
+
       /* ===== PARALLAX SECTIONS ===== */
       .parallax-section {
         transform: translateY(40px);
@@ -954,6 +974,38 @@
       </div>
     </nav>
 
+    <!-- Floating BL watermark that responds to scroll -->
+    <div class="parallax-bl-watermark" id="blWatermark">
+      <svg
+        viewBox="-2 -2 100 114"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M10,6 L48,6 L58,16 L58,38 L48,48 L58,58 L58,84 L48,96 L10,96 Z"
+          stroke="#ffffff"
+          stroke-width="1.5"
+          fill="none"
+          stroke-linejoin="miter"
+        />
+        <line
+          x1="10"
+          y1="48"
+          x2="48"
+          y2="48"
+          stroke="#ffffff"
+          stroke-width="1.5"
+        />
+        <polyline
+          points="70,4 70,70 48,96 92,96"
+          stroke="#ffffff"
+          stroke-width="1.5"
+          fill="none"
+          stroke-linejoin="miter"
+        />
+      </svg>
+    </div>
+
     <main>
       <!-- HERO -->
       <section class="hero">
@@ -993,7 +1045,7 @@
               />
             </svg>
           </div>
-          <div class="hero-badge">
+          <div class="hero-badge" style="display: none">
             &#9889; Building in public · Lisbon, Portugal
           </div>
           <h1>Build. Ship.<br /><em>Repeat.</em></h1>
@@ -1907,28 +1959,34 @@
 
       // ── Parallax / Scroll Animations ──
       (function () {
-        // Parallax tilt on cards
+        // Parallax tilt on cards — VERY strong
         document.querySelectorAll(".parallax-card").forEach(function (card) {
           card.addEventListener("mousemove", function (e) {
             const rect = card.getBoundingClientRect();
             const x = (e.clientX - rect.left) / rect.width - 0.5;
             const y = (e.clientY - rect.top) / rect.height - 0.5;
             card.style.transform =
-              "perspective(600px) rotateY(" +
-              x * 15 +
+              "perspective(500px) rotateY(" +
+              x * 22 +
               "deg) rotateX(" +
-              -y * 15 +
-              "deg) scale(1.04)";
+              -y * 22 +
+              "deg) scale(1.06)";
             card.style.boxShadow =
               "0 " +
-              (25 + y * 15) +
+              (30 + y * 20) +
               "px " +
-              (50 + Math.abs(x) * 30) +
-              "px rgba(0,0,0,0.4)";
+              (60 + Math.abs(x) * 40) +
+              "px rgba(0,0,0,0.45)";
+            // Highlight glow follows cursor
+            var px = ((x + 0.5) * 100).toFixed(0);
+            var py = ((y + 0.5) * 100).toFixed(0);
+            card.style.background =
+              "radial-gradient(circle at " + px + "% " + py + "%, rgba(16,185,129,0.06), transparent 60%), var(--surface)";
           });
           card.addEventListener("mouseleave", function () {
             card.style.transform = "";
             card.style.boxShadow = "";
+            card.style.background = "";
           });
         });
 
@@ -1985,14 +2043,20 @@
             fadeObserver.observe(el);
           });
 
-        // Smooth parallax scrolling for hero content
+        // Smooth parallax scrolling for hero + floating BL watermark
         var hero = document.querySelector(".hero-content");
         var heroSection = document.querySelector(".hero");
-        if (hero && heroSection) {
-          window.addEventListener(
-            "scroll",
-            function () {
-              var scrolled = window.pageYOffset;
+        var blWatermark = document.getElementById("blWatermark");
+        var totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+
+        window.addEventListener(
+          "scroll",
+          function () {
+            var scrolled = window.pageYOffset;
+            var scrollPct = scrolled / (totalHeight || 1);
+
+            // Hero parallax
+            if (hero && heroSection) {
               var heroBottom = heroSection.offsetTop + heroSection.offsetHeight;
               if (scrolled < heroBottom) {
                 hero.style.transform = "translateY(" + scrolled * 0.3 + "px)";
@@ -2001,10 +2065,22 @@
                   0,
                 );
               }
-            },
-            { passive: true },
-          );
-        }
+            }
+
+            // Floating BL watermark: rotates, scales, and shifts with scroll
+            if (blWatermark) {
+              var rotation = scrollPct * 360;
+              var scale = 1 + Math.sin(scrollPct * Math.PI) * 0.4;
+              var yShift = Math.sin(scrollPct * Math.PI * 2) * 100;
+              var xShift = Math.cos(scrollPct * Math.PI * 3) * 50;
+              var opacity = 0.025 + Math.sin(scrollPct * Math.PI) * 0.02;
+              blWatermark.style.transform =
+                "translate(calc(-50% + " + xShift + "px), calc(-50% + " + yShift + "px)) rotate(" + rotation + "deg) scale(" + scale + ")";
+              blWatermark.style.opacity = opacity;
+            }
+          },
+          { passive: true },
+        );
 
         // Counter animation for stat numbers
         var statCards = document.querySelectorAll(".about-stat-card strong");
