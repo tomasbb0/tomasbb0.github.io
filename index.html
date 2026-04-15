@@ -677,25 +677,7 @@
         opacity: 1;
       }
 
-      /* ===== PARALLAX FLOATING BL LOGO ===== */
-      .parallax-bl-watermark {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 60vw;
-        height: 60vw;
-        max-width: 700px;
-        max-height: 700px;
-        pointer-events: none;
-        z-index: 0;
-        opacity: 0.03;
-        transition: opacity 0.3s;
-      }
-      .parallax-bl-watermark svg {
-        width: 100%;
-        height: 100%;
-      }
+
 
       /* ===== PARALLAX SECTIONS ===== */
       .parallax-section {
@@ -905,12 +887,186 @@
         color: var(--white);
       }
 
+      /* ===== TEAM / ORG CHART ===== */
+      .team {
+        padding: 100px 0;
+        background: rgba(255, 255, 255, 0.001);
+        backdrop-filter: blur(3px) saturate(120%);
+        -webkit-backdrop-filter: blur(3px) saturate(120%);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 24px;
+        margin: 12px 20px;
+      }
+      .team-layout {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 48px;
+        align-items: start;
+      }
+      .org-chart {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0;
+      }
+      .org-node {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 20px;
+        background: var(--surface);
+        border: 1px solid var(--border2);
+        border-radius: 12px;
+        transition: all 0.3s;
+        cursor: default;
+        position: relative;
+      }
+      .org-node:hover {
+        border-color: var(--green);
+        box-shadow: 0 0 20px var(--green-glow);
+        transform: translateY(-2px);
+      }
+      .org-node-ceo {
+        background: linear-gradient(135deg, rgba(16,185,129,0.08), rgba(139,92,246,0.08));
+        border-color: var(--green);
+        padding: 18px 28px;
+      }
+      .org-node-emoji {
+        font-size: 24px;
+        flex-shrink: 0;
+      }
+      .org-node-info {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .org-node-name {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--white);
+      }
+      .org-node-role {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .org-connector {
+        width: 2px;
+        height: 20px;
+        background: var(--border2);
+      }
+      .org-branch {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+        position: relative;
+        padding-top: 20px;
+      }
+      .org-branch::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 25%;
+        right: 25%;
+        height: 1px;
+        background: var(--border2);
+      }
+      .org-branch .org-node {
+        padding: 10px 14px;
+        font-size: 13px;
+      }
+      .org-branch .org-node-emoji {
+        font-size: 18px;
+      }
+      .org-branch .org-node-name {
+        font-size: 13px;
+      }
+      .org-branch .org-node-role {
+        font-size: 11px;
+      }
+      .org-label {
+        font-size: 11px;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        font-weight: 600;
+        margin: 16px 0 8px;
+        text-align: center;
+      }
+      .team-right {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+      .team-photo {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid var(--border2);
+        box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+      }
+      .team-about h2 {
+        font-size: 28px;
+        font-weight: 800;
+        color: var(--white);
+        margin-bottom: 16px;
+      }
+      .team-about p {
+        font-size: 15px;
+        color: var(--muted);
+        line-height: 1.8;
+        margin-bottom: 12px;
+      }
+      .team-about-label {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--green);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-top: 20px;
+        margin-bottom: 8px;
+      }
+
+      /* ===== LANGUAGE TOGGLE ===== */
+      .lang-toggle {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        background: rgba(255,255,255,0.06);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 2px;
+        margin-right: 12px;
+      }
+      .lang-btn {
+        padding: 4px 10px;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--muted);
+        background: transparent;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .lang-btn.active {
+        background: var(--green);
+        color: var(--bg);
+      }
+      .lang-btn:hover:not(.active) {
+        color: var(--white);
+      }
+
       /* ===== RESPONSIVE ===== */
       @media (max-width: 900px) {
         .products-grid {
           grid-template-columns: repeat(2, 1fr);
         }
         .about-grid {
+          grid-template-columns: 1fr;
+        }
+        .team-layout {
           grid-template-columns: 1fr;
         }
       }
@@ -973,12 +1129,22 @@
           The Burnay Labs
         </a>
         <div class="nav-links">
-          <a href="#products">Products</a>
-          <a href="#about">About</a>
-          <a href="#stack">Stack</a>
-          <a href="https://education.theburnaylabs.pt">Education</a>
+          <a href="#products" data-en="Products" data-pt="Produtos">Products</a>
+          <a href="#about" data-en="About" data-pt="Sobre">About</a>
+          <a href="#team" data-en="Team" data-pt="Equipa">Team</a>
+          <a href="#stack" data-en="Stack" data-pt="Tecnologias">Stack</a>
+          <a
+            href="https://theburnaylabs.pt/burnaylabs-site/"
+            data-en="Education"
+            data-pt="Educação"
+            >Education</a
+          >
         </div>
         <div class="nav-auth">
+          <div class="lang-toggle">
+            <button class="lang-btn active" onclick="setLang('en')">EN</button>
+            <button class="lang-btn" onclick="setLang('pt')">PT</button>
+          </div>
           <a
             href="https://github.com/tomasbb0"
             target="_blank"
@@ -994,38 +1160,6 @@
         </div>
       </div>
     </nav>
-
-    <!-- Floating BL watermark that responds to scroll -->
-    <div class="parallax-bl-watermark" id="blWatermark">
-      <svg
-        viewBox="-2 -2 100 114"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M10,6 L48,6 L58,16 L58,38 L48,48 L58,58 L58,84 L48,96 L10,96 Z"
-          stroke="#ffffff"
-          stroke-width="1.5"
-          fill="none"
-          stroke-linejoin="miter"
-        />
-        <line
-          x1="10"
-          y1="48"
-          x2="48"
-          y2="48"
-          stroke="#ffffff"
-          stroke-width="1.5"
-        />
-        <polyline
-          points="70,4 70,70 48,96 92,96"
-          stroke="#ffffff"
-          stroke-width="1.5"
-          fill="none"
-          stroke-linejoin="miter"
-        />
-      </svg>
-    </div>
 
     <main>
       <!-- HERO -->
@@ -1069,8 +1203,16 @@
           <div class="hero-badge" style="display: none">
             &#9889; Building in public · Lisbon, Portugal
           </div>
-          <h1>Build. Ship.<br /><em>Repeat.</em></h1>
-          <p>
+          <h1
+            data-en="Build. Ship.<br><em>Repeat.</em>"
+            data-pt="Construir. Lançar.<br><em>Repetir.</em>"
+          >
+            Build. Ship.<br /><em>Repeat.</em>
+          </h1>
+          <p
+            data-en="I'm Tomás Batalha. I build software products that solve real problems. From AI-powered job search tools to language learning platforms. Fast iteration, real users, shipped code."
+            data-pt="Sou o Tomás Batalha. Construo produtos de software que resolvem problemas reais. De ferramentas de procura de emprego com IA a plataformas de aprendizagem de idiomas. Iteração rápida, utilizadores reais, código entregue."
+          >
             I'm Tomás Batalha. I build software products that solve real
             problems. From AI-powered job search tools to language learning
             platforms. Fast iteration, real users, shipped code.
@@ -1087,18 +1229,36 @@
               </svg>
               See Products
             </a>
-            <a href="#about" class="btn-outline">About Me</a>
+            <a
+              href="#about"
+              class="btn-outline"
+              data-en="About Me"
+              data-pt="Sobre Mim"
+              >About Me</a
+            >
           </div>
           <div class="hero-stats">
             <div class="hero-stat">
-              <strong>12+</strong><span>Products Built</span>
+              <strong>12+</strong
+              ><span data-en="Products Built" data-pt="Produtos Construídos"
+                >Products Built</span
+              >
             </div>
             <div class="hero-stat">
-              <strong>3</strong><span>Live &amp; Shipped</span>
+              <strong>3</strong
+              ><span data-en="Live & Shipped" data-pt="Ao Vivo & Lançados"
+                >Live &amp; Shipped</span
+              >
             </div>
-            <div class="hero-stat"><strong>9</strong><span>In Beta</span></div>
             <div class="hero-stat">
-              <strong>100%</strong><span>Solo-Built</span>
+              <strong>9</strong
+              ><span data-en="In Beta" data-pt="Em Beta">In Beta</span>
+            </div>
+            <div class="hero-stat">
+              <strong>100%</strong
+              ><span data-en="Solo-Built" data-pt="Construído a Solo"
+                >Solo-Built</span
+              >
             </div>
           </div>
         </div>
@@ -1107,8 +1267,16 @@
       <!-- PRODUCTS -->
       <section class="products section-reveal" id="products">
         <div class="container">
-          <span class="section-label">Products</span>
-          <h2 class="section-title">What I've built.</h2>
+          <span class="section-label" data-en="Products" data-pt="Produtos"
+            >Products</span
+          >
+          <h2
+            class="section-title"
+            data-en="What I've built."
+            data-pt="O que construí."
+          >
+            What I've built.
+          </h2>
           <p class="section-desc">
             Each product started with a real problem. Some are live, some are in
             beta. All are built to ship.
@@ -1539,22 +1707,35 @@
         <div class="container">
           <div class="about-grid">
             <div class="about-text">
-              <span class="section-label">About</span>
-              <h2>Hi, I'm Tomás.</h2>
-              <p>
+              <span class="section-label" data-en="About" data-pt="Sobre"
+                >About</span
+              >
+              <h2 data-en="Hi, I'm Tomás." data-pt="Olá, eu sou o Tomás.">
+                Hi, I'm Tomás.
+              </h2>
+              <p
+                data-en="I'm a builder based in Lisbon, Portugal. I design, develop, and ship software products end-to-end, from idea to production. My stack is whatever gets the job done fastest: vanilla JS for speed, Python for AI, Firebase for backend, Chrome APIs for extensions."
+                data-pt="Sou um builder baseado em Lisboa, Portugal. Desenho, desenvolvo e lanço produtos de software de ponta a ponta, da ideia à produção. A minha stack é o que resolve mais rápido: vanilla JS para velocidade, Python para IA, Firebase para backend, Chrome APIs para extensões."
+              >
                 I'm a builder based in Lisbon, Portugal. I design, develop, and
                 ship software products end-to-end, from idea to production. My
                 stack is whatever gets the job done fastest: vanilla JS for
                 speed, Python for AI, Firebase for backend, Chrome APIs for
                 extensions.
               </p>
-              <p>
+              <p
+                data-en="I believe in learning by building. Every product in this portfolio started as a real problem I wanted to solve. Some grew into tools that thousands use. Others are still finding their audience."
+                data-pt="Acredito em aprender a construir. Cada produto neste portfólio começou como um problema real que queria resolver. Alguns cresceram para ferramentas que milhares usam. Outros ainda estão a encontrar o seu público."
+              >
                 I believe in learning by building. Every product in this
                 portfolio started as a real problem I wanted to solve. Some grew
                 into tools that thousands use. Others are still finding their
                 audience.
               </p>
-              <p>
+              <p
+                data-en="When I'm not coding, I'm teaching Portuguese to kids around the world through The Burnay Labs Education platform, or exploring AI-powered automation workflows."
+                data-pt="Quando não estou a programar, estou a ensinar Português a crianças de todo o mundo através da plataforma The Burnay Labs Education, ou a explorar workflows de automação com IA."
+              >
                 When I'm not coding, I'm teaching Portuguese to kids around the
                 world through The Burnay Labs Education platform, or exploring
                 AI-powered automation workflows.
@@ -1563,19 +1744,260 @@
             <div class="about-stats">
               <div class="about-stat-card">
                 <strong>12+</strong>
-                <span>Products Shipped</span>
+                <span data-en="Products Shipped" data-pt="Produtos Lançados"
+                  >Products Shipped</span
+                >
               </div>
               <div class="about-stat-card">
                 <strong>5M+</strong>
-                <span>Actions Powered</span>
+                <span data-en="Actions Powered" data-pt="Ações Automatizadas"
+                  >Actions Powered</span
+                >
               </div>
               <div class="about-stat-card">
                 <strong>50+</strong>
-                <span>Platforms Supported</span>
+                <span
+                  data-en="Platforms Supported"
+                  data-pt="Plataformas Suportadas"
+                  >Platforms Supported</span
+                >
               </div>
               <div class="about-stat-card">
                 <strong>0</strong>
-                <span>VC Dollars Raised</span>
+                <span
+                  data-en="VC Dollars Raised"
+                  data-pt="Euros de VC Levantados"
+                  >VC Dollars Raised</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TEAM / ORG CHART -->
+      <section class="team section-reveal" id="team">
+        <div class="container">
+          <span class="section-label" data-en="Team" data-pt="Equipa"
+            >Team</span
+          >
+          <h2
+            class="section-title"
+            data-en="The Burnay Labs Organization"
+            data-pt="A Organização The Burnay Labs"
+          >
+            The Burnay Labs Organization
+          </h2>
+          <div class="team-layout">
+            <div class="org-chart">
+              <!-- CEO -->
+              <div class="org-node org-node-ceo">
+                <span class="org-node-emoji">👨‍💻</span>
+                <div class="org-node-info">
+                  <span class="org-node-name">Tomás Batalha</span>
+                  <span
+                    class="org-node-role"
+                    data-en="Founder & CEO"
+                    data-pt="Fundador & CEO"
+                    >Founder & CEO</span
+                  >
+                </div>
+              </div>
+              <div class="org-connector"></div>
+              <div
+                class="org-label"
+                data-en="HOLDING LEVEL AGENTS"
+                data-pt="AGENTES DE HOLDING"
+              >
+                HOLDING LEVEL AGENTS
+              </div>
+              <div class="org-branch">
+                <div class="org-node">
+                  <span class="org-node-emoji">🧠</span>
+                  <div class="org-node-info">
+                    <span class="org-node-name">Oracle</span>
+                    <span
+                      class="org-node-role"
+                      data-en="VP Strategy & Mentor"
+                      data-pt="VP Estratégia & Mentor"
+                      >VP Strategy & Mentor</span
+                    >
+                  </div>
+                </div>
+                <div class="org-node">
+                  <span class="org-node-emoji">🏛️</span>
+                  <div class="org-node-info">
+                    <span class="org-node-name">Atlas</span>
+                    <span
+                      class="org-node-role"
+                      data-en="COO / Right Hand"
+                      data-pt="COO / Braço Direito"
+                      >COO / Right Hand</span
+                    >
+                  </div>
+                </div>
+                <div class="org-node">
+                  <span class="org-node-emoji">📋</span>
+                  <div class="org-node-info">
+                    <span class="org-node-name">Sage</span>
+                    <span
+                      class="org-node-role"
+                      data-en="Secretary / PA"
+                      data-pt="Secretário / PA"
+                      >Secretary / PA</span
+                    >
+                  </div>
+                </div>
+                <div class="org-node">
+                  <span class="org-node-emoji">👁️</span>
+                  <div class="org-node-info">
+                    <span class="org-node-name">Iris</span>
+                    <span
+                      class="org-node-role"
+                      data-en="Browser Agent"
+                      data-pt="Agente de Browser"
+                      >Browser Agent</span
+                    >
+                  </div>
+                </div>
+                <div class="org-node">
+                  <span class="org-node-emoji">👩‍💼</span>
+                  <div class="org-node-info">
+                    <span class="org-node-name">Hera</span>
+                    <span
+                      class="org-node-role"
+                      data-en="HR & Onboarding"
+                      data-pt="RH & Integração"
+                      >HR & Onboarding</span
+                    >
+                  </div>
+                </div>
+                <div class="org-node">
+                  <span class="org-node-emoji">🔧</span>
+                  <div class="org-node-info">
+                    <span class="org-node-name">Sentinel</span>
+                    <span
+                      class="org-node-role"
+                      data-en="Tech Ops / SRE"
+                      data-pt="Ops Técnico / SRE"
+                      >Tech Ops / SRE</span
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="org-connector"></div>
+              <div
+                class="org-label"
+                data-en="JOBPILOT AI SUBSIDIARY"
+                data-pt="SUBSIDIÁRIA JOBPILOT AI"
+              >
+                JOBPILOT AI SUBSIDIARY
+              </div>
+              <div class="org-branch">
+                <div class="org-node">
+                  <span class="org-node-emoji">⭐</span>
+                  <div class="org-node-info">
+                    <span class="org-node-name">Rex</span>
+                    <span
+                      class="org-node-role"
+                      data-en="CEO, JobPilot AI"
+                      data-pt="CEO, JobPilot AI"
+                      >CEO, JobPilot AI</span
+                    >
+                  </div>
+                </div>
+                <div class="org-node">
+                  <span class="org-node-emoji">💎</span>
+                  <div class="org-node-info">
+                    <span class="org-node-name">Prism</span>
+                    <span
+                      class="org-node-role"
+                      data-en="VP Strategy"
+                      data-pt="VP Estratégia"
+                      >VP Strategy</span
+                    >
+                  </div>
+                </div>
+                <div class="org-node">
+                  <span class="org-node-emoji">📝</span>
+                  <div class="org-node-info">
+                    <span class="org-node-name">Kit</span>
+                    <span
+                      class="org-node-role"
+                      data-en="Review Intern"
+                      data-pt="Estagiário de Reviews"
+                      >Review Intern</span
+                    >
+                  </div>
+                </div>
+                <div class="org-node">
+                  <span class="org-node-emoji">🔍</span>
+                  <div class="org-node-info">
+                    <span class="org-node-name">Scout</span>
+                    <span
+                      class="org-node-role"
+                      data-en="Intelligence"
+                      data-pt="Inteligência"
+                      >Intelligence</span
+                    >
+                  </div>
+                </div>
+                <div class="org-node">
+                  <span class="org-node-emoji">📢</span>
+                  <div class="org-node-info">
+                    <span class="org-node-name">Echo</span>
+                    <span
+                      class="org-node-role"
+                      data-en="Marketing & Growth"
+                      data-pt="Marketing & Crescimento"
+                      >Marketing & Growth</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="team-right">
+              <img
+                src="https://avatars.githubusercontent.com/u/211906206?v=4"
+                alt="Tomás Batalha"
+                class="team-photo"
+              />
+              <div class="team-about">
+                <h2 data-en="About Me" data-pt="Sobre Mim">About Me</h2>
+                <p
+                  data-en="I'm Tomás Batalha, a builder based in Lisbon, Portugal. I design, develop, and ship software products end-to-end. My approach: identify a real problem, build the solution fast, ship it, learn from users, iterate."
+                  data-pt="Sou o Tomás Batalha, um builder baseado em Lisboa, Portugal. Concebo, desenvolvo e lanço produtos de software de ponta a ponta. A minha abordagem: identificar um problema real, construir a solução rapidamente, lançar, aprender com os utilizadores, iterar."
+                >
+                  I'm Tomás Batalha, a builder based in Lisbon, Portugal. I
+                  design, develop, and ship software products end-to-end. My
+                  approach: identify a real problem, build the solution fast,
+                  ship it, learn from users, iterate.
+                </p>
+                <div
+                  class="team-about-label"
+                  data-en="About The Burnay Labs"
+                  data-pt="Sobre The Burnay Labs"
+                >
+                  About The Burnay Labs
+                </div>
+                <p
+                  data-en="The Burnay Labs is a solo software holding company. I run 11 AI agents that handle everything from strategic planning to marketing to code reviews. Think of it as a one-person company with a full team, all powered by AI."
+                  data-pt="The Burnay Labs é uma holding de software a solo. Giro 11 agentes de IA que tratam de tudo, desde planeamento estratégico a marketing e revisões de código. É como uma empresa de uma pessoa com uma equipa completa, toda movida a IA."
+                >
+                  The Burnay Labs is a solo software holding company. I run 11
+                  AI agents that handle everything from strategic planning to
+                  marketing to code reviews. Think of it as a one-person company
+                  with a full team, all powered by AI.
+                </p>
+                <p
+                  data-en="Each agent has a specific role, personality, and set of tools. They communicate through structured workflows and escalation protocols. The org chart on the left shows the current team structure."
+                  data-pt="Cada agente tem um papel específico, personalidade e conjunto de ferramentas. Comunicam através de workflows estruturados e protocolos de escalação. O organigrama à esquerda mostra a estrutura atual da equipa."
+                >
+                  Each agent has a specific role, personality, and set of tools.
+                  They communicate through structured workflows and escalation
+                  protocols. The org chart on the left shows the current team
+                  structure.
+                </p>
               </div>
             </div>
           </div>
@@ -1585,8 +2007,16 @@
       <!-- TECH STACK -->
       <section class="tech section-reveal" id="stack">
         <div class="container" style="text-align: center">
-          <span class="section-label">Stack</span>
-          <h2 class="section-title">Technologies I work with</h2>
+          <span class="section-label" data-en="Stack" data-pt="Tecnologias"
+            >Stack</span
+          >
+          <h2
+            class="section-title"
+            data-en="Technologies I work with"
+            data-pt="Tecnologias com que trabalho"
+          >
+            Technologies I work with
+          </h2>
           <div class="tech-tags">
             <span class="tech-tag">JavaScript</span>
             <span class="tech-tag">TypeScript</span>
@@ -1614,8 +2044,16 @@
       <section class="cta-section section-reveal">
         <div class="container">
           <div class="cta-box">
-            <h2>Let's build something together.</h2>
-            <p>
+            <h2
+              data-en="Let's build something together."
+              data-pt="Vamos construir algo juntos."
+            >
+              Let's build something together.
+            </h2>
+            <p
+              data-en="Whether you have a product idea, need technical help, or just want to connect. I'm always open to conversations."
+              data-pt="Quer tenha uma ideia de produto, precise de ajuda técnica, ou apenas queira conectar-se. Estou sempre aberto a conversas."
+            >
               Whether you have a product idea, need technical help, or just want
               to connect. I'm always open to conversations.
             </p>
@@ -1642,13 +2080,19 @@
                     d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6zM2 9h4v12H2zM4 6a2 2 0 110-4 2 2 0 010 4z"
                   />
                 </svg>
-                Connect on LinkedIn
+                <span
+                  data-en="Connect on LinkedIn"
+                  data-pt="Conectar no LinkedIn"
+                  >Connect on LinkedIn</span
+                >
               </a>
               <a
                 href="https://github.com/tomasbb0"
                 target="_blank"
                 class="btn-outline"
                 style="padding: 14px 32px; font-size: 15px"
+                data-en="View GitHub"
+                data-pt="Ver GitHub"
                 >View GitHub</a
               >
             </div>
@@ -1656,6 +2100,45 @@
         </div>
       </section>
     </main>
+
+    <!-- LANGUAGE TOGGLE -->
+    <script>
+      function setLang(lang) {
+        document.documentElement.lang = lang;
+        document.querySelectorAll("[data-en][data-pt]").forEach(function (el) {
+          var text = el.getAttribute("data-" + lang);
+          if (text) {
+            // For elements with child nodes (like the LinkedIn button with SVG), only update text nodes
+            if (el.children.length > 0) {
+              // Find the last text node and update it
+              var nodes = el.childNodes;
+              for (var i = nodes.length - 1; i >= 0; i--) {
+                if (nodes[i].nodeType === 3 && nodes[i].textContent.trim()) {
+                  nodes[i].textContent = text;
+                  break;
+                }
+              }
+            } else {
+              el.textContent = text;
+            }
+          }
+        });
+        // Toggle active class on buttons
+        document.querySelectorAll(".lang-btn").forEach(function (btn) {
+          btn.classList.toggle(
+            "active",
+            btn.textContent.trim().toLowerCase() === lang,
+          );
+        });
+        // Persist
+        localStorage.setItem("bl_lang", lang);
+      }
+      // Init from saved preference
+      (function () {
+        var saved = localStorage.getItem("bl_lang");
+        if (saved && saved !== "en") setLang(saved);
+      })();
+    </script>
 
     <!-- HERO WAVE ANIMATION -->
     <script>
@@ -2084,10 +2567,9 @@
           sectionRevealObserver.observe(s);
         });
 
-        // Smooth parallax scrolling for hero + floating BL watermark
+        // Smooth parallax scrolling for hero
         var hero = document.querySelector(".hero-content");
         var heroSection = document.querySelector(".hero");
-        var blWatermark = document.getElementById("blWatermark");
         var totalHeight =
           document.documentElement.scrollHeight - window.innerHeight;
 
@@ -2095,7 +2577,6 @@
           "scroll",
           function () {
             var scrolled = window.pageYOffset;
-            var scrollPct = scrolled / (totalHeight || 1);
 
             // Hero parallax
             if (hero && heroSection) {
@@ -2107,26 +2588,6 @@
                   0,
                 );
               }
-            }
-
-            // Floating BL watermark: rotates, scales, and shifts with scroll
-            if (blWatermark) {
-              var rotation = scrollPct * 360;
-              var scale = 1 + Math.sin(scrollPct * Math.PI) * 0.4;
-              var yShift = Math.sin(scrollPct * Math.PI * 2) * 100;
-              var xShift = Math.cos(scrollPct * Math.PI * 3) * 50;
-              var opacity = 0.025 + Math.sin(scrollPct * Math.PI) * 0.02;
-              blWatermark.style.transform =
-                "translate(calc(-50% + " +
-                xShift +
-                "px), calc(-50% + " +
-                yShift +
-                "px)) rotate(" +
-                rotation +
-                "deg) scale(" +
-                scale +
-                ")";
-              blWatermark.style.opacity = opacity;
             }
           },
           { passive: true },
@@ -2183,7 +2644,12 @@
           <a href="https://linkedin.com/in/tomasmbatalha" target="_blank"
             >LinkedIn</a
           >
-          <a href="https://education.theburnaylabs.pt">Education Platform</a>
+          <a
+            href="https://education.theburnaylabs.pt"
+            data-en="Education Platform"
+            data-pt="Plataforma de Educação"
+            >Education Platform</a
+          >
         </div>
       </div>
     </footer>
