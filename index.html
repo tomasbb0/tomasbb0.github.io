@@ -902,12 +902,43 @@
         grid-template-columns: 1fr 1fr;
         gap: 48px;
         align-items: start;
+        perspective: 1200px;
       }
+      .team-card {
+        background: var(--surface);
+        border: 1px solid var(--border2);
+        border-radius: 20px;
+        padding: 36px 28px;
+        transition: all 0.4s ease;
+      }
+      .team-card-left {
+        transform: rotateY(3deg);
+        transform-origin: right center;
+      }
+      .team-card-right {
+        transform: rotateY(-3deg);
+        transform-origin: left center;
+      }
+      .team-card:hover {
+        border-color: rgba(16,185,129,0.3);
+        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      }
+      .team-card-left:hover { transform: rotateY(1deg) translateY(-4px); }
+      .team-card-right:hover { transform: rotateY(-1deg) translateY(-4px); }
       .org-chart {
         display: flex;
         flex-direction: column;
         align-items: center;
         gap: 0;
+      }
+      .org-chart-subtitle {
+        font-size: 13px;
+        color: var(--green);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        margin-bottom: 20px;
+        text-align: center;
       }
       .org-node {
         display: flex;
@@ -918,7 +949,7 @@
         border: 1px solid var(--border2);
         border-radius: 12px;
         transition: all 0.3s;
-        cursor: default;
+        cursor: pointer;
         position: relative;
       }
       .org-node:hover {
@@ -930,6 +961,7 @@
         background: linear-gradient(135deg, rgba(16,185,129,0.08), rgba(139,92,246,0.08));
         border-color: var(--green);
         padding: 18px 28px;
+        cursor: default;
       }
       .org-node-emoji {
         font-size: 24px;
@@ -997,6 +1029,7 @@
         display: flex;
         flex-direction: column;
         gap: 24px;
+        align-items: center;
       }
       .team-photo {
         width: 200px;
@@ -1026,6 +1059,80 @@
         letter-spacing: 1px;
         margin-top: 20px;
         margin-bottom: 8px;
+      }
+      /* Agent Modal */
+      .agent-modal-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.7);
+        backdrop-filter: blur(8px);
+        z-index: 10000;
+        align-items: center;
+        justify-content: center;
+      }
+      .agent-modal-overlay.active { display: flex; }
+      .agent-modal {
+        background: var(--surface);
+        border: 1px solid var(--border2);
+        border-radius: 20px;
+        padding: 40px;
+        max-width: 520px;
+        width: 90%;
+        position: relative;
+        max-height: 80vh;
+        overflow-y: auto;
+      }
+      .agent-modal-close {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        background: none;
+        border: none;
+        color: var(--muted);
+        font-size: 24px;
+        cursor: pointer;
+        transition: color 0.2s;
+      }
+      .agent-modal-close:hover { color: var(--white); }
+      .agent-modal-header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 20px;
+      }
+      .agent-modal-emoji { font-size: 48px; }
+      .agent-modal-title h3 {
+        font-size: 24px;
+        font-weight: 800;
+        color: var(--white);
+        margin: 0;
+      }
+      .agent-modal-title span {
+        font-size: 14px;
+        color: var(--green);
+        font-weight: 600;
+      }
+      .agent-modal p {
+        font-size: 15px;
+        color: var(--muted);
+        line-height: 1.8;
+        margin-bottom: 12px;
+      }
+      .agent-modal-meta {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+        margin-top: 16px;
+      }
+      .agent-modal-tag {
+        padding: 6px 14px;
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 600;
+        background: rgba(16,185,129,0.1);
+        color: var(--green);
+        border: 1px solid rgba(16,185,129,0.2);
       }
 
       /* ===== LANGUAGE TOGGLE ===== */
@@ -1068,6 +1175,12 @@
         }
         .team-layout {
           grid-template-columns: 1fr;
+        }
+        .team-card-left, .team-card-right {
+          transform: none;
+        }
+        .team-card-left:hover, .team-card-right:hover {
+          transform: translateY(-4px);
         }
       }
       @media (max-width: 640px) {
@@ -1243,7 +1356,11 @@
           >
             What we've built &amp; shipped.
           </h2>
-          <p class="section-desc" data-en="Technology ventures solving real problems. From AI-powered platforms to consumer tools. Some are live, some are in beta. All built to deliver results." data-pt="Ventures tecnológicas a resolver problemas reais. De plataformas com IA a ferramentas para consumidores. Alguns estão ao vivo, outros em beta. Todos construídos para entregar resultados.">
+          <p
+            class="section-desc"
+            data-en="Technology ventures solving real problems. From AI-powered platforms to consumer tools. Some are live, some are in beta. All built to deliver results."
+            data-pt="Ventures tecnológicas a resolver problemas reais. De plataformas com IA a ferramentas para consumidores. Alguns estão ao vivo, outros em beta. Todos construídos para entregar resultados."
+          >
             Technology ventures solving real problems. From AI-powered platforms
             to consumer tools. Some are live, some are in beta. All built to
             deliver results.
@@ -1710,7 +1827,9 @@
             <div class="about-stats">
               <div class="about-stat-card">
                 <strong>12+</strong>
-                <span data-en="Ventures & Products" data-pt="Ventures & Produtos"
+                <span
+                  data-en="Ventures & Products"
+                  data-pt="Ventures & Produtos"
                   >Ventures &amp; Products</span
                 >
               </div>
@@ -1722,9 +1841,7 @@
               </div>
               <div class="about-stat-card">
                 <strong>2</strong>
-                <span
-                  data-en="Business Pillars"
-                  data-pt="Pilares de Negócio"
+                <span data-en="Business Pillars" data-pt="Pilares de Negócio"
                   >Business Pillars</span
                 >
               </div>
@@ -1755,215 +1872,133 @@
             The Burnay Labs Organization
           </h2>
           <div class="team-layout">
-            <div class="org-chart">
+            <div class="team-card team-card-left">
+              <div class="org-chart-subtitle" data-en="The OpenClaw Agents Org Chart" data-pt="Organigrama dos Agentes OpenClaw">The OpenClaw Agents Org Chart</div>
+              <div class="org-chart">
               <!-- CEO -->
               <div class="org-node org-node-ceo">
                 <span class="org-node-emoji">👨‍💻</span>
                 <div class="org-node-info">
                   <span class="org-node-name">Tomás Batalha</span>
-                  <span
-                    class="org-node-role"
-                    data-en="Founder & CEO"
-                    data-pt="Fundador & CEO"
-                    >Founder & CEO</span
-                  >
+                  <span class="org-node-role" data-en="Founder & CEO" data-pt="Fundador & CEO">Founder &amp; CEO</span>
                 </div>
               </div>
               <div class="org-connector"></div>
-              <div
-                class="org-label"
-                data-en="HOLDING LEVEL AGENTS"
-                data-pt="AGENTES DE HOLDING"
-              >
-                HOLDING LEVEL AGENTS
-              </div>
+              <div class="org-label" data-en="HOLDING LEVEL AGENTS" data-pt="AGENTES DE HOLDING">HOLDING LEVEL AGENTS</div>
               <div class="org-branch">
-                <div class="org-node">
+                <div class="org-node" onclick="openAgentModal('oracle')">
                   <span class="org-node-emoji">🧠</span>
                   <div class="org-node-info">
                     <span class="org-node-name">Oracle</span>
-                    <span
-                      class="org-node-role"
-                      data-en="VP Strategy & Mentor"
-                      data-pt="VP Estratégia & Mentor"
-                      >VP Strategy & Mentor</span
-                    >
+                    <span class="org-node-role" data-en="VP Strategy & Mentor" data-pt="VP Estratégia & Mentor">VP Strategy &amp; Mentor</span>
                   </div>
                 </div>
-                <div class="org-node">
+                <div class="org-node" onclick="openAgentModal('atlas')">
                   <span class="org-node-emoji">🏛️</span>
                   <div class="org-node-info">
                     <span class="org-node-name">Atlas</span>
-                    <span
-                      class="org-node-role"
-                      data-en="COO / Right Hand"
-                      data-pt="COO / Braço Direito"
-                      >COO / Right Hand</span
-                    >
+                    <span class="org-node-role" data-en="COO / Right Hand" data-pt="COO / Braço Direito">COO / Right Hand</span>
                   </div>
                 </div>
-                <div class="org-node">
+                <div class="org-node" onclick="openAgentModal('sage')">
                   <span class="org-node-emoji">📋</span>
                   <div class="org-node-info">
                     <span class="org-node-name">Sage</span>
-                    <span
-                      class="org-node-role"
-                      data-en="Secretary / PA"
-                      data-pt="Secretário / PA"
-                      >Secretary / PA</span
-                    >
+                    <span class="org-node-role" data-en="Secretary / PA" data-pt="Secretário / PA">Secretary / PA</span>
                   </div>
                 </div>
-                <div class="org-node">
+                <div class="org-node" onclick="openAgentModal('iris')">
                   <span class="org-node-emoji">👁️</span>
                   <div class="org-node-info">
                     <span class="org-node-name">Iris</span>
-                    <span
-                      class="org-node-role"
-                      data-en="Browser Agent"
-                      data-pt="Agente de Browser"
-                      >Browser Agent</span
-                    >
+                    <span class="org-node-role" data-en="Browser Agent" data-pt="Agente de Browser">Browser Agent</span>
                   </div>
                 </div>
-                <div class="org-node">
+                <div class="org-node" onclick="openAgentModal('hera')">
                   <span class="org-node-emoji">👩‍💼</span>
                   <div class="org-node-info">
                     <span class="org-node-name">Hera</span>
-                    <span
-                      class="org-node-role"
-                      data-en="HR & Onboarding"
-                      data-pt="RH & Integração"
-                      >HR & Onboarding</span
-                    >
+                    <span class="org-node-role" data-en="HR & Onboarding" data-pt="RH & Integração">HR &amp; Onboarding</span>
                   </div>
                 </div>
-                <div class="org-node">
+                <div class="org-node" onclick="openAgentModal('sentinel')">
                   <span class="org-node-emoji">🔧</span>
                   <div class="org-node-info">
                     <span class="org-node-name">Sentinel</span>
-                    <span
-                      class="org-node-role"
-                      data-en="Tech Ops / SRE"
-                      data-pt="Ops Técnico / SRE"
-                      >Tech Ops / SRE</span
-                    >
+                    <span class="org-node-role" data-en="Tech Ops / SRE" data-pt="Ops Técnico / SRE">Tech Ops / SRE</span>
                   </div>
                 </div>
               </div>
               <div class="org-connector"></div>
-              <div
-                class="org-label"
-                data-en="JOBPILOT AI SUBSIDIARY"
-                data-pt="SUBSIDIÁRIA JOBPILOT AI"
-              >
-                JOBPILOT AI SUBSIDIARY
-              </div>
+              <div class="org-label" data-en="JOBPILOT AI SUBSIDIARY" data-pt="SUBSIDIÁRIA JOBPILOT AI">JOBPILOT AI SUBSIDIARY</div>
               <div class="org-branch">
-                <div class="org-node">
+                <div class="org-node" onclick="openAgentModal('rex')">
                   <span class="org-node-emoji">⭐</span>
                   <div class="org-node-info">
                     <span class="org-node-name">Rex</span>
-                    <span
-                      class="org-node-role"
-                      data-en="CEO, JobPilot AI"
-                      data-pt="CEO, JobPilot AI"
-                      >CEO, JobPilot AI</span
-                    >
+                    <span class="org-node-role" data-en="CEO, JobPilot AI" data-pt="CEO, JobPilot AI">CEO, JobPilot AI</span>
                   </div>
                 </div>
-                <div class="org-node">
+                <div class="org-node" onclick="openAgentModal('prism')">
                   <span class="org-node-emoji">💎</span>
                   <div class="org-node-info">
                     <span class="org-node-name">Prism</span>
-                    <span
-                      class="org-node-role"
-                      data-en="VP Strategy"
-                      data-pt="VP Estratégia"
-                      >VP Strategy</span
-                    >
+                    <span class="org-node-role" data-en="VP Strategy" data-pt="VP Estratégia">VP Strategy</span>
                   </div>
                 </div>
-                <div class="org-node">
+                <div class="org-node" onclick="openAgentModal('kit')">
                   <span class="org-node-emoji">📝</span>
                   <div class="org-node-info">
                     <span class="org-node-name">Kit</span>
-                    <span
-                      class="org-node-role"
-                      data-en="Review Intern"
-                      data-pt="Estagiário de Reviews"
-                      >Review Intern</span
-                    >
+                    <span class="org-node-role" data-en="Review Intern" data-pt="Estagiário de Reviews">Review Intern</span>
                   </div>
                 </div>
-                <div class="org-node">
+                <div class="org-node" onclick="openAgentModal('scout')">
                   <span class="org-node-emoji">🔍</span>
                   <div class="org-node-info">
                     <span class="org-node-name">Scout</span>
-                    <span
-                      class="org-node-role"
-                      data-en="Intelligence"
-                      data-pt="Inteligência"
-                      >Intelligence</span
-                    >
+                    <span class="org-node-role" data-en="Intelligence" data-pt="Inteligência">Intelligence</span>
                   </div>
                 </div>
-                <div class="org-node">
+                <div class="org-node" onclick="openAgentModal('echo')">
                   <span class="org-node-emoji">📢</span>
                   <div class="org-node-info">
                     <span class="org-node-name">Echo</span>
-                    <span
-                      class="org-node-role"
-                      data-en="Marketing & Growth"
-                      data-pt="Marketing & Crescimento"
-                      >Marketing & Growth</span
-                    >
+                    <span class="org-node-role" data-en="Marketing & Growth" data-pt="Marketing & Crescimento">Marketing &amp; Growth</span>
                   </div>
                 </div>
               </div>
+              </div>
             </div>
-            <div class="team-right">
+            <div class="team-card team-card-right">
+              <div class="team-right">
               <img
                 src="https://avatars.githubusercontent.com/u/211906206?v=4"
                 alt="Tomás Batalha"
                 class="team-photo"
               />
               <div class="team-about">
-                <h2 data-en="About Me" data-pt="Sobre Mim">About Me</h2>
-                <p
-                  data-en="I'm Tomás Batalha, a builder based in Lisbon, Portugal. I design, develop, and ship software products end-to-end. My approach: identify a real problem, build the solution fast, ship it, learn from users, iterate."
-                  data-pt="Sou o Tomás Batalha, um builder baseado em Lisboa, Portugal. Concebo, desenvolvo e lanço produtos de software de ponta a ponta. A minha abordagem: identificar um problema real, construir a solução rapidamente, lançar, aprender com os utilizadores, iterar."
-                >
+                <h2 data-en="Tomás Batalha" data-pt="Tomás Batalha">Tomás Batalha</h2>
+                <p data-en="I'm Tomás Batalha, a builder based in Lisbon, Portugal. I design, develop, and ship software products end-to-end. My approach: identify a real problem, build the solution fast, ship it, learn from users, iterate." data-pt="Sou o Tomás Batalha, um builder baseado em Lisboa, Portugal. Concebo, desenvolvo e lanço produtos de software de ponta a ponta. A minha abordagem: identificar um problema real, construir a solução rapidamente, lançar, aprender com os utilizadores, iterar.">
                   I'm Tomás Batalha, a builder based in Lisbon, Portugal. I
                   design, develop, and ship software products end-to-end. My
                   approach: identify a real problem, build the solution fast,
                   ship it, learn from users, iterate.
                 </p>
-                <div
-                  class="team-about-label"
-                  data-en="About The Burnay Labs"
-                  data-pt="Sobre The Burnay Labs"
-                >
-                  About The Burnay Labs
-                </div>
-                <p
-                  data-en="The Burnay Labs is a solo software holding company. I run 11 AI agents that handle everything from strategic planning to marketing to code reviews. Think of it as a one-person company with a full team, all powered by AI."
-                  data-pt="The Burnay Labs é uma holding de software a solo. Giro 11 agentes de IA que tratam de tudo, desde planeamento estratégico a marketing e revisões de código. É como uma empresa de uma pessoa com uma equipa completa, toda movida a IA."
-                >
+                <div class="team-about-label" data-en="ABOUT THE BURNAY LABS" data-pt="SOBRE A THE BURNAY LABS">ABOUT THE BURNAY LABS</div>
+                <p data-en="The Burnay Labs is a solo software holding company. I run 11 AI agents that handle everything from strategic planning to marketing to code reviews. Think of it as a one-person company with a full team, all powered by AI." data-pt="The Burnay Labs é uma holding de software a solo. Giro 11 agentes de IA que tratam de tudo, desde planeamento estratégico a marketing e revisões de código. É como uma empresa de uma pessoa com uma equipa completa, toda movida a IA.">
                   The Burnay Labs is a solo software holding company. I run 11
                   AI agents that handle everything from strategic planning to
                   marketing to code reviews. Think of it as a one-person company
                   with a full team, all powered by AI.
                 </p>
-                <p
-                  data-en="Each agent has a specific role, personality, and set of tools. They communicate through structured workflows and escalation protocols. The org chart on the left shows the current team structure."
-                  data-pt="Cada agente tem um papel específico, personalidade e conjunto de ferramentas. Comunicam através de workflows estruturados e protocolos de escalação. O organigrama à esquerda mostra a estrutura atual da equipa."
-                >
+                <p data-en="Each agent has a specific role, personality, and set of tools. They communicate through structured workflows and escalation protocols. The org chart on the left shows the current team structure." data-pt="Cada agente tem um papel específico, personalidade e conjunto de ferramentas. Comunicam através de workflows estruturados e protocolos de escalação. O organigrama à esquerda mostra a estrutura atual da equipa.">
                   Each agent has a specific role, personality, and set of tools.
                   They communicate through structured workflows and escalation
                   protocols. The org chart on the left shows the current team
                   structure.
                 </p>
+              </div>
               </div>
             </div>
           </div>
@@ -2066,6 +2101,54 @@
         </div>
       </section>
     </main>
+
+    <!-- AGENT MODAL -->
+    <div class="agent-modal-overlay" id="agentModalOverlay" onclick="if(event.target===this)closeAgentModal()">
+      <div class="agent-modal">
+        <button class="agent-modal-close" onclick="closeAgentModal()">&times;</button>
+        <div class="agent-modal-header">
+          <span class="agent-modal-emoji" id="agentEmoji"></span>
+          <div class="agent-modal-title">
+            <h3 id="agentName"></h3>
+            <span id="agentRole"></span>
+          </div>
+        </div>
+        <p id="agentDesc"></p>
+        <div class="agent-modal-meta" id="agentMeta"></div>
+      </div>
+    </div>
+
+    <script>
+      var agentData = {
+        oracle: { emoji:'🧠', name:'Oracle', role:'VP Strategy & Mentor', desc:"Tomás's personal strategic advisor. Thinks about the big picture — economy, AI industry trends, geopolitics, cultural shifts — and distills it into advice that shapes the entire company's direction. Mentors subsidiary VP Strategies (currently Prism) with macro-level insights.", tags:['Strategic Advice','AI Industry Trends','Innovation','Cross-subsidiary'], reportsTo:'Tomás' },
+        atlas: { emoji:'🏛️', name:'Atlas', role:'COO / Right Hand', desc:"The operational backbone. Tracks every agent's health, code commits, and performance across ALL subsidiaries. Produces daily operational reports so Tomás always knows what's working and what's broken. Can talk to every single agent.", tags:['Ops Oversight','Agent Health','Commit Tracking','Daily Reports'], reportsTo:'Tomás' },
+        sage: { emoji:'📋', name:'Sage', role:'Secretary / PA', desc:"Tomás's personal assistant. Handles everything Tomás doesn't want to do manually — calendar management, message triage across WhatsApp/Gmail/LinkedIn/Telegram, meeting scheduling, and reminders. Keeps Tomás organized and on time.", tags:['Calendar Mgmt','Message Triage','Meeting Scheduling','Reminders'], reportsTo:'Tomás' },
+        iris: { emoji:'👁️', name:'Iris', role:'Browser Contextualizer', desc:"The team's EYES on the web. Runs a stealth Chromium browser with anti-fingerprint tech and auto-captcha solving. Any agent that needs to see, analyze, or interact with a web page calls Iris. She writes automation skills and maps web elements.", tags:['Web Analysis','Browser Automation','Captcha Solving','Stealth Browsing'], reportsTo:'Shared Resource' },
+        hera: { emoji:'👩‍💼', name:'Hera', role:'HR & Onboarding', desc:"Creates new agents from scratch — sets up their workspace files, configures them in openclaw.json, registers them on platforms (Discord, Telegram, Supabase), and announces them to the entire team. When a new hire joins, Hera makes sure everyone knows.", tags:['Agent Onboarding','Platform Setup','Team Announcements','Config Files'], reportsTo:'Tomás' },
+        sentinel: { emoji:'🔧', name:'Sentinel', role:'Tech Ops / SRE', desc:"The technical firefighter. Collects error reports from every agent across every subsidiary. Aggregates them into a daily error digest for Tomás — categorized by severity, frequency, and affected systems. Handles DevOps, debugging, and system reliability.", tags:['Error Reports','DevOps','Debugging','System Reliability'], reportsTo:'Tomás' },
+        rex: { emoji:'⭐', name:'Rex', role:'CEO, JobPilot AI', desc:"The hands-on boss of JobPilot AI. Runs daily operations, coordinates his team (Prism, Kit, Scout, Echo), executes on product decisions, and reports to Tomás. Has direct access to all holding-level agents when needed. Manages the Chrome extension's growth and competitive positioning.", tags:['Extension Growth','Review Strategy','Daily Operations','Team Mgmt'], reportsTo:'Tomás' },
+        prism: { emoji:'💎', name:'Prism', role:'VP Strategy, JobPilot AI', desc:"Rex's strategic right hand. Doesn't just advise — actively DIRECTS what Rex should build, prioritize, and pivot to. Takes Scout's competitive data and Oracle's macro insights and turns them into clear, decisive product strategy.", tags:['Roadmap','Data-Driven Strategy','Product Direction','Market Analysis'], reportsTo:'Rex' },
+        kit: { emoji:'📝', name:'Kit', role:'Review Exchange Intern', desc:"The diligent intern who handles the daily grind of Extension Booster review exchanges. Opens the dashboard, finds extensions to review, drafts genuine reviews, submits them, and tracks completion. Learning from Rex's feedback to write better reviews every time.", tags:['Review Drafts','Chrome Web Store','Extension Booster','Quality Control'], reportsTo:'Rex' },
+        scout: { emoji:'🔍', name:'Scout', role:'Intelligence Analyst', desc:"The spy. Watches competitors, monitors JobPilot AI's own reviews, tracks Chrome Web Store trends, and delivers raw intelligence to Rex and Prism. Doesn't make strategic calls — just surfaces the data so Prism and Rex can act on it.", tags:['Competitor Analysis','Market Data','Review Monitoring','Trend Tracking'], reportsTo:'Rex' },
+        echo: { emoji:'📢', name:'Echo', role:'Marketing & Growth', desc:"The megaphone. Creates content, manages social media presence, handles community outreach, and drives user acquisition for JobPilot AI. Takes direction from Prism's strategy and Rex's approval to produce blog posts, social copy, and marketing campaigns.", tags:['Content Creation','Social Media','Community Outreach','User Acquisition'], reportsTo:'Rex' }
+      };
+
+      function openAgentModal(id) {
+        var a = agentData[id];
+        if (!a) return;
+        document.getElementById('agentEmoji').textContent = a.emoji;
+        document.getElementById('agentName').textContent = a.name;
+        document.getElementById('agentRole').textContent = a.role;
+        document.getElementById('agentDesc').textContent = a.desc;
+        var meta = document.getElementById('agentMeta');
+        meta.innerHTML = a.tags.map(function(t) { return '<span class="agent-modal-tag">' + t + '</span>'; }).join('') + '<span class="agent-modal-tag" style="background:rgba(139,92,246,0.1);color:#8b5cf6;border-color:rgba(139,92,246,0.2);">Reports to: ' + a.reportsTo + '</span>';
+        document.getElementById('agentModalOverlay').classList.add('active');
+      }
+      function closeAgentModal() {
+        document.getElementById('agentModalOverlay').classList.remove('active');
+      }
+      document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeAgentModal(); });
+    </script>
 
     <!-- LANGUAGE TOGGLE -->
     <script>
