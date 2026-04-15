@@ -1335,16 +1335,17 @@
               </span>
             </div>
 
-            <!-- Sleep Diary — BETA -->
-            <div
-              onclick="openModal('sleepdiary')"
+            <!-- Sleep Diary — LIVE -->
+            <a
+              href="https://github.com/tomasbb0/sleep-diary"
+              target="_blank"
               class="product-card parallax-card"
             >
               <div class="product-header">
                 <div class="product-icon purple has-logo">
                   <img src="logos/sleep-diary.svg" alt="Diário de Sono" />
                 </div>
-                <span class="badge-beta">Beta</span>
+                <span class="badge-live">Live</span>
               </div>
               <h3>Diário de Sono</h3>
               <p class="product-desc">
@@ -1358,7 +1359,7 @@
                 <span class="product-tag">Analytics</span>
               </div>
               <span class="product-link">
-                Learn More
+                View Project
                 <svg
                   viewBox="0 0 24 24"
                   fill="none"
@@ -1368,7 +1369,7 @@
                   <path d="M7 17L17 7M17 7H7M17 7v10" />
                 </svg>
               </span>
-            </div>
+            </a>
 
             <!-- MemoryCleaner — BETA -->
             <div
@@ -1872,8 +1873,8 @@
             const rect = card.getBoundingClientRect();
             const x = (e.clientX - rect.left) / rect.width - 0.5;
             const y = (e.clientY - rect.top) / rect.height - 0.5;
-            card.style.transform = 'perspective(800px) rotateY(' + (x * 8) + 'deg) rotateX(' + (-y * 8) + 'deg) scale(1.02)';
-            card.style.boxShadow = '0 ' + (20 + y * 10) + 'px ' + (40 + Math.abs(x) * 20) + 'px rgba(0,0,0,0.3)';
+            card.style.transform = 'perspective(600px) rotateY(' + (x * 15) + 'deg) rotateX(' + (-y * 15) + 'deg) scale(1.04)';
+            card.style.boxShadow = '0 ' + (25 + y * 15) + 'px ' + (50 + Math.abs(x) * 30) + 'px rgba(0,0,0,0.4)';
           });
           card.addEventListener('mouseleave', function() {
             card.style.transform = '';
