@@ -2434,10 +2434,9 @@
         // Persist
         localStorage.setItem("bl_lang", lang);
       }
-      // Init from saved preference
+      // Init: always start in EN (clear any saved preference)
       (function () {
-        var saved = localStorage.getItem("bl_lang");
-        if (saved && saved !== "en") setLang(saved);
+        localStorage.removeItem("bl_lang");
       })();
 
       /* HERO WAVE ANIMATION */
