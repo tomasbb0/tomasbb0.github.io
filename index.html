@@ -541,7 +541,7 @@
         width: 36px;
         height: 36px;
         border-radius: 50%;
-        background: rgba(255,255,255,0.08);
+        background: rgba(255, 255, 255, 0.08);
         border: 1px solid var(--border2);
         color: var(--muted);
         font-size: 22px;
@@ -555,7 +555,7 @@
       }
       .modal-close:hover {
         color: var(--white);
-        background: rgba(255,255,255,0.15);
+        background: rgba(255, 255, 255, 0.15);
       }
       .modal-icon {
         width: 80px;
@@ -602,7 +602,7 @@
         line-height: 1.5;
       }
       .modal-features li::before {
-        content: '✓';
+        content: "✓";
         color: var(--green);
         font-weight: 700;
         flex-shrink: 0;
@@ -616,7 +616,7 @@
       }
       .modal-tag {
         padding: 4px 12px;
-        background: rgba(255,255,255,0.06);
+        background: rgba(255, 255, 255, 0.06);
         border: 1px solid var(--border);
         border-radius: 20px;
         font-size: 12px;
@@ -634,15 +634,24 @@
         font-size: 13px;
         color: rgba(245, 158, 11, 0.9);
       }
-      .modal-status svg { flex-shrink: 0; stroke: rgba(245, 158, 11, 0.9); }
+      .modal-status svg {
+        flex-shrink: 0;
+        stroke: rgba(245, 158, 11, 0.9);
+      }
 
       /* Visible classes for scroll animations */
-      .section-title, .section-label, .cta-box {
+      .section-title,
+      .section-label,
+      .cta-box {
         transform: translateY(30px);
         opacity: 0;
-        transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.6s ease;
+        transition:
+          transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+          opacity 0.6s ease;
       }
-      .section-title.visible, .section-label.visible, .cta-box.visible {
+      .section-title.visible,
+      .section-label.visible,
+      .cta-box.visible {
         transform: translateY(0);
         opacity: 1;
       }
@@ -651,7 +660,9 @@
       .parallax-section {
         transform: translateY(40px);
         opacity: 0;
-        transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.8s ease;
+        transition:
+          transform 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+          opacity 0.8s ease;
       }
       .parallax-section.visible {
         transform: translateY(0);
@@ -660,7 +671,9 @@
       .parallax-card {
         transform: translateY(30px);
         opacity: 0;
-        transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.5s ease;
+        transition:
+          transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+          opacity 0.5s ease;
       }
       .parallax-card.visible {
         transform: translateY(0);
@@ -669,7 +682,9 @@
       .tech-tag {
         transform: translateY(20px);
         opacity: 0;
-        transition: transform 0.5s ease, opacity 0.4s ease;
+        transition:
+          transform 0.5s ease,
+          opacity 0.4s ease;
       }
       .tech-tag.visible {
         transform: translateY(0);
@@ -678,7 +693,9 @@
       .about-stat-card {
         transform: scale(0.9) translateY(20px);
         opacity: 0;
-        transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.5s ease;
+        transition:
+          transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+          opacity 0.5s ease;
       }
       .about-stat-card.visible {
         transform: scale(1) translateY(0);
@@ -1337,7 +1354,7 @@
 
             <!-- Sleep Diary — LIVE -->
             <a
-              href="https://github.com/tomasbb0/sleep-diary"
+              href="https://theburnaylabs.pt/sleep-diary/"
               target="_blank"
               class="product-card parallax-card"
             >
@@ -1684,15 +1701,25 @@
     <!-- PROJECT MODAL -->
     <div class="modal-overlay" id="projectModal" onclick="closeModal(event)">
       <div class="modal-box">
-        <button class="modal-close" onclick="closeModal(event, true)">&times;</button>
+        <button class="modal-close" onclick="closeModal(event, true)">
+          &times;
+        </button>
         <div class="modal-icon" id="modalIcon"></div>
         <h2 id="modalTitle"></h2>
         <p class="modal-desc" id="modalDesc"></p>
         <div class="modal-features" id="modalFeatures"></div>
         <div class="modal-tags" id="modalTags"></div>
         <div class="modal-status">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-            <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            width="16"
+            height="16"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <path d="M12 6v6l4 2" />
           </svg>
           <span>Currently in development. Stay tuned for launch.</span>
         </div>
@@ -1704,273 +1731,316 @@
       // ── Project data for modals ──
       const projectData = {
         topresume: {
-          name: 'TopResume.ai',
-          logo: 'logos/topresume.svg',
-          color: '#8b5cf6',
-          desc: 'AI-powered CV editor platform. Write, edit, and optimize your resume with real-time AI assistance. Modern editor with templates, sections, and instant PDF export.',
+          name: "TopResume.ai",
+          logo: "logos/topresume.svg",
+          color: "#8b5cf6",
+          desc: "AI-powered CV editor platform. Write, edit, and optimize your resume with real-time AI assistance. Modern editor with templates, sections, and instant PDF export.",
           features: [
-            'Real-time AI writing suggestions and improvements',
-            'Professional templates with customizable sections',
-            'Instant PDF export with pixel-perfect formatting',
-            'ATS-friendly formatting and keyword optimization',
-            'Multi-language support (EN/PT)'
+            "Real-time AI writing suggestions and improvements",
+            "Professional templates with customizable sections",
+            "Instant PDF export with pixel-perfect formatting",
+            "ATS-friendly formatting and keyword optimization",
+            "Multi-language support (EN/PT)",
           ],
-          tags: ['AI', 'Careers', 'Editor', 'React']
+          tags: ["AI", "Careers", "Editor", "React"],
         },
         vendasia: {
-          name: 'VendasIA',
-          logo: 'logos/vendasia.svg',
-          color: '#10b981',
-          desc: 'AI sales toolkit for modern teams. Autonomous SDR agent that generates personalized Portuguese B2B messages at scale, plus an M&A CRM with AI-powered deal analysis.',
+          name: "VendasIA",
+          logo: "logos/vendasia.svg",
+          color: "#10b981",
+          desc: "AI sales toolkit for modern teams. Autonomous SDR agent that generates personalized Portuguese B2B messages at scale, plus an M&A CRM with AI-powered deal analysis.",
           features: [
-            'Autonomous SDR agent for personalized B2B outreach',
-            'AI-generated Portuguese sales messages at scale',
-            'M&A CRM with deal scoring and pipeline analytics',
-            'LinkedIn and email integration',
-            'Performance dashboards and conversion tracking'
+            "Autonomous SDR agent for personalized B2B outreach",
+            "AI-generated Portuguese sales messages at scale",
+            "M&A CRM with deal scoring and pipeline analytics",
+            "LinkedIn and email integration",
+            "Performance dashboards and conversion tracking",
           ],
-          tags: ['AI', 'Sales', 'B2B', 'Automation']
+          tags: ["AI", "Sales", "B2B", "Automation"],
         },
         mbacoach: {
-          name: 'MBA Coach',
-          logo: 'logos/mbacoach.svg',
-          color: '#f59e0b',
-          desc: 'AI-powered MBA coaching platform. Personalized preparation for MBA applications with competitive research, market analysis, and structured guidance through the entire process.',
+          name: "MBA Coach",
+          logo: "logos/mbacoach.svg",
+          color: "#f59e0b",
+          desc: "AI-powered MBA coaching platform. Personalized preparation for MBA applications with competitive research, market analysis, and structured guidance through the entire process.",
           features: [
-            'Personalized MBA school matching and recommendations',
-            'AI-driven essay review and feedback',
-            'Competitive analysis of top programs worldwide',
-            'Interview preparation with AI mock interviews',
-            'Application timeline management and reminders'
+            "Personalized MBA school matching and recommendations",
+            "AI-driven essay review and feedback",
+            "Competitive analysis of top programs worldwide",
+            "Interview preparation with AI mock interviews",
+            "Application timeline management and reminders",
           ],
-          tags: ['AI', 'Education', 'Coaching', 'Career']
+          tags: ["AI", "Education", "Coaching", "Career"],
         },
         lifeorganizer: {
-          name: 'LifeOrganizer',
-          logo: 'logos/lifeorganizer.svg',
-          color: '#3b82f6',
-          desc: 'Personal life management platform. Tracks communications across WhatsApp, Gmail, and Instagram, maps relationships with frequency analysis, and keeps you balanced with smart alerts.',
+          name: "LifeOrganizer",
+          logo: "logos/lifeorganizer.svg",
+          color: "#3b82f6",
+          desc: "Personal life management platform. Tracks communications across WhatsApp, Gmail, and Instagram, maps relationships with frequency analysis, and keeps you balanced with smart alerts.",
           features: [
-            'Cross-platform communication tracking (WhatsApp, Gmail, Instagram)',
-            'Relationship mapping with frequency and sentiment analysis',
-            'Smart alerts for neglected contacts and relationships',
-            'Visual dashboard with communication patterns',
-            'Privacy-first: all data stays on your device'
+            "Cross-platform communication tracking (WhatsApp, Gmail, Instagram)",
+            "Relationship mapping with frequency and sentiment analysis",
+            "Smart alerts for neglected contacts and relationships",
+            "Visual dashboard with communication patterns",
+            "Privacy-first: all data stays on your device",
           ],
-          tags: ['Productivity', 'AI', 'CRM', 'Privacy']
+          tags: ["Productivity", "AI", "CRM", "Privacy"],
         },
         emcasa: {
-          name: 'EmCasa',
+          name: "EmCasa",
           logo: null,
-          emoji: '🎸',
-          color: '#f59e0b',
+          emoji: "🎸",
+          color: "#f59e0b",
           desc: '"Concertos em Casa" — Home concert booking platform. Connect music lovers with artists for intimate, private performances in residential settings across Portugal.',
           features: [
-            'Artist profiles with genre, style, and availability',
-            'Venue matching based on space, acoustics, and capacity',
-            'Integrated booking and payment system',
-            'Rating and review system for hosts and artists',
-            'Event promotion and social sharing tools'
+            "Artist profiles with genre, style, and availability",
+            "Venue matching based on space, acoustics, and capacity",
+            "Integrated booking and payment system",
+            "Rating and review system for hosts and artists",
+            "Event promotion and social sharing tools",
           ],
-          tags: ['Marketplace', 'Music', 'Events', 'Portugal']
+          tags: ["Marketplace", "Music", "Events", "Portugal"],
         },
         sleepdiary: {
-          name: 'Diário de Sono',
-          logo: 'logos/sleep-diary.svg',
-          color: '#8b5cf6',
-          desc: 'Sleep tracking app. Log your sleep patterns, analyze habits over time, and get personalized recommendations to improve sleep quality. Beautiful, calming interface.',
+          name: "Diário de Sono",
+          logo: "logos/sleep-diary.svg",
+          color: "#8b5cf6",
+          desc: "Sleep tracking app. Log your sleep patterns, analyze habits over time, and get personalized recommendations to improve sleep quality. Beautiful, calming interface.",
           features: [
-            'Daily sleep logging with duration and quality tracking',
-            'Weekly and monthly trend analysis with charts',
-            'Personalized recommendations based on your patterns',
-            'Sleep quality scoring algorithm',
-            'Calming, dark-mode interface designed for bedtime use'
+            "Daily sleep logging with duration and quality tracking",
+            "Weekly and monthly trend analysis with charts",
+            "Personalized recommendations based on your patterns",
+            "Sleep quality scoring algorithm",
+            "Calming, dark-mode interface designed for bedtime use",
           ],
-          tags: ['Health', 'Tracking', 'Analytics', 'Wellness']
+          tags: ["Health", "Tracking", "Analytics", "Wellness"],
         },
         memorycleaner: {
-          name: 'MemoryCleaner',
-          logo: 'logos/memorycleaner.svg',
-          color: '#10b981',
-          desc: 'Smart macOS memory optimizer. Lives in your menu bar with Tinder-style recommendation cards. Swipe to keep or kill processes, freeing up RAM instantly.',
+          name: "MemoryCleaner",
+          logo: "logos/memorycleaner.svg",
+          color: "#10b981",
+          desc: "Smart macOS memory optimizer. Lives in your menu bar with Tinder-style recommendation cards. Swipe to keep or kill processes, freeing up RAM instantly.",
           features: [
-            'Menu bar app with real-time memory usage display',
-            'Tinder-style swipe interface for process management',
-            'Smart recommendations based on process behavior',
-            'One-click memory cleanup with customizable rules',
-            'Minimal resource footprint (< 15MB RAM usage)'
+            "Menu bar app with real-time memory usage display",
+            "Tinder-style swipe interface for process management",
+            "Smart recommendations based on process behavior",
+            "One-click memory cleanup with customizable rules",
+            "Minimal resource footprint (< 15MB RAM usage)",
           ],
-          tags: ['macOS', 'Utility', 'Python', 'SwiftUI']
+          tags: ["macOS", "Utility", "Python", "SwiftUI"],
         },
         browseragent: {
-          name: 'Browser Agent',
-          logo: 'logos/browser-agent.svg',
-          color: '#3b82f6',
-          desc: 'AI browser automation agent with visible navigation and chat interface. Control a real Chromium browser with natural language, powered by GPT-4o via browser-use.',
+          name: "Browser Agent",
+          logo: "logos/browser-agent.svg",
+          color: "#3b82f6",
+          desc: "AI browser automation agent with visible navigation and chat interface. Control a real Chromium browser with natural language, powered by GPT-4o via browser-use.",
           features: [
             'Natural language browser control ("fill this form", "click submit")',
-            'Visible Chromium browser with real-time action display',
-            'Session persistence with cookie/profile management',
-            'Built-in captcha solving (Buster + NopeCHA)',
-            'CLI interface with flags for headless, data, and file uploads'
+            "Visible Chromium browser with real-time action display",
+            "Session persistence with cookie/profile management",
+            "Built-in captcha solving (Buster + NopeCHA)",
+            "CLI interface with flags for headless, data, and file uploads",
           ],
-          tags: ['AI', 'Automation', 'CLI', 'GPT-4o']
-        }
+          tags: ["AI", "Automation", "CLI", "GPT-4o"],
+        },
       };
 
       function openModal(id) {
         const p = projectData[id];
         if (!p) return;
-        const modal = document.getElementById('projectModal');
-        document.getElementById('modalTitle').textContent = p.name;
-        document.getElementById('modalDesc').textContent = p.desc;
+        const modal = document.getElementById("projectModal");
+        document.getElementById("modalTitle").textContent = p.name;
+        document.getElementById("modalDesc").textContent = p.desc;
 
         // Icon
-        const iconEl = document.getElementById('modalIcon');
+        const iconEl = document.getElementById("modalIcon");
         if (p.logo) {
-          iconEl.innerHTML = '<img src="' + p.logo + '" alt="' + p.name + '" style="width:56px;height:56px;border-radius:12px;">';
+          iconEl.innerHTML =
+            '<img src="' +
+            p.logo +
+            '" alt="' +
+            p.name +
+            '" style="width:56px;height:56px;border-radius:12px;">';
         } else if (p.emoji) {
-          iconEl.innerHTML = '<span style="font-size:48px;">' + p.emoji + '</span>';
+          iconEl.innerHTML =
+            '<span style="font-size:48px;">' + p.emoji + "</span>";
         }
-        iconEl.style.background = p.color + '22';
-        iconEl.style.borderColor = p.color + '44';
+        iconEl.style.background = p.color + "22";
+        iconEl.style.borderColor = p.color + "44";
 
         // Features
-        const featEl = document.getElementById('modalFeatures');
-        featEl.innerHTML = '<h4>Key Features</h4><ul>' +
-          p.features.map(function(f) { return '<li>' + f + '</li>'; }).join('') +
-          '</ul>';
+        const featEl = document.getElementById("modalFeatures");
+        featEl.innerHTML =
+          "<h4>Key Features</h4><ul>" +
+          p.features
+            .map(function (f) {
+              return "<li>" + f + "</li>";
+            })
+            .join("") +
+          "</ul>";
 
         // Tags
-        const tagsEl = document.getElementById('modalTags');
-        tagsEl.innerHTML = p.tags.map(function(t) {
-          return '<span class="modal-tag">' + t + '</span>';
-        }).join('');
+        const tagsEl = document.getElementById("modalTags");
+        tagsEl.innerHTML = p.tags
+          .map(function (t) {
+            return '<span class="modal-tag">' + t + "</span>";
+          })
+          .join("");
 
-        modal.classList.add('active');
-        document.body.style.overflow = 'hidden';
+        modal.classList.add("active");
+        document.body.style.overflow = "hidden";
       }
 
       function closeModal(e, force) {
-        if (force || e.target.classList.contains('modal-overlay')) {
-          document.getElementById('projectModal').classList.remove('active');
-          document.body.style.overflow = '';
+        if (force || e.target.classList.contains("modal-overlay")) {
+          document.getElementById("projectModal").classList.remove("active");
+          document.body.style.overflow = "";
         }
       }
 
-      document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-          document.getElementById('projectModal').classList.remove('active');
-          document.body.style.overflow = '';
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") {
+          document.getElementById("projectModal").classList.remove("active");
+          document.body.style.overflow = "";
         }
       });
 
       // ── Parallax / Scroll Animations ──
-      (function() {
+      (function () {
         // Parallax tilt on cards
-        document.querySelectorAll('.parallax-card').forEach(function(card) {
-          card.addEventListener('mousemove', function(e) {
+        document.querySelectorAll(".parallax-card").forEach(function (card) {
+          card.addEventListener("mousemove", function (e) {
             const rect = card.getBoundingClientRect();
             const x = (e.clientX - rect.left) / rect.width - 0.5;
             const y = (e.clientY - rect.top) / rect.height - 0.5;
-            card.style.transform = 'perspective(600px) rotateY(' + (x * 15) + 'deg) rotateX(' + (-y * 15) + 'deg) scale(1.04)';
-            card.style.boxShadow = '0 ' + (25 + y * 15) + 'px ' + (50 + Math.abs(x) * 30) + 'px rgba(0,0,0,0.4)';
+            card.style.transform =
+              "perspective(600px) rotateY(" +
+              x * 15 +
+              "deg) rotateX(" +
+              -y * 15 +
+              "deg) scale(1.04)";
+            card.style.boxShadow =
+              "0 " +
+              (25 + y * 15) +
+              "px " +
+              (50 + Math.abs(x) * 30) +
+              "px rgba(0,0,0,0.4)";
           });
-          card.addEventListener('mouseleave', function() {
-            card.style.transform = '';
-            card.style.boxShadow = '';
+          card.addEventListener("mouseleave", function () {
+            card.style.transform = "";
+            card.style.boxShadow = "";
           });
         });
 
         // Scroll-triggered fade-in / slide-up
-        const observerOptions = { threshold: 0.15, rootMargin: '0px 0px -50px 0px' };
+        const observerOptions = {
+          threshold: 0.15,
+          rootMargin: "0px 0px -50px 0px",
+        };
 
-        const fadeObserver = new IntersectionObserver(function(entries) {
-          entries.forEach(function(entry) {
+        const fadeObserver = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
             if (entry.isIntersecting) {
-              entry.target.classList.add('visible');
+              entry.target.classList.add("visible");
               fadeObserver.unobserve(entry.target);
             }
           });
         }, observerOptions);
 
         // Staggered card reveals
-        const staggerObserver = new IntersectionObserver(function(entries) {
-          entries.forEach(function(entry) {
-            if (entry.isIntersecting) {
-              const cards = entry.target.querySelectorAll('.product-card, .about-stat-card');
-              cards.forEach(function(card, i) {
-                setTimeout(function() {
-                  card.classList.add('visible');
-                }, i * 100);
-              });
-              staggerObserver.unobserve(entry.target);
-            }
-          });
-        }, { threshold: 0.05 });
+        const staggerObserver = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                const cards = entry.target.querySelectorAll(
+                  ".product-card, .about-stat-card",
+                );
+                cards.forEach(function (card, i) {
+                  setTimeout(function () {
+                    card.classList.add("visible");
+                  }, i * 100);
+                });
+                staggerObserver.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.05 },
+        );
 
         // Observe sections for staggered reveals
-        document.querySelectorAll('.products, .about').forEach(function(s) {
+        document.querySelectorAll(".products, .about").forEach(function (s) {
           staggerObserver.observe(s);
         });
 
         // Observe tech tags
-        document.querySelectorAll('.tech-tag').forEach(function(tag, i) {
-          tag.style.transitionDelay = (i * 40) + 'ms';
+        document.querySelectorAll(".tech-tag").forEach(function (tag, i) {
+          tag.style.transitionDelay = i * 40 + "ms";
           fadeObserver.observe(tag);
         });
 
         // Observe section titles and labels
-        document.querySelectorAll('.section-title, .section-label, .cta-box').forEach(function(el) {
-          fadeObserver.observe(el);
-        });
+        document
+          .querySelectorAll(".section-title, .section-label, .cta-box")
+          .forEach(function (el) {
+            fadeObserver.observe(el);
+          });
 
         // Smooth parallax scrolling for hero content
-        var hero = document.querySelector('.hero-content');
-        var heroSection = document.querySelector('.hero');
+        var hero = document.querySelector(".hero-content");
+        var heroSection = document.querySelector(".hero");
         if (hero && heroSection) {
-          window.addEventListener('scroll', function() {
-            var scrolled = window.pageYOffset;
-            var heroBottom = heroSection.offsetTop + heroSection.offsetHeight;
-            if (scrolled < heroBottom) {
-              hero.style.transform = 'translateY(' + (scrolled * 0.3) + 'px)';
-              hero.style.opacity = Math.max(1 - scrolled / (heroBottom * 0.6), 0);
-            }
-          }, { passive: true });
+          window.addEventListener(
+            "scroll",
+            function () {
+              var scrolled = window.pageYOffset;
+              var heroBottom = heroSection.offsetTop + heroSection.offsetHeight;
+              if (scrolled < heroBottom) {
+                hero.style.transform = "translateY(" + scrolled * 0.3 + "px)";
+                hero.style.opacity = Math.max(
+                  1 - scrolled / (heroBottom * 0.6),
+                  0,
+                );
+              }
+            },
+            { passive: true },
+          );
         }
 
         // Counter animation for stat numbers
-        var statCards = document.querySelectorAll('.about-stat-card strong');
+        var statCards = document.querySelectorAll(".about-stat-card strong");
         var counted = false;
-        var countObserver = new IntersectionObserver(function(entries) {
-          entries.forEach(function(entry) {
-            if (entry.isIntersecting && !counted) {
-              counted = true;
-              statCards.forEach(function(el) {
-                var text = el.textContent;
-                var match = text.match(/(\d+)/);
-                if (match) {
-                  var target = parseInt(match[1]);
-                  var suffix = text.replace(match[1], '');
-                  var start = 0;
-                  var duration = 1500;
-                  var startTime = null;
-                  function animate(ts) {
-                    if (!startTime) startTime = ts;
-                    var progress = Math.min((ts - startTime) / duration, 1);
-                    var eased = 1 - Math.pow(1 - progress, 3);
-                    el.textContent = Math.floor(eased * target) + suffix;
-                    if (progress < 1) requestAnimationFrame(animate);
+        var countObserver = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting && !counted) {
+                counted = true;
+                statCards.forEach(function (el) {
+                  var text = el.textContent;
+                  var match = text.match(/(\d+)/);
+                  if (match) {
+                    var target = parseInt(match[1]);
+                    var suffix = text.replace(match[1], "");
+                    var start = 0;
+                    var duration = 1500;
+                    var startTime = null;
+                    function animate(ts) {
+                      if (!startTime) startTime = ts;
+                      var progress = Math.min((ts - startTime) / duration, 1);
+                      var eased = 1 - Math.pow(1 - progress, 3);
+                      el.textContent = Math.floor(eased * target) + suffix;
+                      if (progress < 1) requestAnimationFrame(animate);
+                    }
+                    requestAnimationFrame(animate);
                   }
-                  requestAnimationFrame(animate);
-                }
-              });
-              countObserver.unobserve(entry.target);
-            }
-          });
-        }, { threshold: 0.3 });
+                });
+                countObserver.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.3 },
+        );
 
-        var aboutStats = document.querySelector('.about-stats');
+        var aboutStats = document.querySelector(".about-stats");
         if (aboutStats) countObserver.observe(aboutStats);
       })();
     </script>
