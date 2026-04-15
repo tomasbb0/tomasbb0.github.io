@@ -50,6 +50,7 @@
         min-height: 100vh;
         overflow-x: hidden;
         scroll-behavior: smooth;
+        -webkit-font-smoothing: antialiased;
       }
       /* Full-page scroll snap for sections */
       html {
@@ -68,8 +69,6 @@
       .section-reveal.revealed {
         opacity: 1;
         transform: translateY(0) scale(1);
-      }
-        -webkit-font-smoothing: antialiased;
       }
       .container {
         max-width: 1120px;
@@ -188,16 +187,22 @@
       .hero-logo .logo-b {
         stroke-dasharray: 400;
         stroke-dashoffset: 400;
-        animation: drawB 1s ease-out 0.3s forwards;
       }
       .hero-logo .logo-b-bar {
         stroke-dasharray: 38;
         stroke-dashoffset: 38;
-        animation: drawBbar 0.3s ease-out 0.9s forwards;
       }
       .hero-logo .logo-l {
         stroke-dasharray: 160;
         stroke-dashoffset: 160;
+      }
+      .hero-logo.animate .logo-b {
+        animation: drawB 1s ease-out 0.3s forwards;
+      }
+      .hero-logo.animate .logo-b-bar {
+        animation: drawBbar 0.3s ease-out 0.9s forwards;
+      }
+      .hero-logo.animate .logo-l {
         animation: drawL 0.7s ease-out 1.1s forwards;
       }
       @keyframes drawB {
@@ -2434,9 +2439,21 @@
         // Persist
         localStorage.setItem("bl_lang", lang);
       }
+      function triggerHeroLogoAnimation() {
+        var heroLogo = document.querySelector(".hero-logo");
+        if (!heroLogo) return;
+        heroLogo.classList.remove("animate");
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () {
+            heroLogo.classList.add("animate");
+          });
+        });
+      }
       // Init: always start in EN (clear any saved preference)
       (function () {
         localStorage.removeItem("bl_lang");
+        document.addEventListener("DOMContentLoaded", triggerHeroLogoAnimation);
+        window.addEventListener("pageshow", triggerHeroLogoAnimation);
       })();
 
       /* HERO WAVE ANIMATION */
