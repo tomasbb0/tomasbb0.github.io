@@ -1967,9 +1967,8 @@
             </div>
 
             <!-- CasePreper. LIVE -->
-            <a
-              href="https://tomasbb0.github.io/CasePreper/"
-              target="_blank"
+            <div
+              onclick="openModal('casepreper')"
               class="product-card featured parallax-card"
             >
               <div class="product-header">
@@ -1990,7 +1989,7 @@
                 <span class="product-tag">Consulting</span>
               </div>
               <span class="product-link">
-                Open Platform
+                Learn More
                 <svg
                   viewBox="0 0 24 24"
                   fill="none"
@@ -2000,7 +1999,7 @@
                   <path d="M7 17L17 7M17 7H7M17 7v10" />
                 </svg>
               </span>
-            </a>
+            </div>
 
             <!-- Uzer. LIVE (Confidential) -->
             <div
@@ -2458,6 +2457,24 @@
         </div>
       </section>
     </main>
+
+    <!-- PROJECT MODAL -->
+    <div
+      class="modal-overlay"
+      id="projectModal"
+      onclick="closeModal(event)"
+    >
+      <div class="modal-box">
+        <button class="modal-close" onclick="closeModal(event, true)">
+          &times;
+        </button>
+        <div class="modal-icon" id="modalIcon"></div>
+        <h2 id="modalTitle"></h2>
+        <p class="modal-desc" id="modalDesc"></p>
+        <div class="modal-features" id="modalFeatures"></div>
+        <div class="modal-tags" id="modalTags"></div>
+      </div>
+    </div>
 
     <!-- AGENT MODAL -->
     <div
