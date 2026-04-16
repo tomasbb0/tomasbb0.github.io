@@ -488,6 +488,57 @@
         border: 1px solid rgba(16, 185, 129, 0.3);
         color: var(--green);
       }
+      .badge-consulting {
+        padding: 3px 10px;
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border-radius: 12px;
+        background: var(--gold-glow);
+        border: 1px solid rgba(245, 158, 11, 0.3);
+        color: var(--gold);
+      }
+      /* Spinning half-green half-orange neon border for dual-badge cards */
+      .product-card.dual-badge {
+        position: relative;
+        border: none;
+      }
+      .product-card.dual-badge::before {
+        content: "";
+        position: absolute;
+        inset: -1px;
+        border-radius: var(--radius);
+        padding: 1px;
+        background: conic-gradient(
+          from var(--spin-angle, 0deg),
+          #10b981 0deg,
+          #10b981 180deg,
+          #f59e0b 180deg,
+          #f59e0b 360deg
+        );
+        -webkit-mask:
+          linear-gradient(#fff 0 0) content-box,
+          linear-gradient(#fff 0 0);
+        mask:
+          linear-gradient(#fff 0 0) content-box,
+          linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        animation: spin-border 6s linear infinite;
+        pointer-events: none;
+        z-index: 1;
+      }
+      @property --spin-angle {
+        syntax: "<angle>";
+        initial-value: 0deg;
+        inherits: false;
+      }
+      @keyframes spin-border {
+        to {
+          --spin-angle: 360deg;
+        }
+      }
       .product-card h3 {
         font-size: 17px;
         font-weight: 700;
@@ -1443,7 +1494,7 @@
                 <div class="product-icon green has-logo">
                   <img src="logos/jobpilot.png" alt="JobPilot AI" />
                 </div>
-                <span class="badge-live">Live</span>
+                <span class="badge-live">Product · Live</span>
               </div>
               <h3>JobPilot AI</h3>
               <p class="product-desc">
@@ -1478,7 +1529,7 @@
                 <div class="product-icon green has-logo">
                   <img src="logos/maktub.png" alt="Maktub" />
                 </div>
-                <span class="badge-live">Live</span>
+                <span class="badge-live">Product · Live</span>
               </div>
               <h3>Maktub</h3>
               <p class="product-desc">
@@ -1507,13 +1558,16 @@
             <!-- Mr Blue. LIVE (Confidential) -->
             <div
               onclick="openModal('mrblue')"
-              class="product-card featured parallax-card"
+              class="product-card featured dual-badge parallax-card"
             >
               <div class="product-header">
                 <div class="product-icon blue has-logo">
                   <img src="logos/mrblue.jpg" alt="Mr Blue" />
                 </div>
-                <span class="badge-live">Live</span>
+                <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                  <span class="badge-live">Product · Live</span>
+                  <span class="badge-consulting">Consulting</span>
+                </div>
               </div>
               <h3>Mr Blue</h3>
               <p class="product-desc">
@@ -1549,7 +1603,7 @@
                 <div class="product-icon purple has-logo">
                   <img src="logos/topresume.svg" alt="TopResume.ai" />
                 </div>
-                <span class="badge-live">Live</span>
+                <span class="badge-live">Product · Live</span>
               </div>
               <h3>TopResume.ai</h3>
               <p class="product-desc">
@@ -1585,7 +1639,7 @@
                 <div class="product-icon purple has-logo">
                   <img src="logos/burnaylabs.svg" alt="The Burnay Labs" />
                 </div>
-                <span class="badge-live">Live</span>
+                <span class="badge-live">Product · Live</span>
               </div>
               <h3>The Burnay Labs Education</h3>
               <p class="product-desc">
@@ -1620,7 +1674,7 @@
                 <div class="product-icon purple has-logo">
                   <img src="logos/vendasia.svg" alt="VendasIA" />
                 </div>
-                <span class="badge-beta">Beta</span>
+                <span class="badge-beta">Product · Beta</span>
               </div>
               <h3>VendasIA</h3>
               <p class="product-desc">
@@ -1655,7 +1709,7 @@
                 <div class="product-icon gold has-logo">
                   <img src="logos/mbacoach.svg" alt="MBA Coach" />
                 </div>
-                <span class="badge-beta">Beta</span>
+                <span class="badge-beta">Product · Beta</span>
               </div>
               <h3>MBA Coach</h3>
               <p class="product-desc">
@@ -1691,7 +1745,7 @@
                 <div class="product-icon blue has-logo">
                   <img src="logos/lifeorganizer.svg" alt="LifeOrganizer" />
                 </div>
-                <span class="badge-live">Live</span>
+                <span class="badge-live">Product · Live</span>
               </div>
               <h3>LifeOrganizer</h3>
               <p class="product-desc">
@@ -1724,7 +1778,7 @@
             >
               <div class="product-header">
                 <div class="product-icon gold">&#127928;</div>
-                <span class="badge-beta">Beta</span>
+                <span class="badge-beta">Product · Beta</span>
               </div>
               <h3>EmCasa</h3>
               <p class="product-desc">
@@ -1760,7 +1814,7 @@
                 <div class="product-icon purple has-logo">
                   <img src="logos/sleep-diary.svg" alt="Diário de Sono" />
                 </div>
-                <span class="badge-live">Live</span>
+                <span class="badge-live">Product · Live</span>
               </div>
               <h3>Diário de Sono</h3>
               <p class="product-desc">
@@ -1795,7 +1849,7 @@
                 <div class="product-icon green has-logo">
                   <img src="logos/memorycleaner.svg" alt="MemoryCleaner" />
                 </div>
-                <span class="badge-beta">Beta</span>
+                <span class="badge-beta">Product · Beta</span>
               </div>
               <h3>MemoryCleaner</h3>
               <p class="product-desc">
@@ -1830,7 +1884,7 @@
                 <div class="product-icon blue has-logo">
                   <img src="logos/browser-agent.svg" alt="Browser Agent" />
                 </div>
-                <span class="badge-beta">Beta</span>
+                <span class="badge-beta">Product · Beta</span>
               </div>
               <h3>Browser Agent</h3>
               <p class="product-desc">
@@ -1865,7 +1919,7 @@
                 <div class="product-icon purple has-logo">
                   <img src="logos/mindmatch.svg" alt="MindMatch" />
                 </div>
-                <span class="badge-beta">Beta</span>
+                <span class="badge-beta">Product · Beta</span>
               </div>
               <h3>MindMatch</h3>
               <p class="product-desc">
@@ -1901,7 +1955,7 @@
                 <div class="product-icon green has-logo">
                   <img src="logos/casepreper.svg" alt="CasePreper" />
                 </div>
-                <span class="badge-live">Live</span>
+                <span class="badge-live">Product · Live</span>
               </div>
               <h3>CasePreper</h3>
               <p class="product-desc">
@@ -1936,7 +1990,7 @@
                 <div class="product-icon gold has-logo">
                   <img src="logos/uzer-original.png" alt="Uzer" />
                 </div>
-                <span class="badge-live">Live</span>
+                <span class="badge-consulting">Consulting</span>
               </div>
               <h3>Uzer</h3>
               <p class="product-desc">
