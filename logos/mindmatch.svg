@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+  <rect width="120" height="120" rx="24" fill="#0f172a"/>
+  <circle cx="60" cy="52" r="28" fill="#8b5cf6" opacity="0.15"/>
+  <circle cx="60" cy="52" r="20" fill="#8b5cf6" opacity="0.25"/>
+  <path d="M44 52 Q52 36 60 52 Q68 36 76 52" stroke="#a78bfa" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M44 52 Q52 68 60 52 Q68 68 76 52" stroke="#8b5cf6" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <circle cx="52" cy="46" r="4" fill="#c4b5fd"/>
+  <circle cx="68" cy="46" r="4" fill="#c4b5fd"/>
+  <path d="M56 56 Q60 60 64 56" stroke="#c4b5fd" stroke-width="2" stroke-linecap="round" fill="none"/>
+  <text x="60" y="92" text-anchor="middle" font-family="system-ui" font-weight="700" font-size="13" fill="#a78bfa">MM</text>
+</svg>

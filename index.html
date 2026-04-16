@@ -1385,19 +1385,19 @@
           </div>
           <div class="hero-stats">
             <div class="hero-stat">
-              <strong>12+</strong
+              <strong>15+</strong
               ><span data-en="Ventures & Products" data-pt="Ventures & Produtos"
                 >Ventures &amp; Products</span
               >
             </div>
             <div class="hero-stat">
-              <strong>7</strong
+              <strong>9</strong
               ><span data-en="Live & Shipped" data-pt="Ao Vivo & Lançados"
                 >Live &amp; Shipped</span
               >
             </div>
             <div class="hero-stat">
-              <strong>5</strong
+              <strong>6</strong
               ><span data-en="In Beta" data-pt="Em Beta">In Beta</span>
             </div>
             <div class="hero-stat">
@@ -1470,7 +1470,10 @@
             </a>
 
             <!-- Maktub. LIVE (Confidential) -->
-            <div class="product-card featured product-card-div parallax-card">
+            <div
+              onclick="openModal('maktub')"
+              class="product-card featured parallax-card"
+            >
               <div class="product-header">
                 <div class="product-icon green has-logo">
                   <img src="logos/maktub.png" alt="Maktub" />
@@ -1488,25 +1491,27 @@
                 <span class="product-tag">Music Industry</span>
                 <span class="product-tag">Dashboard</span>
               </div>
-              <span class="confidential-note">
+              <span class="product-link">
+                Learn More
                 <svg
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
                   stroke-width="2"
                 >
-                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                  <path d="M7 11V7a5 5 0 0110 0v4" />
+                  <path d="M7 17L17 7M17 7H7M17 7v10" />
                 </svg>
-                Internal platform &middot; Confidential
               </span>
             </div>
 
             <!-- Mr Blue. LIVE (Confidential) -->
-            <div class="product-card featured product-card-div parallax-card">
+            <div
+              onclick="openModal('mrblue')"
+              class="product-card featured parallax-card"
+            >
               <div class="product-header">
-                <div class="product-icon green has-logo">
-                  <img src="logos/mrblue.png" alt="Mr Blue" />
+                <div class="product-icon blue has-logo">
+                  <img src="logos/mrblue.svg" alt="Mr Blue" />
                 </div>
                 <span class="badge-live">Live</span>
               </div>
@@ -1521,17 +1526,16 @@
                 <span class="product-tag">Scraping</span>
                 <span class="product-tag">Google Maps</span>
               </div>
-              <span class="confidential-note">
+              <span class="product-link">
+                Learn More
                 <svg
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
                   stroke-width="2"
                 >
-                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                  <path d="M7 11V7a5 5 0 0110 0v4" />
+                  <path d="M7 17L17 7M17 7H7M17 7v10" />
                 </svg>
-                Internal platform &middot; Confidential
               </span>
             </div>
 
@@ -1851,6 +1855,112 @@
                 </svg>
               </span>
             </div>
+
+            <!-- MindMatch. BETA -->
+            <div
+              onclick="openModal('mindmatch')"
+              class="product-card parallax-card"
+            >
+              <div class="product-header">
+                <div class="product-icon purple has-logo">
+                  <img src="logos/mindmatch.svg" alt="MindMatch" />
+                </div>
+                <span class="badge-beta">Beta</span>
+              </div>
+              <h3>MindMatch</h3>
+              <p class="product-desc">
+                Mental health marketplace connecting patients with local
+                psychologists through AI-powered matching. City-by-city rollout
+                starting in Lisbon.
+              </p>
+              <div class="product-tags">
+                <span class="product-tag">Health</span>
+                <span class="product-tag">AI</span>
+                <span class="product-tag">Marketplace</span>
+              </div>
+              <span class="product-link">
+                Learn More
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M7 17L17 7M17 7H7M17 7v10" />
+                </svg>
+              </span>
+            </div>
+
+            <!-- CasePreper. LIVE -->
+            <a
+              href="https://tomasbb0.github.io/CasePreper/"
+              target="_blank"
+              class="product-card featured parallax-card"
+            >
+              <div class="product-header">
+                <div class="product-icon green has-logo">
+                  <img src="logos/casepreper.svg" alt="CasePreper" />
+                </div>
+                <span class="badge-live">Live</span>
+              </div>
+              <h3>CasePreper</h3>
+              <p class="product-desc">
+                AI-powered consulting case interview preparation platform.
+                End-to-end career support from firm research to application
+                tracking, with an agentic assistant that executes tasks.
+              </p>
+              <div class="product-tags">
+                <span class="product-tag">AI</span>
+                <span class="product-tag">Careers</span>
+                <span class="product-tag">Consulting</span>
+              </div>
+              <span class="product-link">
+                Open Platform
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M7 17L17 7M17 7H7M17 7v10" />
+                </svg>
+              </span>
+            </a>
+
+            <!-- Uzer. LIVE (Confidential) -->
+            <div
+              onclick="openModal('uzer')"
+              class="product-card featured parallax-card"
+            >
+              <div class="product-header">
+                <div class="product-icon gold has-logo">
+                  <img src="logos/uzer-original.png" alt="Uzer" />
+                </div>
+                <span class="badge-live">Live</span>
+              </div>
+              <h3>Uzer</h3>
+              <p class="product-desc">
+                AI consulting for executive education. Helped the Uzer team
+                design and deliver AI-focused executive education programs,
+                providing resources and in-class facilitation support.
+              </p>
+              <div class="product-tags">
+                <span class="product-tag">AI</span>
+                <span class="product-tag">Consulting</span>
+                <span class="product-tag">Education</span>
+              </div>
+              <span class="product-link">
+                Learn More
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M7 17L17 7M17 7H7M17 7v10" />
+                </svg>
+              </span>
+            </div>
           </div>
         </div>
       </section>
@@ -1916,9 +2026,7 @@
               </div>
               <div class="about-stat-card">
                 <strong>100%</strong>
-                <span
-                  data-en="Solo Built!!"
-                  data-pt="Construído a solo!!"
+                <span data-en="Solo Built!!" data-pt="Construído a solo!!"
                   >Solo Built!!</span
                 >
               </div>
@@ -2718,6 +2826,78 @@
             "CLI interface with flags for headless, data, and file uploads",
           ],
           tags: ["AI", "Automation", "CLI", "GPT-4o"],
+        },
+        maktub: {
+          name: "Maktub",
+          logo: "logos/maktub.png",
+          color: "#10b981",
+          desc: "Expense management platform for music management companies. Real-time dashboard, artist-level tracking, visual charts, and multi-investor expense categorization. Zero dependencies.",
+          features: [
+            "Real-time expense dashboard with summary statistics",
+            "Artist-level expense tracking and categorization",
+            "Visual charts showing expenses by artist and type",
+            "Multi-investor (MacTube vs Third Parties) tracking",
+            "Export to Excel (CSV) and PDF with Portuguese encoding",
+            "Settlement calculations for investment distribution",
+          ],
+          tags: ["Finance", "Music Industry", "Dashboard", "Vanilla JS"],
+        },
+        mrblue: {
+          name: "Mr Blue",
+          logo: "logos/mrblue.svg",
+          color: "#3b82f6",
+          desc: "Google Reviews scraper and aggregator. Enter a brand, discover store locations via Google Maps, filter reviews by stars, dates and keywords, then aggregate everything into one copyable block.",
+          features: [
+            "Brand-based Google Maps store discovery",
+            "Review scraping with star rating and date filters",
+            "Keyword search across all aggregated reviews",
+            "One-click copy of filtered review blocks",
+            "AI-powered persona analysis of review sentiment",
+            "Multi-location aggregation in a single view",
+          ],
+          tags: ["AI", "Scraping", "Google Maps", "React"],
+        },
+        uzer: {
+          name: "Uzer",
+          logo: "logos/uzer-original.png",
+          color: "#f59e0b",
+          desc: "AI consulting for executive education. Helped the Uzer team design and deliver AI-focused executive education programs, providing resources and in-class facilitation support.",
+          features: [
+            "AI curriculum design for executive education programs",
+            "In-class facilitation and hands-on AI demonstrations",
+            "Custom resource packages for business leaders",
+            "Practical AI use-case workshops for non-technical teams",
+            "Post-program support and implementation guidance",
+          ],
+          tags: ["AI", "Consulting", "Education", "Executive"],
+        },
+        mindmatch: {
+          name: "MindMatch",
+          logo: "logos/mindmatch.svg",
+          color: "#8b5cf6",
+          desc: "Mental health marketplace connecting patients with local psychologists through AI-powered matching. City-by-city rollout starting in Lisbon.",
+          features: [
+            "AI-powered patient-psychologist matching algorithm",
+            "City-by-city marketplace rollout (starting Lisbon)",
+            "Psychologist profiles with specializations and availability",
+            "Low-friction onboarding with guided questionnaire",
+            "PWA with offline support and mobile-first design",
+          ],
+          tags: ["Health", "AI", "Marketplace", "PWA"],
+        },
+        casepreper: {
+          name: "CasePreper",
+          logo: "logos/casepreper.svg",
+          color: "#10b981",
+          desc: "AI-powered consulting case interview preparation platform. End-to-end career support from firm research to application tracking, with an agentic assistant that executes tasks.",
+          features: [
+            "Comprehensive consulting firm database with application links",
+            "Agentic AI assistant that executes tasks, not just advises",
+            "Case interview practice with structured frameworks",
+            "Application pipeline tracking across all target firms",
+            "Personalized preparation plans based on your profile",
+          ],
+          tags: ["AI", "Careers", "Consulting", "Automation"],
         },
       };
 
