@@ -499,6 +499,20 @@
         border: 1px solid rgba(245, 158, 11, 0.3);
         color: var(--gold);
       }
+      /* Orange neon border for consulting-only cards */
+      .product-card.consulting-card {
+        border-color: rgba(245, 158, 11, 0.3);
+        box-shadow:
+          0 4px 24px rgba(0, 0, 0, 0.25),
+          0 0 20px rgba(245, 158, 11, 0.08),
+          inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      }
+      .product-card.consulting-card:hover {
+        border-color: rgba(245, 158, 11, 0.5);
+        box-shadow:
+          0 8px 32px rgba(0, 0, 0, 0.35),
+          0 0 30px rgba(245, 158, 11, 0.15);
+      }
       /* Spinning half-green half-orange neon border for dual-badge cards */
       .product-card.dual-badge {
         position: relative;
@@ -525,7 +539,7 @@
           linear-gradient(#fff 0 0);
         -webkit-mask-composite: xor;
         mask-composite: exclude;
-        animation: spin-border 6s linear infinite;
+        animation: spin-border 20s linear infinite;
         pointer-events: none;
         z-index: 1;
       }
@@ -1564,7 +1578,7 @@
                 <div class="product-icon blue has-logo">
                   <img src="logos/mrblue.jpg" alt="Mr Blue" />
                 </div>
-                <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                <div style="display: flex; gap: 6px; flex-wrap: wrap">
                   <span class="badge-live">Product · Live</span>
                   <span class="badge-consulting">Consulting</span>
                 </div>
@@ -1984,7 +1998,7 @@
             <!-- Uzer. LIVE (Confidential) -->
             <div
               onclick="openModal('uzer')"
-              class="product-card featured parallax-card"
+              class="product-card featured consulting-card parallax-card"
             >
               <div class="product-header">
                 <div class="product-icon gold has-logo">
