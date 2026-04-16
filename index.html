@@ -1939,7 +1939,7 @@
               </div>
               <h3>MindMatch</h3>
               <p class="product-desc">
-                Nova-backed prototype for a mental health marketplace
+                Nova-funded prototype for a mental health marketplace
                 connecting patients with local psychologists through AI-powered
                 matching. Designed for a Lisbon-first rollout.
               </p>
@@ -2216,6 +2216,72 @@
                 <span class="product-tag">Electron</span>
                 <span class="product-tag">Desktop</span>
                 <span class="product-tag">Developer Tool</span>
+              </div>
+              <span class="product-link">
+                Learn More
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M7 17L17 7M17 7H7M17 7v10" />
+                </svg>
+              </span>
+            </div>
+
+            <!-- Google Reviews App. BETA -->
+            <div
+              onclick="openModal('googlereviewsapp')"
+              class="product-card parallax-card"
+            >
+              <div class="product-header">
+                <div class="product-icon blue">⭐</div>
+                <span class="badge-beta">Product · Beta</span>
+              </div>
+              <h3>Google Reviews App</h3>
+              <p class="product-desc">
+                Review intelligence app for discovering store locations,
+                filtering Google reviews, and collapsing multi-location
+                feedback into one usable block of insight.
+              </p>
+              <div class="product-tags">
+                <span class="product-tag">Reviews</span>
+                <span class="product-tag">Maps</span>
+                <span class="product-tag">AI</span>
+              </div>
+              <span class="product-link">
+                Learn More
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M7 17L17 7M17 7H7M17 7v10" />
+                </svg>
+              </span>
+            </div>
+
+            <!-- Neon Review Orb. PROTOTYPE -->
+            <div
+              onclick="openModal('neonrevieworb')"
+              class="product-card parallax-card"
+            >
+              <div class="product-header">
+                <div class="product-icon purple">🟣</div>
+                <span class="badge-beta">Product · Prototype</span>
+              </div>
+              <h3>Neon Review Orb</h3>
+              <p class="product-desc">
+                Neon-themed interface experiment for the review aggregation
+                stack. A more cinematic front end with mouse-tracking,
+                glassmorphism, and scanning interactions.
+              </p>
+              <div class="product-tags">
+                <span class="product-tag">UI</span>
+                <span class="product-tag">Prototype</span>
+                <span class="product-tag">React</span>
               </div>
               <span class="product-link">
                 Learn More
@@ -3152,10 +3218,10 @@
           name: "MindMatch",
           logo: "logos/mindmatch.svg",
           color: "#8b5cf6",
-          desc: "Nova-backed prototype for a mental health marketplace connecting patients with local psychologists through AI-powered matching. Designed for a Lisbon-first rollout.",
+          desc: "Nova-funded prototype for a mental health marketplace connecting patients with local psychologists through AI-powered matching. Designed for a Lisbon-first rollout.",
           features: [
             "AI-powered patient-psychologist matching algorithm",
-            "Nova-backed prototype developed around a Lisbon-first go-to-market",
+            "Nova-funded prototype developed around a Lisbon-first go-to-market",
             "City-by-city marketplace rollout (starting Lisbon)",
             "Psychologist profiles with specializations and availability",
             "Low-friction onboarding with guided questionnaire",
@@ -3252,6 +3318,36 @@
             "Built as a personal command center for multi-repo work",
           ],
           tags: ["Electron", "Desktop", "Developer Tool", "macOS"],
+        },
+        googlereviewsapp: {
+          name: "Google Reviews App",
+          logo: null,
+          emoji: "⭐",
+          color: "#3b82f6",
+          desc: "Review intelligence app for discovering store locations, filtering Google reviews, and collapsing multi-location feedback into one usable block of insight.",
+          features: [
+            "Brand-based location discovery using Google Maps grounding",
+            "Review filtering by stars, date range, and keywords",
+            "Aggregation of feedback across many store locations",
+            "Copyable output blocks for downstream analysis",
+            "React front end paired with AI and scraping infrastructure",
+          ],
+          tags: ["Reviews", "Maps", "AI", "React"],
+        },
+        neonrevieworb: {
+          name: "Neon Review Orb",
+          logo: null,
+          emoji: "🟣",
+          color: "#8b5cf6",
+          desc: "Neon-themed interface experiment for the review aggregation stack. A more cinematic front end with mouse-tracking, glassmorphism, and scanning interactions.",
+          features: [
+            "Glassmorphism neon interface with motion-heavy presentation",
+            "Mouse-tracking and custom cursor interactions",
+            "Alternative front-end direction for review intelligence workflows",
+            "Built in React, Vite, and shadcn-style component patterns",
+            "Useful as a prototype layer on top of the core aggregation engine",
+          ],
+          tags: ["UI", "Prototype", "React", "Design"],
         },
         casepreper: {
           name: "CasePreper",
