@@ -1143,7 +1143,13 @@
         height: 220px;
         object-fit: contain;
         filter: drop-shadow(0 16px 32px rgba(0, 0, 0, 0.45));
-        border-bottom: 1px solid var(--green);
+      }
+      .team-photo-line {
+        display: block;
+        width: 240px;
+        height: 2px;
+        background: var(--green);
+        margin-top: -24px;
       }
       .team-about h2 {
         font-size: 28px;
@@ -2342,6 +2348,7 @@
                   alt="Tomás Batalha"
                   class="team-photo"
                 />
+                <span class="team-photo-line"></span>
                 <div class="team-about">
                   <h2
                     data-en="Tomás Batalha, Founder and CEO"
