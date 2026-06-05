@@ -175,10 +175,19 @@ function showPdfDemo() {
   founderName = 'Test Founder';
   resultContext = 'USER_CONSTRAINTS:\n  age_band: 28-34\n  cash_on_hand_eur: 5000\n  own_money_to_invest_eur: 2000\n\nFOUNDER PROFILE: sample profile for PDF testing.';
   resultDossier = '1 Snapshot: sample founder, Lisbon, wants oxygen now.\n2 Credibility: this is a test dossier used only to check the PDF download button works.\n3 Money and risk: cash 5k, would put in 2k of own money.';
-  addMsg('PDF test mode. Tap the button below to download a sample PDF.', 'bot');
-  $('composer').classList.add('hidden');
-  $('hint').classList.add('hidden');
-  $('done').classList.remove('hidden');
+  addMsg('Section 18 of 18: where is the market for your idea mostly based?', 'bot');
+  addMsg('Closer to B, mostly Portugal but some EU.', 'me');
+  typingOn();
+  setTimeout(() => {
+    typingOff();
+    addMsg("That's everything, Test Founder. Your dossier is complete and your results are being sent to Tomás now.", 'bot');
+    finished = true;
+    $('composer').classList.add('hidden');
+    $('hint').classList.add('hidden');
+    $('done').classList.remove('hidden');
+    const note = document.querySelector('.done-msg');
+    if (note) note.textContent = 'Results sent to Tomás \u2713';
+  }, 1500);
 }
 
 function tryLogin() {
