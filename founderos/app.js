@@ -302,34 +302,88 @@ $('composer').addEventListener('submit', (e) => {
   send($('input').value.trim());
 });
 
-// ---------- Voice input (Web Speech API) ----------
-const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-let rec = null, recording = false;
-if (SR) {
-  rec = new SR();
-  rec.continuous = true;
-  rec.interimResults = true;
-  rec.lang = 'en-US';
-  let base = '';
-  rec.onresult = (ev) => {
-    let interim = '';
-    for (let i = ev.resultIndex; i < ev.results.length; i++) {
-      const t = ev.results[i][0].transcript;
-      if (ev.results[i].isFinal) base += t + ' ';
-      else interim += t;
-    }
-    $('input').value = (base + interim).trim();
-    autosize();
+// ---------- Voice input: record, then transcribe with Whisper on stop ----------
+// Auto-detects the spoken language. Text appears only when you stop talking.
+let mediaRecorder = null, chunks = [], recording = false, recMime = 'audio/webm';
+
+function pickMime() {
+  const opts = ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4', 'audio/ogg'];
+  for (const m of opts) {
+    if (window.MediaRecorder && MediaRecorder.isTypeSupported(m)) return m;
+  }
+  return '';
+}
+
+function blobToBase64(blob) {
+  return new Promise((resolve, reject) => {
+    const r = new FileReader();
+    r.onloadend = () => resolve(String(r.result).split(',')[1] || '');
+    r.onerror = reject;
+    r.readAsDataURL(blob);
+  });
+}
+
+async function startRecording() {
+  const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  const mime = pickMime();
+  recMime = mime || 'audio/webm';
+  mediaRecorder = mime ? new MediaRecorder(stream, { mimeType: mime }) : new MediaRecorder(stream);
+  chunks = [];
+  mediaRecorder.ondataavailable = (e) => { if (e.data.size) chunks.push(e.data); };
+  mediaRecorder.onstop = async () => {
+    stream.getTracks().forEach((t) => t.stop());
+    await transcribeAndFill();
   };
-  rec.onend = () => { if (recording) rec.start(); };
-  $('mic').addEventListener('click', () => {
-    recording = !recording;
-    $('mic').classList.toggle('rec', recording);
-    if (recording) { base = $('input').value ? $('input').value + ' ' : ''; rec.start(); }
-    else { rec.stop(); }
+  mediaRecorder.start();
+  recording = true;
+  $('mic').classList.add('rec');
+}
+
+async function transcribeAndFill() {
+  if (!chunks.length) { $('mic').classList.remove('rec', 'busy'); return; }
+  $('mic').classList.remove('rec');
+  $('mic').classList.add('busy');
+  $('input').setAttribute('placeholder', 'Transcribing…');
+  try {
+    const blob = new Blob(chunks, { type: recMime });
+    const audio = await blobToBase64(blob);
+    const r = await fetch(CFG.APPS_SCRIPT_URL, {
+      method: 'POST',
+      body: JSON.stringify({ action: 'transcribe', audio, mime: recMime }),
+    });
+    const data = await r.json();
+    if (data.error) throw new Error(data.error);
+    const text = (data.text || '').trim();
+    if (text) {
+      const cur = $('input').value.trim();
+      $('input').value = cur ? cur + ' ' + text : text;
+      autosize();
+    }
+  } catch (e) {
+    addMsg("Couldn't transcribe that. Please type it instead.", 'bot');
+  } finally {
+    $('mic').classList.remove('busy');
+    $('input').setAttribute('placeholder', 'Type, or tap the mic and talk…');
+    $('input').focus();
+  }
+}
+
+if (window.MediaRecorder && navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+  $('mic').addEventListener('click', async () => {
+    if (recording) {
+      recording = false;
+      try { mediaRecorder.stop(); } catch (e) { $('mic').classList.remove('rec'); }
+      return;
+    }
+    try {
+      await startRecording();
+    } catch (e) {
+      addMsg("I couldn't access your microphone. Check the browser's mic permission, or just type.", 'bot');
+      $('mic').classList.remove('rec');
+    }
   });
 } else {
   $('mic').addEventListener('click', () => {
-    addMsg("Voice input is not supported in this browser. Please type your answer.", 'bot');
+    addMsg("Voice input isn't supported in this browser. Please type your answer.", 'bot');
   });
 }
