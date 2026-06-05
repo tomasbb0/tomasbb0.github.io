@@ -73,7 +73,7 @@ body{
   padding:12px 18px;font-weight:600;cursor:pointer;font-size:15px;
 }
 .ghost:hover{opacity:.9}
-.hidden{display:none}
+.hidden{display:none!important}
 
 /* password gate */
 #gate{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:50;padding:20px}
