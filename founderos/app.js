@@ -162,12 +162,23 @@ function showMain() {
     $('gate').classList.add('hidden');
     $('main').classList.remove('hidden');
     $('input').focus();
+    if (new URLSearchParams(location.search).has('testpdf')) { showPdfDemo(); return; }
     if (messages.length === 0 && loadProgress()) { renderHistory(); return; }
     if (messages.length === 0) kickoff();
     else renderHistory();
   } catch (err) {
     console.error('showMain failed', err);
   }
+}
+
+function showPdfDemo() {
+  founderName = 'Test Founder';
+  resultContext = 'USER_CONSTRAINTS:\n  age_band: 28-34\n  cash_on_hand_eur: 5000\n  own_money_to_invest_eur: 2000\n\nFOUNDER PROFILE: sample profile for PDF testing.';
+  resultDossier = '1 Snapshot: sample founder, Lisbon, wants oxygen now.\n2 Credibility: this is a test dossier used only to check the PDF download button works.\n3 Money and risk: cash 5k, would put in 2k of own money.';
+  addMsg('PDF test mode. Tap the button below to download a sample PDF.', 'bot');
+  $('composer').classList.add('hidden');
+  $('hint').classList.add('hidden');
+  $('done').classList.remove('hidden');
 }
 
 function tryLogin() {
