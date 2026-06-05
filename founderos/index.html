@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FounderOS</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main id="app">
+    <div id="gate">
+      <div class="gate-box">
+        <div class="brand">FounderOS<span class="dot">.</span></div>
+        <div class="gate-title">Contextualizer</div>
+        <p class="gate-sub">This platform is private. Enter the password to continue.</p>
+        <form id="gate-form">
+          <input id="password" type="password" placeholder="Password" autocomplete="current-password" />
+          <button type="submit" class="ghost">Enter</button>
+        </form>
+        <div id="gate-error" class="gate-error hidden">Wrong password. Try again.</div>
+      </div>
+    </div>
+
+    <div id="main" class="hidden">
+    <header id="top">
+      <div class="brand">FounderOS<span class="dot">.</span></div>
+      <div class="sub">Contextualizer · by Burnay Labs</div>
+    </header>
+
+    <section id="chat" aria-live="polite"></section>
+
+    <div id="done" class="hidden">
+      <p class="done-msg">Results sent to Tomás.</p>
+      <button id="download" class="ghost">Download my copy (PDF)</button>
+    </div>
+
+    <form id="composer" autocomplete="off">
+      <textarea id="input" rows="1" placeholder="Type, or tap the mic and talk…"></textarea>
+      <button type="button" id="mic" title="Speak your answer" aria-label="Speak">●</button>
+      <button type="submit" id="send" aria-label="Send">↑</button>
+    </form>
+    <div id="hint">Tip: you don't have to pick A/B/C cleanly. Talk it through: "between B and C, because…"</div>
+    </div>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
