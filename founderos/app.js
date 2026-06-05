@@ -307,10 +307,11 @@ async function finishUp() {
   $('composer').classList.add('hidden');
   $('hint').classList.add('hidden');
   $('done').classList.remove('hidden');
-  // Send to Tomás (best effort; the founder still gets their PDF either way).
+  const note = document.querySelector('.done-msg');
+  // Send to Tomás. Verify it actually went; warn (don't fail silently) if not.
   if (CFG.APPS_SCRIPT_URL) {
     try {
-      await fetch(CFG.APPS_SCRIPT_URL, {
+      const r = await fetch(CFG.APPS_SCRIPT_URL, {
         method: 'POST',
         body: JSON.stringify({
           action: 'submit',
@@ -319,7 +320,12 @@ async function finishUp() {
           dossier: resultDossier,
         }),
       });
-    } catch (e) { /* graceful: download still works */ }
+      const data = await r.json();
+      if (!data.ok) throw new Error(data.error || 'submit failed');
+      if (note) note.textContent = 'Results sent to Tomás \u2713';
+    } catch (e) {
+      if (note) note.textContent = "Couldn't reach the server. Please tap Download and email the file to Tomás.";
+    }
   }
 }
 
