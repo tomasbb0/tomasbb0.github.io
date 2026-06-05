@@ -92,22 +92,33 @@ Do not wrap the machine block in code fences. Do not add commentary after %%END%
 
 // ---------- Password gate ----------
 function showMain() {
-  $('gate').classList.add('hidden');
-  $('main').classList.remove('hidden');
-  $('input').focus();
-  if (messages.length === 0) kickoff();
+  try {
+    $('gate').classList.add('hidden');
+    $('main').classList.remove('hidden');
+    $('input').focus();
+    if (messages.length === 0) kickoff();
+  } catch (err) {
+    console.error('showMain failed', err);
+  }
 }
 
-$('gate-form').addEventListener('submit', (e) => {
-  e.preventDefault();
-  const pw = $('password').value;
-  if (pw === (CFG.SITE_PASSWORD || '')) {
+function tryLogin() {
+  const pw = ($('password').value || '').trim();
+  const expected = (CFG.SITE_PASSWORD || '').trim();
+  if (pw && pw === expected) {
     sessionStorage.setItem('fos_ok', '1');
+    $('gate-error').classList.add('hidden');
     showMain();
-  } else {
-    $('gate-error').classList.remove('hidden');
-    $('password').value = '';
+    return true;
   }
+  $('gate-error').classList.remove('hidden');
+  $('password').value = '';
+  return false;
+}
+
+$('gate-form').addEventListener('submit', (e) => { e.preventDefault(); tryLogin(); });
+$('password').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') { e.preventDefault(); tryLogin(); }
 });
 
 if (sessionStorage.getItem('fos_ok') === '1') showMain();
