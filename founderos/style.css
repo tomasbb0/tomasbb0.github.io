@@ -29,6 +29,14 @@ body{
   border-bottom:1px solid var(--line);
   position:sticky;top:0;background:var(--bg);z-index:5;
 }
+#controls{position:absolute;top:26px;right:2px;display:flex;align-items:center;gap:8px}
+.mini{
+  background:transparent;border:1px solid var(--line);color:var(--muted);
+  border-radius:9px;padding:6px 11px;font-size:12px;cursor:pointer;font:inherit;font-size:12px;
+}
+.mini:hover{background:#111;color:#fff}
+#reset:hover{border-color:#c0202c;color:#e0555f}
+.saved-note{color:#6fcf97;font-size:12px}
 .brand{font-size:20px;font-weight:700;letter-spacing:.2px}
 .brand .dot{color:var(--muted)}
 .sub{font-size:12px;color:var(--muted);margin-top:2px;letter-spacing:.3px}
@@ -58,13 +66,12 @@ body{
   width:40px;height:40px;flex:0 0 auto;border-radius:11px;
   border:1px solid var(--line);background:#111;color:#fff;
   cursor:pointer;font-size:16px;line-height:1;display:flex;align-items:center;justify-content:center;
-  transition:transform .06s ease,background .15s ease;
+  transition:transform .06s ease,background .15s ease,border-radius .22s ease;
 }
 #mic:hover,#send:hover{background:#1a1a1a}
 #mic:active,#send:active{transform:scale(.94)}
-#mic.rec{background:#c0202c;border-color:#c0202c;animation:pulse 1.1s infinite}
-#mic.busy{background:#222;border-color:#333;color:#ffce4f;animation:spin 0.9s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
+#mic.rec{background:#c0202c;border-color:#c0202c;border-radius:50%;animation:pulse 1.1s infinite}
+#mic.busy{background:#161616;border-color:#2a2a2a;border-radius:50%;opacity:.6}
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(192,32,44,.5)}70%{box-shadow:0 0 0 9px rgba(192,32,44,0)}100%{box-shadow:0 0 0 0 rgba(192,32,44,0)}}
 
 #hint{color:var(--muted);font-size:12px;text-align:center;margin-top:10px}

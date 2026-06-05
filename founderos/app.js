@@ -90,13 +90,81 @@ Then, on a new line, output EXACTLY this machine block and NOTHING after it (the
 Do not wrap the machine block in code fences. Do not add commentary after %%END%%. Fill every field from what the founder told you.
 `;
 
+// ---------- Save / restore / reset (browser cache) ----------
+const SAVE_KEY = 'fos_progress';
+
+function saveProgress(silent) {
+  try {
+    localStorage.setItem(SAVE_KEY, JSON.stringify({
+      messages, founderName, resultContext, resultDossier, finished,
+    }));
+    if (!silent) {
+      const n = $('saved-note');
+      n.classList.remove('hidden');
+      clearTimeout(n._t);
+      n._t = setTimeout(() => n.classList.add('hidden'), 1800);
+    }
+  } catch (e) { /* cache may be full or blocked */ }
+}
+
+function loadProgress() {
+  try {
+    const raw = localStorage.getItem(SAVE_KEY);
+    if (!raw) return false;
+    const d = JSON.parse(raw);
+    if (!d || !Array.isArray(d.messages) || d.messages.length === 0) return false;
+    messages.length = 0;
+    d.messages.forEach((m) => messages.push(m));
+    founderName = d.founderName || '';
+    resultContext = d.resultContext || '';
+    resultDossier = d.resultDossier || '';
+    finished = !!d.finished;
+    return true;
+  } catch (e) { return false; }
+}
+
+function stripMachineBlock(text) {
+  const idx = text.indexOf('%%FOUNDEROS_RESULT%%');
+  return idx === -1 ? text : text.slice(0, idx).trim();
+}
+
+function renderHistory() {
+  $('chat').innerHTML = '';
+  messages.forEach((m) => {
+    if (m.role === 'user') addMsg(m.content, 'me');
+    else if (m.role === 'assistant') {
+      const v = stripMachineBlock(m.content);
+      if (v) addMsg(v, 'bot');
+    }
+  });
+  if (finished) {
+    $('composer').classList.add('hidden');
+    $('hint').classList.add('hidden');
+    $('done').classList.remove('hidden');
+  }
+}
+
+function resetAll() {
+  if (!confirm('Start over? This erases the saved answers on this computer.')) return;
+  try { localStorage.removeItem(SAVE_KEY); } catch (e) {}
+  messages.length = 0;
+  founderName = ''; resultContext = ''; resultDossier = ''; finished = false;
+  $('chat').innerHTML = '';
+  $('done').classList.add('hidden');
+  $('composer').classList.remove('hidden');
+  $('hint').classList.remove('hidden');
+  kickoff();
+}
+
 // ---------- Password gate ----------
 function showMain() {
   try {
     $('gate').classList.add('hidden');
     $('main').classList.remove('hidden');
     $('input').focus();
+    if (messages.length === 0 && loadProgress()) { renderHistory(); return; }
     if (messages.length === 0) kickoff();
+    else renderHistory();
   } catch (err) {
     console.error('showMain failed', err);
   }
@@ -130,6 +198,9 @@ $('password').addEventListener('keydown', (e) => {
 });
 
 if (sessionStorage.getItem('fos_ok') === '1') showMain();
+
+$('save').addEventListener('click', () => saveProgress(false));
+$('reset').addEventListener('click', resetAll);
 
 // ---------- Chat rendering ----------
 function escapeHtml(s) {
@@ -184,6 +255,7 @@ async function send(userText) {
   if (!userText || finished) return;
   addMsg(userText, 'me');
   messages.push({ role: 'user', content: userText });
+  saveProgress(true);
   $('input').value = '';
   autosize();
   typingOn();
@@ -204,12 +276,14 @@ function handleReply(reply) {
   if (idx === -1) {
     messages.push({ role: 'assistant', content: reply });
     addMsg(reply, 'bot');
+    saveProgress(true);
     return;
   }
   const visible = reply.slice(0, idx).trim();
   if (visible) addMsg(visible, 'bot');
   messages.push({ role: 'assistant', content: reply });
   parseResult(reply.slice(idx));
+  saveProgress(true);
   finishUp();
 }
 
@@ -229,6 +303,7 @@ function parseResult(block) {
 
 async function finishUp() {
   finished = true;
+  saveProgress(true);
   $('composer').classList.add('hidden');
   $('hint').classList.add('hidden');
   $('done').classList.remove('hidden');
