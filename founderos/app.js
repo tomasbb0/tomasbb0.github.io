@@ -105,6 +105,10 @@ function showMain() {
 function tryLogin() {
   const pw = ($('password').value || '').trim();
   const expected = (CFG.SITE_PASSWORD || '').trim();
+  console.log('[FounderOS] login attempt | typed chars:', pw.length,
+              '| expected chars:', expected.length,
+              '| match:', pw === expected,
+              '| CFG loaded:', !!window.FOUNDEROS_CONFIG);
   if (pw && pw === expected) {
     sessionStorage.setItem('fos_ok', '1');
     $('gate-error').classList.add('hidden');
@@ -115,6 +119,10 @@ function tryLogin() {
   $('password').value = '';
   return false;
 }
+
+window.addEventListener('error', (e) => {
+  console.log('[FounderOS ERROR]', e.message, '@', e.filename, 'line', e.lineno);
+});
 
 $('gate-form').addEventListener('submit', (e) => { e.preventDefault(); tryLogin(); });
 $('password').addEventListener('keydown', (e) => {
