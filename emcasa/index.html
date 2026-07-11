@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Concertos intimistas em salas portuguesas. Descobre artistas locais, conhece pessoas e vive a música de perto com o EmCasa.">
+    <meta name="theme-color" content="#23172e">
+    <title>EmCasa — Música ao vivo, mesmo perto</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink: #23172e;
+            --ink-soft: #61576a;
+            --cream: #f7f1e8;
+            --paper: #fffdf8;
+            --purple: #6941c6;
+            --purple-dark: #4d2a9a;
+            --lilac: #e9ddff;
+            --terracotta: #cf5f3c;
+            --peach: #f1b598;
+            --sage: #b9c8ab;
+            --line: rgba(35, 23, 46, .14);
+            --shadow: 0 24px 70px rgba(52, 34, 63, .14);
+            --radius-lg: 32px;
+            --radius-md: 20px;
+            --container: 1180px;
+        }
+
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            margin: 0;
+            font-family: "DM Sans", system-ui, sans-serif;
+            color: var(--ink);
+            background: var(--cream);
+            line-height: 1.55;
+            overflow-x: hidden;
+        }
+        body.menu-open { overflow: hidden; }
+        img { display: block; max-width: 100%; }
+        a { color: inherit; }
+        button, input, select, textarea { font: inherit; }
+        button { color: inherit; }
+        ::selection { background: var(--lilac); color: var(--ink); }
+
+        .skip-link {
+            position: fixed;
+            z-index: 2000;
+            top: 12px;
+            left: 12px;
+            padding: 10px 16px;
+            background: var(--ink);
+            color: white;
+            border-radius: 8px;
+            transform: translateY(-160%);
+        }
+        .skip-link:focus { transform: translateY(0); }
+        :focus-visible { outline: 3px solid var(--terracotta); outline-offset: 4px; }
+
+        .shell { width: min(calc(100% - 48px), var(--container)); margin-inline: auto; }
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            margin: 0 0 18px;
+            color: var(--purple-dark);
+            font-weight: 700;
+            font-size: .78rem;
+            letter-spacing: .11em;
+            text-transform: uppercase;
+        }
+        .eyebrow::before { content: ""; width: 26px; height: 2px; background: var(--terracotta); }
+        h1, h2, h3, p { margin-top: 0; }
+        h1, h2, .display { font-family: "Fraunces", Georgia, serif; }
+        h1 { font-size: clamp(3.25rem, 5.2vw, 4.9rem); line-height: .94; letter-spacing: -.055em; margin-bottom: 22px; }
+        h2 { font-size: clamp(2.4rem, 5vw, 4.3rem); line-height: 1.02; letter-spacing: -.04em; margin-bottom: 22px; }
+        h3 { font-size: 1.25rem; line-height: 1.25; }
+        .lead { font-size: clamp(1.08rem, 1.7vw, 1.3rem); color: var(--ink-soft); max-width: 650px; }
+        .muted { color: var(--ink-soft); }
+
+        .site-header {
+            position: fixed;
+            z-index: 1000;
+            inset: 0 0 auto;
+            transition: background .25s, box-shadow .25s, padding .25s;
+        }
+        .site-header.scrolled {
+            background: rgba(247, 241, 232, .9);
+            box-shadow: 0 1px 0 var(--line);
+            backdrop-filter: blur(18px);
+        }
+        .nav-wrap { height: 88px; display: flex; align-items: center; justify-content: space-between; gap: 28px; }
+        .brand { display: inline-flex; align-items: center; gap: 11px; text-decoration: none; font-family: "Fraunces", Georgia, serif; font-weight: 700; font-size: 1.55rem; }
+        .brand-mark { width: 38px; height: 38px; display: grid; place-items: center; border-radius: 13px 13px 15px 15px; background: var(--ink); color: var(--paper); transform: rotate(-2deg); }
+        .brand-mark svg { width: 23px; height: 23px; }
+        .desktop-nav { display: flex; align-items: center; gap: 30px; }
+        .desktop-nav a { text-decoration: none; font-size: .94rem; font-weight: 600; }
+        .desktop-nav a:not(.button) { position: relative; }
+        .desktop-nav a:not(.button)::after { content: ""; position: absolute; inset: auto 0 -6px; height: 2px; background: var(--terracotta); transform: scaleX(0); transform-origin: right; transition: transform .2s; }
+        .desktop-nav a:hover::after { transform: scaleX(1); transform-origin: left; }
+        .menu-button { display: none; width: 46px; height: 46px; border: 1px solid var(--line); border-radius: 50%; background: rgba(255,255,255,.45); align-items: center; justify-content: center; }
+        .menu-button span, .menu-button span::before, .menu-button span::after { content: ""; display: block; width: 20px; height: 2px; background: var(--ink); transition: .2s; }
+        .menu-button span { position: relative; }
+        .menu-button span::before { position: absolute; top: -6px; }
+        .menu-button span::after { position: absolute; top: 6px; }
+        .menu-button[aria-expanded="true"] span { background: transparent; }
+        .menu-button[aria-expanded="true"] span::before { top: 0; transform: rotate(45deg); }
+        .menu-button[aria-expanded="true"] span::after { top: 0; transform: rotate(-45deg); }
+        .mobile-menu { display: none; }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            min-height: 52px;
+            padding: 0 23px;
+            border: 1px solid transparent;
+            border-radius: 999px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: transform .2s, background .2s, box-shadow .2s;
+            cursor: pointer;
+        }
+        .button:hover { transform: translateY(-2px); }
+        .button-primary { background: var(--purple); color: white; box-shadow: 0 12px 26px rgba(105, 65, 198, .24); }
+        .button-primary:hover { background: var(--purple-dark); box-shadow: 0 16px 35px rgba(105, 65, 198, .3); }
+        .button-light { background: var(--paper); border-color: var(--line); }
+        .button-light:hover { box-shadow: 0 12px 25px rgba(35,23,46,.1); }
+        .button-dark { background: var(--ink); color: white; }
+        .button svg { width: 18px; height: 18px; }
+
+        .hero { min-height: 100svh; padding: 112px 0 40px; display: grid; align-items: center; position: relative; }
+        .hero::before { content: ""; position: absolute; width: 480px; height: 480px; border-radius: 50%; left: -230px; top: 120px; background: var(--lilac); opacity: .55; filter: blur(2px); z-index: -1; }
+        .hero-grid { display: grid; grid-template-columns: .9fr 1.1fr; align-items: center; gap: clamp(42px, 6vw, 90px); }
+        .hero-copy { position: relative; z-index: 2; }
+        .hero h1 em { display: block; color: var(--terracotta); font-weight: 500; }
+        .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
+        .microcopy { display: flex; gap: 22px; flex-wrap: wrap; margin: 20px 0 0; padding: 0; list-style: none; color: var(--ink-soft); font-size: .88rem; }
+        .microcopy li { display: flex; align-items: center; gap: 7px; }
+        .microcopy li::before { content: "✓"; width: 19px; height: 19px; display: grid; place-items: center; border-radius: 50%; background: var(--sage); color: var(--ink); font-size: .7rem; font-weight: 800; }
+        .hero-visual { position: relative; padding: 18px 0 32px 18px; }
+        .hero-image-wrap { border-radius: 180px 180px 28px 28px; overflow: hidden; box-shadow: var(--shadow); aspect-ratio: 4 / 5; background: #7c5c4c; }
+        .hero-image-wrap img { width: 100%; height: 100%; object-fit: cover; object-position: 58% center; }
+        .hero-note { position: absolute; left: -28px; bottom: 0; width: min(250px, 58%); padding: 20px; background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius-md); box-shadow: 0 16px 45px rgba(35,23,46,.16); transform: rotate(-2deg); }
+        .hero-note strong { display: block; font-family: "Fraunces", Georgia, serif; font-size: 1.32rem; line-height: 1.1; margin-bottom: 5px; }
+        .hero-note span { color: var(--ink-soft); font-size: .86rem; }
+        .sound-wave { position: absolute; right: -24px; top: 19%; display: flex; gap: 5px; align-items: center; padding: 14px 18px; border-radius: 999px; background: var(--terracotta); box-shadow: 0 12px 25px rgba(103,46,28,.22); }
+        .sound-wave i { display: block; width: 3px; border-radius: 3px; background: white; animation: pulse 1s ease-in-out infinite alternate; }
+        .sound-wave i:nth-child(1), .sound-wave i:nth-child(5) { height: 10px; }
+        .sound-wave i:nth-child(2), .sound-wave i:nth-child(4) { height: 20px; animation-delay: .18s; }
+        .sound-wave i:nth-child(3) { height: 29px; animation-delay: .34s; }
+        @keyframes pulse { to { transform: scaleY(.48); } }
+
+        .marquee { overflow: hidden; border-block: 1px solid var(--line); background: var(--paper); }
+        .marquee-track { width: max-content; display: flex; align-items: center; gap: 30px; padding: 17px 0; animation: marquee 24s linear infinite; font-family: "Fraunces", Georgia, serif; font-size: 1.08rem; }
+        .marquee-track span { display: flex; align-items: center; gap: 30px; }
+        .marquee-track span::after { content: "✦"; color: var(--terracotta); }
+        @keyframes marquee { to { transform: translateX(-50%); } }
+
+        section { padding: 110px 0; scroll-margin-top: 70px; }
+        .section-intro { display: flex; justify-content: space-between; align-items: end; gap: 40px; margin-bottom: 58px; }
+        .section-intro h2 { max-width: 720px; margin-bottom: 0; }
+        .section-intro .lead { max-width: 430px; margin-bottom: 4px; }
+
+        .experience { background: var(--paper); }
+        .experience-grid { display: grid; grid-template-columns: 1.2fr .8fr; gap: 28px; }
+        .experience-card { min-height: 420px; border-radius: var(--radius-lg); padding: 40px; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: end; }
+        .experience-card h3 { font-family: "Fraunces", Georgia, serif; font-size: 2rem; margin-bottom: 10px; }
+        .experience-card p { max-width: 440px; margin-bottom: 0; }
+        .experience-card.featured { color: white; background: linear-gradient(180deg, transparent 30%, rgba(20,12,25,.83)), url("assets/emcasa-house-concert.webp") center / cover; }
+        .experience-card.featured .card-tag { background: rgba(255,255,255,.16); color: white; border-color: rgba(255,255,255,.3); backdrop-filter: blur(10px); }
+        .experience-stack { display: grid; gap: 28px; }
+        .experience-stack .experience-card { min-height: 196px; justify-content: space-between; }
+        .experience-card.purple { background: var(--lilac); }
+        .experience-card.terracotta { background: var(--peach); }
+        .card-tag { align-self: flex-start; padding: 7px 12px; border-radius: 999px; border: 1px solid var(--line); background: rgba(255,255,255,.35); font-size: .76rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+        .big-number { font-family: "Fraunces", Georgia, serif; font-size: 3.8rem; line-height: 1; letter-spacing: -.05em; }
+
+        .steps { position: relative; }
+        .steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; counter-reset: step; }
+        .step { padding: 38px 36px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); counter-increment: step; }
+        .step + .step { border-left: 1px solid var(--line); }
+        .step::before { content: "0" counter(step); display: block; color: var(--terracotta); font-family: "Fraunces", Georgia, serif; font-size: 2.2rem; margin-bottom: 54px; }
+        .step h3 { font-size: 1.28rem; }
+        .step p { color: var(--ink-soft); margin-bottom: 0; }
+
+        .host { padding-top: 30px; }
+        .host-panel { background: var(--ink); color: white; border-radius: 42px; padding: clamp(38px, 7vw, 84px); position: relative; overflow: hidden; }
+        .host-panel::before { content: ""; position: absolute; width: 380px; height: 380px; border-radius: 50%; background: var(--purple); right: -170px; top: -190px; opacity: .5; }
+        .host-panel::after { content: "♪"; position: absolute; right: 8%; bottom: -12%; font-family: "Fraunces", Georgia, serif; font-size: 15rem; color: rgba(255,255,255,.05); transform: rotate(-8deg); }
+        .host-layout { display: grid; grid-template-columns: .95fr 1.05fr; gap: 80px; position: relative; z-index: 1; }
+        .host-panel .eyebrow { color: var(--peach); }
+        .host-panel h2 { max-width: 530px; }
+        .host-panel .lead { color: rgba(255,255,255,.68); }
+        .host-benefits { display: grid; gap: 0; }
+        .host-benefit { display: grid; grid-template-columns: 48px 1fr; gap: 18px; padding: 24px 0; border-bottom: 1px solid rgba(255,255,255,.14); }
+        .host-benefit:first-child { border-top: 1px solid rgba(255,255,255,.14); }
+        .host-benefit-icon { width: 45px; height: 45px; border-radius: 50%; display: grid; place-items: center; background: rgba(255,255,255,.1); color: var(--peach); font-weight: 700; }
+        .host-benefit h3 { margin: 0 0 5px; }
+        .host-benefit p { color: rgba(255,255,255,.65); margin: 0; }
+
+        .quote-section { padding-block: 130px; text-align: center; }
+        .quote-mark { color: var(--terracotta); font-family: "Fraunces", Georgia, serif; font-size: 5rem; line-height: .7; }
+        blockquote { max-width: 920px; margin: 22px auto 28px; font-family: "Fraunces", Georgia, serif; font-size: clamp(2rem, 4.4vw, 4rem); line-height: 1.1; letter-spacing: -.035em; }
+        .quote-section cite { color: var(--ink-soft); font-style: normal; }
+
+        .register { background: var(--paper); }
+        .register-layout { display: grid; grid-template-columns: .78fr 1.22fr; gap: 80px; align-items: start; }
+        .register-copy { position: sticky; top: 125px; }
+        .price { display: inline-flex; align-items: baseline; gap: 7px; margin: 12px 0 25px; }
+        .price strong { font-family: "Fraunces", Georgia, serif; font-size: 3.2rem; line-height: 1; }
+        .price span { color: var(--ink-soft); }
+        .payment-note { padding: 20px; border: 1px solid var(--line); border-radius: 16px; color: var(--ink-soft); font-size: .9rem; }
+        .payment-note strong { color: var(--ink); display: block; margin-bottom: 5px; }
+        .form-card { background: var(--cream); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: clamp(24px, 4vw, 48px); box-shadow: 0 18px 55px rgba(52,34,63,.08); }
+        .form-card h3 { font-family: "Fraunces", Georgia, serif; font-size: 2rem; margin-bottom: 8px; }
+        .form-card > p { margin-bottom: 32px; }
+        .form-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+        .field { margin-bottom: 19px; }
+        .field label { display: block; margin-bottom: 8px; font-size: .88rem; font-weight: 700; }
+        .field input, .field select, .field textarea { width: 100%; min-height: 52px; padding: 13px 15px; border: 1px solid rgba(35,23,46,.2); border-radius: 12px; background: var(--paper); color: var(--ink); transition: border .2s, box-shadow .2s; }
+        .field textarea { min-height: 108px; resize: vertical; }
+        .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--purple); box-shadow: 0 0 0 4px rgba(105,65,198,.12); }
+        .choice { display: flex; align-items: flex-start; gap: 12px; padding: 16px; border: 1px solid var(--line); border-radius: 14px; background: rgba(255,255,255,.45); margin-bottom: 12px; }
+        .choice input { width: 19px; height: 19px; margin-top: 2px; accent-color: var(--purple); flex: 0 0 auto; }
+        .choice label { cursor: pointer; }
+        .choice small { display: block; color: var(--ink-soft); margin-top: 3px; }
+        .submit-button { width: 100%; margin-top: 12px; }
+        .spinner { display: none; width: 18px; height: 18px; border: 2px solid rgba(255,255,255,.35); border-top-color: white; border-radius: 50%; animation: spin .7s linear infinite; }
+        .loading .spinner { display: block; }
+        .loading .button-label { display: none; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        footer { background: var(--ink); color: white; padding: 68px 0 30px; }
+        .footer-grid { display: grid; grid-template-columns: 1.4fr .6fr .6fr; gap: 50px; padding-bottom: 60px; }
+        .footer-brand .brand { margin-bottom: 18px; }
+        .footer-brand .brand-mark { background: var(--paper); color: var(--ink); }
+        .footer-brand p { max-width: 370px; color: rgba(255,255,255,.62); }
+        .footer-column h3 { font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; color: var(--peach); margin-bottom: 18px; }
+        .footer-column a { display: block; width: fit-content; color: rgba(255,255,255,.72); text-decoration: none; margin-bottom: 10px; }
+        .footer-column span { display: block; margin-bottom: 10px; color: rgba(255,255,255,.62); }
+        .footer-column a:hover { color: white; }
+        .footer-bottom { display: flex; justify-content: space-between; gap: 24px; padding-top: 26px; border-top: 1px solid rgba(255,255,255,.13); color: rgba(255,255,255,.48); font-size: .82rem; }
+
+        .modal { position: fixed; z-index: 1500; inset: 0; display: none; place-items: center; padding: 20px; background: rgba(24,14,30,.7); backdrop-filter: blur(8px); }
+        .modal.active { display: grid; }
+        .modal-card { width: min(100%, 480px); max-height: calc(100vh - 40px); overflow-y: auto; background: var(--paper); border-radius: 28px; padding: 38px; text-align: center; box-shadow: var(--shadow); animation: modal-in .25s ease-out; }
+        @keyframes modal-in { from { opacity: 0; transform: translateY(12px) scale(.97); } }
+        .success-icon { width: 66px; height: 66px; display: grid; place-items: center; margin: 0 auto 22px; border-radius: 50%; background: var(--sage); font-size: 1.6rem; }
+        .modal-card h2 { font-size: 2.3rem; margin-bottom: 10px; }
+        .ticket-preview { display: none; margin: 24px 0; padding: 20px; background: var(--cream); border: 1px dashed var(--purple); border-radius: 16px; }
+        #ticketQR { display: flex; justify-content: center; }
+        #ticketCode { margin: 12px 0 0; color: var(--purple-dark); font-family: ui-monospace, monospace; font-weight: 700; }
+
+        .reveal { opacity: 0; transform: translateY(20px); transition: opacity .6s ease, transform .6s ease; }
+        .reveal.visible { opacity: 1; transform: none; }
+
+        @media (min-width: 921px) {
+            .hero-grid { transform: translateY(-20px); }
+        }
+
+        @media (max-width: 920px) {
+            .desktop-nav { display: none; }
+            .menu-button { display: flex; }
+            .mobile-menu { display: grid; position: fixed; z-index: 900; inset: 0; padding: 120px 24px 40px; background: var(--cream); align-content: start; gap: 4px; transform: translateX(100%); transition: transform .25s ease; }
+            .mobile-menu.active { transform: none; }
+            .mobile-menu a { padding: 16px 0; border-bottom: 1px solid var(--line); text-decoration: none; font-family: "Fraunces", Georgia, serif; font-size: 1.7rem; }
+            .hero-grid, .host-layout, .register-layout { grid-template-columns: 1fr; }
+            .hero { padding-top: 122px; }
+            .hero-copy { max-width: 700px; }
+            .hero-visual { width: min(86%, 620px); margin: 0 auto; }
+            .hero-image-wrap { aspect-ratio: 1 / 1.12; }
+            .section-intro { align-items: start; flex-direction: column; }
+            .experience-grid { grid-template-columns: 1fr; }
+            .experience-stack { grid-template-columns: repeat(2, 1fr); }
+            .steps-grid { grid-template-columns: 1fr; }
+            .step + .step { border-left: 0; border-top: 0; }
+            .step::before { margin-bottom: 20px; }
+            .host-layout { gap: 42px; }
+            .register-layout { gap: 50px; }
+            .register-copy { position: static; }
+        }
+
+        @media (max-width: 620px) {
+            .shell { width: min(calc(100% - 32px), var(--container)); }
+            .nav-wrap { height: 74px; }
+            .brand { font-size: 1.36rem; }
+            .brand-mark { width: 35px; height: 35px; }
+            .hero { min-height: auto; padding: 108px 0 64px; }
+            h1 { font-size: clamp(3.2rem, 16vw, 4.7rem); }
+            h2 { font-size: 2.55rem; }
+            .hero-actions { display: grid; }
+            .hero-actions .button { width: 100%; }
+            .hero-visual { width: 95%; padding-left: 0; margin-top: 18px; }
+            .hero-image-wrap { border-radius: 110px 110px 24px 24px; }
+            .hero-note { left: -8px; padding: 15px; }
+            .sound-wave { right: -10px; }
+            section { padding: 78px 0; }
+            .section-intro { margin-bottom: 38px; }
+            .experience-card { min-height: 400px; padding: 27px; }
+            .experience-stack { grid-template-columns: 1fr; }
+            .experience-stack .experience-card { min-height: 210px; }
+            .step { padding: 30px 22px; }
+            .host { padding-top: 10px; }
+            .host-panel { border-radius: 26px; padding: 34px 24px; }
+            .host-benefit { grid-template-columns: 40px 1fr; gap: 13px; }
+            .host-benefit-icon { width: 38px; height: 38px; }
+            .quote-section { padding-block: 90px; }
+            .form-row { grid-template-columns: 1fr; gap: 0; }
+            .form-card { border-radius: 22px; }
+            .footer-grid { grid-template-columns: 1fr 1fr; }
+            .footer-brand { grid-column: 1 / -1; }
+            .footer-bottom { flex-direction: column; }
+            .modal-card { padding: 30px 20px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+            .reveal { opacity: 1; transform: none; }
+        }
+    </style>
+</head>
+<body>
+    <a class="skip-link" href="#main">Saltar para o conteúdo</a>
+
+    <header class="site-header" id="siteHeader">
+        <div class="shell nav-wrap">
+            <a class="brand" href="#top" aria-label="EmCasa — início">
+                <span class="brand-mark" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none"><path d="M4 11.2 12 4l8 7.2V20H4v-8.8Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M10.5 17.2v-6l5-1.2v5.1" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9.2" cy="17.7" r="1.8" fill="currentColor"/><circle cx="14" cy="15.5" r="1.8" fill="currentColor"/></svg>
+                </span>
+                EmCasa
+            </a>
+            <nav class="desktop-nav" aria-label="Navegação principal">
+                <a href="#experiencia">A experiência</a>
+                <a href="#como-funciona">Como funciona</a>
+                <a href="#anfitrioes">Anfitriões</a>
+                <a class="button button-dark" href="#inscricao">Quero participar</a>
+            </nav>
+            <button class="menu-button" id="menuButton" type="button" aria-expanded="false" aria-controls="mobileMenu" aria-label="Abrir menu"><span></span></button>
+        </div>
+    </header>
+    <nav class="mobile-menu" id="mobileMenu" aria-label="Navegação móvel">
+        <a href="#experiencia">A experiência</a>
+        <a href="#como-funciona">Como funciona</a>
+        <a href="#anfitrioes">Anfitriões</a>
+        <a href="#inscricao">Quero participar</a>
+    </nav>
+
+    <main id="main">
+        <section class="hero" id="top">
+            <div class="shell hero-grid">
+                <div class="hero-copy">
+                    <p class="eyebrow">Concertos fora do palco</p>
+                    <h1>A sala fica pequena. <em>A música fica enorme.</em></h1>
+                    <p class="lead">Concertos intimistas em casas reais, com artistas locais e pessoas que querem ouvir — mesmo ouvir — música ao vivo.</p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#inscricao">
+                            Quero ir a um concerto
+                            <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="m7 4 6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </a>
+                        <a class="button button-light" href="#anfitrioes">Tenho uma sala</a>
+                    </div>
+                    <ul class="microcopy" aria-label="Destaques">
+                        <li>Grupos pequenos</li>
+                        <li>Artistas locais</li>
+                        <li>A partir de 8€</li>
+                    </ul>
+                </div>
+                <div class="hero-visual" aria-label="Concerto acústico numa sala em Lisboa">
+                    <div class="hero-image-wrap">
+                        <img src="assets/emcasa-house-concert.webp" alt="Músico a tocar guitarra para um pequeno grupo numa sala acolhedora em Lisboa" width="1448" height="1086" fetchpriority="high">
+                    </div>
+                    <div class="hero-note">
+                        <strong>Sem palco.<br>Sem distância.</strong>
+                        <span>Só uma sala, um artista e uma boa noite.</span>
+                    </div>
+                    <div class="sound-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+                </div>
+            </div>
+        </section>
+
+        <div class="marquee" aria-hidden="true">
+            <div class="marquee-track">
+                <span>Uma sala</span><span>Um artista</span><span>Poucos lugares</span><span>Música de perto</span><span>Noites para lembrar</span>
+                <span>Uma sala</span><span>Um artista</span><span>Poucos lugares</span><span>Música de perto</span><span>Noites para lembrar</span>
+            </div>
+        </div>
+
+        <section class="experience" id="experiencia">
+            <div class="shell">
+                <div class="section-intro reveal">
+                    <div>
+                        <p class="eyebrow">Perto é diferente</p>
+                        <h2>Não vens só assistir.<br>Vens fazer parte.</h2>
+                    </div>
+                    <p class="lead">O EmCasa junta quem tem música para partilhar, quem tem uma sala para abrir e quem quer viver uma noite menos previsível.</p>
+                </div>
+                <div class="experience-grid">
+                    <article class="experience-card featured reveal">
+                        <span class="card-tag">A experiência</span>
+                        <div>
+                            <h3>Ouve cada nota. Conhece toda a gente.</h3>
+                            <p>Sem barreiras entre artista e público. A proximidade muda a forma como a música se sente.</p>
+                        </div>
+                    </article>
+                    <div class="experience-stack">
+                        <article class="experience-card purple reveal">
+                            <span class="card-tag">Intimista</span>
+                            <div><span class="big-number">15–30</span><p>pessoas por concerto</p></div>
+                        </article>
+                        <article class="experience-card terracotta reveal">
+                            <span class="card-tag">Local</span>
+                            <div><h3>Artistas que vale a pena descobrir.</h3><p>Projetos independentes, novos sons e histórias contadas sem pressa.</p></div>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="steps" id="como-funciona">
+            <div class="shell">
+                <div class="section-intro reveal">
+                    <div>
+                        <p class="eyebrow">É simples</p>
+                        <h2>Da inscrição à primeira nota.</h2>
+                    </div>
+                    <p class="lead">Nós tratamos dos detalhes para que tu só tenhas de aparecer com vontade de ouvir.</p>
+                </div>
+                <div class="steps-grid reveal">
+                    <article class="step"><h3>Diz-nos onde estás</h3><p>Faz a pré-inscrição e conta-nos que música gostas de ouvir.</p></article>
+                    <article class="step"><h3>Recebe o convite</h3><p>Quando houver um concerto perto de ti, enviamos os detalhes e o link de pagamento.</p></article>
+                    <article class="step"><h3>Entra e sente-te em casa</h3><p>O endereço é partilhado com os participantes confirmados. Depois, é deixar a noite acontecer.</p></article>
+                </div>
+            </div>
+        </section>
+
+        <section class="host" id="anfitrioes">
+            <div class="shell host-panel reveal">
+                <div class="host-layout">
+                    <div>
+                        <p class="eyebrow">Abre a porta</p>
+                        <h2>A tua sala pode ser o próximo palco.</h2>
+                        <p class="lead">Não precisas de uma casa perfeita. Precisas de espaço para algumas pessoas e vontade de criar uma noite especial.</p>
+                        <a class="button button-primary host-cta" href="#inscricao" data-host="true">Quero ser anfitrião</a>
+                    </div>
+                    <div class="host-benefits">
+                        <article class="host-benefit"><span class="host-benefit-icon">01</span><div><h3>Nós organizamos</h3><p>Artista, inscrições, comunicação e apoio no dia.</p></div></article>
+                        <article class="host-benefit"><span class="host-benefit-icon">02</span><div><h3>Tu defines o ambiente</h3><p>A sala é tua. A personalidade da noite também.</p></div></article>
+                        <article class="host-benefit"><span class="host-benefit-icon">03</span><div><h3>Tu e mais um entram sem pagar</h3><p>O nosso obrigado por receberes a comunidade.</p></div></article>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="quote-section">
+            <div class="shell reveal">
+                <div class="quote-mark" aria-hidden="true">“</div>
+                <blockquote>A melhor música não precisa de um palco maior. Precisa de pessoas mais perto.</blockquote>
+                <cite>— Equipa EmCasa</cite>
+            </div>
+        </section>
+
+        <section class="register" id="inscricao">
+            <div class="shell register-layout">
+                <div class="register-copy reveal">
+                    <p class="eyebrow">Fica na lista</p>
+                    <h2>A próxima noite pode começar aqui.</h2>
+                    <p class="lead">A pré-inscrição é gratuita e sem compromisso. Avisamos-te quando houver uma sessão perto de ti.</p>
+                    <div class="price"><strong>8€</strong><span>a partir de / pessoa</span></div>
+                    <div class="payment-note"><strong>Pagamento só depois da confirmação.</strong>Recebes um link seguro com as opções disponíveis. Nunca pagas antes de saberes a data e a zona do concerto.</div>
+                </div>
+
+                <div class="form-card reveal">
+                    <h3>Conta-nos um pouco sobre ti</h3>
+                    <p class="muted">Demora menos de dois minutos.</p>
+                    <form id="registrationForm">
+                        <div class="form-row">
+                            <div class="field"><label for="firstName">Primeiro nome *</label><input id="firstName" name="firstName" type="text" autocomplete="given-name" required placeholder="Ex.: Marta"></div>
+                            <div class="field"><label for="lastName">Apelido *</label><input id="lastName" name="lastName" type="text" autocomplete="family-name" required placeholder="Ex.: Silva"></div>
+                        </div>
+                        <div class="field"><label for="email">Email *</label><input id="email" name="email" type="email" autocomplete="email" required placeholder="marta@email.com"></div>
+                        <div class="form-row">
+                            <div class="field"><label for="phone">Telemóvel *</label><input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" required placeholder="912 345 678"></div>
+                            <div class="field"><label for="city">Cidade *</label><input id="city" name="city" type="text" autocomplete="address-level2" required placeholder="Lisboa"></div>
+                        </div>
+                        <div class="field">
+                            <label for="musicGenres">O que gostas de ouvir?</label>
+                            <select id="musicGenres" name="musicGenres"><option value="">Escolhe uma opção</option><option value="rock">Rock</option><option value="jazz">Jazz</option><option value="folk">Folk / Acústico</option><option value="pop">Pop</option><option value="classical">Clássica</option><option value="fado">Fado</option><option value="hiphop">Hip-Hop</option><option value="electronic">Eletrónica</option><option value="all">Um pouco de tudo</option></select>
+                        </div>
+                        <div class="field"><label for="message">Há algo que queiras acrescentar? <span class="muted">(opcional)</span></label><textarea id="message" name="message" placeholder="Uma sugestão, uma pergunta ou um artista que gostavas de ouvir..."></textarea></div>
+                        <div class="choice"><input id="wantHost" name="wantHost" type="checkbox"><label for="wantHost"><strong>Também quero receber um concerto</strong><small>Tenho interesse em disponibilizar a minha casa.</small></label></div>
+                        <div class="choice"><input id="newsletter" name="newsletter" type="checkbox" checked><label for="newsletter"><strong>Quero receber novidades</strong><small>Próximas sessões e notícias EmCasa. Podes sair quando quiseres.</small></label></div>
+                        <button class="button button-primary submit-button" type="submit"><span class="button-label">Fazer pré-inscrição</span><span class="spinner" aria-hidden="true"></span></button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="shell">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a class="brand" href="#top"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 11.2 12 4l8 7.2V20H4v-8.8Z" stroke="currentColor" stroke-width="1.7"/><path d="M10.5 17.2v-6l5-1.2v5.1" stroke="currentColor" stroke-width="1.7"/><circle cx="9.2" cy="17.7" r="1.8" fill="currentColor"/><circle cx="14" cy="15.5" r="1.8" fill="currentColor"/></svg></span>EmCasa</a>
+                    <p>Música ao vivo. Pessoas por perto. Uma sala onde tudo pode acontecer.</p>
+                </div>
+                <div class="footer-column"><h3>Explorar</h3><a href="#experiencia">A experiência</a><a href="#como-funciona">Como funciona</a><a href="#anfitrioes">Ser anfitrião</a></div>
+                <div class="footer-column"><h3>Por perto</h3><span class="muted">Lisboa, Portugal</span><span class="muted">Novidades em breve</span></div>
+            </div>
+            <div class="footer-bottom"><span>© 2026 EmCasa. Feito com atenção em Portugal.</span><span>Concertos pequenos. Memórias grandes.</span></div>
+        </div>
+    </footer>
+
+    <div class="modal" id="successModal" role="dialog" aria-modal="true" aria-labelledby="successTitle">
+        <div class="modal-card">
+            <div class="success-icon" aria-hidden="true">✓</div>
+            <h2 id="successTitle">Estás na lista.</h2>
+            <p class="muted">Obrigado pelo interesse. Vamos avisar-te quando houver uma sessão perto de ti.</p>
+            <div class="ticket-preview" id="ticketPreview"><small class="muted">Código da pré-inscrição</small><div id="ticketQR"></div><p id="ticketCode"></p></div>
+            <button class="button button-dark" id="closeModal" type="button">Continuar a explorar</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+    <script>
+        const GOOGLE_SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
+        const header = document.getElementById('siteHeader');
+        const menuButton = document.getElementById('menuButton');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const successModal = document.getElementById('successModal');
+        const closeModalButton = document.getElementById('closeModal');
+
+        const updateHeader = () => header.classList.toggle('scrolled', window.scrollY > 20);
+        updateHeader();
+        window.addEventListener('scroll', updateHeader, { passive: true });
+
+        function closeMenu() {
+            menuButton.setAttribute('aria-expanded', 'false');
+            menuButton.setAttribute('aria-label', 'Abrir menu');
+            mobileMenu.classList.remove('active');
+            document.body.classList.remove('menu-open');
+        }
+
+        menuButton.addEventListener('click', () => {
+            const open = menuButton.getAttribute('aria-expanded') === 'true';
+            menuButton.setAttribute('aria-expanded', String(!open));
+            menuButton.setAttribute('aria-label', open ? 'Abrir menu' : 'Fechar menu');
+            mobileMenu.classList.toggle('active', !open);
+            document.body.classList.toggle('menu-open', !open);
+        });
+        mobileMenu.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
+
+        document.querySelectorAll('[data-host="true"]').forEach(link => {
+            link.addEventListener('click', () => { document.getElementById('wantHost').checked = true; });
+        });
+
+        const revealItems = document.querySelectorAll('.reveal');
+        if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: .12 });
+            revealItems.forEach(item => observer.observe(item));
+        } else {
+            revealItems.forEach(item => item.classList.add('visible'));
+        }
+
+        function makeTicketId() {
+            return 'EC-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).slice(2, 6).toUpperCase();
+        }
+
+        document.getElementById('registrationForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+            const submitButton = this.querySelector('button[type="submit"]');
+            submitButton.classList.add('loading');
+            submitButton.disabled = true;
+            const data = Object.fromEntries(new FormData(this).entries());
+            data.wantHost = document.getElementById('wantHost').checked;
+            data.newsletter = document.getElementById('newsletter').checked;
+            data.timestamp = new Date().toISOString();
+            const ticketId = makeTicketId();
+
+            try {
+                if (GOOGLE_SCRIPT_URL !== 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
+                    await fetch(GOOGLE_SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+                } else {
+                    console.info('EmCasa demo submission:', data);
+                }
+                document.getElementById('ticketCode').textContent = ticketId;
+                document.getElementById('ticketPreview').style.display = 'block';
+                const qrTarget = document.getElementById('ticketQR');
+                qrTarget.innerHTML = '';
+                if (window.QRCode) new QRCode(qrTarget, { text: ticketId, width: 112, height: 112, colorDark: '#23172e', colorLight: '#f7f1e8', correctLevel: QRCode.CorrectLevel.H });
+                successModal.classList.add('active');
+                closeModalButton.focus();
+                this.reset();
+                document.getElementById('newsletter').checked = true;
+            } catch (error) {
+                console.error(error);
+                alert('Não foi possível enviar a pré-inscrição. Tenta novamente dentro de momentos.');
+            } finally {
+                submitButton.classList.remove('loading');
+                submitButton.disabled = false;
+            }
+        });
+
+        function closeSuccessModal() {
+            successModal.classList.remove('active');
+            document.getElementById('firstName').focus();
+        }
+        closeModalButton.addEventListener('click', closeSuccessModal);
+        successModal.addEventListener('click', event => { if (event.target === successModal) closeSuccessModal(); });
+        document.addEventListener('keydown', event => {
+            if (event.key === 'Escape') {
+                if (successModal.classList.contains('active')) closeSuccessModal();
+                if (mobileMenu.classList.contains('active')) closeMenu();
+            }
+        });
+    </script>
+</body>
+</html>
