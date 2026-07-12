@@ -3,105 +3,173 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Concertos intimistas em salas portuguesas. Descobre artistas locais, conhece pessoas e vive a música de perto com o EmCasa.">
-    <meta name="theme-color" content="#23172e">
-    <title>EmCasa — Música ao vivo, mesmo perto</title>
+    <meta name="description" content="Todos os meses, um artista novo, numa casa diferente. Concertos intimistas em Lisboa por 10€ por pessoa.">
+    <meta name="theme-color" content="#160d1d">
+    <meta property="og:title" content="EmCasa — Concertos fora do palco">
+    <meta property="og:description" content="Uma casa. Um artista. Uma noite que fica.">
+    <meta property="og:image" content="assets/emcasa-house-concert.webp">
+    <title>EmCasa — Concertos fora do palco</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght,SOFT,WONK@9..144,400..900,0..100,0..1&display=swap" rel="stylesheet">
     <style>
         :root {
-            --ink: #23172e;
-            --ink-soft: #61576a;
-            --cream: #f7f1e8;
-            --paper: #fffdf8;
-            --purple: #6941c6;
-            --purple-dark: #4d2a9a;
-            --lilac: #e9ddff;
-            --terracotta: #cf5f3c;
-            --peach: #f1b598;
-            --sage: #b9c8ab;
-            --line: rgba(35, 23, 46, .14);
-            --shadow: 0 24px 70px rgba(52, 34, 63, .14);
-            --radius-lg: 32px;
-            --radius-md: 20px;
-            --container: 1180px;
+            --night: #160d1d;
+            --night-2: #24142e;
+            --violet: #5634ff;
+            --violet-deep: #3825fe;
+            --orange: #e65d33;
+            --orange-deep: #bf4928;
+            --cream: #f8f0e3;
+            --cream-2: #eadcc8;
+            --brown: #71341f;
+            --ink: #201326;
+            --white: #fffdf8;
+            --line-light: rgba(255,255,255,.16);
+            --line-dark: rgba(32,19,38,.16);
+            --ease: cubic-bezier(.22,1,.36,1);
+            --container: 1240px;
         }
 
         * { box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
+        html { scroll-behavior: smooth; overflow-x: clip; }
         body {
             margin: 0;
+            background: var(--night);
+            color: var(--cream);
             font-family: "DM Sans", system-ui, sans-serif;
-            color: var(--ink);
-            background: var(--cream);
-            line-height: 1.55;
+            line-height: 1.5;
             overflow-x: hidden;
+            cursor: default;
         }
-        body.menu-open { overflow: hidden; }
+        body.menu-open, body.loading { overflow: hidden; }
         img { display: block; max-width: 100%; }
         a { color: inherit; }
-        button, input, select, textarea { font: inherit; }
+        button, input { font: inherit; }
         button { color: inherit; }
-        ::selection { background: var(--lilac); color: var(--ink); }
+        ::selection { color: var(--cream); background: var(--orange); }
 
         .skip-link {
             position: fixed;
-            z-index: 2000;
-            top: 12px;
-            left: 12px;
-            padding: 10px 16px;
-            background: var(--ink);
-            color: white;
-            border-radius: 8px;
+            z-index: 10000;
+            top: 14px;
+            left: 14px;
+            padding: 11px 17px;
+            color: var(--night);
+            background: var(--cream);
+            border-radius: 999px;
             transform: translateY(-160%);
         }
-        .skip-link:focus { transform: translateY(0); }
-        :focus-visible { outline: 3px solid var(--terracotta); outline-offset: 4px; }
+        .skip-link:focus { transform: none; }
+        :focus-visible { outline: 3px solid var(--orange); outline-offset: 5px; }
 
-        .shell { width: min(calc(100% - 48px), var(--container)); margin-inline: auto; }
+        .page-noise {
+            position: fixed;
+            z-index: 9000;
+            inset: 0;
+            pointer-events: none;
+            opacity: .045;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E");
+            mix-blend-mode: soft-light;
+        }
+        .spotlight {
+            position: fixed;
+            z-index: 0;
+            width: 520px;
+            height: 520px;
+            left: 0;
+            top: 0;
+            border-radius: 50%;
+            pointer-events: none;
+            background: radial-gradient(circle, rgba(86,52,255,.15), transparent 68%);
+            transform: translate3d(calc(var(--mouse-x, 50vw) - 50%), calc(var(--mouse-y, 50vh) - 50%), 0);
+            transition: opacity .25s;
+            will-change: transform;
+        }
+        .scroll-progress {
+            position: fixed;
+            z-index: 10001;
+            inset: 0 auto auto 0;
+            width: var(--scroll, 0%);
+            height: 3px;
+            background: linear-gradient(90deg, var(--violet), var(--orange));
+            transform-origin: left;
+        }
+
+        .preloader {
+            position: fixed;
+            z-index: 9999;
+            inset: 0;
+            display: grid;
+            place-items: center;
+            overflow: hidden;
+            background: var(--night);
+            transition: visibility 0s 1.35s;
+        }
+        .preloader::before,
+        .preloader::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            transform-origin: top;
+            transition: transform 1.05s var(--ease);
+        }
+        .preloader::before { background: var(--violet); }
+        .preloader::after { background: var(--orange); transform: translateY(50%); }
+        .preloader-inner { position: relative; z-index: 2; text-align: center; transition: opacity .35s, transform .7s var(--ease); }
+        .preloader-logo { width: min(290px, 58vw); filter: drop-shadow(0 20px 35px rgba(31,10,37,.28)); }
+        .preloader p { margin: 14px 0 0; font-weight: 700; font-size: .72rem; letter-spacing: .22em; text-transform: uppercase; }
+        body.loaded .preloader { visibility: hidden; }
+        body.loaded .preloader::before { transform: translateY(-102%); }
+        body.loaded .preloader::after { transform: translateY(102%); }
+        body.loaded .preloader-inner { opacity: 0; transform: scale(.9); }
+
+        .shell { width: min(calc(100% - 64px), var(--container)); margin-inline: auto; }
+        .display { font-family: "Fraunces", Georgia, serif; }
         .eyebrow {
             display: inline-flex;
             align-items: center;
-            gap: 9px;
-            margin: 0 0 18px;
-            color: var(--purple-dark);
+            gap: 12px;
+            margin: 0 0 22px;
+            font-size: .72rem;
             font-weight: 700;
-            font-size: .78rem;
-            letter-spacing: .11em;
+            letter-spacing: .18em;
             text-transform: uppercase;
         }
-        .eyebrow::before { content: ""; width: 26px; height: 2px; background: var(--terracotta); }
+        .eyebrow::before { content: ""; width: 32px; height: 2px; background: currentColor; }
+        .eyebrow.orange { color: var(--orange); }
+        .eyebrow.violet { color: var(--violet); }
+        .eyebrow.cream { color: var(--cream); }
         h1, h2, h3, p { margin-top: 0; }
-        h1, h2, .display { font-family: "Fraunces", Georgia, serif; }
-        h1 { font-size: clamp(3.25rem, 5.2vw, 4.9rem); line-height: .94; letter-spacing: -.055em; margin-bottom: 22px; }
-        h2 { font-size: clamp(2.4rem, 5vw, 4.3rem); line-height: 1.02; letter-spacing: -.04em; margin-bottom: 22px; }
-        h3 { font-size: 1.25rem; line-height: 1.25; }
-        .lead { font-size: clamp(1.08rem, 1.7vw, 1.3rem); color: var(--ink-soft); max-width: 650px; }
-        .muted { color: var(--ink-soft); }
+        h1, h2 { font-family: "Fraunces", Georgia, serif; font-weight: 570; letter-spacing: -.055em; }
+        h2 { font-size: clamp(3.2rem, 7.5vw, 7.4rem); line-height: .9; }
+        .lead { max-width: 640px; color: rgba(248,240,227,.68); font-size: clamp(1.05rem, 1.5vw, 1.25rem); }
 
         .site-header {
             position: fixed;
             z-index: 1000;
             inset: 0 0 auto;
-            transition: background .25s, box-shadow .25s, padding .25s;
+            transition: transform .45s var(--ease), background .3s, border .3s;
         }
         .site-header.scrolled {
-            background: rgba(247, 241, 232, .9);
-            box-shadow: 0 1px 0 var(--line);
-            backdrop-filter: blur(18px);
+            background: rgba(22,13,29,.78);
+            border-bottom: 1px solid var(--line-light);
+            backdrop-filter: blur(20px) saturate(1.2);
         }
-        .nav-wrap { height: 88px; display: flex; align-items: center; justify-content: space-between; gap: 28px; }
-        .brand { display: inline-flex; align-items: center; text-decoration: none; }
-        .brand-logo-frame { width: 82px; height: 72px; display: grid; place-items: center; overflow: hidden; border-radius: 14px; }
-        .brand-logo { width: 100%; height: 100%; object-fit: contain; transform: scale(1.35); }
+        .site-header.hidden { transform: translateY(-105%); }
+        .nav-wrap { min-height: 94px; display: flex; align-items: center; justify-content: space-between; gap: 36px; }
+        .brand { position: relative; display: inline-flex; align-items: center; text-decoration: none; }
+        .brand img { width: 112px; height: auto; filter: drop-shadow(0 8px 18px rgba(0,0,0,.18)); transition: transform .4s var(--ease); }
+        .brand:hover img { transform: rotate(-3deg) scale(1.06); }
         .desktop-nav { display: flex; align-items: center; gap: 30px; }
-        .desktop-nav a { text-decoration: none; font-size: .94rem; font-weight: 600; }
-        .desktop-nav a:not(.button) { position: relative; }
-        .desktop-nav a:not(.button)::after { content: ""; position: absolute; inset: auto 0 -6px; height: 2px; background: var(--terracotta); transform: scaleX(0); transform-origin: right; transition: transform .2s; }
-        .desktop-nav a:hover::after { transform: scaleX(1); transform-origin: left; }
-        .menu-button { display: none; width: 46px; height: 46px; border: 1px solid var(--line); border-radius: 50%; background: rgba(255,255,255,.45); align-items: center; justify-content: center; }
-        .menu-button span, .menu-button span::before, .menu-button span::after { content: ""; display: block; width: 20px; height: 2px; background: var(--ink); transition: .2s; }
+        .desktop-nav > a:not(.pill) { position: relative; text-decoration: none; font-size: .86rem; font-weight: 700; }
+        .desktop-nav > a:not(.pill)::after { content: ""; position: absolute; inset: auto 0 -7px; height: 2px; background: var(--orange); transform: scaleX(0); transform-origin: right; transition: transform .3s var(--ease); }
+        .desktop-nav > a:not(.pill):hover::after { transform: scaleX(1); transform-origin: left; }
+        .social-icon { width: 42px; height: 42px; display: grid; place-items: center; border: 1px solid var(--line-light); border-radius: 50%; transition: background .25s, transform .25s; }
+        .social-icon:hover { background: var(--orange); transform: rotate(8deg); }
+        .social-icon svg { width: 17px; height: 17px; }
+        .menu-button { display: none; width: 48px; height: 48px; border: 1px solid var(--line-light); border-radius: 50%; background: rgba(255,255,255,.05); align-items: center; justify-content: center; }
+        .menu-button span, .menu-button span::before, .menu-button span::after { content: ""; display: block; width: 20px; height: 2px; background: var(--cream); transition: .25s var(--ease); }
         .menu-button span { position: relative; }
         .menu-button span::before { position: absolute; top: -6px; }
         .menu-button span::after { position: absolute; top: 6px; }
@@ -110,231 +178,264 @@
         .menu-button[aria-expanded="true"] span::after { top: 0; transform: rotate(-45deg); }
         .mobile-menu { display: none; }
 
-        .button {
+        .pill {
+            --pill-bg: var(--orange);
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 11px;
             min-height: 52px;
             padding: 0 23px;
+            color: var(--cream);
+            background: var(--pill-bg);
             border: 1px solid transparent;
             border-radius: 999px;
             text-decoration: none;
             font-weight: 700;
-            transition: transform .2s, background .2s, box-shadow .2s;
-            cursor: pointer;
+            box-shadow: 0 12px 30px rgba(230,93,51,.19);
+            transition: color .3s, background .3s, border .3s, box-shadow .3s;
+            will-change: transform;
         }
-        .button:hover { transform: translateY(-2px); }
-        .button-primary { background: var(--purple); color: white; box-shadow: 0 12px 26px rgba(105, 65, 198, .24); }
-        .button-primary:hover { background: var(--purple-dark); box-shadow: 0 16px 35px rgba(105, 65, 198, .3); }
-        .button-light { background: var(--paper); border-color: var(--line); }
-        .button-light:hover { box-shadow: 0 12px 25px rgba(35,23,46,.1); }
-        .button-dark { background: var(--ink); color: white; }
-        .button svg { width: 18px; height: 18px; }
+        .pill:hover { background: var(--cream); color: var(--night); box-shadow: 0 18px 40px rgba(0,0,0,.22); }
+        .pill.violet { --pill-bg: var(--violet); box-shadow: 0 12px 30px rgba(86,52,255,.25); }
+        .pill.ghost { --pill-bg: transparent; border-color: var(--line-light); box-shadow: none; }
+        .pill.ghost:hover { border-color: var(--cream); }
+        .pill svg { width: 18px; height: 18px; }
 
-        .hero { min-height: 100svh; padding: 112px 0 40px; display: grid; align-items: center; position: relative; }
-        .hero::before { content: ""; position: absolute; width: 480px; height: 480px; border-radius: 50%; left: -230px; top: 120px; background: var(--lilac); opacity: .55; filter: blur(2px); z-index: -1; }
-        .hero-grid { display: grid; grid-template-columns: .9fr 1.1fr; align-items: center; gap: clamp(42px, 6vw, 90px); }
-        .hero-copy { position: relative; z-index: 2; }
-        .hero h1 em { display: block; color: var(--terracotta); font-weight: 500; }
-        .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
-        .microcopy { display: flex; gap: 22px; flex-wrap: wrap; margin: 20px 0 0; padding: 0; list-style: none; color: var(--ink-soft); font-size: .88rem; }
-        .microcopy li { display: flex; align-items: center; gap: 7px; }
-        .microcopy li::before { content: "✓"; width: 19px; height: 19px; display: grid; place-items: center; border-radius: 50%; background: var(--sage); color: var(--ink); font-size: .7rem; font-weight: 800; }
-        .hero-visual { position: relative; padding: 18px 0 32px 18px; }
-        .hero-image-wrap { border-radius: 180px 180px 28px 28px; overflow: hidden; box-shadow: var(--shadow); aspect-ratio: 4 / 5; background: #7c5c4c; }
-        .hero-image-wrap img { width: 100%; height: 100%; object-fit: cover; object-position: 58% center; }
-        .hero-note { position: absolute; left: -28px; bottom: 0; width: min(250px, 58%); padding: 20px; background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius-md); box-shadow: 0 16px 45px rgba(35,23,46,.16); transform: rotate(-2deg); }
-        .hero-note strong { display: block; font-family: "Fraunces", Georgia, serif; font-size: 1.32rem; line-height: 1.1; margin-bottom: 5px; }
-        .hero-note span { color: var(--ink-soft); font-size: .86rem; }
-        .sound-wave { position: absolute; right: -24px; top: 19%; display: flex; gap: 5px; align-items: center; padding: 14px 18px; border-radius: 999px; background: var(--terracotta); box-shadow: 0 12px 25px rgba(103,46,28,.22); }
-        .sound-wave i { display: block; width: 3px; border-radius: 3px; background: white; animation: pulse 1s ease-in-out infinite alternate; }
-        .sound-wave i:nth-child(1), .sound-wave i:nth-child(5) { height: 10px; }
-        .sound-wave i:nth-child(2), .sound-wave i:nth-child(4) { height: 20px; animation-delay: .18s; }
-        .sound-wave i:nth-child(3) { height: 29px; animation-delay: .34s; }
-        @keyframes pulse { to { transform: scaleY(.48); } }
-
-        .marquee { overflow: hidden; border-block: 1px solid var(--line); background: var(--paper); }
-        .marquee-track { width: max-content; display: flex; align-items: center; gap: 30px; padding: 17px 0; animation: marquee 24s linear infinite; font-family: "Fraunces", Georgia, serif; font-size: 1.08rem; }
-        .marquee-track span { display: flex; align-items: center; gap: 30px; }
-        .marquee-track span::after { content: "✦"; color: var(--terracotta); }
-        @keyframes marquee { to { transform: translateX(-50%); } }
-
-        section { padding: 110px 0; scroll-margin-top: 70px; }
-        .section-intro { display: flex; justify-content: space-between; align-items: end; gap: 40px; margin-bottom: 58px; }
-        .section-intro h2 { max-width: 720px; margin-bottom: 0; }
-        .section-intro .lead { max-width: 430px; margin-bottom: 4px; }
-
-        .experience { background: var(--paper); }
-        .experience-grid { display: grid; grid-template-columns: 1.2fr .8fr; gap: 28px; }
-        .experience-card { min-height: 420px; border-radius: var(--radius-lg); padding: 40px; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: end; }
-        .experience-card h3 { font-family: "Fraunces", Georgia, serif; font-size: 2rem; margin-bottom: 10px; }
-        .experience-card p { max-width: 440px; margin-bottom: 0; }
-        .experience-card.featured { color: white; background: linear-gradient(180deg, transparent 30%, rgba(20,12,25,.83)), url("assets/emcasa-house-concert.webp") center / cover; }
-        .experience-card.featured .card-tag { background: rgba(255,255,255,.16); color: white; border-color: rgba(255,255,255,.3); backdrop-filter: blur(10px); }
-        .experience-stack { display: grid; gap: 28px; }
-        .experience-stack .experience-card { min-height: 196px; justify-content: space-between; }
-        .experience-card.purple { background: var(--lilac); }
-        .experience-card.terracotta { background: var(--peach); }
-        .card-tag { align-self: flex-start; padding: 7px 12px; border-radius: 999px; border: 1px solid var(--line); background: rgba(255,255,255,.35); font-size: .76rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
-        .big-number { font-family: "Fraunces", Georgia, serif; font-size: 3.8rem; line-height: 1; letter-spacing: -.05em; }
-
-        .steps { position: relative; }
-        .steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; counter-reset: step; }
-        .step { padding: 38px 36px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); counter-increment: step; }
-        .step + .step { border-left: 1px solid var(--line); }
-        .step::before { content: "0" counter(step); display: block; color: var(--terracotta); font-family: "Fraunces", Georgia, serif; font-size: 2.2rem; margin-bottom: 54px; }
-        .step h3 { font-size: 1.28rem; }
-        .step p { color: var(--ink-soft); margin-bottom: 0; }
-
-        .host { padding-top: 30px; }
-        .host-panel { background: var(--ink); color: white; border-radius: 42px; padding: clamp(38px, 7vw, 84px); position: relative; overflow: hidden; }
-        .host-panel::before { content: ""; position: absolute; width: 380px; height: 380px; border-radius: 50%; background: var(--purple); right: -170px; top: -190px; opacity: .5; }
-        .host-panel::after { content: "♪"; position: absolute; right: 8%; bottom: -12%; font-family: "Fraunces", Georgia, serif; font-size: 15rem; color: rgba(255,255,255,.05); transform: rotate(-8deg); }
-        .host-layout { display: grid; grid-template-columns: .95fr 1.05fr; gap: 80px; position: relative; z-index: 1; }
-        .host-panel .eyebrow { color: var(--peach); }
-        .host-panel h2 { max-width: 530px; }
-        .host-panel .lead { color: rgba(255,255,255,.68); }
-        .host-benefits { display: grid; gap: 0; }
-        .host-benefit { display: grid; grid-template-columns: 48px 1fr; gap: 18px; padding: 24px 0; border-bottom: 1px solid rgba(255,255,255,.14); }
-        .host-benefit:first-child { border-top: 1px solid rgba(255,255,255,.14); }
-        .host-benefit-icon { width: 45px; height: 45px; border-radius: 50%; display: grid; place-items: center; background: rgba(255,255,255,.1); color: var(--peach); font-weight: 700; }
-        .host-benefit h3 { margin: 0 0 5px; }
-        .host-benefit p { color: rgba(255,255,255,.65); margin: 0; }
-
-        .quote-section { padding-block: 130px; text-align: center; }
-        .quote-mark { color: var(--terracotta); font-family: "Fraunces", Georgia, serif; font-size: 5rem; line-height: .7; }
-        blockquote { max-width: 920px; margin: 22px auto 28px; font-family: "Fraunces", Georgia, serif; font-size: clamp(2rem, 4.4vw, 4rem); line-height: 1.1; letter-spacing: -.035em; }
-        .quote-section cite { color: var(--ink-soft); font-style: normal; }
-
-        .register { background: var(--paper); }
-        .register-layout { display: grid; grid-template-columns: .78fr 1.22fr; gap: 80px; align-items: start; }
-        .register-copy { position: sticky; top: 125px; }
-        .price { display: inline-flex; align-items: baseline; gap: 7px; margin: 12px 0 25px; }
-        .price strong { font-family: "Fraunces", Georgia, serif; font-size: 3.2rem; line-height: 1; }
-        .price span { color: var(--ink-soft); }
-        .payment-note { padding: 20px; border: 1px solid var(--line); border-radius: 16px; color: var(--ink-soft); font-size: .9rem; }
-        .payment-note strong { color: var(--ink); display: block; margin-bottom: 5px; }
-        .form-card { background: var(--cream); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: clamp(24px, 4vw, 48px); box-shadow: 0 18px 55px rgba(52,34,63,.08); }
-        .form-card h3 { font-family: "Fraunces", Georgia, serif; font-size: 2rem; margin-bottom: 8px; }
-        .form-card > p { margin-bottom: 32px; }
-        .form-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
-        .field { margin-bottom: 19px; }
-        .field label { display: block; margin-bottom: 8px; font-size: .88rem; font-weight: 700; }
-        .field input, .field select, .field textarea { width: 100%; min-height: 52px; padding: 13px 15px; border: 1px solid rgba(35,23,46,.2); border-radius: 12px; background: var(--paper); color: var(--ink); transition: border .2s, box-shadow .2s; }
-        .field textarea { min-height: 108px; resize: vertical; }
-        .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--purple); box-shadow: 0 0 0 4px rgba(105,65,198,.12); }
-        .choice { display: flex; align-items: flex-start; gap: 12px; padding: 16px; border: 1px solid var(--line); border-radius: 14px; background: rgba(255,255,255,.45); margin-bottom: 12px; }
-        .choice input { width: 19px; height: 19px; margin-top: 2px; accent-color: var(--purple); flex: 0 0 auto; }
-        .choice label { cursor: pointer; }
-        .choice small { display: block; color: var(--ink-soft); margin-top: 3px; }
-        .submit-button { width: 100%; margin-top: 12px; }
-        .spinner { display: none; width: 18px; height: 18px; border: 2px solid rgba(255,255,255,.35); border-top-color: white; border-radius: 50%; animation: spin .7s linear infinite; }
-        .loading .spinner { display: block; }
-        .loading .button-label { display: none; }
+        .hero {
+            min-height: 100svh;
+            position: relative;
+            display: grid;
+            align-items: center;
+            padding: 135px 0 65px;
+            overflow: hidden;
+            isolation: isolate;
+        }
+        .hero::before { content: ""; position: absolute; z-index: -3; width: 72vw; height: 72vw; max-width: 980px; max-height: 980px; right: -21vw; top: -33vw; border-radius: 50%; border: 1px solid rgba(248,240,227,.14); box-shadow: 0 0 0 80px rgba(86,52,255,.035), 0 0 0 160px rgba(230,93,51,.025); animation: orbit 18s linear infinite; }
+        @keyframes orbit { to { transform: rotate(360deg); } }
+        .hero-grid { display: grid; grid-template-columns: 1.03fr .97fr; align-items: center; gap: clamp(40px, 7vw, 110px); }
+        .hero-copy { position: relative; z-index: 3; }
+        .hero-title { margin: 0; font-size: clamp(4.6rem, 9.2vw, 9.5rem); line-height: .78; }
+        .hero-title .line { display: block; overflow: hidden; padding-bottom: .08em; }
+        .hero-title .line > span { display: block; transform: translateY(115%) rotate(3deg); opacity: 0; transition: transform 1.1s var(--ease), opacity .8s; }
+        body.loaded .hero-title .line > span { transform: none; opacity: 1; }
+        body.loaded .hero-title .line:nth-child(2) > span { transition-delay: .12s; }
+        body.loaded .hero-title .line:nth-child(3) > span { transition-delay: .24s; }
+        .hero-title .outline { color: transparent; -webkit-text-stroke: 1.5px var(--cream); }
+        .hero-title .accent { color: var(--orange); font-style: italic; font-variation-settings: "SOFT" 70, "WONK" 1; }
+        .hero-bottom { display: flex; align-items: center; gap: 24px; margin-top: 36px; opacity: 0; transform: translateY(20px); transition: .8s var(--ease) .7s; }
+        body.loaded .hero-bottom { opacity: 1; transform: none; }
+        .hero-bottom p { margin: 0; max-width: 300px; color: rgba(248,240,227,.66); font-size: .94rem; }
+        .hero-stage { position: relative; min-height: min(72vh, 760px); }
+        .hero-blob { position: absolute; inset: 5% 0 0 4%; border-radius: 46% 54% 36% 64% / 42% 34% 66% 58%; background: var(--violet); transform: rotate(-5deg); animation: morph 9s ease-in-out infinite alternate; }
+        @keyframes morph { 50% { border-radius: 35% 65% 57% 43% / 57% 49% 51% 43%; transform: rotate(2deg) scale(1.02); } }
+        .hero-photo { position: absolute; inset: 0 3% 4% 0; border-radius: 52% 48% 36% 64% / 36% 34% 66% 64%; overflow: hidden; clip-path: inset(100% 0 0 0 round 52% 48% 36% 64% / 36% 34% 66% 64%); transition: clip-path 1.45s var(--ease) .55s; box-shadow: 0 42px 90px rgba(0,0,0,.38); }
+        body.loaded .hero-photo { clip-path: inset(0 0 0 0 round 52% 48% 36% 64% / 36% 34% 66% 64%); }
+        .hero-photo img { width: 100%; height: 112%; object-fit: cover; object-position: 58% center; transform: translateY(var(--hero-shift, -4%)) scale(1.03); will-change: transform; }
+        .hero-logo { position: absolute; z-index: 5; width: min(250px, 37%); left: -9%; bottom: 3%; filter: drop-shadow(0 24px 36px rgba(16,5,24,.42)); animation: logo-float 4.5s ease-in-out infinite; }
+        @keyframes logo-float { 50% { transform: translateY(-13px) rotate(-2deg); } }
+        .orbit-copy { position: absolute; z-index: 6; width: 126px; height: 126px; right: -1%; top: 6%; animation: spin 15s linear infinite; }
+        .orbit-copy text { fill: var(--cream); font-size: 10px; font-weight: 700; letter-spacing: 2.8px; }
+        .orbit-copy circle { fill: var(--orange); }
         @keyframes spin { to { transform: rotate(360deg); } }
+        .hero-stamp { position: absolute; z-index: 6; right: -3%; bottom: 10%; padding: 16px 20px; color: var(--night); background: var(--cream); border-radius: 999px; font-weight: 700; font-size: .8rem; transform: rotate(-6deg); box-shadow: 0 18px 35px rgba(0,0,0,.2); }
+        .scroll-cue { position: absolute; left: 32px; bottom: 35px; display: flex; align-items: center; gap: 11px; font-size: .65rem; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; writing-mode: vertical-rl; }
+        .scroll-cue::after { content: ""; width: 1px; height: 52px; background: linear-gradient(var(--cream), transparent); animation: cue 1.5s ease-in-out infinite; }
+        @keyframes cue { 50% { transform: scaleY(.45); transform-origin: top; } }
 
-        footer { background: var(--ink); color: white; padding: 68px 0 30px; }
-        .footer-grid { display: grid; grid-template-columns: 1.4fr .6fr .6fr; gap: 50px; padding-bottom: 60px; }
-        .footer-brand .brand { margin-bottom: 18px; }
-        .footer-brand .brand-logo-frame { width: 108px; height: 96px; background: var(--paper); }
-        .footer-brand p { max-width: 370px; color: rgba(255,255,255,.62); }
-        .footer-column h3 { font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; color: var(--peach); margin-bottom: 18px; }
-        .footer-column a { display: block; width: fit-content; color: rgba(255,255,255,.72); text-decoration: none; margin-bottom: 10px; }
-        .footer-column span { display: block; margin-bottom: 10px; color: rgba(255,255,255,.62); }
-        .footer-column a:hover { color: white; }
-        .footer-bottom { display: flex; justify-content: space-between; gap: 24px; padding-top: 26px; border-top: 1px solid rgba(255,255,255,.13); color: rgba(255,255,255,.48); font-size: .82rem; }
+        .ticker { position: relative; z-index: 4; overflow: hidden; color: var(--night); background: var(--orange); transform: rotate(-1.3deg) scale(1.02); border-block: 1px solid rgba(22,13,29,.35); }
+        .ticker-track { display: flex; width: max-content; animation: ticker 24s linear infinite; }
+        .ticker-track span { display: flex; align-items: center; gap: 30px; padding: 19px 15px; font-family: "Fraunces", Georgia, serif; font-size: clamp(1.25rem, 2vw, 1.75rem); font-weight: 750; white-space: nowrap; }
+        .ticker-track span::after { content: "✦"; color: var(--violet-deep); }
+        @keyframes ticker { to { transform: translateX(-50%); } }
 
-        .modal { position: fixed; z-index: 1500; inset: 0; display: none; place-items: center; padding: 20px; background: rgba(24,14,30,.7); backdrop-filter: blur(8px); }
-        .modal.active { display: grid; }
-        .modal-card { width: min(100%, 480px); max-height: calc(100vh - 40px); overflow-y: auto; background: var(--paper); border-radius: 28px; padding: 38px; text-align: center; box-shadow: var(--shadow); animation: modal-in .25s ease-out; }
-        @keyframes modal-in { from { opacity: 0; transform: translateY(12px) scale(.97); } }
-        .success-icon { width: 66px; height: 66px; display: grid; place-items: center; margin: 0 auto 22px; border-radius: 50%; background: var(--sage); font-size: 1.6rem; }
-        .modal-card h2 { font-size: 2.3rem; margin-bottom: 10px; }
-        .ticket-preview { display: none; margin: 24px 0; padding: 20px; background: var(--cream); border: 1px dashed var(--purple); border-radius: 16px; }
-        #ticketQR { display: flex; justify-content: center; }
-        #ticketCode { margin: 12px 0 0; color: var(--purple-dark); font-family: ui-monospace, monospace; font-weight: 700; }
+        section { position: relative; scroll-margin-top: 90px; }
+        .manifesto { padding: 170px 0 190px; color: var(--ink); background: var(--cream); overflow: hidden; }
+        .manifesto::before { content: "CASA"; position: absolute; inset: 3% auto auto -2%; color: rgba(86,52,255,.055); font-family: "Fraunces", Georgia, serif; font-size: 33vw; font-weight: 900; line-height: .8; pointer-events: none; }
+        .manifesto-grid { position: relative; display: grid; grid-template-columns: .32fr .68fr; gap: 80px; }
+        .manifesto-aside { padding-top: 12px; }
+        .manifesto-aside p { max-width: 245px; color: rgba(32,19,38,.62); }
+        .manifesto-copy { margin: 0; font-family: "Fraunces", Georgia, serif; font-size: clamp(3.4rem, 7.4vw, 7.7rem); font-weight: 580; letter-spacing: -.06em; line-height: .91; }
+        .manifesto-copy .word { display: inline-block; color: rgba(32,19,38,.16); transition: color .7s, transform .7s var(--ease); }
+        .manifesto-copy .word.visible { color: var(--ink); transform: translateY(-4px); }
+        .manifesto-copy em { color: var(--orange); font-weight: 480; }
+        .manifesto-note { display: flex; align-items: center; gap: 18px; margin-top: 48px; color: var(--brown); font-weight: 700; }
+        .manifesto-note::before { content: ""; width: 80px; height: 1px; background: currentColor; }
 
-        .reveal { opacity: 0; transform: translateY(20px); transition: opacity .6s ease, transform .6s ease; }
+        .experience { padding: 150px 0; overflow: hidden; }
+        .experience-head { display: grid; grid-template-columns: 1fr .55fr; gap: 80px; align-items: end; margin-bottom: 100px; }
+        .experience-head h2 { max-width: 880px; margin: 0; }
+        .experience-head h2 em { color: var(--orange); font-weight: 420; }
+        .experience-head .lead { margin-bottom: 8px; }
+        .steps-list { border-top: 1px solid var(--line-light); }
+        .step-row { display: grid; grid-template-columns: 100px 1fr .75fr; gap: 40px; align-items: center; min-height: 180px; padding: 30px 0; border-bottom: 1px solid var(--line-light); transition: padding .5s var(--ease), color .3s; }
+        .step-row:hover { padding-inline: 22px; color: var(--orange); }
+        .step-number { color: var(--orange); font-family: "Fraunces", Georgia, serif; font-size: 1.2rem; }
+        .step-row h3 { margin: 0; font-family: "Fraunces", Georgia, serif; font-size: clamp(2.1rem, 4.8vw, 4.7rem); font-weight: 520; letter-spacing: -.045em; }
+        .step-row p { margin: 0; color: rgba(248,240,227,.6); }
+        .step-row:hover p { color: var(--cream); }
+
+        .photo-break { min-height: 92vh; position: relative; display: grid; align-items: end; overflow: hidden; }
+        .photo-break-image { position: absolute; inset: -12%; background: linear-gradient(180deg, rgba(22,13,29,.05), rgba(22,13,29,.86)), url("assets/emcasa-house-concert.webp") center / cover; transform: translateY(var(--photo-shift, 0)); will-change: transform; }
+        .photo-break-copy { position: relative; z-index: 2; width: min(100% - 64px, var(--container)); margin: 0 auto 75px; display: flex; justify-content: space-between; align-items: end; gap: 40px; }
+        .photo-break h2 { max-width: 900px; margin: 0; font-size: clamp(4rem, 9vw, 9.5rem); }
+        .photo-break h2 span { color: var(--orange); font-style: italic; }
+        .price-badge { flex: 0 0 auto; width: 164px; height: 164px; display: grid; place-items: center; text-align: center; color: var(--night); background: var(--cream); border-radius: 50%; transform: rotate(8deg); box-shadow: 0 25px 50px rgba(0,0,0,.24); }
+        .price-badge strong { display: block; font-family: "Fraunces", Georgia, serif; font-size: 3.4rem; line-height: .8; }
+        .price-badge span { display: block; max-width: 90px; margin-top: 7px; font-size: .7rem; font-weight: 700; line-height: 1.2; text-transform: uppercase; }
+
+        .next-event { padding: 160px 0; color: var(--ink); background: var(--violet); overflow: hidden; }
+        .next-event::before { content: ""; position: absolute; width: 760px; height: 760px; border: 1px solid rgba(248,240,227,.25); border-radius: 50%; right: -300px; top: -390px; box-shadow: 0 0 0 70px rgba(248,240,227,.03), 0 0 0 140px rgba(248,240,227,.025); }
+        .event-grid { position: relative; z-index: 2; display: grid; grid-template-columns: .8fr 1.2fr; gap: clamp(50px, 8vw, 120px); align-items: start; }
+        .event-copy { position: sticky; top: 135px; color: var(--cream); }
+        .event-copy h2 { margin-bottom: 30px; }
+        .event-copy h2 span { color: var(--orange); font-style: italic; }
+        .event-copy .lead { color: rgba(248,240,227,.76); }
+        .closed-note { margin: 30px 0; padding: 18px 20px; border: 1px solid rgba(248,240,227,.25); border-radius: 16px; color: rgba(248,240,227,.75); font-size: .88rem; }
+        .closed-note strong { display: block; color: var(--cream); margin-bottom: 4px; }
+        .form-stage { position: relative; min-height: 600px; padding: 34px; background: var(--cream); border: 1px solid rgba(255,255,255,.55); border-radius: 32px; box-shadow: 0 45px 90px rgba(21,8,29,.3); transform: rotate(1deg); }
+        .form-stage::before { content: "PRÓXIMA SESSÃO"; position: absolute; top: -17px; right: 34px; padding: 9px 16px; color: var(--cream); background: var(--orange); border-radius: 999px; font-size: .68rem; font-weight: 700; letter-spacing: .13em; transform: rotate(2deg); }
+        .form-stage iframe { width: 100%; min-height: 530px; border: 0; border-radius: 18px; background: var(--cream); }
+        .form-fallback { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding-top: 18px; border-top: 1px solid var(--line-dark); color: rgba(32,19,38,.62); font-size: .8rem; }
+        .form-fallback a { color: var(--ink); font-weight: 700; }
+
+        .host { padding: 150px 0; color: var(--ink); background: var(--cream); }
+        .host-panel { position: relative; overflow: hidden; min-height: 600px; display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 75px; padding: clamp(42px, 7vw, 92px); color: var(--cream); background: var(--night); border-radius: 42px; }
+        .host-panel::before { content: ""; position: absolute; inset: auto -10% -50% 45%; width: 620px; height: 620px; border-radius: 50%; background: var(--orange); opacity: .9; }
+        .host-panel::after { content: "🛋️"; position: absolute; right: 8%; bottom: -4%; font-size: clamp(9rem, 22vw, 20rem); filter: saturate(.5); transform: rotate(-7deg); }
+        .host-copy { position: relative; z-index: 2; }
+        .host-copy h2 { margin-bottom: 25px; }
+        .host-copy h2 em { color: var(--orange); font-weight: 430; }
+        .host-points { position: relative; z-index: 3; display: grid; align-self: stretch; }
+        .host-point { display: grid; grid-template-columns: 42px 1fr; gap: 18px; align-content: center; padding: 24px 0; border-bottom: 1px solid var(--line-light); }
+        .host-point:first-child { border-top: 1px solid var(--line-light); }
+        .host-point span { width: 40px; height: 40px; display: grid; place-items: center; border: 1px solid rgba(248,240,227,.25); border-radius: 50%; color: var(--orange); font-weight: 700; }
+        .host-point h3 { margin: 0 0 5px; }
+        .host-point p { margin: 0; color: rgba(248,240,227,.6); }
+
+        .instagram { position: relative; min-height: 90vh; display: grid; place-items: center; padding: 140px 0; overflow: hidden; text-align: center; background: var(--orange); color: var(--night); }
+        .instagram::before, .instagram::after { position: absolute; font-size: 22vw; opacity: .08; pointer-events: none; }
+        .instagram::before { content: "💜"; left: -4vw; top: -8vw; transform: rotate(-20deg); }
+        .instagram::after { content: "🧡"; right: -4vw; bottom: -9vw; transform: rotate(18deg); }
+        .instagram-inner { position: relative; z-index: 2; }
+        .instagram h2 { max-width: 1000px; margin: 0 auto 32px; }
+        .instagram-handle { display: inline-flex; align-items: center; gap: 16px; position: relative; text-decoration: none; font-family: "Fraunces", Georgia, serif; font-size: clamp(2.1rem, 5vw, 4.5rem); font-weight: 650; }
+        .instagram-handle::after { content: ""; position: absolute; inset: auto 0 -5px; height: 3px; background: var(--night); transform: scaleX(.2); transition: transform .5s var(--ease); }
+        .instagram-handle:hover::after { transform: scaleX(1); }
+        .instagram-handle svg { width: .75em; height: .75em; transition: transform .4s var(--ease); }
+        .instagram-handle:hover svg { transform: translate(8px,-8px); }
+        .community-link { display: inline-flex; margin-top: 40px; color: rgba(22,13,29,.68); font-weight: 700; }
+
+        footer { position: relative; padding: 100px 0 30px; overflow: hidden; background: var(--night); }
+        .footer-top { display: grid; grid-template-columns: 1.2fr .8fr; gap: 80px; align-items: end; padding-bottom: 80px; }
+        .footer-logo { width: min(430px, 80vw); filter: drop-shadow(0 24px 45px rgba(0,0,0,.3)); }
+        .footer-copy { text-align: right; }
+        .footer-copy p { max-width: 420px; margin-left: auto; color: rgba(248,240,227,.6); }
+        .footer-links { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 20px; margin-top: 28px; }
+        .footer-links a { text-decoration: none; font-weight: 700; }
+        .footer-bottom { display: flex; justify-content: space-between; gap: 25px; padding-top: 25px; border-top: 1px solid var(--line-light); color: rgba(248,240,227,.42); font-size: .78rem; }
+
+        .reveal { opacity: 0; transform: translateY(44px); transition: opacity .85s, transform .95s var(--ease); }
         .reveal.visible { opacity: 1; transform: none; }
+        .reveal.delay-1 { transition-delay: .1s; }
+        .reveal.delay-2 { transition-delay: .2s; }
+        .tilt { transform-style: preserve-3d; will-change: transform; }
 
-        @media (min-width: 921px) {
-            .hero-grid { transform: translateY(-20px); }
-        }
-
-        @media (max-width: 920px) {
+        @media (max-width: 1020px) {
             .desktop-nav { display: none; }
             .menu-button { display: flex; }
-            .mobile-menu { display: grid; position: fixed; z-index: 900; inset: 0; padding: 120px 24px 40px; background: var(--cream); align-content: start; gap: 4px; transform: translateX(100%); transition: transform .25s ease; }
+            .mobile-menu { display: grid; position: fixed; z-index: 950; inset: 0; padding: 125px 28px 45px; align-content: start; gap: 0; background: var(--night); transform: translateX(102%); transition: transform .6s var(--ease); }
             .mobile-menu.active { transform: none; }
-            .mobile-menu a { padding: 16px 0; border-bottom: 1px solid var(--line); text-decoration: none; font-family: "Fraunces", Georgia, serif; font-size: 1.7rem; }
-            .hero-grid, .host-layout, .register-layout { grid-template-columns: 1fr; }
-            .hero { padding-top: 122px; }
-            .hero-copy { max-width: 700px; }
-            .hero-visual { width: min(86%, 620px); margin: 0 auto; }
-            .hero-image-wrap { aspect-ratio: 1 / 1.12; }
-            .section-intro { align-items: start; flex-direction: column; }
-            .experience-grid { grid-template-columns: 1fr; }
-            .experience-stack { grid-template-columns: repeat(2, 1fr); }
-            .steps-grid { grid-template-columns: 1fr; }
-            .step + .step { border-left: 0; border-top: 0; }
-            .step::before { margin-bottom: 20px; }
-            .host-layout { gap: 42px; }
-            .register-layout { gap: 50px; }
-            .register-copy { position: static; }
+            .mobile-menu a { padding: 18px 0; border-bottom: 1px solid var(--line-light); text-decoration: none; font-family: "Fraunces", Georgia, serif; font-size: 2rem; }
+            .mobile-menu .mobile-social { margin-top: 30px; border: 0; color: var(--orange); font-family: "DM Sans", sans-serif; font-size: .95rem; }
+            .hero-grid { grid-template-columns: 1fr; }
+            .hero-copy { padding-top: 25px; }
+            .hero-title { font-size: clamp(5rem, 16vw, 9rem); }
+            .hero-stage { width: min(88%, 680px); min-height: 680px; margin: 15px auto 0; }
+            .scroll-cue { display: none; }
+            .manifesto-grid, .experience-head, .event-grid { grid-template-columns: 1fr; }
+            .manifesto-aside { display: flex; justify-content: space-between; gap: 30px; }
+            .manifesto-aside p { max-width: 420px; }
+            .experience-head { gap: 28px; }
+            .step-row { grid-template-columns: 70px 1fr; }
+            .step-row p { grid-column: 2; }
+            .event-copy { position: static; }
+            .host-panel { grid-template-columns: 1fr; }
+            .host-points { width: min(100%, 610px); }
+            .host-panel::after { opacity: .22; }
         }
 
-        @media (max-width: 620px) {
+        @media (max-width: 680px) {
             .shell { width: min(calc(100% - 32px), var(--container)); }
-            .nav-wrap { height: 74px; }
-            .brand-logo-frame { width: 68px; height: 58px; }
-            .hero { min-height: auto; padding: 108px 0 64px; }
-            h1 { font-size: clamp(3.2rem, 16vw, 4.7rem); }
-            h2 { font-size: 2.55rem; }
-            .hero-actions { display: grid; }
-            .hero-actions .button { width: 100%; }
-            .hero-visual { width: 95%; padding-left: 0; margin-top: 18px; }
-            .hero-image-wrap { border-radius: 110px 110px 24px 24px; }
-            .hero-note { left: -8px; padding: 15px; }
-            .sound-wave { right: -10px; }
-            section { padding: 78px 0; }
-            .section-intro { margin-bottom: 38px; }
-            .experience-card { min-height: 400px; padding: 27px; }
-            .experience-stack { grid-template-columns: 1fr; }
-            .experience-stack .experience-card { min-height: 210px; }
-            .step { padding: 30px 22px; }
-            .host { padding-top: 10px; }
-            .host-panel { border-radius: 26px; padding: 34px 24px; }
-            .host-benefit { grid-template-columns: 40px 1fr; gap: 13px; }
-            .host-benefit-icon { width: 38px; height: 38px; }
-            .quote-section { padding-block: 90px; }
-            .form-row { grid-template-columns: 1fr; gap: 0; }
-            .form-card { border-radius: 22px; }
-            .footer-grid { grid-template-columns: 1fr 1fr; }
-            .footer-brand { grid-column: 1 / -1; }
+            .nav-wrap { min-height: 78px; }
+            .brand img { width: 88px; }
+            .hero { min-height: auto; padding: 112px 0 55px; }
+            .hero-title { font-size: clamp(4.1rem, 20vw, 6.5rem); line-height: .8; }
+            .hero-bottom { display: grid; gap: 16px; }
+            .hero-bottom .pill { width: 100%; }
+            .hero-stage { width: 96%; min-height: 500px; margin-top: 45px; }
+            .hero-logo { left: -6%; width: 42%; }
+            .orbit-copy { width: 100px; height: 100px; right: -5%; }
+            .hero-stamp { right: -5%; bottom: 6%; }
+            .ticker-track span { padding-block: 14px; }
+            .manifesto, .experience, .next-event, .host { padding-block: 95px; }
+            .manifesto-grid { gap: 45px; }
+            .manifesto-aside { display: block; }
+            .manifesto-copy { font-size: 3.15rem; }
+            .manifesto-note { align-items: flex-start; }
+            .experience-head { margin-bottom: 55px; }
+            .step-row { grid-template-columns: 45px 1fr; min-height: 150px; gap: 12px; }
+            .step-row h3 { font-size: 2.25rem; }
+            .photo-break { min-height: 78vh; }
+            .photo-break-copy { width: min(100% - 32px, var(--container)); margin-bottom: 42px; display: grid; }
+            .photo-break h2 { font-size: 4rem; }
+            .price-badge { width: 125px; height: 125px; justify-self: end; }
+            .price-badge strong { font-size: 2.7rem; }
+            .form-stage { min-height: 520px; padding: 24px 14px 16px; border-radius: 22px; transform: none; }
+            .form-stage iframe { min-height: 460px; }
+            .form-fallback { align-items: flex-start; flex-direction: column; }
+            .host-panel { min-height: 720px; gap: 45px; padding: 42px 24px; border-radius: 28px; }
+            .instagram { min-height: 76vh; padding-block: 100px; }
+            .footer-top { grid-template-columns: 1fr; gap: 50px; }
+            .footer-copy { text-align: left; }
+            .footer-copy p { margin-left: 0; }
+            .footer-links { justify-content: flex-start; }
             .footer-bottom { flex-direction: column; }
-            .modal-card { padding: 30px 20px; }
         }
 
+        @media (hover: none) { .spotlight { display: none; } }
         @media (prefers-reduced-motion: reduce) {
             *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
-            .reveal { opacity: 1; transform: none; }
+            .preloader { display: none; }
+            .hero-title .line > span, .hero-bottom, .reveal { opacity: 1; transform: none; }
+            .hero-photo { clip-path: none; }
         }
     </style>
 </head>
-<body>
+<body class="loading">
     <a class="skip-link" href="#main">Saltar para o conteúdo</a>
+    <div class="page-noise" aria-hidden="true"></div>
+    <div class="spotlight" aria-hidden="true"></div>
+    <div class="scroll-progress" aria-hidden="true"></div>
+
+    <div class="preloader" aria-hidden="true">
+        <div class="preloader-inner">
+            <img class="preloader-logo" src="assets/emcasa-logo.svg" alt="">
+            <p>Concertos fora do palco</p>
+        </div>
+    </div>
 
     <header class="site-header" id="siteHeader">
         <div class="shell nav-wrap">
-            <a class="brand" href="#top" aria-label="EmCasa — início">
-                <span class="brand-logo-frame"><img class="brand-logo" src="assets/emcasa-logo.svg" alt="" width="500" height="500"></span>
-            </a>
+            <a class="brand" href="#top" aria-label="EmCasa — início"><img src="assets/emcasa-logo.svg" alt="" width="365" height="310"></a>
             <nav class="desktop-nav" aria-label="Navegação principal">
                 <a href="#experiencia">A experiência</a>
                 <a href="#como-funciona">Como funciona</a>
-                <a href="#anfitrioes">Anfitriões</a>
-                <a class="button button-dark" href="#inscricao">Quero participar</a>
+                <a href="#anfitrioes">Ser anfitrião</a>
+                <a class="social-icon" href="https://www.instagram.com/emcasa____/" target="_blank" rel="noopener noreferrer" aria-label="EmCasa no Instagram">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.8"/><circle cx="17.4" cy="6.7" r="1" fill="currentColor"/></svg>
+                </a>
+                <a class="pill magnetic" href="#proxima">Próxima sessão <span aria-hidden="true">↗</span></a>
             </nav>
             <button class="menu-button" id="menuButton" type="button" aria-expanded="false" aria-controls="mobileMenu" aria-label="Abrir menu"><span></span></button>
         </div>
@@ -342,284 +443,264 @@
     <nav class="mobile-menu" id="mobileMenu" aria-label="Navegação móvel">
         <a href="#experiencia">A experiência</a>
         <a href="#como-funciona">Como funciona</a>
-        <a href="#anfitrioes">Anfitriões</a>
-        <a href="#inscricao">Quero participar</a>
+        <a href="#anfitrioes">Ser anfitrião</a>
+        <a href="#proxima">Próxima sessão</a>
+        <a class="mobile-social" href="https://www.instagram.com/emcasa____/" target="_blank" rel="noopener noreferrer">Instagram · @emcasa____ ↗</a>
     </nav>
 
     <main id="main">
         <section class="hero" id="top">
             <div class="shell hero-grid">
                 <div class="hero-copy">
-                    <p class="eyebrow">Concertos fora do palco</p>
-                    <h1>A sala fica pequena. <em>A música fica enorme.</em></h1>
-                    <p class="lead">Concertos intimistas em casas reais, com artistas locais e pessoas que querem ouvir — mesmo ouvir — música ao vivo.</p>
-                    <div class="hero-actions">
-                        <a class="button button-primary" href="#inscricao">
-                            Quero ir a um concerto
-                            <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="m7 4 6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                        </a>
-                        <a class="button button-light" href="#anfitrioes">Tenho uma sala</a>
+                    <p class="eyebrow orange">Lisboa · concertos intimistas</p>
+                    <h1 class="hero-title">
+                        <span class="line"><span>Uma casa.</span></span>
+                        <span class="line"><span class="outline">Um artista.</span></span>
+                        <span class="line"><span class="accent">Uma noite.</span></span>
+                    </h1>
+                    <div class="hero-bottom">
+                        <a class="pill magnetic" href="#proxima">Quero estar na próxima <span aria-hidden="true">↗</span></a>
+                        <p>Todos os meses, um artista novo, numa casa diferente.</p>
                     </div>
-                    <ul class="microcopy" aria-label="Destaques">
-                        <li>Grupos pequenos</li>
-                        <li>Artistas locais</li>
-                        <li>10€ por pessoa</li>
-                    </ul>
                 </div>
-                <div class="hero-visual" aria-label="Concerto acústico numa sala em Lisboa">
-                    <div class="hero-image-wrap">
-                        <img src="assets/emcasa-house-concert.webp" alt="Músico a tocar guitarra para um pequeno grupo numa sala acolhedora em Lisboa" width="1448" height="1086" fetchpriority="high">
-                    </div>
-                    <div class="hero-note">
-                        <strong>Sem palco.<br>Sem distância.</strong>
-                        <span>Só uma sala, um artista e uma boa noite.</span>
-                    </div>
-                    <div class="sound-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+                <div class="hero-stage" aria-label="Concerto EmCasa numa sala em Lisboa">
+                    <div class="hero-blob" aria-hidden="true"></div>
+                    <figure class="hero-photo"><img src="assets/emcasa-house-concert.webp" alt="Músico a tocar guitarra para um pequeno grupo numa sala em Lisboa" width="1448" height="1086" fetchpriority="high"></figure>
+                    <img class="hero-logo" src="assets/emcasa-logo.svg" alt="EmCasa" width="365" height="310">
+                    <svg class="orbit-copy" viewBox="0 0 120 120" aria-hidden="true">
+                        <defs><path id="orbit" d="M60,60 m-43,0 a43,43 0 1,1 86,0 a43,43 0 1,1 -86,0"/></defs>
+                        <circle cx="60" cy="60" r="25"/>
+                        <text><textPath href="#orbit">MÚSICA DE PERTO · CASA CHEIA · </textPath></text>
+                        <text x="60" y="66" text-anchor="middle" fill="#f8f0e3" font-size="17">♪</text>
+                    </svg>
+                    <span class="hero-stamp">10€ · poucos lugares</span>
                 </div>
             </div>
+            <div class="scroll-cue" aria-hidden="true">Descobre</div>
         </section>
 
-        <div class="marquee" aria-hidden="true">
-            <div class="marquee-track">
-                <span>Uma sala</span><span>Um artista</span><span>Poucos lugares</span><span>Música de perto</span><span>Noites para lembrar</span>
-                <span>Uma sala</span><span>Um artista</span><span>Poucos lugares</span><span>Música de perto</span><span>Noites para lembrar</span>
+        <div class="ticker" aria-hidden="true">
+            <div class="ticker-track">
+                <span>10€ por pessoa</span><span>Lisboa</span><span>Uma casa diferente</span><span>Um artista novo</span><span>Poucos lugares</span><span>Música mesmo perto</span>
+                <span>10€ por pessoa</span><span>Lisboa</span><span>Uma casa diferente</span><span>Um artista novo</span><span>Poucos lugares</span><span>Música mesmo perto</span>
             </div>
         </div>
 
-        <section class="experience" id="experiencia">
-            <div class="shell">
-                <div class="section-intro reveal">
-                    <div>
-                        <p class="eyebrow">Perto é diferente</p>
-                        <h2>Não vens só assistir.<br>Vens fazer parte.</h2>
-                    </div>
-                    <p class="lead">O EmCasa junta quem tem música para partilhar, quem tem uma sala para abrir e quem quer viver uma noite menos previsível.</p>
-                </div>
-                <div class="experience-grid">
-                    <article class="experience-card featured reveal">
-                        <span class="card-tag">A experiência</span>
-                        <div>
-                            <h3>Ouve cada nota. Conhece toda a gente.</h3>
-                            <p>Sem barreiras entre artista e público. A proximidade muda a forma como a música se sente.</p>
-                        </div>
-                    </article>
-                    <div class="experience-stack">
-                        <article class="experience-card purple reveal">
-                            <span class="card-tag">Intimista</span>
-                            <div><span class="big-number">15–30</span><p>pessoas por concerto</p></div>
-                        </article>
-                        <article class="experience-card terracotta reveal">
-                            <span class="card-tag">Local</span>
-                            <div><h3>Artistas que vale a pena descobrir.</h3><p>Projetos independentes, novos sons e histórias contadas sem pressa.</p></div>
-                        </article>
-                    </div>
+        <section class="manifesto" id="experiencia">
+            <div class="shell manifesto-grid">
+                <aside class="manifesto-aside reveal">
+                    <p class="eyebrow violet">Não é um venue</p>
+                    <p>É música sem grade, sem backstage e sem a distância habitual entre quem toca e quem ouve.</p>
+                </aside>
+                <div>
+                    <p class="manifesto-copy" id="manifestoCopy"><span class="word">A</span> <span class="word">sala</span> <span class="word">é</span> <span class="word">pequena</span> <span class="word">de</span> <span class="word">propósito.</span> <span class="word">Aqui</span> <span class="word">cada</span> <span class="word">nota</span> <span class="word">chega</span> <span class="word">mais</span> <span class="word">perto,</span> <span class="word">cada</span> <span class="word">história</span> <span class="word">fica</span> <span class="word">mais</span> <span class="word"><em>tempo.</em></span></p>
+                    <div class="manifesto-note reveal">Não vens só assistir. Vens fazer parte.</div>
                 </div>
             </div>
         </section>
 
-        <section class="steps" id="como-funciona">
+        <section class="experience" id="como-funciona">
             <div class="shell">
-                <div class="section-intro reveal">
-                    <div>
-                        <p class="eyebrow">É simples</p>
-                        <h2>Da inscrição à primeira nota.</h2>
+                <div class="experience-head">
+                    <div class="reveal">
+                        <p class="eyebrow orange">Da bio à sala</p>
+                        <h2>Fácil de entrar.<br><em>Difícil de esquecer.</em></h2>
                     </div>
-                    <p class="lead">Nós tratamos dos detalhes para que tu só tenhas de aparecer com vontade de ouvir.</p>
+                    <p class="lead reveal delay-1">Nós escolhemos a casa, o artista e o ambiente. Tu só tens de garantir o teu lugar e aparecer com os ouvidos abertos.</p>
                 </div>
-                <div class="steps-grid reveal">
-                    <article class="step"><h3>Diz-nos onde estás</h3><p>Faz a pré-inscrição e conta-nos que música gostas de ouvir.</p></article>
-                    <article class="step"><h3>Recebe o convite</h3><p>Quando houver um concerto perto de ti, enviamos os detalhes e o link de pagamento.</p></article>
-                    <article class="step"><h3>Entra e sente-te em casa</h3><p>O endereço é partilhado com os participantes confirmados. Depois, é deixar a noite acontecer.</p></article>
+                <div class="steps-list">
+                    <article class="step-row reveal"><span class="step-number">01</span><h3>Inscreve-te</h3><p>Quando a próxima sessão abrir, o formulário aparece aqui e na bio do Instagram.</p></article>
+                    <article class="step-row reveal"><span class="step-number">02</span><h3>Recebe o convite</h3><p>Data, zona e detalhes chegam aos participantes confirmados. A morada fica entre nós.</p></article>
+                    <article class="step-row reveal"><span class="step-number">03</span><h3>Entra EmCasa</h3><p>10€ por pessoa. Capacidade limitada. Uma sala cheia da maneira certa.</p></article>
+                </div>
+            </div>
+        </section>
+
+        <section class="photo-break">
+            <div class="photo-break-image" aria-hidden="true"></div>
+            <div class="photo-break-copy reveal">
+                <h2>Sem palco.<br><span>Sem distância.</span></h2>
+                <div class="price-badge tilt"><div><strong>10€</strong><span>por pessoa</span></div></div>
+            </div>
+        </section>
+
+        <section class="next-event" id="proxima">
+            <div class="shell event-grid">
+                <div class="event-copy reveal">
+                    <p class="eyebrow cream">A próxima casa</p>
+                    <h2>O próximo sofá pode ser <span>o teu.</span></h2>
+                    <p class="lead">O formulário abaixo está ligado diretamente ao Tally oficial do EmCasa. Quando as inscrições reabrirem, fica disponível aqui automaticamente.</p>
+                    <div class="closed-note"><strong>Estado atual: formulário fechado.</strong>O Tally ainda não está a aceitar respostas. Reabre-o no Tally quando a próxima data estiver pronta.</div>
+                    <a class="pill magnetic" href="https://tally.so/r/RGPQVK" target="_blank" rel="noopener noreferrer">Abrir no Tally <span aria-hidden="true">↗</span></a>
+                </div>
+                <div class="form-stage reveal delay-1">
+                    <iframe data-tally-src="https://tally.so/embed/RGPQVK?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" loading="lazy" width="100%" height="530" frameborder="0" marginheight="0" marginwidth="0" title="Inscrição para a próxima sessão EmCasa"></iframe>
+                    <div class="form-fallback"><span>Se o formulário não carregar, abre-o diretamente.</span><a href="https://tally.so/r/RGPQVK" target="_blank" rel="noopener noreferrer">tally.so/r/RGPQVK ↗</a></div>
                 </div>
             </div>
         </section>
 
         <section class="host" id="anfitrioes">
             <div class="shell host-panel reveal">
-                <div class="host-layout">
-                    <div>
-                        <p class="eyebrow">Abre a porta</p>
-                        <h2>A tua sala pode ser o próximo palco.</h2>
-                        <p class="lead">Não precisas de uma casa perfeita. Precisas de espaço para algumas pessoas e vontade de criar uma noite especial.</p>
-                        <a class="button button-primary host-cta" href="#inscricao" data-host="true">Quero ser anfitrião</a>
-                    </div>
-                    <div class="host-benefits">
-                        <article class="host-benefit"><span class="host-benefit-icon">01</span><div><h3>Nós organizamos</h3><p>Artista, inscrições, comunicação e apoio no dia.</p></div></article>
-                        <article class="host-benefit"><span class="host-benefit-icon">02</span><div><h3>Tu defines o ambiente</h3><p>A sala é tua. A personalidade da noite também.</p></div></article>
-                        <article class="host-benefit"><span class="host-benefit-icon">03</span><div><h3>Tu e mais um entram sem pagar</h3><p>O nosso obrigado por receberes a comunidade.</p></div></article>
-                    </div>
+                <div class="host-copy">
+                    <p class="eyebrow orange">Tens uma sala?</p>
+                    <h2>Tu abres a porta.<br><em>Nós levamos o palco.</em></h2>
+                    <p class="lead">Não precisa de parecer uma sala de concertos. Essa é precisamente a ideia.</p>
+                    <a class="pill violet magnetic" href="https://tally.so/r/RGPQVK" target="_blank" rel="noopener noreferrer">Quero receber um EmCasa <span aria-hidden="true">↗</span></a>
+                </div>
+                <div class="host-points">
+                    <article class="host-point"><span>01</span><div><h3>Nós tratamos da produção</h3><p>Artista, comunicação, inscrições e apoio na noite.</p></div></article>
+                    <article class="host-point"><span>02</span><div><h3>A casa mantém a personalidade</h3><p>O espaço não é cenário. É parte do concerto.</p></div></article>
+                    <article class="host-point"><span>03</span><div><h3>Tu e mais um entram por nossa conta</h3><p>O nosso obrigado por dares casa à música.</p></div></article>
                 </div>
             </div>
         </section>
 
-        <section class="quote-section">
-            <div class="shell reveal">
-                <div class="quote-mark" aria-hidden="true">“</div>
-                <blockquote>A melhor música não precisa de um palco maior. Precisa de pessoas mais perto.</blockquote>
-                <cite>— Equipa EmCasa</cite>
-            </div>
-        </section>
-
-        <section class="register" id="inscricao">
-            <div class="shell register-layout">
-                <div class="register-copy reveal">
-                    <p class="eyebrow">Fica na lista</p>
-                    <h2>A próxima noite pode começar aqui.</h2>
-                    <p class="lead">A pré-inscrição é gratuita e sem compromisso. Avisamos-te quando houver uma sessão perto de ti.</p>
-                    <div class="price"><strong>10€</strong><span>por pessoa</span></div>
-                    <div class="payment-note"><strong>Pagamento só depois da confirmação.</strong>Recebes um link seguro com as opções disponíveis. Nunca pagas antes de saberes a data e a zona do concerto.</div>
-                </div>
-
-                <div class="form-card reveal">
-                    <h3>Conta-nos um pouco sobre ti</h3>
-                    <p class="muted">Demora menos de dois minutos.</p>
-                    <form id="registrationForm">
-                        <div class="form-row">
-                            <div class="field"><label for="firstName">Primeiro nome *</label><input id="firstName" name="firstName" type="text" autocomplete="given-name" required placeholder="Ex.: Marta"></div>
-                            <div class="field"><label for="lastName">Apelido *</label><input id="lastName" name="lastName" type="text" autocomplete="family-name" required placeholder="Ex.: Silva"></div>
-                        </div>
-                        <div class="field"><label for="email">Email *</label><input id="email" name="email" type="email" autocomplete="email" required placeholder="marta@email.com"></div>
-                        <div class="form-row">
-                            <div class="field"><label for="phone">Telemóvel *</label><input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" required placeholder="912 345 678"></div>
-                            <div class="field"><label for="city">Cidade *</label><input id="city" name="city" type="text" autocomplete="address-level2" required placeholder="Lisboa"></div>
-                        </div>
-                        <div class="field">
-                            <label for="musicGenres">O que gostas de ouvir?</label>
-                            <select id="musicGenres" name="musicGenres"><option value="">Escolhe uma opção</option><option value="rock">Rock</option><option value="jazz">Jazz</option><option value="folk">Folk / Acústico</option><option value="pop">Pop</option><option value="classical">Clássica</option><option value="fado">Fado</option><option value="hiphop">Hip-Hop</option><option value="electronic">Eletrónica</option><option value="all">Um pouco de tudo</option></select>
-                        </div>
-                        <div class="field"><label for="message">Há algo que queiras acrescentar? <span class="muted">(opcional)</span></label><textarea id="message" name="message" placeholder="Uma sugestão, uma pergunta ou um artista que gostavas de ouvir..."></textarea></div>
-                        <div class="choice"><input id="wantHost" name="wantHost" type="checkbox"><label for="wantHost"><strong>Também quero receber um concerto</strong><small>Tenho interesse em disponibilizar a minha casa.</small></label></div>
-                        <div class="choice"><input id="newsletter" name="newsletter" type="checkbox" checked><label for="newsletter"><strong>Quero receber novidades</strong><small>Próximas sessões e notícias EmCasa. Podes sair quando quiseres.</small></label></div>
-                        <button class="button button-primary submit-button" type="submit"><span class="button-label">Fazer pré-inscrição</span><span class="spinner" aria-hidden="true"></span></button>
-                    </form>
-                </div>
+        <section class="instagram">
+            <div class="shell instagram-inner reveal">
+                <p class="eyebrow">Acompanha a próxima sala</p>
+                <h2>Todos os meses,<br>um artista novo,<br>numa casa diferente.</h2>
+                <a class="instagram-handle" href="https://www.instagram.com/emcasa____/" target="_blank" rel="noopener noreferrer">@emcasa____
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M8 5h11v11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a><br>
+                <a class="community-link" href="https://chat.whatsapp.com/CE9qQXCIqVPLqDdj37zAaG?s=cl&amp;p=i&amp;ilr=0" target="_blank" rel="noopener noreferrer">Ou entra na comunidade WhatsApp ↗</a>
             </div>
         </section>
     </main>
 
     <footer>
         <div class="shell">
-            <div class="footer-grid">
-                <div class="footer-brand">
-                    <a class="brand" href="#top" aria-label="EmCasa — início"><span class="brand-logo-frame"><img class="brand-logo" src="assets/emcasa-logo.svg" alt="" width="500" height="500"></span></a>
-                    <p>Música ao vivo. Pessoas por perto. Uma sala onde tudo pode acontecer.</p>
+            <div class="footer-top">
+                <img class="footer-logo reveal" src="assets/emcasa-logo.svg" alt="EmCasa" width="365" height="310">
+                <div class="footer-copy reveal delay-1">
+                    <p>Concertos intimistas em casas reais. Lisboa, uma vez por mês, sempre diferente.</p>
+                    <div class="footer-links"><a href="#proxima">Inscrições</a><a href="#anfitrioes">Anfitriões</a><a href="https://www.instagram.com/emcasa____/" target="_blank" rel="noopener noreferrer">Instagram ↗</a></div>
                 </div>
-                <div class="footer-column"><h3>Explorar</h3><a href="#experiencia">A experiência</a><a href="#como-funciona">Como funciona</a><a href="#anfitrioes">Ser anfitrião</a></div>
-                <div class="footer-column"><h3>Por perto</h3><span class="muted">Lisboa, Portugal</span><span class="muted">Novidades em breve</span></div>
             </div>
-            <div class="footer-bottom"><span>© 2026 EmCasa. Feito com atenção em Portugal.</span><span>Concertos pequenos. Memórias grandes.</span></div>
+            <div class="footer-bottom"><span>© 2026 EmCasa · Lisboa</span><span>💜 Música de perto. 🧡 Pessoas por perto.</span></div>
         </div>
     </footer>
 
-    <div class="modal" id="successModal" role="dialog" aria-modal="true" aria-labelledby="successTitle">
-        <div class="modal-card">
-            <div class="success-icon" aria-hidden="true">✓</div>
-            <h2 id="successTitle">Estás na lista.</h2>
-            <p class="muted">Obrigado pelo interesse. Vamos avisar-te quando houver uma sessão perto de ti.</p>
-            <div class="ticket-preview" id="ticketPreview"><small class="muted">Código da pré-inscrição</small><div id="ticketQR"></div><p id="ticketCode"></p></div>
-            <button class="button button-dark" id="closeModal" type="button">Continuar a explorar</button>
-        </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     <script>
-        const GOOGLE_SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const body = document.body;
         const header = document.getElementById('siteHeader');
         const menuButton = document.getElementById('menuButton');
         const mobileMenu = document.getElementById('mobileMenu');
-        const successModal = document.getElementById('successModal');
-        const closeModalButton = document.getElementById('closeModal');
+        let previousScroll = 0;
+        let ticking = false;
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        if (!location.hash) window.scrollTo(0, 0);
 
-        const updateHeader = () => header.classList.toggle('scrolled', window.scrollY > 20);
-        updateHeader();
-        window.addEventListener('scroll', updateHeader, { passive: true });
+        const finishLoading = () => {
+            body.classList.add('loaded');
+            body.classList.remove('loading');
+        };
+        if (reducedMotion) finishLoading();
+        else window.addEventListener('load', () => window.setTimeout(finishLoading, 550), { once: true });
+        window.setTimeout(finishLoading, 2800);
 
         function closeMenu() {
             menuButton.setAttribute('aria-expanded', 'false');
             menuButton.setAttribute('aria-label', 'Abrir menu');
             mobileMenu.classList.remove('active');
-            document.body.classList.remove('menu-open');
+            body.classList.remove('menu-open');
         }
-
         menuButton.addEventListener('click', () => {
             const open = menuButton.getAttribute('aria-expanded') === 'true';
             menuButton.setAttribute('aria-expanded', String(!open));
             menuButton.setAttribute('aria-label', open ? 'Abrir menu' : 'Fechar menu');
             mobileMenu.classList.toggle('active', !open);
-            document.body.classList.toggle('menu-open', !open);
+            body.classList.toggle('menu-open', !open);
         });
         mobileMenu.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
+        document.addEventListener('keydown', event => { if (event.key === 'Escape') closeMenu(); });
 
-        document.querySelectorAll('[data-host="true"]').forEach(link => {
-            link.addEventListener('click', () => { document.getElementById('wantHost').checked = true; });
-        });
-
-        const revealItems = document.querySelectorAll('.reveal');
-        if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            const observer = new IntersectionObserver(entries => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: .12 });
-            revealItems.forEach(item => observer.observe(item));
-        } else {
-            revealItems.forEach(item => item.classList.add('visible'));
-        }
-
-        function makeTicketId() {
-            return 'EC-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).slice(2, 6).toUpperCase();
-        }
-
-        document.getElementById('registrationForm').addEventListener('submit', async function (event) {
-            event.preventDefault();
-            const submitButton = this.querySelector('button[type="submit"]');
-            submitButton.classList.add('loading');
-            submitButton.disabled = true;
-            const data = Object.fromEntries(new FormData(this).entries());
-            data.wantHost = document.getElementById('wantHost').checked;
-            data.newsletter = document.getElementById('newsletter').checked;
-            data.timestamp = new Date().toISOString();
-            const ticketId = makeTicketId();
-
-            try {
-                if (GOOGLE_SCRIPT_URL !== 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
-                    await fetch(GOOGLE_SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
-                } else {
-                    console.info('EmCasa demo submission:', data);
+        const revealObserver = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    revealObserver.unobserve(entry.target);
                 }
-                document.getElementById('ticketCode').textContent = ticketId;
-                document.getElementById('ticketPreview').style.display = 'block';
-                const qrTarget = document.getElementById('ticketQR');
-                qrTarget.innerHTML = '';
-                if (window.QRCode) new QRCode(qrTarget, { text: ticketId, width: 112, height: 112, colorDark: '#23172e', colorLight: '#f7f1e8', correctLevel: QRCode.CorrectLevel.H });
-                successModal.classList.add('active');
-                closeModalButton.focus();
-                this.reset();
-                document.getElementById('newsletter').checked = true;
-            } catch (error) {
-                console.error(error);
-                alert('Não foi possível enviar a pré-inscrição. Tenta novamente dentro de momentos.');
-            } finally {
-                submitButton.classList.remove('loading');
-                submitButton.disabled = false;
-            }
-        });
+            });
+        }, { threshold: .14 });
+        document.querySelectorAll('.reveal').forEach(item => revealObserver.observe(item));
 
-        function closeSuccessModal() {
-            successModal.classList.remove('active');
-            document.getElementById('firstName').focus();
-        }
-        closeModalButton.addEventListener('click', closeSuccessModal);
-        successModal.addEventListener('click', event => { if (event.target === successModal) closeSuccessModal(); });
-        document.addEventListener('keydown', event => {
-            if (event.key === 'Escape') {
-                if (successModal.classList.contains('active')) closeSuccessModal();
-                if (mobileMenu.classList.contains('active')) closeMenu();
+        const wordObserver = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                entry.target.querySelectorAll('.word').forEach((word, index) => {
+                    window.setTimeout(() => word.classList.add('visible'), index * 55);
+                });
+                wordObserver.unobserve(entry.target);
+            });
+        }, { threshold: .3 });
+        const manifestoCopy = document.getElementById('manifestoCopy');
+        if (manifestoCopy) wordObserver.observe(manifestoCopy);
+
+        function updateScroll() {
+            const y = window.scrollY;
+            const max = document.documentElement.scrollHeight - window.innerHeight;
+            document.documentElement.style.setProperty('--scroll', `${max > 0 ? (y / max) * 100 : 0}%`);
+            header.classList.toggle('scrolled', y > 24);
+            header.classList.toggle('hidden', y > previousScroll && y > 180 && !body.classList.contains('menu-open'));
+            previousScroll = Math.max(y, 0);
+            if (!reducedMotion) {
+                document.documentElement.style.setProperty('--hero-shift', `${Math.min(5, -4 + y * .012)}%`);
+                const photo = document.querySelector('.photo-break');
+                if (photo) {
+                    const rect = photo.getBoundingClientRect();
+                    document.documentElement.style.setProperty('--photo-shift', `${rect.top * -.055}px`);
+                }
             }
-        });
+            ticking = false;
+        }
+        window.addEventListener('scroll', () => {
+            if (!ticking) { window.requestAnimationFrame(updateScroll); ticking = true; }
+        }, { passive: true });
+        updateScroll();
+
+        if (!reducedMotion && window.matchMedia('(hover:hover)').matches) {
+            window.addEventListener('pointermove', event => {
+                document.documentElement.style.setProperty('--mouse-x', `${event.clientX}px`);
+                document.documentElement.style.setProperty('--mouse-y', `${event.clientY}px`);
+            }, { passive: true });
+            document.querySelectorAll('.magnetic').forEach(item => {
+                item.addEventListener('pointermove', event => {
+                    const rect = item.getBoundingClientRect();
+                    item.style.transform = `translate(${(event.clientX - rect.left - rect.width / 2) * .14}px, ${(event.clientY - rect.top - rect.height / 2) * .18}px)`;
+                });
+                item.addEventListener('pointerleave', () => { item.style.transform = ''; });
+            });
+            document.querySelectorAll('.tilt').forEach(item => {
+                item.addEventListener('pointermove', event => {
+                    const rect = item.getBoundingClientRect();
+                    const x = (event.clientX - rect.left) / rect.width - .5;
+                    const y = (event.clientY - rect.top) / rect.height - .5;
+                    item.style.transform = `rotateX(${y * -10}deg) rotateY(${x * 10}deg) rotate(8deg)`;
+                });
+                item.addEventListener('pointerleave', () => { item.style.transform = 'rotate(8deg)'; });
+            });
+        }
+
+        const initializeTally = () => {
+            const d = document, w = 'https://tally.so/widgets/embed.js';
+            const loadEmbeds = () => { if (typeof Tally !== 'undefined') Tally.loadEmbeds(); };
+            if (typeof Tally !== 'undefined') loadEmbeds();
+            else if (!d.querySelector(`script[src="${w}"]`)) {
+                const s = d.createElement('script'); s.src = w; s.onload = loadEmbeds; s.onerror = loadEmbeds; d.body.appendChild(s);
+            }
+        };
+        const tallyFrame = document.querySelector('[data-tally-src]');
+        if (tallyFrame) {
+            const tallyObserver = new IntersectionObserver(entries => {
+                if (entries.some(entry => entry.isIntersecting)) {
+                    initializeTally();
+                    tallyObserver.disconnect();
+                }
+            }, { rootMargin: '500px 0px' });
+            tallyObserver.observe(tallyFrame);
+        }
     </script>
 </body>
 </html>
