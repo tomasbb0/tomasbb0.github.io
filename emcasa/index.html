@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Todos os meses, um artista novo, numa casa diferente. Concertos intimistas em Lisboa por 10€ por pessoa.">
+    <meta name="description" content="Concertos intimistas em Lisboa com comida e bebidas incluídas. Música ao vivo, mesa partilhada e uma casa diferente por 10€ por pessoa.">
     <meta name="theme-color" content="#160d1d">
     <meta property="og:title" content="EmCasa — Concertos fora do palco">
     <meta property="og:description" content="Uma casa. Um artista. Uma noite que fica.">
@@ -195,7 +195,11 @@
             box-shadow: 0 12px 30px rgba(230,93,51,.19);
             transition: color .3s, background .3s, border .3s, box-shadow .3s;
             will-change: transform;
+            overflow: hidden;
+            isolation: isolate;
         }
+        .pill::before { content: ""; position: absolute; z-index: -1; inset: -40% auto -40% -35%; width: 28%; background: linear-gradient(90deg, transparent, rgba(255,255,255,.48), transparent); transform: skewX(-18deg); transition: left .75s var(--ease); }
+        .pill:hover::before { left: 118%; }
         .pill:hover { background: var(--cream); color: var(--night); box-shadow: 0 18px 40px rgba(0,0,0,.22); }
         .pill.violet { --pill-bg: var(--violet); box-shadow: 0 12px 30px rgba(86,52,255,.25); }
         .pill.ghost { --pill-bg: transparent; border-color: var(--line-light); box-shadow: none; }
@@ -268,15 +272,48 @@
         .experience-head h2 em { color: var(--orange); font-weight: 420; }
         .experience-head .lead { margin-bottom: 8px; }
         .steps-list { border-top: 1px solid var(--line-light); }
-        .step-row { display: grid; grid-template-columns: 100px 1fr .75fr; gap: 40px; align-items: center; min-height: 180px; padding: 30px 0; border-bottom: 1px solid var(--line-light); transition: padding .5s var(--ease), color .3s; }
-        .step-row:hover { padding-inline: 22px; color: var(--orange); }
+        .step-row { position: relative; isolation: isolate; overflow: hidden; display: grid; grid-template-columns: 100px 1fr .75fr; gap: 40px; align-items: center; min-height: 180px; padding: 30px 0; border-bottom: 1px solid var(--line-light); opacity: .48; transition: padding .5s var(--ease), color .3s, opacity .55s; }
+        .step-row::after { content: attr(data-step); position: absolute; z-index: -1; right: 3%; top: 50%; color: rgba(248,240,227,.035); font-family: "Fraunces", Georgia, serif; font-size: 12rem; font-weight: 900; line-height: .7; transform: translateY(-45%) translateX(35px); transition: transform .7s var(--ease), color .5s; }
+        .step-row:hover, .step-row.active { padding-inline: 22px; color: var(--orange); opacity: 1; }
+        .step-row:hover::after, .step-row.active::after { color: rgba(230,93,51,.08); transform: translateY(-45%) translateX(0); }
         .step-number { color: var(--orange); font-family: "Fraunces", Georgia, serif; font-size: 1.2rem; }
         .step-row h3 { margin: 0; font-family: "Fraunces", Georgia, serif; font-size: clamp(2.1rem, 4.8vw, 4.7rem); font-weight: 520; letter-spacing: -.045em; }
         .step-row p { margin: 0; color: rgba(248,240,227,.6); }
         .step-row:hover p { color: var(--cream); }
 
+        .included { min-height: 115vh; padding: 165px 0; color: var(--ink); background: var(--cream); overflow: hidden; isolation: isolate; }
+        .included::before { content: "TUDO"; position: absolute; z-index: -1; top: 4%; right: -3%; color: rgba(86,52,255,.06); font-family: "Fraunces", Georgia, serif; font-size: 30vw; font-weight: 900; line-height: .8; letter-spacing: -.08em; }
+        .included-grid { display: grid; grid-template-columns: .72fr 1.28fr; gap: clamp(60px, 9vw, 140px); align-items: start; }
+        .included-copy { position: sticky; top: 145px; }
+        .included-copy h2 { margin-bottom: 30px; }
+        .included-copy h2 em { color: var(--orange); font-weight: 440; }
+        .included-copy p:not(.eyebrow) { max-width: 430px; color: rgba(32,19,38,.62); font-size: 1.08rem; }
+        .inclusion-canvas { position: relative; min-height: 760px; perspective: 1100px; }
+        .receipt { position: absolute; z-index: 3; top: 8%; left: 13%; width: min(430px, 70%); padding: 42px 38px 34px; background: var(--white); border: 1px solid rgba(32,19,38,.13); border-radius: 8px; box-shadow: 0 45px 90px rgba(42,22,48,.2); transform: rotate(-4deg); }
+        .receipt::before, .receipt::after { content: ""; position: absolute; left: 0; width: 100%; height: 14px; background: radial-gradient(circle at 7px 7px, transparent 7px, var(--white) 7.5px) 0 0 / 14px 14px repeat-x; }
+        .receipt::before { top: -13px; transform: rotate(180deg); }
+        .receipt::after { bottom: -13px; }
+        .receipt-head { display: flex; justify-content: space-between; gap: 20px; padding-bottom: 24px; margin-bottom: 20px; border-bottom: 2px dashed rgba(32,19,38,.18); }
+        .receipt-head strong { font-family: "Fraunces", Georgia, serif; font-size: 2rem; }
+        .receipt-head span { align-self: end; color: rgba(32,19,38,.5); font-size: .68rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+        .receipt-row { display: flex; justify-content: space-between; gap: 24px; padding: 13px 0; border-bottom: 1px solid rgba(32,19,38,.1); }
+        .receipt-row span:last-child { font-weight: 700; }
+        .receipt-total { display: flex; justify-content: space-between; align-items: end; gap: 25px; margin-top: 28px; }
+        .receipt-total span { font-size: .72rem; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; }
+        .receipt-total strong { color: var(--violet); font-family: "Fraunces", Georgia, serif; font-size: 5rem; line-height: .78; }
+        .receipt-note { margin: 28px 0 0; text-align: center; color: var(--brown); font-size: .78rem; font-weight: 700; }
+        .value-token { position: absolute; z-index: 4; display: grid; place-items: center; text-align: center; border-radius: 50%; box-shadow: 0 24px 50px rgba(45,25,50,.2); will-change: transform; }
+        .value-token span { display: block; max-width: 90px; font-size: .68rem; font-weight: 800; line-height: 1.15; letter-spacing: .08em; text-transform: uppercase; }
+        .value-token b { display: block; margin-bottom: 7px; font-size: 2.2rem; }
+        .token-music { width: 150px; height: 150px; right: 0; top: 1%; color: var(--cream); background: var(--orange); transform: rotate(10deg); }
+        .token-food { width: 180px; height: 180px; right: -2%; bottom: 8%; color: var(--cream); background: var(--violet); transform: rotate(-8deg); }
+        .token-drinks { width: 136px; height: 136px; left: 0; bottom: 1%; color: var(--cream); background: var(--brown); transform: rotate(7deg); }
+        .included-seal { position: absolute; z-index: 5; right: 7%; top: 39%; padding: 11px 18px; color: var(--night); background: var(--cream-2); border: 2px solid var(--night); border-radius: 999px; font-size: .72rem; font-weight: 800; text-transform: uppercase; transform: rotate(6deg); box-shadow: 5px 5px 0 var(--night); }
+
         .photo-break { min-height: 92vh; position: relative; display: grid; align-items: end; overflow: hidden; }
-        .photo-break-image { position: absolute; inset: -12%; background: linear-gradient(180deg, rgba(22,13,29,.05), rgba(22,13,29,.86)), url("assets/emcasa-house-concert.webp") center / cover; transform: translateY(var(--photo-shift, 0)); will-change: transform; }
+        .photo-break::before { content: ""; position: absolute; z-index: 4; inset: -1px 0 auto; height: 28px; background: radial-gradient(circle at 50% -3px, var(--cream) 16px, transparent 17px) 0 0 / 32px 28px repeat-x; pointer-events: none; }
+        .photo-break-image { position: absolute; inset: -12%; background: linear-gradient(180deg, rgba(22,13,29,.05), rgba(22,13,29,.86)), url("assets/emcasa-house-concert.webp") center / cover; transform: translateY(var(--photo-shift, 0)) scale(var(--photo-scale, 1.08)); will-change: transform; }
+        .photo-break::after { content: ""; position: absolute; z-index: 1; inset: 0; pointer-events: none; background: linear-gradient(120deg, rgba(86,52,255,.38), transparent 38%, rgba(230,93,51,.2)); mix-blend-mode: color; transform: translateY(var(--veil-shift, 0)); }
         .photo-break-copy { position: relative; z-index: 2; width: min(100% - 64px, var(--container)); margin: 0 auto 75px; display: flex; justify-content: space-between; align-items: end; gap: 40px; }
         .photo-break h2 { max-width: 900px; margin: 0; font-size: clamp(4rem, 9vw, 9.5rem); }
         .photo-break h2 span { color: var(--orange); font-style: italic; }
@@ -294,6 +331,8 @@
         .closed-note { margin: 30px 0; padding: 18px 20px; border: 1px solid rgba(248,240,227,.25); border-radius: 16px; color: rgba(248,240,227,.75); font-size: .88rem; }
         .closed-note strong { display: block; color: var(--cream); margin-bottom: 4px; }
         .form-stage { position: relative; min-height: 600px; padding: 34px; background: var(--cream); border: 1px solid rgba(255,255,255,.55); border-radius: 32px; box-shadow: 0 45px 90px rgba(21,8,29,.3); transform: rotate(1deg); }
+        .form-stage.reveal { clip-path: polygon(0 0, 4% 0, 0 8%, 0 100%, 0 100%); transition: opacity .85s, transform .95s var(--ease), clip-path 1.2s var(--ease); }
+        .form-stage.reveal.visible { clip-path: polygon(0 0, 100% 0, 100% 92%, 96% 100%, 0 100%); }
         .form-stage::before { content: "PRÓXIMA SESSÃO"; position: absolute; top: -17px; right: 34px; padding: 9px 16px; color: var(--cream); background: var(--orange); border-radius: 999px; font-size: .68rem; font-weight: 700; letter-spacing: .13em; transform: rotate(2deg); }
         .form-stage iframe { width: 100%; min-height: 530px; border: 0; border-radius: 18px; background: var(--cream); }
         .form-fallback { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding-top: 18px; border-top: 1px solid var(--line-dark); color: rgba(32,19,38,.62); font-size: .8rem; }
@@ -302,7 +341,7 @@
         .host { padding: 150px 0; color: var(--ink); background: var(--cream); }
         .host-panel { position: relative; overflow: hidden; min-height: 600px; display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 75px; padding: clamp(42px, 7vw, 92px); color: var(--cream); background: var(--night); border-radius: 42px; }
         .host-panel::before { content: ""; position: absolute; inset: auto -10% -50% 45%; width: 620px; height: 620px; border-radius: 50%; background: var(--orange); opacity: .9; }
-        .host-panel::after { content: "🛋️"; position: absolute; right: 8%; bottom: -4%; font-size: clamp(9rem, 22vw, 20rem); filter: saturate(.5); transform: rotate(-7deg); }
+        .host-panel::after { content: ""; position: absolute; right: -2%; bottom: -10%; width: min(46vw, 620px); aspect-ratio: 365 / 310; background: url("assets/emcasa-logo.svg") center / contain no-repeat; filter: grayscale(1) brightness(2); opacity: .09; transform: rotate(-7deg); }
         .host-copy { position: relative; z-index: 2; }
         .host-copy h2 { margin-bottom: 25px; }
         .host-copy h2 em { color: var(--orange); font-weight: 430; }
@@ -314,9 +353,9 @@
         .host-point p { margin: 0; color: rgba(248,240,227,.6); }
 
         .instagram { position: relative; min-height: 90vh; display: grid; place-items: center; padding: 140px 0; overflow: hidden; text-align: center; background: var(--orange); color: var(--night); }
-        .instagram::before, .instagram::after { position: absolute; font-size: 22vw; opacity: .08; pointer-events: none; }
-        .instagram::before { content: "💜"; left: -4vw; top: -8vw; transform: rotate(-20deg); }
-        .instagram::after { content: "🧡"; right: -4vw; bottom: -9vw; transform: rotate(18deg); }
+        .instagram::before, .instagram::after { content: ""; position: absolute; width: 38vw; height: 38vw; min-width: 320px; min-height: 320px; pointer-events: none; border-radius: 44% 56% 61% 39% / 55% 36% 64% 45%; }
+        .instagram::before { left: -14vw; top: -16vw; border: 2px solid var(--violet); box-shadow: 0 0 0 55px rgba(86,52,255,.08), 0 0 0 110px rgba(86,52,255,.045); transform: rotate(-20deg); }
+        .instagram::after { right: -13vw; bottom: -17vw; border: 2px solid var(--cream); box-shadow: 0 0 0 48px rgba(248,240,227,.07), 0 0 0 96px rgba(248,240,227,.04); transform: rotate(18deg); }
         .instagram-inner { position: relative; z-index: 2; }
         .instagram h2 { max-width: 1000px; margin: 0 auto 32px; }
         .instagram-handle { display: inline-flex; align-items: center; gap: 16px; position: relative; text-decoration: none; font-family: "Fraunces", Georgia, serif; font-size: clamp(2.1rem, 5vw, 4.5rem); font-weight: 650; }
@@ -340,6 +379,7 @@
         .reveal.delay-1 { transition-delay: .1s; }
         .reveal.delay-2 { transition-delay: .2s; }
         .tilt { transform-style: preserve-3d; will-change: transform; }
+        [data-parallax] { translate: var(--pointer-x, 0px) calc(var(--parallax-y, 0px) + var(--pointer-y, 0px)); will-change: translate; }
 
         @media (max-width: 1020px) {
             .desktop-nav { display: none; }
@@ -353,13 +393,15 @@
             .hero-title { font-size: clamp(5rem, 16vw, 9rem); }
             .hero-stage { width: min(88%, 680px); min-height: 680px; margin: 15px auto 0; }
             .scroll-cue { display: none; }
-            .manifesto-grid, .experience-head, .event-grid { grid-template-columns: 1fr; }
+            .manifesto-grid, .experience-head, .event-grid, .included-grid { grid-template-columns: 1fr; }
             .manifesto-aside { display: flex; justify-content: space-between; gap: 30px; }
             .manifesto-aside p { max-width: 420px; }
             .experience-head { gap: 28px; }
             .step-row { grid-template-columns: 70px 1fr; }
             .step-row p { grid-column: 2; }
             .event-copy { position: static; }
+            .included-copy { position: static; }
+            .inclusion-canvas { width: min(100%, 760px); margin-inline: auto; }
             .host-panel { grid-template-columns: 1fr; }
             .host-points { width: min(100%, 610px); }
             .host-panel::after { opacity: .22; }
@@ -378,7 +420,7 @@
             .orbit-copy { width: 100px; height: 100px; right: -5%; }
             .hero-stamp { right: -5%; bottom: 6%; }
             .ticker-track span { padding-block: 14px; }
-            .manifesto, .experience, .next-event, .host { padding-block: 95px; }
+            .manifesto, .experience, .included, .next-event, .host { padding-block: 95px; }
             .manifesto-grid { gap: 45px; }
             .manifesto-aside { display: block; }
             .manifesto-copy { font-size: 3.15rem; }
@@ -386,6 +428,15 @@
             .experience-head { margin-bottom: 55px; }
             .step-row { grid-template-columns: 45px 1fr; min-height: 150px; gap: 12px; }
             .step-row h3 { font-size: 2.25rem; }
+            .step-row::after { font-size: 8rem; }
+            .inclusion-canvas { min-height: 690px; }
+            .receipt { left: 6%; width: 88%; padding: 34px 25px 28px; }
+            .receipt-total strong { font-size: 4.2rem; }
+            .token-music { width: 112px; height: 112px; right: -2%; top: 0; }
+            .token-food { width: 135px; height: 135px; right: -4%; bottom: 9%; }
+            .token-drinks { width: 104px; height: 104px; left: -2%; bottom: 2%; }
+            .value-token b { font-size: 1.6rem; }
+            .included-seal { right: 1%; top: 42%; }
             .photo-break { min-height: 78vh; }
             .photo-break-copy { width: min(100% - 32px, var(--container)); margin-bottom: 42px; display: grid; }
             .photo-break h2 { font-size: 4rem; }
@@ -464,16 +515,16 @@
                     </div>
                 </div>
                 <div class="hero-stage" aria-label="Concerto EmCasa numa sala em Lisboa">
-                    <div class="hero-blob" aria-hidden="true"></div>
-                    <figure class="hero-photo"><img src="assets/emcasa-house-concert.webp" alt="Músico a tocar guitarra para um pequeno grupo numa sala em Lisboa" width="1448" height="1086" fetchpriority="high"></figure>
-                    <img class="hero-logo" src="assets/emcasa-logo.svg" alt="EmCasa" width="365" height="310">
-                    <svg class="orbit-copy" viewBox="0 0 120 120" aria-hidden="true">
+                    <div class="hero-blob" data-parallax="0.025" aria-hidden="true"></div>
+                    <figure class="hero-photo" data-parallax="-0.035"><img src="assets/emcasa-house-concert.webp" alt="Músico a tocar guitarra para um pequeno grupo numa sala em Lisboa" width="1448" height="1086" fetchpriority="high"></figure>
+                    <img class="hero-logo" data-parallax="0.085" src="assets/emcasa-logo.svg" alt="EmCasa" width="365" height="310">
+                    <svg class="orbit-copy" data-parallax="-0.11" viewBox="0 0 120 120" aria-hidden="true">
                         <defs><path id="orbit" d="M60,60 m-43,0 a43,43 0 1,1 86,0 a43,43 0 1,1 -86,0"/></defs>
                         <circle cx="60" cy="60" r="25"/>
                         <text><textPath href="#orbit">MÚSICA DE PERTO · CASA CHEIA · </textPath></text>
                         <text x="60" y="66" text-anchor="middle" fill="#f8f0e3" font-size="17">♪</text>
                     </svg>
-                    <span class="hero-stamp">10€ · poucos lugares</span>
+                    <span class="hero-stamp" data-parallax="0.12">Música + comida + bebidas · 10€</span>
                 </div>
             </div>
             <div class="scroll-cue" aria-hidden="true">Descobre</div>
@@ -481,8 +532,8 @@
 
         <div class="ticker" aria-hidden="true">
             <div class="ticker-track">
-                <span>10€ por pessoa</span><span>Lisboa</span><span>Uma casa diferente</span><span>Um artista novo</span><span>Poucos lugares</span><span>Música mesmo perto</span>
-                <span>10€ por pessoa</span><span>Lisboa</span><span>Uma casa diferente</span><span>Um artista novo</span><span>Poucos lugares</span><span>Música mesmo perto</span>
+                <span>10€ · tudo incluído</span><span>Comida para partilhar</span><span>Bebidas incluídas</span><span>Um artista novo</span><span>Uma casa diferente</span><span>Música mesmo perto</span>
+                <span>10€ · tudo incluído</span><span>Comida para partilhar</span><span>Bebidas incluídas</span><span>Um artista novo</span><span>Uma casa diferente</span><span>Música mesmo perto</span>
             </div>
         </div>
 
@@ -509,18 +560,42 @@
                     <p class="lead reveal delay-1">Nós escolhemos a casa, o artista e o ambiente. Tu só tens de garantir o teu lugar e aparecer com os ouvidos abertos.</p>
                 </div>
                 <div class="steps-list">
-                    <article class="step-row reveal"><span class="step-number">01</span><h3>Inscreve-te</h3><p>Quando a próxima sessão abrir, o formulário aparece aqui e na bio do Instagram.</p></article>
-                    <article class="step-row reveal"><span class="step-number">02</span><h3>Recebe o convite</h3><p>Data, zona e detalhes chegam aos participantes confirmados. A morada fica entre nós.</p></article>
-                    <article class="step-row reveal"><span class="step-number">03</span><h3>Entra EmCasa</h3><p>10€ por pessoa. Capacidade limitada. Uma sala cheia da maneira certa.</p></article>
+                    <article class="step-row reveal" data-step="01"><span class="step-number">01</span><h3>Inscreve-te</h3><p>Quando a próxima sessão abrir, o formulário aparece aqui e na bio do Instagram.</p></article>
+                    <article class="step-row reveal" data-step="02"><span class="step-number">02</span><h3>Recebe o convite</h3><p>Data, zona e detalhes chegam aos participantes confirmados. A morada fica entre nós.</p></article>
+                    <article class="step-row reveal" data-step="03"><span class="step-number">03</span><h3>Entra EmCasa</h3><p>10€ por pessoa inclui o concerto, comida para partilhar e bebidas. Sem extras escondidos.</p></article>
+                </div>
+            </div>
+        </section>
+
+        <section class="included" id="incluido">
+            <div class="shell included-grid">
+                <div class="included-copy reveal">
+                    <p class="eyebrow violet">Um bilhete. Tudo incluído.</p>
+                    <h2>Vens pela música.<br><em>Ficas pela mesa.</em></h2>
+                    <p>Música ao vivo, comida para partilhar e bebidas. Tudo incluído por 10€ por pessoa.</p>
+                </div>
+                <div class="inclusion-canvas" aria-label="Tudo o que está incluído nos 10 euros">
+                    <article class="receipt reveal tilt" data-parallax="-0.035" data-rotate="-4">
+                        <div class="receipt-head"><strong>EmCasa</strong><span>Uma noite completa</span></div>
+                        <div class="receipt-row"><span>Concerto intimista</span><span>Incluído</span></div>
+                        <div class="receipt-row"><span>Comida para partilhar</span><span>Incluída</span></div>
+                        <div class="receipt-row"><span>Bebidas</span><span>Incluídas</span></div>
+                        <div class="receipt-total"><span>Total<br>por pessoa</span><strong>10€</strong></div>
+                        <p class="receipt-note">Sem taxa de palco. Sem extras escondidos.</p>
+                    </article>
+                    <div class="value-token token-music reveal" data-parallax="0.08" aria-hidden="true"><div><b>♪</b><span>Concerto</span></div></div>
+                    <div class="value-token token-food reveal delay-1" data-parallax="-0.06" aria-hidden="true"><div><b>◒</b><span>Comida</span></div></div>
+                    <div class="value-token token-drinks reveal delay-2" data-parallax="0.11" aria-hidden="true"><div><b>⌁</b><span>Bebidas</span></div></div>
+                    <span class="included-seal" data-parallax="-0.09">Tudo. Mesmo tudo.</span>
                 </div>
             </div>
         </section>
 
         <section class="photo-break">
             <div class="photo-break-image" aria-hidden="true"></div>
-            <div class="photo-break-copy reveal">
+            <div class="photo-break-copy reveal" data-parallax="-0.05">
                 <h2>Sem palco.<br><span>Sem distância.</span></h2>
-                <div class="price-badge tilt"><div><strong>10€</strong><span>por pessoa</span></div></div>
+                <div class="price-badge tilt" data-parallax="0.09" data-rotate="8"><div><strong>10€</strong><span>tudo incluído</span></div></div>
             </div>
         </section>
 
@@ -529,7 +604,7 @@
                 <div class="event-copy reveal">
                     <p class="eyebrow cream">A próxima casa</p>
                     <h2>O próximo sofá pode ser <span>o teu.</span></h2>
-                    <p class="lead">O formulário abaixo está ligado diretamente ao Tally oficial do EmCasa. Quando as inscrições reabrirem, fica disponível aqui automaticamente.</p>
+                    <p class="lead">O formulário abaixo está ligado diretamente ao Tally oficial do EmCasa. São 10€ pelo concerto, comida e bebidas — tudo incluído. Quando as inscrições reabrirem, fica disponível aqui automaticamente.</p>
                     <div class="closed-note"><strong>Estado atual: formulário fechado.</strong>O Tally ainda não está a aceitar respostas. Reabre-o no Tally quando a próxima data estiver pronta.</div>
                     <a class="pill magnetic" href="https://tally.so/r/RGPQVK" target="_blank" rel="noopener noreferrer">Abrir no Tally <span aria-hidden="true">↗</span></a>
                 </div>
@@ -592,12 +667,18 @@
         if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
         if (!location.hash) window.scrollTo(0, 0);
 
+        let introSeen = false;
+        try { introSeen = sessionStorage.getItem('emcasa-intro-seen') === '1'; } catch (error) { introSeen = false; }
+
         const finishLoading = () => {
             body.classList.add('loaded');
             body.classList.remove('loading');
         };
-        if (reducedMotion) finishLoading();
-        else window.addEventListener('load', () => window.setTimeout(finishLoading, 550), { once: true });
+        if (reducedMotion || introSeen) finishLoading();
+        else window.addEventListener('load', () => window.setTimeout(() => {
+            finishLoading();
+            try { sessionStorage.setItem('emcasa-intro-seen', '1'); } catch (error) { /* storage is optional */ }
+        }, 550), { once: true });
         window.setTimeout(finishLoading, 2800);
 
         function closeMenu() {
@@ -638,6 +719,16 @@
         const manifestoCopy = document.getElementById('manifestoCopy');
         if (manifestoCopy) wordObserver.observe(manifestoCopy);
 
+        const stepRows = [...document.querySelectorAll('.step-row')];
+        const stepObserver = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    stepRows.forEach(row => row.classList.toggle('active', row === entry.target));
+                }
+            });
+        }, { rootMargin: '-32% 0px -38%', threshold: .2 });
+        stepRows.forEach(row => stepObserver.observe(row));
+
         function updateScroll() {
             const y = window.scrollY;
             const max = document.documentElement.scrollHeight - window.innerHeight;
@@ -651,6 +742,20 @@
                 if (photo) {
                     const rect = photo.getBoundingClientRect();
                     document.documentElement.style.setProperty('--photo-shift', `${rect.top * -.055}px`);
+                    const progress = Math.max(0, Math.min(1, (window.innerHeight - rect.top) / (window.innerHeight + rect.height)));
+                    document.documentElement.style.setProperty('--photo-scale', String(1.1 - progress * .075));
+                    document.documentElement.style.setProperty('--veil-shift', `${(progress - .5) * 55}px`);
+                }
+                document.querySelectorAll('[data-parallax]').forEach(layer => {
+                    const rect = layer.getBoundingClientRect();
+                    const speed = Number(layer.dataset.parallax || 0);
+                    const distance = (window.innerHeight / 2 - (rect.top + rect.height / 2)) * speed;
+                    layer.style.setProperty('--parallax-y', `${Math.max(-72, Math.min(72, distance))}px`);
+                });
+                if (manifestoCopy) {
+                    const rect = manifestoCopy.getBoundingClientRect();
+                    const progress = Math.max(0, Math.min(1, (window.innerHeight - rect.top) / (window.innerHeight + rect.height)));
+                    manifestoCopy.style.fontVariationSettings = `"SOFT" ${Math.round(20 + progress * 75)}, "WONK" ${progress > .45 ? 1 : 0}`;
                 }
             }
             ticking = false;
@@ -677,10 +782,30 @@
                     const rect = item.getBoundingClientRect();
                     const x = (event.clientX - rect.left) / rect.width - .5;
                     const y = (event.clientY - rect.top) / rect.height - .5;
-                    item.style.transform = `rotateX(${y * -10}deg) rotateY(${x * 10}deg) rotate(8deg)`;
+                    const baseRotate = Number(item.dataset.rotate || 0);
+                    item.style.transform = `rotateX(${y * -10}deg) rotateY(${x * 10}deg) rotate(${baseRotate}deg)`;
                 });
-                item.addEventListener('pointerleave', () => { item.style.transform = 'rotate(8deg)'; });
+                item.addEventListener('pointerleave', () => { item.style.transform = `rotate(${Number(item.dataset.rotate || 0)}deg)`; });
             });
+            const heroStage = document.querySelector('.hero-stage');
+            if (heroStage) {
+                heroStage.addEventListener('pointermove', event => {
+                    const rect = heroStage.getBoundingClientRect();
+                    const x = (event.clientX - rect.left) / rect.width - .5;
+                    const y = (event.clientY - rect.top) / rect.height - .5;
+                    heroStage.querySelectorAll('[data-parallax]').forEach(layer => {
+                        const depth = Number(layer.dataset.parallax || 0);
+                        layer.style.setProperty('--pointer-x', `${x * depth * 180}px`);
+                        layer.style.setProperty('--pointer-y', `${y * depth * 120}px`);
+                    });
+                });
+                heroStage.addEventListener('pointerleave', () => {
+                    heroStage.querySelectorAll('[data-parallax]').forEach(layer => {
+                        layer.style.removeProperty('--pointer-x');
+                        layer.style.removeProperty('--pointer-y');
+                    });
+                });
+            }
         }
 
         const initializeTally = () => {
