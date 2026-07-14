@@ -247,7 +247,8 @@
         .scroll-cue::after { content: ""; width: 1px; height: 52px; background: linear-gradient(var(--cream), transparent); animation: cue 1.5s ease-in-out infinite; }
         @keyframes cue { 50% { transform: scaleY(.45); transform-origin: top; } }
 
-        .ticker { position: relative; z-index: 4; overflow: hidden; color: var(--night); background: var(--orange); transform: rotate(-1.3deg) scale(1.02); border-block: 1px solid rgba(22,13,29,.35); }
+        .ticker-band { position: relative; z-index: 4; isolation: isolate; background: linear-gradient(to bottom, var(--night) 0 50%, var(--cream) 50% 100%); }
+        .ticker { position: relative; z-index: 1; overflow: hidden; color: var(--night); background: var(--orange); transform: rotate(-1.3deg) scale(1.02); border-block: 1px solid rgba(22,13,29,.35); }
         .ticker-track { display: flex; width: max-content; animation: ticker 24s linear infinite; }
         .ticker-track span { display: flex; align-items: center; gap: 30px; padding: 19px 15px; font-family: "Fraunces", Georgia, serif; font-size: clamp(1.25rem, 2vw, 1.75rem); font-weight: 750; white-space: nowrap; }
         .ticker-track span::after { content: "✦"; color: var(--violet-deep); }
@@ -530,10 +531,12 @@
             <div class="scroll-cue" aria-hidden="true">Descobre</div>
         </section>
 
-        <div class="ticker" aria-hidden="true">
-            <div class="ticker-track">
-                <span>10€ · tudo incluído</span><span>Comida para partilhar</span><span>Bebidas incluídas</span><span>Um artista novo</span><span>Uma casa diferente</span><span>Música mesmo perto</span>
-                <span>10€ · tudo incluído</span><span>Comida para partilhar</span><span>Bebidas incluídas</span><span>Um artista novo</span><span>Uma casa diferente</span><span>Música mesmo perto</span>
+        <div class="ticker-band">
+            <div class="ticker" aria-hidden="true">
+                <div class="ticker-track">
+                    <span>10€ · tudo incluído</span><span>Comida para partilhar</span><span>Bebidas incluídas</span><span>Um artista novo</span><span>Uma casa diferente</span><span>Música mesmo perto</span>
+                    <span>10€ · tudo incluído</span><span>Comida para partilhar</span><span>Bebidas incluídas</span><span>Um artista novo</span><span>Uma casa diferente</span><span>Música mesmo perto</span>
+                </div>
             </div>
         </div>
 
