@@ -188,6 +188,12 @@
   font: 600 9px DM Mono, monospace;
 }
 
+.restart-button {
+  background: transparent;
+  border-color: #cbd3ce;
+  color: var(--muted);
+}
+
 .ttv-strip b {
   color: #fff;
   display: inline-block;

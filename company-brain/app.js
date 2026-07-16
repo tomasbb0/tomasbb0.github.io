@@ -179,6 +179,8 @@ function renderPriorities(){
 $("#export").addEventListener('click',()=>{
   const portable={schema_version:"0.1",exported_at:new Date().toISOString(),company:state.company,people:state.people,workflows:state.workflows,priorities}; const url=URL.createObjectURL(new Blob([JSON.stringify(portable,null,2)],{type:'application/json'})); const a=document.createElement('a');a.href=url;a.download=`${state.company.toLowerCase().replace(/[^a-z0-9]+/g,'-')}-context-pack.json`;a.click();URL.revokeObjectURL(url);toast('Portable context pack exported');
 });
-$("#reset").addEventListener('click',()=>{localStorage.removeItem('companyBrainState');location.reload();});
+function startOver(){ localStorage.removeItem('companyBrainState'); location.reload(); }
+$("#restart").addEventListener('click',startOver);
+$("#reset").addEventListener('click',startOver);
 
 const stored=localStorage.getItem("companyBrainState"); if(stored){try{openApp(JSON.parse(stored));}catch{}}
