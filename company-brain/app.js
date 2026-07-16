@@ -47,6 +47,7 @@ function openApp(nextState){ state=nextState; save(); $("#welcome").classList.ad
 
 $("#start-clean").addEventListener("click",()=>$("#ceo-dialog").showModal());
 $("#load-demo").addEventListener("click",()=>openApp(demoState()));
+$("#load-demo-bottom")?.addEventListener("click",()=>openApp(demoState()));
 $("#ceo-form").addEventListener("submit",(event)=>{
   event.preventDefault();
   const name=$("#ceo-name").value.trim(), email=$("#ceo-email").value.trim(), company=$("#company-name").value.trim();
@@ -66,7 +67,7 @@ function staticDemoInterview(stage,text){
   if(stage==="workflow_name")return{...base,assistant_message:"Good. How many minutes does that workflow consume in a typical week? Include review and follow-up time.",next_stage:"time",workflow_update:{title:text||"Recurring workflow",minutes_per_week:null,platforms:[],steps:[],delegation:""}};
   if(stage==="time"){const n=Number((String(text).match(/\d+/)||[120])[0]);return{...base,assistant_message:"Which platforms do you use for it? Search the catalog, select every system involved, then send the selection.",next_stage:"platforms",workflow_update:{title:"",minutes_per_week:/hour/i.test(text)?n*60:n,platforms:[],steps:[],delegation:""}};}
   if(stage==="platforms")return{...base,assistant_message:"Walk me through the steps from trigger to finished output. A short numbered list is perfect.",next_stage:"steps",workflow_update:{title:"",minutes_per_week:null,platforms:text.split(",").map((v)=>v.trim()).filter(Boolean),steps:[],delegation:""}};
-  if(stage==="steps")return{...base,assistant_message:"Where does judgment enter: approvals, exceptions, or decisions that cannot be taken automatically today?",next_stage:"decisions",workflow_update:{title:"",minutes_per_week:null,platforms:[],steps:text.split(/\n|\d+[.)]/).map((v)=>v.trim()).filter(Boolean),delegation:""}};
+  if(stage==="steps")return{...base,assistant_message:"Where does judgment enter? Include the decision owner, approval threshold, governing policy, and what happens in an exception.",next_stage:"decisions",workflow_update:{title:"",minutes_per_week:null,platforms:[],steps:text.split(/\n|\d+[.)]/).map((v)=>v.trim()).filter(Boolean),delegation:""}};
   if(stage==="decisions")return{...base,assistant_message:"Last part: what do you delegate, and to whom? Include the email addresses of everyone who reports directly to you.",next_stage:"delegations",workflow_update:{title:"",minutes_per_week:null,platforms:[],steps:[],delegation:text||"Executive judgment and exception approval"}};
   const reports=emails.map((email)=>({email,name:email.split("@")[0].split(/[._-]/).map((p)=>p.charAt(0).toUpperCase()+p.slice(1)).join(" "),role:"Direct report"}));
   return{...base,assistant_message:reports.length?`Your interview is complete. I queued ${reports.length} personal invitation${reports.length===1?"":"s"}. The operating graph will expand as each person completes the same interview.`:"Add at least one direct-report email when you are ready; the graph grows only from verified reporting relationships.",next_stage:reports.length?"complete":"delegations",direct_reports:reports,complete:reports.length>0};
