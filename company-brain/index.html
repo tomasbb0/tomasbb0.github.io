@@ -50,6 +50,8 @@
       <article><span>02</span><h3>Accountable semantics</h3><p>Attach owners, approval thresholds, policies, permissions, exceptions, escalation routes, outputs, and definitions of done.</p></article>
       <article><span>03</span><h3>Contradiction resolution</h3><p>Detect conflicting accounts, missing ownership, and unexplained handoffs—then ask the person best positioned to resolve them.</p></article>
       <article><span>04</span><h3>Delivery-ready handoff</h3><p>Package the current process, decision rules, integrations, access needs, evaluation cases, success metrics, and unresolved risks.</p></article>
+      <article><span>05</span><h3>Multimodal evidence</h3><p>Verify explanations against approved documents, system events, and privacy-preserving desktop observations—with redaction and employee controls.</p></article>
+      <article><span>06</span><h3>Deployed-AI control</h3><p>Maintain agent owners, permissions, approval gates, evaluations, incidents, reversibility, and measured outcomes in the same graph.</p></article>
     </section>
     <section class="wedge-section" aria-label="Initial market wedge">
       <div>
@@ -62,7 +64,7 @@
       </div>
     </section>
     <section class="loop-section" aria-label="Continuous operating graph">
-      <div class="loop-copy"><p class="eyebrow">THE COMPOUNDING ASSET</p><h2>A living decision record, not a one-off process map.</h2><p>Employee corrections, implementation decisions, agent failures, exceptions, and measured outcomes return to the graph. Each delivery becomes evidence for the next prioritization and implementation.</p></div>
+      <div class="loop-copy"><p class="eyebrow">THE COMPOUNDING ASSET</p><h2>A living decision record, not a one-off process map.</h2><p>Employee corrections, implementation decisions, agent failures, exceptions, and measured outcomes return to the graph. The first ranked roadmap is designed to arrive in five days; each delivery then becomes evidence for the next.</p></div>
       <div class="loop-visual"><b>ELICIT</b><i>→</i><b>VERIFY</b><i>→</i><b>PACKAGE</b><i>→</i><b>LEARN</b></div>
       <button class="button primary" id="load-demo-bottom">Open the investor demo <span>→</span></button>
     </section>
@@ -86,6 +88,7 @@
         <button class="nav-item active" data-view="interview"><span>◉</span> AI interview</button>
         <button class="nav-item" data-view="graph"><span>⌘</span> Operating graph <b id="graph-count">3</b></button>
         <button class="nav-item" data-view="priorities"><span>↗</span> AI priorities</button>
+        <button class="nav-item" data-view="governance"><span>◎</span> Evidence + control</button>
       </nav>
       <div class="sidebar-section"><p>DISCOVERED PEOPLE</p><div id="people-list"></div></div>
       <div class="sidebar-bottom"><div class="security-note"><span>⌾</span><div><strong>Context stays controlled</strong><small>Credentials are referenced, never collected.</small></div></div><button id="reset" class="text-button">Reset prototype</button></div>
@@ -133,6 +136,15 @@
         <div class="priority-summary"><div><span>1</span><strong>Implement now</strong><small>High feasibility, controlled risk</small></div><div><span>2</span><strong>Pilot</strong><small>Value proven, judgment remains</small></div><div><span>2</span><strong>Not yet</strong><small>Dependency or risk blocker</small></div></div>
         <div id="priority-list" class="priority-list"></div>
         <div class="benchmark-note"><span>✦</span><div><strong>The benchmark becomes the moat.</strong><p>Every implementation contributes anonymized evidence: time saved, error reduction, integration effort, and failure modes by workflow pattern.</p></div></div>
+      </section>
+
+      <section id="view-governance" class="view">
+        <div class="section-heading"><div><p class="eyebrow">VERIFICATION + CONTROL PLANE</p><h2>Connect evidence. Govern what gets deployed.</h2><p>Human explanations establish meaning and accountability; approved evidence verifies behavior. Deployed AI returns decisions, failures, and outcomes to the graph.</p></div><div class="metric-strip"><div><strong>6</strong><span>sources</span></div><div><strong>2</strong><span>agents</span></div><div><strong>0</strong><span>critical gaps</span></div></div></div>
+        <div class="ttv-strip"><span>DAY 0<br><b>CEO interview</b></span><i>→</i><span>DAY 2<br><b>Leadership coverage</b></span><i>→</i><span>DAY 5<br><b>Ranked AI roadmap</b></span></div>
+        <div class="control-grid">
+          <section class="evidence-card"><div class="card-kicker">APPROVED EVIDENCE</div><h3>Triangulate, do not guess.</h3><div class="source-row"><span class="source-icon api">API</span><div><strong>Salesforce + HubSpot events</strong><small>Frequency, sequence and ownership verified</small></div><b>Connected</b></div><div class="source-row"><span class="source-icon docs">DOC</span><div><strong>Policies + operating documents</strong><small>Decision thresholds and definitions of done</small></div><b>Indexed</b></div><div class="source-row"><span class="source-icon desk">DESK</span><div><strong>Desktop observation</strong><small>Opt-in, scoped apps, automatic redaction</small></div><b>Selective</b></div></section>
+          <section class="evidence-card"><div class="card-kicker">DEPLOYED AI REGISTER</div><h3>Every agent has an accountable owner.</h3><div class="agent-row"><div><strong>Vendor reconciliation agent</strong><small>Owner: COO · Finance approval above €5k</small></div><span class="pilot">Pilot</span></div><div class="agent-row"><div><strong>Customer onboarding agent</strong><small>Owner: COO · Reversible writes · 24 evals</small></div><span class="now">Ready</span></div><div class="guardrail-box"><b>Guardrails attached to the graph</b><p>Permissions · approval gates · evaluation set · rollback route · incident log · realized ROI</p></div></section>
+        </div>
       </section>
     </main>
   </div>

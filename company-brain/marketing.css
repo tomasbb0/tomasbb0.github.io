@@ -40,7 +40,7 @@
   color: var(--ink);
   display: grid;
   gap: 14px;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   padding: 0 max(6vw, 36px) 94px;
 }
 
@@ -174,4 +174,112 @@
     margin-left: 14px;
     transform: rotate(90deg);
   }
+}
+
+.ttv-strip {
+  align-items: center;
+  background: var(--navy);
+  border-radius: 14px;
+  color: #93a6a0;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 18px;
+  padding: 17px 24px;
+  font: 600 9px DM Mono, monospace;
+}
+
+.ttv-strip b {
+  color: #fff;
+  display: inline-block;
+  font: 700 13px Manrope, sans-serif;
+  margin-top: 5px;
+}
+
+.ttv-strip i {
+  color: var(--lime);
+  font-style: normal;
+}
+
+.control-grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: 1fr 1fr;
+}
+
+.evidence-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  padding: 24px;
+}
+
+.card-kicker {
+  color: var(--green);
+  font: 700 9px DM Mono, monospace;
+  letter-spacing: .08em;
+}
+
+.evidence-card h3 {
+  font-size: 24px;
+  letter-spacing: -.04em;
+  margin: 12px 0 20px;
+}
+
+.source-row,
+.agent-row {
+  align-items: center;
+  border-top: 1px solid #edf0ec;
+  display: flex;
+  gap: 12px;
+  min-height: 74px;
+  padding: 12px 0;
+}
+
+.source-row > div,
+.agent-row > div { flex: 1; }
+.source-row strong,
+.source-row small,
+.agent-row strong,
+.agent-row small { display: block; }
+.source-row strong,
+.agent-row strong { font-size: 12px; }
+.source-row small,
+.agent-row small { color: var(--muted); font-size: 9px; margin-top: 4px; }
+.source-row > b { color: var(--green); font: 600 8px DM Mono, monospace; }
+
+.source-icon {
+  border-radius: 9px;
+  color: var(--navy);
+  display: grid;
+  flex: 0 0 42px;
+  font: 800 8px DM Mono, monospace;
+  height: 42px;
+  place-items: center;
+}
+.source-icon.api { background: var(--teal); }
+.source-icon.docs { background: var(--lav); }
+.source-icon.desk { background: var(--lime); }
+
+.agent-row > span {
+  border-radius: 7px;
+  font: 700 8px DM Mono, monospace;
+  padding: 7px 10px;
+}
+
+.guardrail-box {
+  background: #eef5f1;
+  border-radius: 11px;
+  margin-top: 18px;
+  padding: 17px;
+}
+.guardrail-box b { font-size: 11px; }
+.guardrail-box p { color: var(--muted); font-size: 9px; line-height: 1.6; margin: 6px 0 0; }
+
+@media (max-width: 950px) {
+  .control-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 600px) {
+  .ttv-strip { align-items: flex-start; flex-direction: column; gap: 10px; }
+  .ttv-strip i { transform: rotate(90deg); }
 }

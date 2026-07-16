@@ -2,6 +2,7 @@ const platforms = ["1Password","Adobe Acrobat","Airtable","Amplitude","Asana","A
 
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
+const apiBase = location.hostname === "burnaylabs.com" ? "https://company-brain-api.tomas-b-batalha.workers.dev" : ".";
 const initialMessage = "Let’s map how the company actually works, starting with your own work as CEO. What is one recurring workflow you personally own?";
 
 let state = {
@@ -57,7 +58,7 @@ $("#ceo-form").addEventListener("submit",(event)=>{
 });
 
 async function checkApi(){
-  try{ const data=await fetch("./api/status").then((r)=>{if(!r.ok)throw new Error("Static demo");return r.json();}); const el=$("#api-status"); el.innerHTML=`<i></i>${data.apiConfigured?` Live AI · ${escapeHtml(data.model)}`:" Demo interviewer"}`; el.classList.toggle("live",data.apiConfigured); }
+  try{ const data=await fetch(`${apiBase}/api/status`).then((r)=>{if(!r.ok)throw new Error("Static demo");return r.json();}); const el=$("#api-status"); el.innerHTML=`<i></i>${data.apiConfigured?` Live AI · ${escapeHtml(data.model)}`:" Demo interviewer"}`; el.classList.toggle("live",data.apiConfigured); }
   catch{}
 }
 
@@ -78,7 +79,7 @@ function switchView(name){
   $$('.nav-item').forEach((b)=>b.classList.toggle("active",b.dataset.view===name));
   $$('.view').forEach((v)=>v.classList.remove("active-view"));
   $(`#view-${name}`).classList.add("active-view");
-  $("#top-view").textContent=name==="interview"?`${currentPerson()?.role||"CEO"} interview`:name==="graph"?"Operating graph":"AI priorities";
+  $("#top-view").textContent=name==="interview"?`${currentPerson()?.role||"CEO"} interview`:name==="graph"?"Operating graph":name==="priorities"?"AI priorities":"Evidence + control";
   if(name==="graph") renderGraph(); if(name==="priorities") renderPriorities();
 }
 
@@ -87,7 +88,7 @@ $("#composer").addEventListener("submit",async(event)=>{
   state.messages.push({role:"user",text}); input.value=""; renderMessages();
   const typing={role:"assistant",text:"…",typing:true}; state.messages.push(typing); renderMessages();
   try{
-    const response=await fetch("./api/interview",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({stage:state.stage,message:text,state:{company:state.company,person:currentPerson(),workflow:currentWorkflow()}})}).then((r)=>{if(!r.ok)throw new Error("Static demo");return r.json();}).catch(()=>staticDemoInterview(state.stage,text));
+    const response=await fetch(`${apiBase}/api/interview`,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({stage:state.stage,message:text,state:{company:state.company,person:currentPerson(),workflow:currentWorkflow()}})}).then((r)=>{if(!r.ok)throw new Error("Static demo");return r.json();}).catch(()=>staticDemoInterview(state.stage,text));
     state.messages.pop(); applyResponse(response); if(response.warning) toast("Live AI unavailable — continued in demo mode");
   }catch(error){ state.messages.pop(); state.messages.push({role:"assistant",text:"I could not process that answer. Please try again."}); toast(error.message); }
   save(); render();
