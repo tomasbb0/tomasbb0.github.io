@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="CEO-first operating graph and AI readiness prototype" />
+  <title>Company Brain — Operating graph prototype</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div id="welcome" class="welcome-shell">
+    <div class="welcome-noise"></div>
+    <header class="welcome-nav"><div class="brand"><span class="brand-mark">CB</span><span>Company Brain</span></div><span class="prototype-pill">Investor prototype</span></header>
+    <main class="welcome-grid">
+      <section>
+        <p class="eyebrow">THE OPERATING GRAPH FOR THE AI TRANSITION</p>
+        <h1>Make how your company works <em>legible to AI.</em></h1>
+        <p class="welcome-copy">A guided AI interview starts with the CEO, maps their real work, then cascades through verified reporting lines—without asking company size or requiring an org chart.</p>
+        <div class="welcome-actions">
+          <button id="start-clean" class="button primary">Start with the CEO <span>→</span></button>
+          <button id="load-demo" class="button ghost">Open investor demo</button>
+        </div>
+        <div class="trust-row"><span>↳ No company-size field</span><span>↳ No prior org chart</span><span>↳ Portable context pack</span></div>
+      </section>
+      <section class="cascade-card">
+        <div class="cascade-header"><span>Live discovery</span><span class="pulse"><i></i> expanding</span></div>
+        <div class="cascade-visual">
+          <article class="person-node root"><span>CEO</span><strong>1</strong><small>interview starts</small></article>
+          <div class="connector v"></div>
+          <div class="level">
+            <article class="person-node"><span>COO</span><strong>2</strong><small>invited by CEO</small></article>
+            <article class="person-node"><span>CTO</span><strong>3</strong><small>invited by CEO</small></article>
+          </div>
+          <div class="connector v short"></div>
+          <div class="level faint">
+            <article class="person-node mini"><strong>4</strong></article><article class="person-node mini"><strong>5</strong></article><article class="person-node mini"><strong>6</strong></article>
+          </div>
+        </div>
+        <div class="cascade-footer"><span><b>7</b> workflows</span><span><b>9.8h</b> mapped / week</span><span><b>3</b> invitations</span></div>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="ceo-dialog">
+    <form method="dialog" id="ceo-form">
+      <button class="dialog-close" value="cancel" aria-label="Close">×</button>
+      <p class="eyebrow">ROOT NODE</p><h2>Start with the CEO</h2><p>The company reveals itself through verified reporting relationships. We never ask how large it is.</p>
+      <label>Name<input id="ceo-name" required placeholder="e.g. Tomás Batalha" /></label>
+      <label>Work email<input id="ceo-email" required type="email" placeholder="you@company.com" /></label>
+      <label>Company<input id="company-name" required placeholder="Company name" /></label>
+      <button class="button primary full" value="default">Begin CEO interview</button>
+    </form>
+  </dialog>
+
+  <div id="app" class="app-shell hidden">
+    <aside class="sidebar">
+      <div class="brand"><span class="brand-mark">CB</span><span>Company Brain</span></div>
+      <nav>
+        <button class="nav-item active" data-view="interview"><span>◉</span> AI interview</button>
+        <button class="nav-item" data-view="graph"><span>⌘</span> Operating graph <b id="graph-count">3</b></button>
+        <button class="nav-item" data-view="priorities"><span>↗</span> AI priorities</button>
+      </nav>
+      <div class="sidebar-section"><p>DISCOVERED PEOPLE</p><div id="people-list"></div></div>
+      <div class="sidebar-bottom"><div class="security-note"><span>⌾</span><div><strong>Context stays controlled</strong><small>Credentials are referenced, never collected.</small></div></div><button id="reset" class="text-button">Reset prototype</button></div>
+    </aside>
+
+    <main class="main-panel">
+      <header class="topbar">
+        <div><p class="breadcrumb"><span id="top-company">Company</span> / <b id="top-view">CEO interview</b></p></div>
+        <div class="top-actions"><span id="api-status" class="api-pill"><i></i> Demo interviewer</span><button id="export" class="button compact">Export context pack</button></div>
+      </header>
+
+      <section id="view-interview" class="view active-view">
+        <div class="interview-head"><div><p class="eyebrow">CURRENT INTERVIEW</p><h2 id="person-title">CEO</h2><p id="person-subtitle">Root of the operating graph</p></div><div class="completion"><div><span id="completion-number">62%</span><small>complete</small></div><svg viewBox="0 0 42 42"><circle cx="21" cy="21" r="16"></circle><circle id="progress-ring" class="progress-ring" cx="21" cy="21" r="16"></circle></svg></div></div>
+        <div class="interview-layout">
+          <section class="chat-card">
+            <div id="messages" class="messages"></div>
+            <div id="platform-picker" class="platform-picker hidden">
+              <div class="picker-top"><strong>Select platforms used</strong><button id="close-platforms">×</button></div>
+              <input id="platform-search" placeholder="Search 100+ platforms or add your own…" />
+              <div id="platform-results" class="platform-results"></div>
+              <div class="picker-bottom"><span id="platform-selected-count">0 selected</span><button id="use-platforms" class="button primary compact">Use selection</button></div>
+            </div>
+            <form id="composer" class="composer"><button id="open-platforms" type="button" class="icon-button" title="Select platforms">⌘</button><textarea id="message-input" rows="1" placeholder="Describe the workflow in your own words…"></textarea><button class="send-button" aria-label="Send">↑</button></form>
+            <p class="composer-note">The interviewer keeps asking until the structured record is complete.</p>
+          </section>
+          <aside class="capture-panel">
+            <div class="capture-title"><span>LIVE STRUCTURED CAPTURE</span><span class="live-dot">LIVE</span></div>
+            <div class="capture-block"><label>Workflow</label><strong id="capture-workflow">Waiting for answer…</strong></div>
+            <div class="capture-grid"><div><label>Time / week</label><strong id="capture-time">—</strong></div><div><label>Readiness</label><strong id="capture-readiness">—</strong></div></div>
+            <div class="capture-block"><label>Platforms</label><div id="capture-platforms" class="tags"><span class="empty-tag">Not mapped</span></div></div>
+            <div class="capture-block"><label>Steps & decisions</label><div id="capture-steps" class="steps"><p class="muted">The operating graph updates while the employee talks.</p></div></div>
+            <div class="capture-block last"><label>Reporting cascade</label><div id="capture-reports" class="report-list"><p class="muted">Direct-report emails are requested only after this interview.</p></div></div>
+          </aside>
+        </div>
+      </section>
+
+      <section id="view-graph" class="view">
+        <div class="section-heading"><div><p class="eyebrow">DISCOVERED, NOT UPLOADED</p><h2>The operating graph builds itself</h2><p>Each completed interview unlocks the next verified layer. Company size is an output, never an input.</p></div><div class="metric-strip"><div><strong id="metric-people">3</strong><span>people</span></div><div><strong id="metric-workflows">5</strong><span>workflows</span></div><div><strong id="metric-hours">12.6h</strong><span>mapped / week</span></div></div></div>
+        <div id="org-graph" class="org-graph"></div>
+        <div class="graph-legend"><span><i class="complete-key"></i> Complete</span><span><i class="progress-key"></i> In progress</span><span><i class="invite-key"></i> Invited</span></div>
+      </section>
+
+      <section id="view-priorities" class="view">
+        <div class="section-heading"><div><p class="eyebrow">MANAGEMENT OUTPUT</p><h2>Know where AI helps now—and where it does not</h2><p>Feasibility and savings combine current workflow structure with anonymized outcome benchmarks.</p></div><div class="roi-card"><span>MODELED CAPACITY RELEASE</span><strong>€84k</strong><small>annual / discovered scope</small></div></div>
+        <div class="priority-summary"><div><span>1</span><strong>Implement now</strong><small>High feasibility, controlled risk</small></div><div><span>2</span><strong>Pilot</strong><small>Value proven, judgment remains</small></div><div><span>2</span><strong>Not yet</strong><small>Dependency or risk blocker</small></div></div>
+        <div id="priority-list" class="priority-list"></div>
+        <div class="benchmark-note"><span>✦</span><div><strong>The benchmark becomes the moat.</strong><p>Every implementation contributes anonymized evidence: time saved, error reduction, integration effort, and failure modes by workflow pattern.</p></div></div>
+      </section>
+    </main>
+  </div>
+  <div id="toast" class="toast"></div>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
