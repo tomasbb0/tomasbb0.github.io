@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>jogo novasbe 🎮</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
+    background: radial-gradient(1200px 800px at 20% 10%, #2b1055 0%, #0b0b1a 55%, #05050c 100%);
+    color: #fff;
+    overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  #stage { position: relative; width: 100vw; height: 100vh; overflow: hidden; }
+
+  .screen {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 24px;
+    transition: opacity .5s ease;
+  }
+  .hidden { opacity: 0; pointer-events: none; }
+
+  h1 { font-size: clamp(32px, 6vw, 64px); font-weight: 700; letter-spacing: -0.02em; }
+  p  { font-size: clamp(16px, 2.2vw, 22px); opacity: .8; margin-top: 12px; max-width: 520px; line-height: 1.5; }
+
+  .btn {
+    margin-top: 32px; padding: 16px 40px; border: 0; border-radius: 999px;
+    font-size: 20px; font-weight: 600; color: #1a0a2e; cursor: pointer;
+    background: linear-gradient(135deg, #ff8fb1, #ffd1dc);
+    box-shadow: 0 10px 40px rgba(255, 143, 177, .35);
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .btn:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 14px 50px rgba(255,143,177,.5); }
+  .btn:active { transform: scale(.97); }
+
+  /* HUD */
+  #hud {
+    position: absolute; top: 20px; left: 0; right: 0;
+    display: flex; justify-content: center; gap: 24px; align-items: center;
+    font-size: 18px; font-weight: 600; opacity: .9;
+  }
+  #bar { width: min(360px, 60vw); height: 10px; background: rgba(255,255,255,.12); border-radius: 999px; overflow: hidden; }
+  #fill { height: 100%; width: 0%; background: linear-gradient(90deg, #ff8fb1, #ffd1dc); transition: width .2s ease; }
+
+  .heart {
+    position: absolute; top: -80px;
+    font-size: 48px; cursor: pointer; line-height: 1;
+    filter: drop-shadow(0 6px 16px rgba(255,143,177,.45));
+    animation: fall linear forwards;
+    transition: transform .1s ease;
+  }
+  .heart:hover { transform: scale(1.15); }
+  @keyframes fall { from { transform: translateY(0) rotate(-8deg); } to { transform: translateY(110vh) rotate(8deg); } }
+
+  .pop {
+    position: absolute; pointer-events: none; font-weight: 700; color: #ffd1dc; font-size: 22px;
+    animation: rise .7s ease-out forwards;
+  }
+  @keyframes rise { from { opacity: 1; transform: translateY(0) scale(1); } to { opacity: 0; transform: translateY(-60px) scale(1.4); } }
+
+  /* Reveal */
+  .card {
+    background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border-radius: 28px; padding: 44px 48px; max-width: 560px;
+    box-shadow: 0 30px 80px rgba(0,0,0,.5);
+    animation: popin .6s cubic-bezier(.2,.9,.3,1.2);
+  }
+  @keyframes popin { from { opacity: 0; transform: scale(.85) translateY(20px); } to { opacity: 1; transform: none; } }
+  .handle {
+    display: inline-block; margin-top: 24px; padding: 18px 36px; border-radius: 999px;
+    font-size: clamp(24px, 4vw, 36px); font-weight: 700; text-decoration: none; color: #fff;
+    background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+    box-shadow: 0 12px 40px rgba(220,39,67,.45);
+    transition: transform .15s ease;
+  }
+  .handle:hover { transform: translateY(-2px) scale(1.04); }
+  .small { font-size: 14px; opacity: .55; margin-top: 18px; }
+
+  .confetti {
+    position: absolute; top: -20px; width: 10px; height: 16px; border-radius: 3px;
+    animation: cfall linear forwards; pointer-events: none;
+  }
+  @keyframes cfall { to { transform: translateY(110vh) rotate(720deg); opacity: .6; } }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <div id="intro" class="screen">
+    <div style="font-size:72px;margin-bottom:12px">💌</div>
+    <h1>um joguinho para ti</h1>
+    <p>Apanha <b>10 coisas</b> antes de caírem. Demora uns 30 segundos. Há uma pequena surpresa no fim.</p>
+    <button class="btn" id="start">bora</button>
+  </div>
+
+  <div id="game" class="screen hidden">
+    <div id="hud">
+      <span id="score">0 / 10</span>
+      <div id="bar"><div id="fill"></div></div>
+      <span id="timer">2:00</span>
+    </div>
+  </div>
+
+  <div id="reveal" class="screen hidden">
+    <div class="card">
+      <div style="font-size:64px">🎉</div>
+      <h1 id="revealTitle">conseguiste</h1>
+      <p>estava sem energia para flirt, mas tens aqui o meu ig se quiseres da um follow/manda mensagem ;)</p>
+      <a class="handle" href="https://instagram.com/tomasbb0" target="_blank" rel="noopener">@tomasbb0</a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const GOAL = 10;
+  const TIME_LIMIT = 120; // segundos; revela na mesma quando acaba
+  let score = 0, timeLeft = TIME_LIMIT, spawnTimer, tickTimer, running = false;
+
+  const $ = id => document.getElementById(id);
+  const stage = $('stage');
+
+  $('start').addEventListener('click', startGame);
+
+  function startGame() {
+    $('intro').classList.add('hidden');
+    $('game').classList.remove('hidden');
+    running = true;
+    spawnTimer = setInterval(spawnHeart, 700);
+    tickTimer = setInterval(tick, 1000);
+    spawnHeart();
+  }
+
+  function tick() {
+    timeLeft--;
+    const m = Math.floor(timeLeft / 60), s = String(timeLeft % 60).padStart(2, '0');
+    $('timer').textContent = `${m}:${s}`;
+    if (timeLeft <= 0) finish(false);
+  }
+
+  function spawnHeart() {
+    if (!running) return;
+    const h = document.createElement('div');
+    h.className = 'heart';
+    const stuff = ['🍕','🐸','🎧','☕','🛹','🌮','🦆','📚','🍔','🎲','🧃','🐢','🥑','🎸','🧦','🍩','🚲','🐙','🍿','🧠','🦖','🍓','🎈','🐧'];
+    h.textContent = stuff[Math.floor(Math.random()*stuff.length)];
+    h.style.left = (5 + Math.random() * 85) + 'vw';
+    h.style.animationDuration = (3.2 + Math.random() * 1.8) + 's';
+    h.style.fontSize = (42 + Math.random() * 20) + 'px';
+    const catchIt = e => {
+      if (!running) return;
+      e.preventDefault();
+      const r = h.getBoundingClientRect();
+      h.remove();
+      pop(r.left + r.width/2, r.top);
+      score++;
+      $('score').textContent = `${score} / ${GOAL}`;
+      $('fill').style.width = (score / GOAL * 100) + '%';
+      if (score >= GOAL) finish(true);
+    };
+    h.addEventListener('mousedown', catchIt);
+    h.addEventListener('touchstart', catchIt, { passive: false });
+    h.addEventListener('animationend', () => h.remove());
+    stage.appendChild(h);
+  }
+
+  function pop(x, y) {
+    const p = document.createElement('div');
+    p.className = 'pop';
+    p.textContent = ['+1','boa','✨','apanhaste'][Math.floor(Math.random()*4)];
+    p.style.left = x + 'px'; p.style.top = y + 'px';
+    stage.appendChild(p);
+    setTimeout(() => p.remove(), 700);
+  }
+
+  function finish(won) {
+    if (!running) return;
+    running = false;
+    clearInterval(spawnTimer); clearInterval(tickTimer);
+    document.querySelectorAll('.heart').forEach(h => h.remove());
+    $('revealTitle').textContent = won ? 'conseguiste 🥹' : 'acabou o tempo, mas ganhas na mesma';
+    $('game').classList.add('hidden');
+    $('reveal').classList.remove('hidden');
+    confetti();
+  }
+
+  function confetti() {
+    const colors = ['#ff8fb1','#ffd1dc','#fff','#f09433','#dc2743','#bc1888','#8ec5ff'];
+    for (let i = 0; i < 120; i++) {
+      const c = document.createElement('div');
+      c.className = 'confetti';
+      c.style.left = Math.random() * 100 + 'vw';
+      c.style.background = colors[Math.floor(Math.random()*colors.length)];
+      c.style.animationDuration = (2.5 + Math.random() * 2.5) + 's';
+      c.style.animationDelay = (Math.random() * 1.5) + 's';
+      c.style.transform = `rotate(${Math.random()*360}deg)`;
+      stage.appendChild(c);
+      setTimeout(() => c.remove(), 6000);
+    }
+  }
+</script>
+</body>
+</html>
