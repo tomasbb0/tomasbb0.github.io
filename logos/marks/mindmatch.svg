@@ -1,8 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
-  <!-- MindMatch: two people, one match -->
-  <rect width="120" height="120" rx="27" fill="#7C3AED"/>
-  <g stroke="#FFFFFF" stroke-width="8">
-    <circle cx="48" cy="60" r="20"/>
-    <circle cx="72" cy="60" r="20"/>
-  </g>
+  <!-- MindMatch: two people overlap, and the match is where they meet -->
+  <rect width="120" height="120" rx="27" fill="#E6E0FF"/>
+  <circle cx="49" cy="60" r="20" fill="#7B5CFF"/>
+  <circle cx="71" cy="60" r="20" fill="#FF7AB6"/>
+  <path d="M60 43.3A20 20 0 0 1 60 76.7A20 20 0 0 1 60 43.3Z" fill="#3B1F9E"/>
 </svg>
