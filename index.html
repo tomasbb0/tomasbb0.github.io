@@ -611,13 +611,13 @@ body.invert .scene .kicker{color:#6E6E78}
           <ul class="chips"><li data-en="AI" data-pt="IA">AI</li><li data-en="Prototype" data-pt="Protótipo">Prototype</li><li>B2B</li></ul>
           <span class="go"><span data-en="Open Prototype" data-pt="Abrir Protótipo">Open Prototype</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></span>
         </a>
-        <a class="card beta wide" href="https://burnaylabs.pt/founderos/" target="_blank" rel="noopener">
+        <div class="card beta wide" role="button" tabindex="0" data-modal="founderos">
           <div class="card-top"><span class="icon"><img src="logos/marks/founderos.svg" alt="FounderOS" width="44" height="44"></span><span class="badges"><span class="badge beta">Product · Beta</span></span></div>
           <div class="title"><span class="num">21</span><h3>FounderOS</h3></div>
           <p data-en="AI interviewer for founders. It runs a structured questionnaire in a minimal black chat and turns the answers into a PDF dossier. Access is password-protected." data-pt="Entrevistador de IA para fundadores. Conduz um questionário estruturado num chat minimalista e transforma as respostas num dossier em PDF. Acesso protegido por palavra-passe.">AI interviewer for founders. It runs a structured questionnaire in a minimal black chat and turns the answers into a PDF dossier. Access is password-protected.</p>
           <ul class="chips"><li data-en="AI" data-pt="IA">AI</li><li data-en="Founders" data-pt="Fundadores">Founders</li><li data-en="Prototype" data-pt="Protótipo">Prototype</li></ul>
-          <span class="go"><span data-en="Open Platform" data-pt="Abrir Plataforma">Open Platform</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></span>
-        </a>
+          <span class="go"><span data-en="Learn More" data-pt="Saber Mais">Learn More</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></span>
+        </div>
         <a class="card consult wide" href="https://speedhealth.pt" target="_blank" rel="noopener">
           <div class="card-top"><span class="icon"><img src="logos/marks/speedhealth.svg" alt="SpeedHealth.ai" width="44" height="44"></span><span class="badges"><span class="badge consult">Client · Website</span></span></div>
           <div class="title"><span class="num">22</span><h3>SpeedHealth.ai</h3></div>
@@ -851,6 +851,19 @@ body.invert .scene .kicker{color:#6E6E78}
   };
 
   var projectData = {
+    founderos: {
+      name: "FounderOS",
+      logo: "logos/marks/founderos.svg",
+      color: "#ef4444",
+      desc: "AI interviewer for founders. It runs a structured questionnaire in a minimal black chat and turns the answers into a PDF dossier.",
+      features: [
+        "AI interviewer that runs a structured founder questionnaire",
+        "Minimal black chat interface, with voice input",
+        "Turns the answers into a PDF dossier to download",
+        "Finished dossiers can be emailed to Tomás automatically",
+      ],
+      tags: ["AI", "Founders", "Prototype"],
+    },
     tasksync: {
       name: "TaskSync",
       logo: "logos/marks/tasksync.svg",
