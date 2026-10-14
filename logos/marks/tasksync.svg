@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+  <!-- TaskSync: several agents running side by side -->
+  <rect width="120" height="120" rx="27" fill="#22D3EE"/>
+  <g stroke="#0B1220" stroke-width="6" stroke-linecap="round" opacity=".3"><path d="M32 42H88"/><path d="M32 60H88"/><path d="M32 78H88"/></g>
+  <g fill="#0B1220"><circle cx="74" cy="42" r="7.5"/><circle cx="46" cy="60" r="7.5"/><circle cx="64" cy="78" r="7.5"/></g>
+</svg>
