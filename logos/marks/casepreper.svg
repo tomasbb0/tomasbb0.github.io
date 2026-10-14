@@ -1,7 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
-  <!-- CasePreper: the consultant's briefcase -->
-  <rect width="120" height="120" rx="27" fill="#FACC15"/>
-  <path d="M48 45V40C48 35.6 51.6 32 56 32H64C68.4 32 72 35.6 72 40V45" stroke="#18181B" stroke-width="7" stroke-linecap="round"/>
-  <rect x="30" y="44" width="60" height="44" rx="9" fill="#18181B"/>
-  <rect x="54" y="58" width="12" height="9" rx="2.5" fill="#FACC15"/>
+  <!-- CasePreper: a C, with the answer dropped into its opening -->
+  <rect width="120" height="120" rx="27" fill="#123C3A"/>
+  <path d="M77.5 44.2A23 23 0 1 0 77.5 75.8" stroke="#F2E8D5" stroke-width="11" stroke-linecap="round"/>
+  <circle cx="79" cy="60" r="6.5" fill="#FFB547"/>
 </svg>
