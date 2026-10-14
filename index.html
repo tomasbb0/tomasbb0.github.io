@@ -179,23 +179,18 @@ html.scenes .grid-head{display:flex;align-items:baseline;justify-content:space-b
   background:linear-gradient(180deg,#131318,#0C0C10);box-shadow:var(--shadow);transition:box-shadow .3s,background .3s}
 button.node{cursor:pointer}
 button.node:hover{background:linear-gradient(180deg,#17171D,#0E0E12);box-shadow:var(--shadow-hi)}
-/* agent icons: one thin line each, no chip; in the scenes they brighten as each agent arrives */
-.node .ic{flex:0 0 auto;display:grid;place-items:center;width:20px;height:20px;color:var(--text-2);transition:color .35s}
+/* agent icons: one plain white filled shape each */
+.node .ic{flex:0 0 auto;display:grid;place-items:center;width:20px;height:20px;color:#fff}
 .node .ic svg{display:block;width:20px;height:20px}
-.js-fx .node:not(.on) .ic{color:var(--text-3)}
-.js-fx .node.on .ic{color:var(--text)}
 .node b{display:block;font-weight:600;font-size:14.5px;letter-spacing:-.01em;line-height:1.3}
 .node small{display:block;margin-top:3px;font-family:var(--mono);font-size:11px;line-height:1.35;color:var(--text-3)}
-.node.ceo{width:auto;min-width:280px;padding:16px 22px 14px}
-.node.ceo .ic,.js-fx .node.ceo .ic{color:var(--text)}
-.node.ceo b{font-size:16px}
 .org-conn{width:1px;height:28px;margin:10px 0;background:linear-gradient(rgba(255,255,255,.24),rgba(255,255,255,.06));transform-origin:top;transform:scaleY(var(--k,1))}
 .org-label{margin:0 0 14px;font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--text-3)}
 .org-row{display:grid;gap:10px;width:100%}
 .org-row.r6{grid-template-columns:repeat(6,minmax(0,1fr))}
 .org-row.r5{grid-template-columns:repeat(5,minmax(0,1fr));max-width:84%}
 @media (max-width:1100px){.org-row.r6,.org-row.r5{grid-template-columns:repeat(3,minmax(0,1fr));max-width:none}}
-@media (max-width:560px){.org-row.r6,.org-row.r5{grid-template-columns:repeat(2,minmax(0,1fr))}.node.ceo{min-width:0}}
+@media (max-width:560px){.org-row.r6,.org-row.r5{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .founder{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:64px;align-items:center;margin-top:120px}
 @media (max-width:900px){.founder{grid-template-columns:1fr;gap:36px;margin-top:80px}}
 .portrait{position:relative;justify-self:center;width:100%;max-width:440px;aspect-ratio:4/5}
@@ -655,25 +650,23 @@ body.invert .scene .kicker{color:#6E6E78}
         <p class="org-sub" data-en="The OpenClaw Agents Org Chart" data-pt="Organigrama dos Agentes OpenClaw">The OpenClaw Agents Org Chart</p>
       </div>
       <div class="org">
-        <div class="node ceo"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c1.3-3.7 4-5.5 7-5.5s5.7 1.8 7 5.5"/></svg></span><span><b>Tomás Batalha</b><small data-en="Founder and CEO" data-pt="Fundador e CEO">Founder and CEO</small></span></div>
-        <div class="org-conn"></div>
         <div class="org-label" data-en="HOLDING LEVEL AGENTS" data-pt="AGENTES DE HOLDING">HOLDING LEVEL AGENTS</div>
         <div class="org-row r6">
-          <button class="node" type="button" data-agent="oracle"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l1.9 6.6 6.6 1.9-6.6 1.9-1.9 6.6-1.9-6.6-6.6-1.9 6.6-1.9z"/></svg></span><span><b>Oracle</b><small data-en="VP Strategy &amp; Mentor" data-pt="VP Estratégia &amp; Mentor">VP Strategy &amp; Mentor</small></span></button>
-          <button class="node" type="button" data-agent="atlas"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17"/><path d="M12 3.5c2.3 2.3 3.5 5.1 3.5 8.5s-1.2 6.2-3.5 8.5c-2.3-2.3-3.5-5.1-3.5-8.5s1.2-6.2 3.5-8.5z"/></svg></span><span><b>Atlas</b><small data-en="COO / Right Hand" data-pt="COO / Braço Direito">COO / Right Hand</small></span></button>
-          <button class="node" type="button" data-agent="sage"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5.5" width="16" height="14.5" rx="3"/><path d="M4 10h16"/><path d="M8.5 3.5v3M15.5 3.5v3"/></svg></span><span><b>Sage</b><small data-en="Secretary / PA" data-pt="Secretário / PA">Secretary / PA</small></span></button>
-          <button class="node" type="button" data-agent="iris"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.8"/></svg></span><span><b>Iris</b><small data-en="Browser Agent" data-pt="Agente de Browser">Browser Agent</small></span></button>
-          <button class="node" type="button" data-agent="hera"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="8" r="3.3"/><path d="M3.5 20c1.1-3.4 3.6-5.2 6.5-5.2 1.6 0 3 .5 4.1 1.5"/><path d="M18.5 13.5v6M15.5 16.5h6"/></svg></span><span><b>Hera</b><small data-en="HR &amp; Onboarding" data-pt="RH &amp; Integração">HR &amp; Onboarding</small></span></button>
-          <button class="node" type="button" data-agent="sentinel"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h4l2.5-5.5 5 11 2.5-5.5h4"/></svg></span><span><b>Sentinel</b><small data-en="Tech Ops / SRE" data-pt="Ops Técnico / SRE">Tech Ops / SRE</small></span></button>
+          <button class="node" type="button" data-agent="oracle"><span class="ic"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.6 7.4L22 12l-7.4 2.6L12 22l-2.6-7.4L2 12l7.4-2.6z"/></svg></span><span><b>Oracle</b><small data-en="VP Strategy &amp; Mentor" data-pt="VP Estratégia &amp; Mentor">VP Strategy &amp; Mentor</small></span></button>
+          <button class="node" type="button" data-agent="atlas"><span class="ic"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/></svg></span><span><b>Atlas</b><small data-en="COO / Right Hand" data-pt="COO / Braço Direito">COO / Right Hand</small></span></button>
+          <button class="node" type="button" data-agent="sage"><span class="ic"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><rect x="6.5" y="2" width="3" height="5" rx="1.5"/><rect x="14.5" y="2" width="3" height="5" rx="1.5"/></svg></span><span><b>Sage</b><small data-en="Secretary / PA" data-pt="Secretário / PA">Secretary / PA</small></span></button>
+          <button class="node" type="button" data-agent="iris"><span class="ic"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M1.5 12C4.6 6.6 8.2 4.5 12 4.5s7.4 2.1 10.5 7.5c-3.1 5.4-6.7 7.5-10.5 7.5S4.6 17.4 1.5 12z"/></svg></span><span><b>Iris</b><small data-en="Browser Agent" data-pt="Agente de Browser">Browser Agent</small></span></button>
+          <button class="node" type="button" data-agent="hera"><span class="ic"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="7.5" r="4.5"/><path d="M3.5 21.5a8.5 8.5 0 0 1 17 0z"/></svg></span><span><b>Hera</b><small data-en="HR &amp; Onboarding" data-pt="RH &amp; Integração">HR &amp; Onboarding</small></span></button>
+          <button class="node" type="button" data-agent="sentinel"><span class="ic"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l8.5 3.5v6.2c0 5-3.6 8.9-8.5 10.3-4.9-1.4-8.5-5.3-8.5-10.3V5.5z"/></svg></span><span><b>Sentinel</b><small data-en="Tech Ops / SRE" data-pt="Ops Técnico / SRE">Tech Ops / SRE</small></span></button>
         </div>
         <div class="org-conn"></div>
         <div class="org-label" data-en="JOBPILOT AI SUBSIDIARY" data-pt="SUBSIDIÁRIA JOBPILOT AI">JOBPILOT AI SUBSIDIARY</div>
         <div class="org-row r5">
-          <button class="node" type="button" data-agent="rex"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 17.5l-1-10 5 4 3.5-6.5 3.5 6.5 5-4-1 10z"/></svg></span><span><b>Rex</b><small data-en="CEO, JobPilot AI" data-pt="CEO, JobPilot AI">CEO, JobPilot AI</small></span></button>
-          <button class="node" type="button" data-agent="prism"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4l8.5 15h-17z"/></svg></span><span><b>Prism</b><small data-en="VP Strategy" data-pt="VP Estratégia">VP Strategy</small></span></button>
-          <button class="node" type="button" data-agent="kit"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8.5 12.2l2.4 2.4 4.8-5"/></svg></span><span><b>Kit</b><small data-en="Growth Ops Intern" data-pt="Estagiário de Operações de Crescimento">Growth Ops Intern</small></span></button>
-          <button class="node" type="button" data-agent="scout"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/></svg></span><span><b>Scout</b><small data-en="Intelligence" data-pt="Inteligência">Intelligence</small></span></button>
-          <button class="node" type="button" data-agent="echo"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="1.6"/><path d="M8.6 8.6a4.8 4.8 0 0 0 0 6.8M15.4 8.6a4.8 4.8 0 0 1 0 6.8M5.8 5.8a8.8 8.8 0 0 0 0 12.4M18.2 5.8a8.8 8.8 0 0 1 0 12.4"/></svg></span><span><b>Echo</b><small data-en="Marketing &amp; Growth" data-pt="Marketing &amp; Crescimento">Marketing &amp; Growth</small></span></button>
+          <button class="node" type="button" data-agent="rex"><span class="ic"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M2.5 19.5l-1-12.5 6 5L12 3.5l4.5 8.5 6-5-1 12.5z"/></svg></span><span><b>Rex</b><small data-en="CEO, JobPilot AI" data-pt="CEO, JobPilot AI">CEO, JobPilot AI</small></span></button>
+          <button class="node" type="button" data-agent="prism"><span class="ic"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.5l10.5 19h-21z"/></svg></span><span><b>Prism</b><small data-en="VP Strategy" data-pt="VP Estratégia">VP Strategy</small></span></button>
+          <button class="node" type="button" data-agent="kit"><span class="ic"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5 1.5L4 13.5h7L9.5 22.5 20 9.5h-7z"/></svg></span><span><b>Kit</b><small data-en="Growth Ops Intern" data-pt="Estagiário de Operações de Crescimento">Growth Ops Intern</small></span></button>
+          <button class="node" type="button" data-agent="scout"><span class="ic"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="10" cy="10" r="7.5"/><path d="M15.2 17.3l2.1-2.1 5.2 5.2-2.1 2.1z"/></svg></span><span><b>Scout</b><small data-en="Intelligence" data-pt="Inteligência">Intelligence</small></span></button>
+          <button class="node" type="button" data-agent="echo"><span class="ic"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M2.5 9h5L18 3v18L7.5 15h-5z"/></svg></span><span><b>Echo</b><small data-en="Marketing &amp; Growth" data-pt="Marketing &amp; Crescimento">Marketing &amp; Growth</small></span></button>
         </div>
       </div>
     </div>
@@ -1356,7 +1349,7 @@ body.invert .scene .kicker{color:#6E6E78}
 })();
 </script>
 
-<script>window.SCENES = window.SCENES && ["#heroBg", "#bigmark", ".hero h1", ".hero .lead", ".hero .hero-ctas", ".hero .hero-meta", "#legacyHead h2", ".pgrid .card", "#about .stat", "#orgScene .node.ceo", "#founderScene .portrait img", "#stack .tag", "#contact .cta", "footer .foot", "#nav"].every(q => document.querySelector(q));</script>
+<script>window.SCENES = window.SCENES && ["#heroBg", "#bigmark", ".hero h1", ".hero .lead", ".hero .hero-ctas", ".hero .hero-meta", "#legacyHead h2", ".pgrid .card", "#about .stat", "#founderScene .portrait img", "#stack .tag", "#contact .cta", "footer .foot", "#nav"].every(q => document.querySelector(q));</script>
 <script>
 /* ---------- scenes: each section is a full-screen scene that builds, holds and leaves as you scroll ---------- */
 (() => {
@@ -1594,9 +1587,9 @@ body.invert .scene .kicker{color:#6E6E78}
 
   // ---------- 7. Team: the org chart grows from the founder down; each agent's purple line draws and its icon lights up
   const org = $("#orgScene");
-  const ogA = { kick: $(".kicker", org), h2: $("h2", org), sub: $(".org-sub", org), ceo: $(".node.ceo", org), conns: $$(".org-conn", org), labels: $$(".org-label", org), rows: $$(".org-row", org).map(rw => $$(".node", rw)) };
+  const ogA = { kick: $(".kicker", org), h2: $("h2", org), sub: $(".org-sub", org), conns: $$(".org-conn", org), labels: $$(".org-label", org), rows: $$(".org-row", org).map(rw => $$(".node", rw)) };
   const ogType = typer(ogA.kick), ogLight = lighter(ogA.h2), ogLabels = ogA.labels.map(l => typer(l));
-  const TIERS = [0.32, 0.64];
+  const TIERS = [0.24, 0.56];
   const ORG = {
     apply(r, x) {
       const X = i => outK(x, i, 0.5, 0.06);
@@ -1605,12 +1598,9 @@ body.invert .scene .kicker{color:#6E6E78}
       set(ogA.kick, { y: -X(0) * 70, o: 1 - X(0) });
       set(ogA.h2, { y: (1 - h) * 24 - X(0) * 70, o: h * (1 - X(0)) });
       wipe(ogA.sub, seg(r, 0.12, 0.32, inOut)); set(ogA.sub, { y: -X(1) * 70, o: 1 - X(1) });
-      const c = seg(r, 0.2, 0.32, outExpo);
-      set(ogA.ceo, { y: (1 - c) * 22 - X(2) * 70, s: 0.94 + 0.06 * c, o: c * (1 - X(2)) });
       ogA.rows.forEach((nodes, t) => {
-        const a0 = TIERS[t], Xt = X(3 + t);
-        ogA.conns[t].style.setProperty("--k", seg(r, a0, a0 + 0.07, inOut).toFixed(3));
-        set(ogA.conns[t], { o: 1 - Xt });
+        const a0 = TIERS[t], Xt = X(2 + t), cn = ogA.conns[t - 1];
+        if (cn) { cn.style.setProperty("--k", seg(r, a0, a0 + 0.07, inOut).toFixed(3)); set(cn, { o: 1 - Xt }); }
         ogLabels[t](seg(r, a0 + 0.04, a0 + 0.12, lin)); set(ogA.labels[t], { y: -Xt * 70, o: 1 - Xt });
         nodes.forEach((nd, i) => {
           const a = a0 + 0.1 + i * 0.03, k = seg(r, a, a + 0.1, outExpo);
