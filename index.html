@@ -229,6 +229,15 @@ footer{padding-block:48px 56px}
 .foot a:hover{color:var(--text)}
 .foot-links{display:flex;gap:22px;flex-wrap:wrap}
 
+/* card view (a product card opened from the honeycomb) */
+.card-view{position:fixed;inset:0;z-index:180;display:grid;place-items:center;padding:20px;background:rgba(5,5,6,.62);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);opacity:0;visibility:hidden;transition:opacity .25s ease,visibility .25s}
+.card-view.active{opacity:1;visibility:visible}
+.card-view-box{width:min(460px,100%);scale:.94;translate:0 14px;transition:scale .35s cubic-bezier(.2,.7,.2,1),translate .35s cubic-bezier(.2,.7,.2,1)}
+.card-view.active .card-view-box{scale:none;translate:none}
+.card-view-box .card{width:100%;box-shadow:var(--shadow-hi)}
+.cv-close{position:absolute;top:20px;right:20px;width:40px;height:40px;border:0;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.08);color:var(--text-2);font-size:24px;line-height:1;box-shadow:var(--shadow);transition:background .2s,color .2s}
+.cv-close:hover{background:rgba(255,255,255,.14);color:#fff}
+
 /* modals (product details and agents) */
 .modal-overlay,.agent-modal-overlay{position:fixed;inset:0;z-index:200;display:grid;place-items:center;padding:20px;background:rgba(5,5,6,.62);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);opacity:0;visibility:hidden;transition:opacity .25s ease,visibility .25s}
 .modal-overlay.active,.agent-modal-overlay.active{opacity:1;visibility:visible}
@@ -286,9 +295,19 @@ html.scenes main,html.scenes footer{display:none}
 .scene .portrait{width:auto;max-width:100%;height:min(66vh,560px)}
 .scene .founder-text p{font-size:15px}
 .scene .foot{margin-top:28px}
+/* products as an Apple Watch honeycomb: round bubbles placed around the centre of the scene */
+.hive-wrap{position:relative;height:calc(100vh - 116px)}
+.hive-hint{font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--text-3)}
+.hive{position:absolute;left:50%;top:54%;width:0;height:0}
+.bub{position:absolute;left:-60px;top:-60px;width:120px;height:120px;padding:0;border:0;border-radius:50%;background:none;will-change:transform,opacity}
+.bub-c{display:block;width:100%;height:100%;border-radius:50%;overflow:hidden;background:#000;box-shadow:0 1px 2px rgba(0,0,0,.5),0 14px 34px -12px rgba(0,0,0,.9);transition:box-shadow .25s}
+.bub:hover .bub-c{box-shadow:0 1px 2px rgba(0,0,0,.5),0 24px 48px -14px rgba(0,0,0,.95)}
+.bub-c img{display:block;width:100%;height:100%;object-fit:cover;scale:1.02}
+.bub-n{position:absolute;left:50%;top:calc(100% + 8px);translate:-50% 0;white-space:nowrap;font-size:12px;font-weight:600;letter-spacing:-.01em;color:var(--text);opacity:var(--lo,0);pointer-events:none}
 /* shorter screens (13" laptops): a denser product grid so five cards still fit in one scene */
 @media (max-height:860px){
   .scene{padding:80px 0 20px}
+  .hive-wrap{height:calc(100vh - 100px)}
   html.scenes .grid-head{margin-bottom:12px}
   .scene .cards{gap:12px}
   .scene .card{padding:18px 22px 16px}
@@ -666,6 +685,12 @@ body.invert .scene .kicker{color:#6E6E78}
   </div>
 </div>
 
+<!-- card view: a product card opened from the honeycomb -->
+<div class="card-view" id="cardView" onclick="if (event.target === this) closeCard();">
+  <div class="card-view-box" role="dialog" aria-modal="true" aria-label="Product"></div>
+  <button class="cv-close" type="button" aria-label="Close" onclick="closeCard()">&times;</button>
+</div>
+
 <!-- agent modal -->
 <div class="agent-modal-overlay" id="agentModalOverlay" onclick="if (event.target === this) closeAgentModal();">
   <div class="agent-modal" role="dialog" aria-modal="true" aria-labelledby="agentName">
@@ -963,7 +988,30 @@ body.invert .scene .kicker{color:#6E6E78}
   /* ---------- modals ---------- */
   var lastFocus = null;
   var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
-  function lockScroll(on) { document.body.style.overflow = on ? "hidden" : ""; }
+  function lockScroll(on) { document.body.style.overflow = on || document.querySelector(".card-view.active") ? "hidden" : ""; }
+
+  // a product card opened from the honeycomb; its own link or "Learn More" still works from here
+  var cardFocus = null;
+  function openCard(cd) {
+    var box = document.querySelector("#cardView .card-view-box"), clone = cd.cloneNode(true);
+    clone.removeAttribute("style");
+    box.replaceChildren(clone);
+    cardFocus = document.activeElement;
+    document.getElementById("cardView").classList.add("active");
+    lockScroll(true);
+    document.querySelector("#cardView .cv-close").focus({ preventScroll: true });
+  }
+  function closeCard() {
+    var v = document.getElementById("cardView");
+    if (!v.classList.contains("active")) return;
+    v.classList.remove("active");
+    lockScroll(false);
+    if (cardFocus) cardFocus.focus({ preventScroll: true });
+  }
+  // Escape closes the top layer only: the details modal first, then the card
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && !document.getElementById("projectModal").classList.contains("active")) closeCard();
+  }, true);
 
   function openModal(id) {
     var p = projectData[id];
@@ -985,7 +1033,9 @@ body.invert .scene .kicker{color:#6E6E78}
     if (force || (e && e.target.classList.contains("modal-overlay"))) {
       document.getElementById("projectModal").classList.remove("active");
       lockScroll(false);
-      if (lastFocus) lastFocus.focus({ preventScroll: true });
+      // back inside an open card, return focus to its close button rather than ringing the whole card
+      var back = lastFocus && lastFocus.closest && lastFocus.closest("#cardView") ? document.querySelector("#cardView .cv-close") : lastFocus;
+      if (back) back.focus({ preventScroll: true });
     }
   }
   function openAgentModal(id) {
@@ -1317,29 +1367,76 @@ body.invert .scene .kicker{color:#6E6E78}
     },
   };
 
-  // ---------- 3-5. products, five per scene: cards wipe in in reading order, their status line draws itself
-  const gridFx = pg => {
-    const head = $(".grid-head", pg), hType = typer($(".kicker", head)), cType = typer($(".count", head));
-    const cards = $$(".card", pg).map(cd => ({ cd, top: $(".card-top", cd), num: typer($(".num", cd)), h3: $("h3", cd), p: $("p", cd), chips: $$(".chips li", cd), go: $(".go", cd) }));
-    return {
-      apply(r, x) {
-        hType(seg(r, 0, 0.12, lin)); cType(seg(r, 0.04, 0.18, lin));
-        set(head, { y: -outK(x, 0) * 70, o: 1 - outK(x, 0) });
-        cards.forEach(({ cd, top, num, h3, p, chips, go }, i) => {
-          const a = 0.06 + i * 0.1, k = seg(r, a, a + 0.34, inOut), X = outK(x, i + 1, 0.5, 0.07);
-          wipe(cd, k, "right", 20);
-          set(cd, { x: (1 - seg(r, a, a + 0.34, outExpo)) * -30, y: -X * 80, o: (k > 0 ? 1 : 0) * (1 - X) });
-          set(top, { o: seg(r, a + 0.06, a + 0.22) });
-          num(seg(r, a + 0.1, a + 0.18, lin));
-          const t = seg(r, a + 0.12, a + 0.36, outExpo); set(h3, { y: (1 - t) * 12, o: t });
-          set(p, { o: seg(r, a + 0.18, a + 0.42) });
-          chips.forEach((li, j) => { const kk = seg(r, a + 0.26 + j * 0.03, a + 0.38 + j * 0.03, outExpo); set(li, { s: 0.85 + 0.15 * kk, o: kk }); });
-          set(go, { o: seg(r, a + 0.34, a + 0.46) });
-        });
-      },
-    };
+  // ---------- 3. products as an Apple Watch honeycomb: every product is a round bubble on a hex grid. Bubbles near the
+  // focus are big and the ones at the rim shrink and draw in. The mouse moves the focus (with a little parallax drift),
+  // a click opens that product's card, and on the way out each bubble spins away into nothing at its own moment.
+  const hiveWrap = Object.assign(document.createElement("div"), { className: "hive-wrap" });
+  const hiveHead = $(".pgrid .grid-head"), hive = Object.assign(document.createElement("div"), { className: "hive" });
+  const hint = $(".count", hiveHead);
+  hint.className = "hive-hint";
+  hint.textContent = document.documentElement.lang === "pt" ? "Mova o rato para explorar · clique para abrir" : "Move to explore · click to open";
+  hiveWrap.append(hiveHead, hive);
+  const hType = typer($(".kicker", hiveHead));
+  // the 15 hex cells closest to the centre (axial coordinates), flagship in the middle
+  const CELLS = [[0, 0], [1, 0], [0, 1], [-1, 1], [-1, 0], [0, -1], [1, -1], [1, 1], [-1, 2], [-2, 1], [-1, -1], [1, -2], [2, -1], [2, 0], [-2, 0]];
+  const bubs = $$(".pgrid .card").map((cd, i) => {
+    const b = document.createElement("button"), name = $("h3", cd).textContent.trim(), [q, rr] = CELLS[i];
+    b.type = "button"; b.className = "bub"; b.setAttribute("aria-label", name);
+    b.innerHTML = `<span class="bub-c"><img alt="" src="${$(".icon img", cd).getAttribute("src")}"></span><span class="bub-n"></span>`;
+    $(".bub-n", b).textContent = name;
+    b.addEventListener("click", () => window.openCard && window.openCard(cd));
+    b.addEventListener("pointerenter", () => { hHov = i; hiveKick(); });
+    b.addEventListener("pointerleave", () => { if (hHov === i) hHov = -1; hiveKick(); });
+    hive.append(b);
+    const x = q + rr / 2, y = rr * 0.866;
+    // each bubble's own way out (fixed per bubble, so scrolling back up replays it in reverse):
+    // it spins away almost in place, with its own drift direction, spin and delay
+    const rnd = n => { const v = Math.sin((i + 1) * 12.9898 + n * 78.233) * 43758.5453; return v - Math.floor(v); };
+    const far = 20 + rnd(3) * 60;
+    return { b, x, y, d: Math.hypot(x, y), ex: { a: rnd(1) * Math.PI * 2, far, spin: (rnd(4) < 0.5 ? -1 : 1) * (180 + rnd(5) * 360), delay: rnd(6) * 0.3 } };
+  });
+  const SP = 136;                                                      // centre-to-centre spacing at zoom 1 (bubbles are 120px)
+  let hOn = false, hr = 0, hx = 0, hz = 1, hHov = -1, hRaf = 0;
+  const foc = { x: 0, y: 0, tx: 0, ty: 0 };                            // focus point (where bubbles are biggest), eased towards the mouse
+  const smooth = t => t * t * (3 - 2 * t);
+  const renderHive = () => {
+    const R = Math.min(innerWidth, innerHeight) * 0.42, driftX = -foc.x * 0.18, driftY = -foc.y * 0.18;
+    bubs.forEach((o, i) => {
+      const k = seg(hr, 0.02 + o.d * 0.05, 0.24 + o.d * 0.05, outExpo);   // bubbles pop in from the centre outwards
+      let px = o.x * SP * hz + driftX, py = o.y * SP * hz + driftY;
+      const fish = 1 - smooth(clamp((Math.hypot(px - foc.x, py - foc.y) / R - 0.35) / 0.95));
+      const pull = 1 - 0.16 * (1 - fish);                               // the rim draws in, as on the Watch
+      px *= pull; py *= pull;
+      const e = o.ex, out = seg(hx, e.delay, e.delay + 0.65, inCubic);  // leaving: each bubble spins away into nothing
+      px += Math.cos(e.a) * e.far * out; py += Math.sin(e.a) * e.far * out;
+      const s = (0.38 + 0.46 * fish) * hz * (i === hHov ? 1.07 : 1) * (0.35 + 0.65 * k) * (1 - 0.75 * out);   // at most ~100px on a 136px grid
+      o.b.style.transform = `translate(${px.toFixed(1)}px,${py.toFixed(1)}px) rotate(${(e.spin * out).toFixed(1)}deg) scale(${s.toFixed(4)})`;
+      o.b.style.opacity = (k * (1 - out)).toFixed(3);
+      o.b.style.zIndex = String(Math.round(fish * 100) + (i === hHov ? 200 : 0));
+      o.b.style.setProperty("--lo", clamp((s - 0.7) / 0.12).toFixed(3));    // names show once a bubble is big enough
+    });
   };
-  const grids = $$(".pgrid");
+  const hiveTick = () => {
+    foc.x += (foc.tx - foc.x) * 0.14; foc.y += (foc.ty - foc.y) * 0.14;
+    renderHive();
+    hRaf = hOn && (Math.abs(foc.tx - foc.x) > 0.3 || Math.abs(foc.ty - foc.y) > 0.3) ? requestAnimationFrame(hiveTick) : 0;
+  };
+  const hiveKick = () => { if (hOn && !hRaf) hRaf = requestAnimationFrame(hiveTick); };
+  addEventListener("pointermove", e => {
+    if (e.pointerType !== "mouse") return;
+    foc.tx = (e.clientX - innerWidth / 2) * 0.65; foc.ty = (e.clientY - innerHeight * 0.55) * 0.65; hiveKick();
+  }, { passive: true });
+  document.addEventListener("pointerleave", () => { foc.tx = 0; foc.ty = 0; hiveKick(); });
+  const HIVE = {
+    off() { hOn = false; },
+    apply(r, x) {
+      hOn = true; hr = r; hx = x;
+      hType(seg(r, 0, 0.08, lin));
+      const hk = seg(x, 0, 0.6, inCubic);
+      set(hiveHead, { y: -hk * 60, o: 1 - hk });
+      renderHive();
+    },
+  };
 
   // ---------- 6. About: a white band opens from the centre and the section turns to negative; numbers count up
   const about = $("#about"), nav = $("#nav");
@@ -1459,7 +1556,7 @@ body.invert .scene .kicker{color:#6E6E78}
   const DEF = [
     { id: "top", nodes: [hero], fx: TOP, len: 0, hold: 0.12, out: 0.9, hand: 0.75 },
     { id: "legacy", nodes: [lh], fx: LEGACY, len: 0.65, hold: 0.35, out: 0.5, hand: 0.6 },
-    ...grids.map((pg, i) => ({ id: "legacy" + (i + 1), nodes: [pg], fx: gridFx(pg), len: 0.9, hold: 0.35, out: 0.55, hand: 0.6 })),
+    { id: "hive", nodes: [hiveWrap], fx: HIVE, len: 0.8, hold: 0.8, out: 1.0, hand: 0.7, fixed: true },
     { id: "about", nodes: [about], fx: ABOUT, len: 1.0, hold: 0.35, out: 0.8, hand: 0.92 },
     { id: "team", nodes: [org], fx: ORG, len: 1.2, hold: 0.35, out: 0.55, hand: 0.6 },
     { id: "founder", nodes: [fo], fx: FOUNDER, len: 1.0, hold: 0.4, out: 0.6, hand: 0.6 },
@@ -1474,7 +1571,7 @@ body.invert .scene .kicker{color:#6E6E78}
     scenes.forEach((sc, i) => {
       sc.box = sc.node.firstElementChild; sc.box.style.translate = ""; sc.node.style.alignItems = "";
       const cs = getComputedStyle(sc.node), avail = vh - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
-      sc.over = Math.max(0, sc.box.scrollHeight - avail);
+      sc.over = sc.fixed ? 0 : Math.max(0, sc.box.scrollHeight - avail);  // the honeycomb always fits: its bubbles are placed, not stacked
       if (sc.over) sc.node.style.alignItems = "flex-start";
       sc.t0 = i === 0 ? 0 : t; sc.tIn = sc.t0 + sc.len * vh; sc.tOut = sc.tIn + sc.hold * vh + sc.over; sc.t1 = sc.tOut + sc.out * vh;
       t = sc.tOut + sc.out * vh * sc.hand;
