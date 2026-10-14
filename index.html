@@ -13,22 +13,20 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
 <style>
 /* Layout (inspired by uzerconsulting.pt): one page on near-black, frosted nav, hero with the BL monogram drawn in the
-   emerald brand gradient, dark cards on soft shadows. Colour is used sparingly: the emerald gradient is the brand,
-   purple marks agents and beta products, gold marks consulting. With motion allowed on a large screen, the page plays
+   emerald brand gradient, dark cards on subtle neutral shadows (no glowing lines or dots on small containers).
+   Colour is used sparingly: the emerald gradient is the brand, purple tints agents and beta products, gold tints
+   consulting. With motion allowed on a large screen, the page plays
    as full-screen scenes driven by the scroll (scenes script at the end); otherwise it is a normal scrolling page. */
 :root{
-  --bg:#050506; --card:#0F0F13; --hair:rgba(255,255,255,.08); --hair-2:rgba(255,255,255,.14);
+  --bg:#050506; --hair:rgba(255,255,255,.08);
   --text:#F5F5F7; --text-2:#A3A3AD; --text-3:#6E6E78;
   --g2:#059669; --g3:#10B981; --g4:#5EEAD4;
   --grad:linear-gradient(120deg,var(--g2) 0%,var(--g3) 50%,var(--g4) 100%);
-  --green:#10B981; --green-glow:rgba(16,185,129,.55);
-  --neon:#8B5CF6; --neon-glow:rgba(139,92,246,.55);
-  --gold:#F59E0B; --gold-glow:rgba(245,158,11,.45);
   --font:"Geist",ui-sans-serif,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
   --mono:"Geist Mono",ui-monospace,"SF Mono",Menlo,monospace;
   --maxw:1200px; --r:20px;
-  --shadow:0 1px 2px rgba(0,0,0,.6), 0 24px 60px -24px rgba(0,0,0,.95), 0 10px 40px -20px rgba(16,120,90,.22);
-  --shadow-hi:0 1px 2px rgba(0,0,0,.6), 0 34px 80px -24px rgba(0,0,0,1), 0 16px 60px -20px rgba(16,160,110,.32);
+  --shadow:inset 0 1px 0 rgba(255,255,255,.05), 0 1px 2px rgba(0,0,0,.5), 0 18px 44px -22px rgba(0,0,0,.9);
+  --shadow-hi:inset 0 1px 0 rgba(255,255,255,.06), 0 1px 2px rgba(0,0,0,.5), 0 28px 64px -24px rgba(0,0,0,.95);
   color-scheme:dark;
 }
 *{box-sizing:border-box}
@@ -53,25 +51,24 @@ button{font:inherit;color:inherit}
 .nav-links{display:flex;gap:26px;margin-left:auto;font-size:14px;color:var(--text-2)}
 .nav-links a{transition:color .2s}
 .nav-links a:hover{color:var(--text)}
-.nav-right{display:flex;align-items:center;gap:10px}
+.nav-right{display:flex;align-items:center;gap:8px}
 @media (max-width:1000px){.nav-links{display:none}.nav-right{margin-left:auto}}
-.lang{display:inline-flex;padding:3px;border-radius:999px;background:rgba(255,255,255,.06);box-shadow:0 8px 24px -10px rgba(0,0,0,.8)}
-.lang-btn{font:500 11px/1 var(--mono);letter-spacing:.08em;color:var(--text-3);background:none;border:0;padding:7px 10px;border-radius:999px;transition:background .2s,color .2s}
+/* the three pills on the right (language, GitHub, Connect) share one height and one style */
+.nav-pill,.nav .btn{height:36px;border-radius:999px;background:rgba(255,255,255,.06);box-shadow:inset 0 0 0 1px rgba(255,255,255,.07),0 10px 28px -14px rgba(0,0,0,.95)}
+.nav .btn{padding:0 16px;font-size:13.5px;font-weight:600}
+.nav .btn:hover{background:rgba(255,255,255,.1)}
+.lang{display:inline-flex;align-items:center;padding:3px}
+.lang-btn{height:30px;padding:0 11px;border:0;border-radius:999px;background:none;color:var(--text-3);font-size:12.5px;font-weight:600;letter-spacing:.02em;transition:background .2s,color .2s}
 .lang-btn:hover{color:var(--text)}
 .lang-btn.active{background:rgba(255,255,255,.12);color:#fff}
 .btn{display:inline-flex;align-items:center;gap:10px;border-radius:999px;font-weight:600;font-size:14px;padding:11px 20px;transition:transform .15s, box-shadow .2s, background .2s;white-space:nowrap}
 .btn:active{transform:translateY(1px)}
 .btn svg{width:16px;height:16px;flex:0 0 auto}
-.btn-brand{position:relative;color:#fff;background:#0A0A0D;border:1px solid transparent;background-clip:padding-box;isolation:isolate}
-.btn-brand::before{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1px;background:var(--grad);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;z-index:-1}
-.btn-brand:hover{box-shadow:0 0 0 4px rgba(16,185,129,.14),0 10px 30px -8px rgba(5,150,105,.6)}
-.btn-brand .dot{width:7px;height:7px;border-radius:50%;background:var(--g4);box-shadow:0 0 10px var(--g4)}
 .btn-white{background:#fff;color:#0A0A0D}
 .btn-white:hover{background:#E8E8EE}
 .btn-ghost{background:rgba(255,255,255,.06);color:var(--text);box-shadow:0 1px 2px rgba(0,0,0,.6),0 10px 28px -14px rgba(0,0,0,.95)}
 .btn-ghost:hover{background:rgba(255,255,255,.1)}
-.nav .btn{padding:9px 16px}
-@media (max-width:560px){.nav .btn-ghost{display:none}}
+@media (max-width:560px){.nav .btn-github{display:none}}
 @media (max-width:360px){.brand span{display:none}}
 
 /* hero */
@@ -130,24 +127,19 @@ html.scenes .grid-head{display:flex;align-items:baseline;justify-content:space-b
 .grid-head .kicker{margin:0}
 .grid-head .count{font-family:var(--mono);font-size:12px;letter-spacing:.1em;color:var(--text-3)}
 .cards{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:16px}
-.card{--tint:16,185,129;--line:var(--grad);--lg:var(--green-glow);grid-column:span 2;position:relative;display:flex;flex-direction:column;border-radius:var(--r);padding:24px 24px 22px;overflow:hidden;cursor:pointer;color:var(--text);
-  background:radial-gradient(420px circle at var(--mx,50%) var(--my,0%),rgba(var(--tint),calc(.1 * var(--glow,0))),transparent 65%),linear-gradient(180deg,#131318,#0C0C10);
+.card{grid-column:span 2;position:relative;display:flex;flex-direction:column;border-radius:var(--r);padding:24px 24px 22px;overflow:hidden;cursor:pointer;color:var(--text);
+  background:radial-gradient(420px circle at var(--mx,50%) var(--my,0%),rgba(255,255,255,calc(.045 * var(--glow,0))),transparent 65%),linear-gradient(180deg,#131318,#0C0C10);
   box-shadow:var(--shadow);transition:box-shadow .3s, transform .3s cubic-bezier(.2,.7,.2,1)}
 .card.wide{grid-column:span 3}
-.card.beta{--tint:139,92,246;--line:var(--neon);--lg:var(--neon-glow)}
-.card.consult{--tint:245,158,11;--line:var(--gold);--lg:var(--gold-glow)}
-.card::before{content:"";position:absolute;left:24px;right:24px;top:0;height:2px;border-radius:2px;background:var(--line);box-shadow:0 0 10px var(--lg),0 0 26px var(--lg);transform:scaleX(var(--l,1));transform-origin:left}
 .card:hover{box-shadow:var(--shadow-hi)}
 .card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:18px}
 .icon{width:44px;height:44px;border-radius:11px;overflow:hidden;flex:0 0 auto;display:grid;place-items:center;font-size:22px;background:rgba(255,255,255,.06)}
-.icon.gold{background:rgba(245,158,11,.12)}
 .icon img{display:block;width:100%;height:100%;object-fit:cover}
 .badges{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
-.badge{display:inline-flex;align-items:center;gap:7px;font:500 10.5px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:6px 10px;border-radius:999px;white-space:nowrap}
-.badge i{width:6px;height:6px;border-radius:50%;flex:0 0 auto}
-.badge.live{background:rgba(16,185,129,.12);color:#6EE7B7}.badge.live i{background:var(--green);box-shadow:0 0 8px var(--green)}
-.badge.beta{background:rgba(139,92,246,.14);color:#C4B5FD}.badge.beta i{background:var(--neon);box-shadow:0 0 8px var(--neon)}
-.badge.consult{background:rgba(245,158,11,.12);color:#FCD34D}.badge.consult i{background:var(--gold);box-shadow:0 0 8px var(--gold)}
+.badge{display:inline-flex;align-items:center;font:500 10.5px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:6px 10px;border-radius:999px;white-space:nowrap}
+.badge.live{background:rgba(16,185,129,.12);color:#6EE7B7}
+.badge.beta{background:rgba(139,92,246,.14);color:#C4B5FD}
+.badge.consult{background:rgba(245,158,11,.12);color:#FCD34D}
 .title{display:flex;align-items:baseline;gap:10px}
 .num{font-family:var(--mono);font-size:12px;color:var(--text-3)}
 .card h3{margin:0;font-size:21px;font-weight:600;letter-spacing:-.02em;line-height:1.25}
@@ -168,8 +160,6 @@ html.scenes .grid-head{display:flex;align-items:baseline;justify-content:space-b
 .stat{border-radius:var(--r);padding:26px 24px 24px;background:linear-gradient(180deg,#131318,#0C0C10);box-shadow:var(--shadow)}
 .stat strong{display:block;font-family:var(--mono);font-weight:500;font-size:clamp(36px,4vw,52px);line-height:1.05;letter-spacing:-.05em;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
 .stat span{display:block;margin-top:12px;color:var(--text-2);font-size:14px}
-.m-line{height:2px;margin-top:18px;border-radius:2px;background:rgba(255,255,255,.08);overflow:hidden}
-.m-line i{display:block;height:100%;background:var(--grad);transform-origin:left;transform:scaleX(var(--k,1))}
 /* About in negative: a white band opens from a line (scenes only) */
 #about .kicker,#about h2,#about p,#about .stat span{transition:color .45s ease}
 #about .stat{transition:background .45s ease, box-shadow .45s ease}
@@ -179,7 +169,6 @@ html.scenes .grid-head{display:flex;align-items:baseline;justify-content:space-b
 #about.inv .stat{background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.06),0 24px 50px -28px rgba(20,60,40,.4)}
 #about.inv .stat strong{background-image:linear-gradient(120deg,#047857,#059669 50%,#0D9488)}
 #about.inv .stat span{color:#55555E}
-#about.inv .m-line{background:rgba(10,10,13,.08)}
 
 /* team: the OpenClaw org chart (agents in purple) and the founder */
 .org-head{text-align:center;margin-bottom:40px}
@@ -187,20 +176,18 @@ html.scenes .grid-head{display:flex;align-items:baseline;justify-content:space-b
 .org-sub{margin:14px auto 0;color:var(--text-2);font-size:17px}
 .org{display:flex;flex-direction:column;align-items:center}
 .node{position:relative;display:flex;align-items:center;gap:12px;width:100%;padding:15px 16px 13px;border:0;border-radius:14px;text-align:left;color:var(--text);
-  background:linear-gradient(180deg,#131318,#08080B);box-shadow:0 1px 0 rgba(255,255,255,.06) inset,0 18px 40px -16px rgba(0,0,0,.95);transition:box-shadow .3s}
+  background:linear-gradient(180deg,#131318,#0C0C10);box-shadow:var(--shadow);transition:box-shadow .3s,background .3s}
 button.node{cursor:pointer}
-button.node:hover{box-shadow:0 1px 0 rgba(255,255,255,.08) inset,0 0 0 1px rgba(139,92,246,.42),0 18px 44px -14px rgba(139,92,246,.45)}
-.node::before{content:"";position:absolute;left:14px;right:14px;top:0;height:2px;border-radius:2px;background:var(--neon);box-shadow:0 0 10px var(--neon),0 0 26px var(--neon-glow);transform:scaleX(var(--l,1));transform-origin:left}
-.node .ic{width:34px;height:34px;border-radius:10px;flex:0 0 auto;display:grid;place-items:center;background:rgba(139,92,246,.2);color:#DDD6FE;box-shadow:0 0 16px -4px var(--neon-glow);transition:background .35s, box-shadow .35s, color .35s}
+button.node:hover{background:linear-gradient(180deg,#17171D,#0E0E12);box-shadow:var(--shadow-hi)}
+.node .ic{width:34px;height:34px;border-radius:10px;flex:0 0 auto;display:grid;place-items:center;background:rgba(139,92,246,.16);color:#C4B5FD;transition:background .35s, color .35s}
 .node .ic svg{width:18px;height:18px}
-.js-fx .node:not(.on) .ic{background:rgba(255,255,255,.05);color:var(--text-3);box-shadow:none}
+.js-fx .node:not(.on) .ic{background:rgba(255,255,255,.05);color:var(--text-3)}
 .node b{display:block;font-weight:600;font-size:14.5px;letter-spacing:-.01em;line-height:1.3}
 .node small{display:block;margin-top:3px;font-family:var(--mono);font-size:11px;line-height:1.35;color:var(--text-3)}
 .node.ceo{width:auto;min-width:280px;padding:16px 22px 14px}
-.node.ceo::before{background:var(--grad);box-shadow:0 0 10px var(--green),0 0 26px var(--green-glow)}
-.node.ceo .ic,.js-fx .node.ceo .ic{background:rgba(16,185,129,.16);color:#6EE7B7;box-shadow:0 0 16px -4px var(--green-glow)}
+.node.ceo .ic,.js-fx .node.ceo .ic{background:rgba(16,185,129,.14);color:#6EE7B7}
 .node.ceo b{font-size:16px}
-.org-conn{width:2px;height:28px;margin:10px 0;border-radius:2px;background:linear-gradient(var(--neon),rgba(139,92,246,.12));transform-origin:top;transform:scaleY(var(--k,1))}
+.org-conn{width:1px;height:28px;margin:10px 0;background:linear-gradient(rgba(255,255,255,.24),rgba(255,255,255,.06));transform-origin:top;transform:scaleY(var(--k,1))}
 .org-label{margin:0 0 14px;font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--text-3)}
 .org-row{display:grid;gap:10px;width:100%}
 .org-row.r6{grid-template-columns:repeat(6,minmax(0,1fr))}
@@ -223,7 +210,7 @@ button.node:hover{box-shadow:0 1px 0 rgba(255,255,255,.08) inset,0 0 0 1px rgba(
 .stack-wrap h2{max-width:20ch;margin:0 auto}
 .tags{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;max-width:920px;margin:44px auto 0}
 .tag{font-family:var(--mono);font-size:14px;font-weight:500;line-height:1;padding:12px 18px;border-radius:999px;background:linear-gradient(180deg,#15151B,#0C0C10);box-shadow:var(--shadow);transition:box-shadow .25s}
-.tag:hover{box-shadow:var(--shadow-hi),0 0 0 1px rgba(16,185,129,.4),0 0 24px -6px var(--green-glow)}
+.tag:hover{background:linear-gradient(180deg,#1A1A21,#101015);box-shadow:var(--shadow-hi)}
 
 /* closing CTA + footer */
 .cta{position:relative;border-radius:28px;padding:80px 48px;overflow:hidden;text-align:center;background:#0C0C10;box-shadow:var(--shadow-hi), 0 50px 140px -50px rgba(5,150,105,.5)}
@@ -244,8 +231,7 @@ footer{padding-block:48px 56px}
 .modal-overlay,.agent-modal-overlay{position:fixed;inset:0;z-index:200;display:grid;place-items:center;padding:20px;background:rgba(5,5,6,.62);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);opacity:0;visibility:hidden;transition:opacity .25s ease,visibility .25s}
 .modal-overlay.active,.agent-modal-overlay.active{opacity:1;visibility:visible}
 .modal-box,.agent-modal{position:relative;width:min(560px,100%);max-height:calc(100vh - 40px);overflow:auto;border-radius:24px;padding:32px 32px 28px;background:linear-gradient(180deg,#15151B,#0B0B0F);
-  box-shadow:var(--shadow-hi),0 40px 120px -40px rgba(5,150,105,.45);translate:0 14px;scale:.98;transition:translate .35s cubic-bezier(.2,.7,.2,1),scale .35s cubic-bezier(.2,.7,.2,1)}
-.agent-modal{box-shadow:var(--shadow-hi),0 40px 120px -40px rgba(139,92,246,.5)}
+  box-shadow:var(--shadow-hi);translate:0 14px;scale:.98;transition:translate .35s cubic-bezier(.2,.7,.2,1),scale .35s cubic-bezier(.2,.7,.2,1)}
 .active>.modal-box,.active>.agent-modal{translate:none;scale:none}
 .modal-close,.agent-modal-close{position:absolute;top:14px;right:14px;width:36px;height:36px;border:0;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.06);color:var(--text-2);font-size:22px;line-height:1;transition:background .2s,color .2s}
 .modal-close:hover,.agent-modal-close:hover{background:rgba(255,255,255,.12);color:#fff}
@@ -256,11 +242,11 @@ footer{padding-block:48px 56px}
 .modal-features h4{margin:0 0 12px;font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--text-3)}
 .modal-features ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
 .modal-features li{position:relative;padding-left:18px;font-size:14.5px}
-.modal-features li::before{content:"";position:absolute;left:0;top:.62em;width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green)}
+.modal-features li::before{content:"";position:absolute;left:0;top:.62em;width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.32)}
 .modal-tags,.agent-modal-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:22px}
 .modal-tag,.agent-modal-tag{font-size:12px;color:var(--text-2);background:rgba(255,255,255,.06);border:1px solid transparent;border-radius:999px;padding:4px 11px}
 .agent-modal-header{display:flex;align-items:center;gap:16px;margin-bottom:16px;padding-right:40px}
-.agent-modal-emoji{width:56px;height:56px;border-radius:16px;flex:0 0 auto;display:grid;place-items:center;font-size:28px;background:rgba(139,92,246,.14);box-shadow:0 0 24px -6px var(--neon-glow)}
+.agent-modal-emoji{width:56px;height:56px;border-radius:16px;flex:0 0 auto;display:grid;place-items:center;font-size:28px;background:rgba(139,92,246,.14)}
 .agent-modal-title h3{margin:0;font-size:26px;letter-spacing:-.03em;line-height:1.15}
 .agent-modal-title span{display:block;margin-top:4px;font-family:var(--mono);font-size:12px;color:var(--text-3)}
 .agent-modal p{margin:0;color:var(--text-2);font-size:15.5px}
@@ -274,7 +260,7 @@ html{cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' wi
 a,button,[role=button],label,summary,.btn{cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='36' height='36' viewBox='0 0 36 36'%3E%3Cpath d='M5.60 3.36 L5.60 24.64 L11.20 19.60 L15.12 28.00 L19.04 26.21 L15.23 17.92 L22.40 17.47 Z' fill='%23FFFFFF' stroke='%230A0A0D' stroke-width='1.68' stroke-linejoin='round' stroke-linecap='round'/%3E%3C/svg%3E") 6 3, pointer}
 /* typewriter (labels, numbers): the untyped rest keeps its place, invisible */
 .tw .ghost{visibility:hidden}
-.tw .typed::after{content:"";display:inline-block;width:2px;height:1em;margin-right:-2px;vertical-align:-.15em;background:var(--green);box-shadow:0 0 8px var(--green-glow);animation:caret 1s steps(1) infinite}
+.tw .typed::after{content:"";display:inline-block;width:2px;height:1em;margin-right:-2px;vertical-align:-.15em;background:currentColor;opacity:.85;animation:caret 1s steps(1) infinite}
 .tw.tw-done .typed::after{display:none}
 @keyframes caret{50%{opacity:0}}
 /* plain page (small screens): blocks rise in as they reach the viewport */
@@ -319,8 +305,9 @@ html.scenes main,html.scenes footer{display:none}
 /* scene navigation */
 .scene-dots{position:fixed;right:12px;top:50%;translate:0 -50%;z-index:60;display:flex;flex-direction:column}
 .scene-dots button{width:18px;height:18px;padding:6px;border:0;border-radius:50%;background:rgba(255,255,255,.25) content-box;transition:background .3s, scale .3s}
-.scene-dots button.on{background:linear-gradient(120deg,#059669,#10B981,#5EEAD4) content-box;scale:1.5}
+.scene-dots button.on{background:#fff content-box;scale:1.5}
 body.invert .scene-dots button:not(.on){background:rgba(0,0,0,.2) content-box}
+body.invert .scene-dots button.on{background:#0A0A0D content-box}
 body.invert .scene .kicker{color:#6E6E78}
 </style>
 </head>
@@ -379,12 +366,12 @@ body.invert .scene .kicker{color:#6E6E78}
     <a href="/burnaylabs-site/" data-en="Education" data-pt="Educação">Education</a>
   </nav>
   <div class="nav-right">
-    <div class="lang" role="group" aria-label="Language">
+    <div class="lang nav-pill" role="group" aria-label="Language">
       <button class="lang-btn active" type="button" onclick="setLang('en')">EN</button>
       <button class="lang-btn" type="button" onclick="setLang('pt')">PT</button>
     </div>
-    <a class="btn btn-ghost" href="https://github.com/tomasbb0" target="_blank" rel="noopener">GitHub</a>
-    <a class="btn btn-brand" href="https://linkedin.com/in/tomasmbatalha" target="_blank" rel="noopener"><span class="dot"></span>Connect</a>
+    <a class="btn btn-ghost btn-github" href="https://github.com/tomasbb0" target="_blank" rel="noopener">GitHub</a>
+    <a class="btn btn-ghost" href="https://linkedin.com/in/tomasmbatalha" target="_blank" rel="noopener">Connect</a>
   </div>
 </div></header>
 
@@ -442,35 +429,35 @@ body.invert .scene .kicker{color:#6E6E78}
       <div class="grid-head"><div class="kicker" data-en="Legacy" data-pt="Legado">Legacy</div><span class="count">01 — 05 / 15</span></div>
       <div class="cards">
         <a class="card live wide" href="https://jobpilot.pt" target="_blank" rel="noopener">
-          <div class="card-top"><span class="icon"><img src="logos/jobpilot.png" alt="JobPilot AI" width="44" height="44"></span><span class="badges"><span class="badge live"><i></i>Product · Live</span></span></div>
+          <div class="card-top"><span class="icon"><img src="logos/jobpilot.png" alt="JobPilot AI" width="44" height="44"></span><span class="badges"><span class="badge live">Product · Live</span></span></div>
           <div class="title"><span class="num">01</span><h3>JobPilot AI</h3></div>
           <p data-en="The complete AI job search Chrome extension. Discover matching jobs, autofill every application, generate cover letters, and track it all. Across 50+ ATS platforms." data-pt="A extensão Chrome completa de pesquisa de emprego com IA. Encontra vagas compatíveis, preenche candidaturas, gera cartas de apresentação e organiza tudo. Funciona em mais de 50 plataformas ATS.">The complete AI job search Chrome extension. Discover matching jobs, autofill every application, generate cover letters, and track it all. Across 50+ ATS platforms.</p>
           <ul class="chips"><li data-en="Chrome Extension" data-pt="Extensão Chrome">Chrome Extension</li><li data-en="AI" data-pt="IA">AI</li><li>SaaS</li></ul>
           <span class="go">jobpilot.pt<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></span>
         </a>
         <div class="card live wide" role="button" tabindex="0" data-modal="maktub">
-          <div class="card-top"><span class="icon"><img src="logos/maktub.png" alt="Maktub" width="44" height="44"></span><span class="badges"><span class="badge live"><i></i>Product · Live</span></span></div>
+          <div class="card-top"><span class="icon"><img src="logos/maktub.png" alt="Maktub" width="44" height="44"></span><span class="badges"><span class="badge live">Product · Live</span></span></div>
           <div class="title"><span class="num">02</span><h3>Maktub</h3></div>
           <p data-en="Custom operations platform built for a private client. Bespoke data model, internal dashboards, tailored reporting. Details under NDA." data-pt="Plataforma de operações feita à medida para um cliente privado. Modelo de dados próprio, dashboards internos, relatórios à medida. Detalhes sob NDA.">Custom operations platform built for a private client. Bespoke data model, internal dashboards, tailored reporting. Details under NDA.</p>
           <ul class="chips"><li data-en="Operations" data-pt="Operações">Operations</li><li data-en="Custom" data-pt="À Medida">Custom</li><li data-en="Internal Tool" data-pt="Ferramenta Interna">Internal Tool</li></ul>
           <span class="go"><span data-en="Learn More" data-pt="Saber Mais">Learn More</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></span>
         </div>
         <div class="card live" role="button" tabindex="0" data-modal="mrblue">
-          <div class="card-top"><span class="icon"><img src="logos/mrblue.jpg" alt="Mr Blue" width="44" height="44"></span><span class="badges"><span class="badge live"><i></i>Product · Live</span><span class="badge consult"><i></i>Consulting</span></span></div>
+          <div class="card-top"><span class="icon"><img src="logos/mrblue.jpg" alt="Mr Blue" width="44" height="44"></span><span class="badges"><span class="badge live">Product · Live</span><span class="badge consult">Consulting</span></span></div>
           <div class="title"><span class="num">03</span><h3>Mr Blue</h3></div>
           <p data-en="Custom AI tool built for a private client. Aggregates and analyses customer feedback at scale. Details under NDA." data-pt="Ferramenta de IA feita à medida para um cliente privado. Agrega e analisa feedback de clientes em escala. Detalhes sob NDA.">Custom AI tool built for a private client. Aggregates and analyses customer feedback at scale. Details under NDA.</p>
           <ul class="chips"><li data-en="AI" data-pt="IA">AI</li><li data-en="Custom" data-pt="À Medida">Custom</li><li data-en="Internal Tool" data-pt="Ferramenta Interna">Internal Tool</li></ul>
           <span class="go"><span data-en="Learn More" data-pt="Saber Mais">Learn More</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></span>
         </div>
         <a class="card live" href="/cv-platform/" target="_blank" rel="noopener">
-          <div class="card-top"><span class="icon"><img src="logos/topresume.svg" alt="TopResume.ai" width="44" height="44"></span><span class="badges"><span class="badge live"><i></i>Product · Live</span></span></div>
+          <div class="card-top"><span class="icon"><img src="logos/topresume.svg" alt="TopResume.ai" width="44" height="44"></span><span class="badges"><span class="badge live">Product · Live</span></span></div>
           <div class="title"><span class="num">04</span><h3>TopResume.ai</h3></div>
           <p data-en="AI-powered CV editor platform. Write, edit, and optimize your resume with real-time AI assistance. Modern editor with templates, sections, and instant PDF export." data-pt="Plataforma de edição de CV com IA. Escreve, edita e otimiza o teu currículo com assistência em tempo real. Editor moderno com templates, secções e exportação para PDF.">AI-powered CV editor platform. Write, edit, and optimize your resume with real-time AI assistance. Modern editor with templates, sections, and instant PDF export.</p>
           <ul class="chips"><li data-en="AI" data-pt="IA">AI</li><li data-en="Careers" data-pt="Carreira">Careers</li><li data-en="Editor" data-pt="Editor">Editor</li></ul>
           <span class="go"><span data-en="Open Platform" data-pt="Abrir Plataforma">Open Platform</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></span>
         </a>
         <a class="card live" href="/burnaylabs-site/" target="_blank" rel="noopener">
-          <div class="card-top"><span class="icon"><img src="logos/burnaylabs.svg" alt="Burnay Labs" width="44" height="44"></span><span class="badges"><span class="badge live"><i></i>Product · Live</span></span></div>
+          <div class="card-top"><span class="icon"><img src="logos/burnaylabs.svg" alt="Burnay Labs" width="44" height="44"></span><span class="badges"><span class="badge live">Product · Live</span></span></div>
           <div class="title"><span class="num">05</span><h3>Burnay Labs Education</h3></div>
           <p data-en="Portuguese language tutoring platform for young learners. Teacher dashboard with 12 interactive games, curriculum tracking, vocab tools, and student progress analytics." data-pt="Plataforma de tutoria de língua portuguesa para crianças. Dashboard para professores com 12 jogos interativos, gestão de currículo, ferramentas de vocabulário e analytics de progresso dos alunos.">Portuguese language tutoring platform for young learners. Teacher dashboard with 12 interactive games, curriculum tracking, vocab tools, and student progress analytics.</p>
           <ul class="chips"><li>EdTech</li><li data-en="Games" data-pt="Jogos">Games</li><li>Firebase</li></ul>
@@ -483,35 +470,35 @@ body.invert .scene .kicker{color:#6E6E78}
       <div class="grid-head"><div class="kicker" data-en="Legacy" data-pt="Legado">Legacy</div><span class="count">06 — 10 / 15</span></div>
       <div class="cards">
         <div class="card beta wide" role="button" tabindex="0" data-modal="vendasia">
-          <div class="card-top"><span class="icon"><img src="logos/vendasia.svg" alt="VendasIA" width="44" height="44"></span><span class="badges"><span class="badge beta"><i></i>Product · Beta</span></span></div>
+          <div class="card-top"><span class="icon"><img src="logos/vendasia.svg" alt="VendasIA" width="44" height="44"></span><span class="badges"><span class="badge beta">Product · Beta</span></span></div>
           <div class="title"><span class="num">06</span><h3>VendasIA</h3></div>
           <p data-en="AI sales toolkit for modern teams. Autonomous SDR agent that generates personalized Portuguese B2B messages at scale, plus an M&amp;A CRM with AI-powered deal analysis." data-pt="Toolkit de vendas com IA para equipas modernas. Agente SDR autónomo que gera mensagens B2B em português à medida e em escala, com CRM de M&amp;A e análise de negócios por IA.">AI sales toolkit for modern teams. Autonomous SDR agent that generates personalized Portuguese B2B messages at scale, plus an M&amp;A CRM with AI-powered deal analysis.</p>
           <ul class="chips"><li data-en="AI" data-pt="IA">AI</li><li data-en="Sales" data-pt="Vendas">Sales</li><li>B2B</li></ul>
           <span class="go"><span data-en="Learn More" data-pt="Saber Mais">Learn More</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></span>
         </div>
         <div class="card beta wide" role="button" tabindex="0" data-modal="mbacoach">
-          <div class="card-top"><span class="icon"><img src="logos/mbacoach.svg" alt="MBA Coach" width="44" height="44"></span><span class="badges"><span class="badge beta"><i></i>Product · Beta</span></span></div>
+          <div class="card-top"><span class="icon"><img src="logos/mbacoach.svg" alt="MBA Coach" width="44" height="44"></span><span class="badges"><span class="badge beta">Product · Beta</span></span></div>
           <div class="title"><span class="num">07</span><h3>MBA Coach</h3></div>
           <p data-en="AI-powered MBA coaching platform. Personalized preparation for MBA applications with competitive research, market analysis, and structured guidance through the entire process." data-pt="Plataforma de coaching para MBA com IA. Preparação à medida para candidaturas, com pesquisa competitiva, análise de mercado e acompanhamento estruturado em todo o processo.">AI-powered MBA coaching platform. Personalized preparation for MBA applications with competitive research, market analysis, and structured guidance through the entire process.</p>
           <ul class="chips"><li data-en="AI" data-pt="IA">AI</li><li data-en="Education" data-pt="Educação">Education</li><li>Coaching</li></ul>
           <span class="go"><span data-en="Learn More" data-pt="Saber Mais">Learn More</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></span>
         </div>
         <a class="card live" href="https://lifeorg-app.web.app" target="_blank" rel="noopener">
-          <div class="card-top"><span class="icon"><img src="logos/lifeorganizer.svg" alt="LifeOrganizer" width="44" height="44"></span><span class="badges"><span class="badge live"><i></i>Product · Live</span></span></div>
+          <div class="card-top"><span class="icon"><img src="logos/lifeorganizer.svg" alt="LifeOrganizer" width="44" height="44"></span><span class="badges"><span class="badge live">Product · Live</span></span></div>
           <div class="title"><span class="num">08</span><h3>LifeOrganizer</h3></div>
           <p data-en="Personal life management platform. Tracks communications across WhatsApp, Gmail, and Instagram, maps relationships with frequency analysis, and keeps you balanced with smart alerts." data-pt="Plataforma de gestão de vida pessoal. Acompanha conversas no WhatsApp, Gmail e Instagram, mapeia relações por frequência e mantém o equilíbrio com alertas inteligentes.">Personal life management platform. Tracks communications across WhatsApp, Gmail, and Instagram, maps relationships with frequency analysis, and keeps you balanced with smart alerts.</p>
           <ul class="chips"><li data-en="Productivity" data-pt="Produtividade">Productivity</li><li data-en="AI" data-pt="IA">AI</li><li>CRM</li></ul>
           <span class="go">lifeorg-app.web.app<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></span>
         </a>
         <div class="card beta" role="button" tabindex="0" data-modal="emcasa">
-          <div class="card-top"><span class="icon gold">&#127928;</span><span class="badges"><span class="badge beta"><i></i>Product · Beta</span></span></div>
+          <div class="card-top"><span class="icon"><img src="logos/emcasa.jpg" alt="EmCasa" width="44" height="44"></span><span class="badges"><span class="badge beta">Product · Beta</span></span></div>
           <div class="title"><span class="num">09</span><h3>EmCasa</h3></div>
           <p data-en="Home concert booking platform. &quot;Concertos em Casa&quot;. Connect music lovers with artists for intimate, private performances in residential settings across Portugal." data-pt="Plataforma de marcação de concertos em casa. &quot;Concertos em Casa&quot;. Liga melómanos a artistas para concertos íntimos em casas particulares por todo o país.">Home concert booking platform. "Concertos em Casa". Connect music lovers with artists for intimate, private performances in residential settings across Portugal.</p>
           <ul class="chips"><li>Marketplace</li><li data-en="Music" data-pt="Música">Music</li><li data-en="Events" data-pt="Eventos">Events</li></ul>
           <span class="go"><span data-en="Learn More" data-pt="Saber Mais">Learn More</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></span>
         </div>
         <a class="card live" href="/sleep-diary/" target="_blank" rel="noopener">
-          <div class="card-top"><span class="icon"><img src="logos/sleep-diary.svg" alt="Diário de Sono" width="44" height="44"></span><span class="badges"><span class="badge live"><i></i>Product · Live</span></span></div>
+          <div class="card-top"><span class="icon"><img src="logos/sleep-diary.svg" alt="Diário de Sono" width="44" height="44"></span><span class="badges"><span class="badge live">Product · Live</span></span></div>
           <div class="title"><span class="num">10</span><h3>Diário de Sono</h3></div>
           <p data-en="Sleep tracking app. Log your sleep patterns, analyze habits over time, and get personalized recommendations to improve sleep quality. Beautiful, calming interface." data-pt="App de registo do sono. Regista os teus padrões de sono, analisa hábitos ao longo do tempo e recebe recomendações à medida para melhorar a qualidade do descanso. Interface bonita e calma.">Sleep tracking app. Log your sleep patterns, analyze habits over time, and get personalized recommendations to improve sleep quality. Beautiful, calming interface.</p>
           <ul class="chips"><li data-en="Health" data-pt="Saúde">Health</li><li data-en="Tracking" data-pt="Registo">Tracking</li><li>Analytics</li></ul>
@@ -524,35 +511,35 @@ body.invert .scene .kicker{color:#6E6E78}
       <div class="grid-head"><div class="kicker" data-en="Legacy" data-pt="Legado">Legacy</div><span class="count">11 — 15 / 15</span></div>
       <div class="cards">
         <div class="card beta wide" role="button" tabindex="0" data-modal="memorycleaner">
-          <div class="card-top"><span class="icon"><img src="logos/memorycleaner.svg" alt="MemoryCleaner" width="44" height="44"></span><span class="badges"><span class="badge beta"><i></i>Product · Beta</span></span></div>
+          <div class="card-top"><span class="icon"><img src="logos/memorycleaner.svg" alt="MemoryCleaner" width="44" height="44"></span><span class="badges"><span class="badge beta">Product · Beta</span></span></div>
           <div class="title"><span class="num">11</span><h3>MemoryCleaner</h3></div>
           <p data-en="Smart macOS memory optimizer. Lives in your menu bar with Tinder-style recommendation cards. Swipe to keep or kill processes, freeing up RAM instantly." data-pt="Otimizador inteligente de memória para macOS. Vive na barra de menus com cartões de recomendação ao estilo Tinder. Faz swipe para manter ou terminar processos e libertar RAM ao instante.">Smart macOS memory optimizer. Lives in your menu bar with Tinder-style recommendation cards. Swipe to keep or kill processes, freeing up RAM instantly.</p>
           <ul class="chips"><li>macOS</li><li data-en="Utility" data-pt="Utilitário">Utility</li><li>Python</li></ul>
           <span class="go"><span data-en="Learn More" data-pt="Saber Mais">Learn More</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></span>
         </div>
         <div class="card beta wide" role="button" tabindex="0" data-modal="browseragent">
-          <div class="card-top"><span class="icon"><img src="logos/browser-agent.svg" alt="Browser Agent" width="44" height="44"></span><span class="badges"><span class="badge beta"><i></i>Product · Beta</span></span></div>
+          <div class="card-top"><span class="icon"><img src="logos/browser-agent.svg" alt="Browser Agent" width="44" height="44"></span><span class="badges"><span class="badge beta">Product · Beta</span></span></div>
           <div class="title"><span class="num">12</span><h3>Browser Agent</h3></div>
           <p data-en="AI browser automation agent with visible navigation and chat interface. Control a real Chromium browser with natural language, powered by GPT-4o via browser-use." data-pt="Agente de automação de browser com IA, com navegação visível e interface de chat. Controla um browser Chromium real em linguagem natural, com GPT-4o via browser-use.">AI browser automation agent with visible navigation and chat interface. Control a real Chromium browser with natural language, powered by GPT-4o via browser-use.</p>
           <ul class="chips"><li data-en="AI" data-pt="IA">AI</li><li data-en="Automation" data-pt="Automação">Automation</li><li>CLI</li></ul>
           <span class="go"><span data-en="Learn More" data-pt="Saber Mais">Learn More</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></span>
         </div>
         <div class="card beta" role="button" tabindex="0" data-modal="mindmatch">
-          <div class="card-top"><span class="icon"><img src="logos/mindmatch.svg" alt="MindMatch" width="44" height="44"></span><span class="badges"><span class="badge beta"><i></i>Product · Beta</span></span></div>
+          <div class="card-top"><span class="icon"><img src="logos/mindmatch-mark.svg" alt="MindMatch" width="44" height="44"></span><span class="badges"><span class="badge beta">Product · Beta</span></span></div>
           <div class="title"><span class="num">13</span><h3>MindMatch</h3></div>
           <p data-en="Nova-funded prototype for a mental health marketplace connecting patients with local psychologists through AI-powered matching. Designed for a Lisbon-first rollout." data-pt="Protótipo financiado pela Nova para um marketplace de saúde mental que liga pacientes a psicólogos locais com matching por IA. Pensado para arrancar primeiro em Lisboa.">Nova-funded prototype for a mental health marketplace connecting patients with local psychologists through AI-powered matching. Designed for a Lisbon-first rollout.</p>
           <ul class="chips"><li data-en="Health" data-pt="Saúde">Health</li><li data-en="AI" data-pt="IA">AI</li><li>Marketplace</li></ul>
           <span class="go"><span data-en="Learn More" data-pt="Saber Mais">Learn More</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></span>
         </div>
         <a class="card live" href="CasePreper/" target="_blank" rel="noopener">
-          <div class="card-top"><span class="icon"><img src="logos/casepreper.svg" alt="CasePreper" width="44" height="44"></span><span class="badges"><span class="badge live"><i></i>Product · Live</span></span></div>
+          <div class="card-top"><span class="icon"><img src="logos/casepreper.svg" alt="CasePreper" width="44" height="44"></span><span class="badges"><span class="badge live">Product · Live</span></span></div>
           <div class="title"><span class="num">14</span><h3>CasePreper</h3></div>
           <p data-en="AI-powered consulting case interview preparation platform. End-to-end career support from firm research to application tracking, with an agentic assistant that executes tasks." data-pt="Plataforma de preparação para entrevistas de consultoria com IA. Apoio de carreira ponta a ponta, da pesquisa de empresas ao acompanhamento de candidaturas, com um assistente agentic que executa tarefas.">AI-powered consulting case interview preparation platform. End-to-end career support from firm research to application tracking, with an agentic assistant that executes tasks.</p>
           <ul class="chips"><li data-en="AI" data-pt="IA">AI</li><li data-en="Careers" data-pt="Carreira">Careers</li><li data-en="Consulting" data-pt="Consultoria">Consulting</li></ul>
           <span class="go"><span data-en="Open Platform" data-pt="Abrir Plataforma">Open Platform</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></span>
         </a>
         <div class="card consult" role="button" tabindex="0" data-modal="uzer">
-          <div class="card-top"><span class="icon"><img src="logos/uzer-original.png" alt="Uzer" width="44" height="44"></span><span class="badges"><span class="badge consult"><i></i>Consulting</span></span></div>
+          <div class="card-top"><span class="icon"><img src="logos/uzer-original.png" alt="Uzer" width="44" height="44"></span><span class="badges"><span class="badge consult">Consulting</span></span></div>
           <div class="title"><span class="num">15</span><h3>Uzer</h3></div>
           <p data-en="AI consulting for executive education. Helped the Uzer team design and deliver AI-focused executive education programs, providing resources and in-class facilitation support." data-pt="Consultoria em IA para educação executiva. Apoiou a equipa Uzer no desenho e entrega de programas de educação executiva focados em IA, com recursos e facilitação em sala.">AI consulting for executive education. Helped the Uzer team design and deliver AI-focused executive education programs, providing resources and in-class facilitation support.</p>
           <ul class="chips"><li data-en="AI" data-pt="IA">AI</li><li data-en="Consulting" data-pt="Consultoria">Consulting</li><li data-en="Education" data-pt="Educação">Education</li></ul>
@@ -577,7 +564,6 @@ body.invert .scene .kicker{color:#6E6E78}
         <div class="stat"><strong>2</strong><span data-en="Business Pillars" data-pt="Pilares de Negócio">Business Pillars</span></div>
         <div class="stat"><strong>100%</strong><span data-en="In House" data-pt="Feito Internamente">In House</span></div>
       </div>
-      <div class="m-line"><i></i></div>
     </div>
   </div></section>
 
@@ -641,7 +627,7 @@ body.invert .scene .kicker{color:#6E6E78}
       <p data-en="Whether you need a strategic partner, a technical cofounder, or a team that can take an idea from napkin sketch to production, Burnay Labs is always open to the right conversation." data-pt="Quer precise de um parceiro estratégico, um cofundador técnico, ou de uma equipa capaz de levar uma ideia do esboço à produção, a Burnay Labs está sempre aberta à conversa certa.">Whether you need a strategic partner, a technical cofounder, or a team that can take an idea from napkin sketch to production, Burnay Labs is always open to the right conversation.</p>
       <div class="hero-ctas">
         <a class="btn btn-white" href="https://linkedin.com/in/tomasmbatalha" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6zM2 9h4v12H2zM4 6a2 2 0 110-4 2 2 0 010 4z"/></svg><span data-en="Connect on LinkedIn" data-pt="Conectar no LinkedIn">Connect on LinkedIn</span></a>
-        <a class="btn btn-brand" href="https://github.com/tomasbb0" target="_blank" rel="noopener"><span class="dot"></span><span data-en="View GitHub" data-pt="Ver GitHub">View GitHub</span></a>
+        <a class="btn btn-ghost" href="https://github.com/tomasbb0" target="_blank" rel="noopener" data-en="View GitHub" data-pt="Ver GitHub">View GitHub</a>
       </div>
     </div>
   </div></section>
@@ -837,8 +823,7 @@ body.invert .scene .kicker{color:#6E6E78}
     },
     emcasa: {
       name: "EmCasa",
-      logo: null,
-      emoji: "🎸",
+      logo: "logos/emcasa.jpg",
       color: "#f59e0b",
       desc: '"Concertos em Casa". Home concert booking platform. Connect music lovers with artists for intimate, private performances in residential settings across Portugal.',
       features: [
@@ -938,7 +923,7 @@ body.invert .scene .kicker{color:#6E6E78}
     },
     mindmatch: {
       name: "MindMatch",
-      logo: "logos/mindmatch.svg",
+      logo: "logos/mindmatch-mark.svg",
       color: "#8b5cf6",
       desc: "Nova-funded prototype for a mental health marketplace connecting patients with local psychologists through AI-powered matching. Designed for a Lisbon-first rollout.",
       features: [
@@ -1325,7 +1310,6 @@ body.invert .scene .kicker{color:#6E6E78}
           const a = 0.06 + i * 0.1, k = seg(r, a, a + 0.34, inOut), X = outK(x, i + 1, 0.5, 0.07);
           wipe(cd, k, "right", 20);
           set(cd, { x: (1 - seg(r, a, a + 0.34, outExpo)) * -30, y: -X * 80, o: (k > 0 ? 1 : 0) * (1 - X) });
-          cd.style.setProperty("--l", seg(r, a + 0.12, a + 0.4, inOut).toFixed(3));
           set(top, { o: seg(r, a + 0.06, a + 0.22) });
           num(seg(r, a + 0.1, a + 0.18, lin));
           const t = seg(r, a + 0.12, a + 0.36, outExpo); set(h3, { y: (1 - t) * 12, o: t });
@@ -1340,7 +1324,7 @@ body.invert .scene .kicker{color:#6E6E78}
 
   // ---------- 6. About: a white band opens from the centre and the section turns to negative; numbers count up
   const about = $("#about"), nav = $("#nav");
-  const abA = { kick: $(".kicker", about), h2: $("h2", about), ps: $$(".about-text p", about), stats: $$(".stat", about), line: $(".m-line", about) };
+  const abA = { kick: $(".kicker", about), h2: $("h2", about), ps: $$(".about-text p", about), stats: $$(".stat", about) };
   const abType = typer(abA.kick), abLight = lighter(abA.h2);
   const abNums = abA.stats.map(st => {
     const el = $("strong", st), t = el.textContent.trim(), m = t.match(/\d+/);
@@ -1365,7 +1349,6 @@ body.invert .scene .kicker{color:#6E6E78}
         const c = abNums[i];
         if (c) { const v = Math.round(c.n * seg(r, a, a + 0.3, outCubic)); if (v !== c.last) { c.el.textContent = c.pre + v + c.suf; c.last = v; } }
       });
-      abA.line.style.setProperty("--k", (seg(r, 0.55, 0.95, inOut) * (1 - X(9))).toFixed(3));
     },
   };
 
@@ -1384,7 +1367,6 @@ body.invert .scene .kicker{color:#6E6E78}
       wipe(ogA.sub, seg(r, 0.12, 0.32, inOut)); set(ogA.sub, { y: -X(1) * 70, o: 1 - X(1) });
       const c = seg(r, 0.2, 0.32, outExpo);
       set(ogA.ceo, { y: (1 - c) * 22 - X(2) * 70, s: 0.94 + 0.06 * c, o: c * (1 - X(2)) });
-      ogA.ceo.style.setProperty("--l", seg(r, 0.24, 0.38, inOut).toFixed(3));
       ogA.rows.forEach((nodes, t) => {
         const a0 = TIERS[t], Xt = X(3 + t);
         ogA.conns[t].style.setProperty("--k", seg(r, a0, a0 + 0.07, inOut).toFixed(3));
@@ -1393,7 +1375,6 @@ body.invert .scene .kicker{color:#6E6E78}
         nodes.forEach((nd, i) => {
           const a = a0 + 0.1 + i * 0.03, k = seg(r, a, a + 0.1, outExpo);
           set(nd, { y: (1 - k) * 24 - Xt * 70, o: k * (1 - Xt) });
-          nd.style.setProperty("--l", seg(r, a + 0.03, a + 0.14, inOut).toFixed(3));
           nd.classList.toggle("on", r > a + 0.12);
         });
       });
