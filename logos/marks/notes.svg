@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+  <!-- Notes: a note, corner folded -->
+  <rect width="120" height="120" rx="27" fill="#FFE14D"/>
+  <path d="M39 33H69L83 47V87H39Z" stroke="#111111" stroke-width="7" stroke-linejoin="round"/>
+  <path d="M69 33V47H83" stroke="#111111" stroke-width="7" stroke-linejoin="round"/>
+</svg>
