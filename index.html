@@ -384,11 +384,12 @@ body.invert .scene .kicker{color:#6E6E78}
       <svg class="bigmark bm-draw" id="bigmark" viewBox="0 0 100 100" overflow="visible" focusable="false">
         <defs>
           <linearGradient id="bmG" gradientUnits="userSpaceOnUse" x1="0" y1="100" x2="100" y2="0"><stop offset="0" stop-color="#059669"/><stop offset=".55" stop-color="#10B981"/><stop offset="1" stop-color="#5EEAD4"/></linearGradient>
-          <!-- the strokes that stretch out of the monogram on scroll fade towards the far end -->
-          <linearGradient id="exL"><stop offset="0" stop-color="#0FA877" stop-opacity="0"/><stop offset=".4" stop-color="#0FA877"/></linearGradient>
-          <linearGradient id="exR"><stop offset=".6" stop-color="#22C79A"/><stop offset="1" stop-color="#22C79A" stop-opacity="0"/></linearGradient>
-          <linearGradient id="exU" x1="0" y1="1" x2="0" y2="0"><stop offset=".55" stop-color="#4FE0C8"/><stop offset="1" stop-color="#4FE0C8" stop-opacity="0"/></linearGradient>
+          <!-- the lines pulled out of the monogram on scroll: full strength, with only a short taper at the leading tip -->
+          <linearGradient id="exL"><stop offset="0" stop-color="#0FA877" stop-opacity="0"/><stop offset=".12" stop-color="#0FA877"/></linearGradient>
+          <linearGradient id="exR"><stop offset=".88" stop-color="#22C79A"/><stop offset="1" stop-color="#22C79A" stop-opacity="0"/></linearGradient>
+          <linearGradient id="exU" x1="0" y1="1" x2="0" y2="0"><stop offset=".88" stop-color="#4FE0C8"/><stop offset="1" stop-color="#4FE0C8" stop-opacity="0"/></linearGradient>
           <filter id="bmBlur" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="2.4"/></filter>
+          <filter id="exBlur" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2.4"/></filter>
         </defs>
         <g stroke="url(#bmG)" fill="none" stroke-width="1.6">
           <g class="bm-glow" filter="url(#bmBlur)" opacity=".6" stroke-width="2.6">
@@ -399,6 +400,11 @@ body.invert .scene .kicker{color:#6E6E78}
           <path class="bm-d b1" pathLength="1" d="M10,6 L48,6 L58,16 L58,38 L48,48 L58,58 L58,84 L48,96 L10,96 Z"/>
           <path class="bm-d b2" pathLength="1" d="M10,48 L48,48"/>
           <path class="bm-d b3" pathLength="1" d="M70,4 L70,70 L48,96 L92,96"/>
+        </g>
+        <g class="bm-glow" filter="url(#exBlur)" opacity=".6">
+          <rect class="ex" data-side="L" x="9.2" y="46.7" width="0" height="2.6" fill="url(#exL)"/>
+          <rect class="ex" data-side="R" x="92" y="94.7" width="0" height="2.6" fill="url(#exR)"/>
+          <rect class="ex" data-side="U" x="68.7" y="4" width="2.6" height="0" fill="url(#exU)"/>
         </g>
         <rect class="ex" data-side="L" x="9.2" y="47.2" width="0" height="1.6" fill="url(#exL)"/>
         <rect class="ex" data-side="R" x="92" y="95.2" width="0" height="1.6" fill="url(#exR)"/>
@@ -1257,11 +1263,18 @@ body.invert .scene .kicker{color:#6E6E78}
   // common exit: rises and dissolves, cascading from top to bottom
   const outK = (x, i, span = 0.5, step = 0.07) => seg(x, i * step, span + i * step, inCubic);
 
-  // ---------- 1. top: the text rises away, the monogram's strokes stretch out and it sinks into depth
+  // ---------- 1. top: the text rises away; the monogram unravels like thread pulled through three exits.
+  // The B (bowl and bar) leaves to the left, the L's stem upwards and its base to the right. Each line outside is
+  // exactly as long as the stroke it has taken from the letters, and once the letters are empty the lines fly off.
   const hero = $(".hero"), heroBg = $("#heroBg"), mark = $("#bigmark"), canvas = $("#heroWave");
-  const exts = $$(".ex", mark).map(el => ({ el, side: el.dataset.side }));
   const heroText = [$(".hero h1"), $(".hero .lead"), $(".hero .hero-ctas"), $(".hero .hero-meta")];
-  const EXT = 170;                                                     // how far each stroke stretches (viewBox units; the mark is 100)
+  const strokes = { bowl: $$(".bm-d.b1", mark), bar: $$(".bm-d.b2", mark), ell: $$(".bm-d.b3", mark) };
+  const lines = $$(".ex", mark).map(el => ({ el, side: el.dataset.side }));
+  const BOWL_EXIT = 0.8456;                                            // where the bar meets the B's spine, as a fraction of the bowl outline
+  const LEN = { L: 310, U: 72, R: 72 };                                // stroke each exit pulls out (viewBox units): bowl 272 + bar 38; half the L (144) each
+  const FLY = { L: 260, U: 120, R: 100 };                              // how far the finished lines travel to clear the screen
+  const dash = (els, arr, off) => els.forEach(p => { p.style.strokeDasharray = arr; p.style.strokeDashoffset = off; });
+  mark.addEventListener("animationend", e => { if (e.target.classList.contains("b3")) mark.classList.remove("bm-draw"); });
   const TOP = {
     apply(r, x) {
       heroText.forEach((el, i) => {
@@ -1269,15 +1282,20 @@ body.invert .scene .kicker{color:#6E6E78}
         el.style.translate = T ? `0 ${(-T).toFixed(1)}px` : "";
         el.style.clipPath = T ? `inset(${T.toFixed(1)}px 0 0 0)` : "";
       });
-      const d = seg(x, 0, 0.75) * EXT, w = d > 0.2 ? d.toFixed(2) : "0";
-      exts.forEach(({ el, side }) => {
-        if (side === "L") { el.setAttribute("x", (9.2 - d).toFixed(2)); el.setAttribute("width", w); }
-        else if (side === "R") el.setAttribute("width", w);
-        else { el.setAttribute("y", (4 - d).toFixed(2)); el.setAttribute("height", w); }
+      const c = seg(x, 0.02, 0.62, inOut), f = seg(x, 0.62, 1, inCubic);   // c: share of the letters pulled out; f: lines flying away
+      if (c > 0) {
+        mark.classList.remove("bm-draw");                              // the drawing-in animation would otherwise hold the strokes
+        const keep = (1 - c).toFixed(4);
+        dash(strokes.bowl, `${keep} ${c.toFixed(4)}`, ((1 - c) / 2 - BOWL_EXIT).toFixed(4));   // closes in on the exit from both sides
+        dash(strokes.bar, `${keep} 1`, "0");                                                    // slides out through its left end
+        dash(strokes.ell, `${keep} 1`, (-c / 2).toFixed(4));                                    // pulled from both ends
+      } else dash([...strokes.bowl, ...strokes.bar, ...strokes.ell], "", "");
+      lines.forEach(({ el, side }) => {
+        const tail = f * FLY[side], head = tail + c * LEN[side], len = c * LEN[side] > 0.2 ? (c * LEN[side]).toFixed(2) : "0";
+        if (side === "L") { el.setAttribute("x", (9.2 - head).toFixed(2)); el.setAttribute("width", len); }
+        else if (side === "R") { el.setAttribute("x", (92 + tail).toFixed(2)); el.setAttribute("width", len); }
+        else { el.setAttribute("y", (4 - head).toFixed(2)); el.setAttribute("height", len); }
       });
-      const zk = seg(x, 0.4, 1, inCubic);
-      mark.style.setProperty("--zfade", (1 - zk).toFixed(3));
-      set(mark, { s: 1 - zk * 0.28, blur: zk * 6 });
       heroBg.style.opacity = (1 - seg(x, 0.2, 0.9)).toFixed(3);
       if (canvas) canvas.style.opacity = (1 - 0.7 * seg(x, 0.1, 0.9)).toFixed(3);
     },
