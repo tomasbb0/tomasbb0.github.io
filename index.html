@@ -295,19 +295,15 @@ html.scenes main,html.scenes footer{display:none}
 .scene .portrait{width:auto;max-width:100%;height:min(66vh,560px)}
 .scene .founder-text p{font-size:15px}
 .scene .foot{margin-top:28px}
-/* products as an Apple Watch honeycomb: round bubbles placed around the centre of the scene */
-.hive-wrap{position:relative;height:calc(100vh - 116px)}
-.hive-hint{font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--text-3)}
-.hive{position:absolute;left:50%;top:54%;width:0;height:0}
-.bub{position:absolute;left:-60px;top:-60px;width:120px;height:120px;padding:0;border:0;border-radius:50%;background:none;will-change:transform,opacity}
-.bub-c{display:block;width:100%;height:100%;border-radius:50%;overflow:hidden;background:#000;box-shadow:0 1px 2px rgba(0,0,0,.5),0 14px 34px -12px rgba(0,0,0,.9);transition:box-shadow .25s}
-.bub:hover .bub-c{box-shadow:0 1px 2px rgba(0,0,0,.5),0 24px 48px -14px rgba(0,0,0,.95)}
-.bub-c img{display:block;width:100%;height:100%;object-fit:cover;scale:1.02}
-.bub-n{position:absolute;left:50%;top:calc(100% + 8px);translate:-50% 0;white-space:nowrap;font-size:12px;font-weight:600;letter-spacing:-.01em;color:var(--text);opacity:var(--lo,0);pointer-events:none}
+/* products on a drum: cards side by side around a vertical axis, seen through one shared perspective */
+.wheel-wrap{position:relative;height:calc(100vh - 116px)}
+.wheel{position:absolute;left:50%;top:calc(50% - 150px);width:0;height:0;perspective:1100px;perspective-origin:0 150px}
+.wheel .card{position:absolute;left:-200px;top:0;width:400px;min-height:296px;backface-visibility:hidden;transition:box-shadow .3s;will-change:transform,opacity}
+.wheel .card.front{box-shadow:var(--shadow-hi)}
 /* shorter screens (13" laptops): a denser product grid so five cards still fit in one scene */
 @media (max-height:860px){
   .scene{padding:80px 0 20px}
-  .hive-wrap{height:calc(100vh - 100px)}
+  .wheel-wrap{height:calc(100vh - 100px)}
   html.scenes .grid-head{margin-bottom:12px}
   .scene .cards{gap:12px}
   .scene .card{padding:18px 22px 16px}
@@ -1204,14 +1200,16 @@ body.invert .scene .kicker{color:#6E6E78}
   // product cards lean towards the cursor and a soft light follows it
   if (matchMedia("(hover: hover) and (pointer: fine)").matches) {
     document.querySelectorAll(".card").forEach(card => {
+      const onWheel = () => card.parentElement.classList.contains("wheel");   // on the drum the scroll owns the card's transform
       card.addEventListener("pointermove", e => {
+        if (onWheel()) return;
         const rc = card.getBoundingClientRect(), x = (e.clientX - rc.left) / rc.width - 0.5, y = (e.clientY - rc.top) / rc.height - 0.5;
         card.style.transform = `perspective(900px) rotateY(${(x * 7).toFixed(2)}deg) rotateX(${(-y * 7).toFixed(2)}deg) translateY(-3px)`;
         card.style.setProperty("--mx", ((x + 0.5) * 100).toFixed(1) + "%");
         card.style.setProperty("--my", ((y + 0.5) * 100).toFixed(1) + "%");
         card.style.setProperty("--glow", "1");
       });
-      card.addEventListener("pointerleave", () => { card.style.transform = ""; card.style.setProperty("--glow", "0"); });
+      card.addEventListener("pointerleave", () => { if (onWheel()) return; card.style.transform = ""; card.style.setProperty("--glow", "0"); });
     });
   }
 })();
@@ -1367,90 +1365,44 @@ body.invert .scene .kicker{color:#6E6E78}
     },
   };
 
-  // ---------- 3. products as an Apple Watch honeycomb: every product is a round bubble on a hex grid. Bubbles near the
-  // focus are big and the ones at the rim shrink and draw in. The mouse moves the focus (with a little parallax drift),
-  // a click opens that product's card, and on the way out each bubble flips away in 3D at its own moment.
-  const hiveWrap = Object.assign(document.createElement("div"), { className: "hive-wrap" });
-  const hiveHead = $(".pgrid .grid-head"), hive = Object.assign(document.createElement("div"), { className: "hive" });
-  const hint = $(".count", hiveHead);
-  hint.className = "hive-hint";
-  hint.textContent = document.documentElement.lang === "pt" ? "Mova o rato para explorar · clique para abrir" : "Move to explore · click to open";
-  hiveWrap.append(hiveHead, hive);
-  const hType = typer($(".kicker", hiveHead));
-  // the 15 hex cells closest to the centre (axial coordinates), flagship in the middle
-  const CELLS = [[0, 0], [1, 0], [0, 1], [-1, 1], [-1, 0], [0, -1], [1, -1], [1, 1], [-1, 2], [-2, 1], [-1, -1], [1, -2], [2, -1], [2, 0], [-2, 0]];
-  const bubs = $$(".pgrid .card").map((cd, i) => {
-    const b = document.createElement("button"), name = $("h3", cd).textContent.trim(), [q, rr] = CELLS[i];
-    b.type = "button"; b.className = "bub"; b.setAttribute("aria-label", name);
-    b.innerHTML = `<span class="bub-c"><img alt="" src="${$(".icon img", cd).getAttribute("src")}"></span><span class="bub-n"></span>`;
-    $(".bub-n", b).textContent = name;
-    b.addEventListener("click", () => window.openCard && window.openCard(cd));
-    b.addEventListener("pointerenter", () => { hHov = i; hiveKick(); });
-    b.addEventListener("pointerleave", () => { if (hHov === i) hHov = -1; hiveKick(); });
-    hive.append(b);
-    const x = q + rr / 2, y = rr * 0.866;
-    // each bubble's own way out (fixed per bubble, so scrolling back up replays it in reverse):
-    // it spins away almost in place, with its own drift direction, spin and delay
-    const rnd = n => { const v = Math.sin((i + 1) * 12.9898 + n * 78.233) * 43758.5453; return v - Math.floor(v); };
-    const far = 20 + rnd(3) * 60;
-    return { b, x, y, d: Math.hypot(x, y), h: 0, ex: { a: rnd(1) * Math.PI * 2, far, spin: (rnd(4) < 0.5 ? -1 : 1) * (360 + rnd(5) * 360), tilt: (rnd(7) - 0.5) * 70, delay: rnd(6) * 0.3 } };
+  // ---------- 3. products on a drum (roulette): the cards sit side by side around a vertical axis, like a reel seen
+  // from the front. Scrolling turns the drum to the left: each card comes round from the right, faces you in the
+  // middle (a little bigger) and turns away into depth on the left; inside each card the logo, title and text drift
+  // against the motion (parallax).
+  const wheelWrap = Object.assign(document.createElement("div"), { className: "wheel-wrap" });
+  const wheelHead = $(".pgrid .grid-head"), wheel = Object.assign(document.createElement("div"), { className: "wheel" });
+  const wCards = $$(".pgrid .card").map(cd => {
+    wheel.append(cd);
+    return { cd, layers: [[$(".card-top", cd), 14], [$(".title", cd), 9], [$("p", cd), 5], [$(".chips", cd), 3]] };
   });
-  const SP = 136;                                                      // centre-to-centre spacing at zoom 1 (bubbles are 120px)
-  let hOn = false, hr = 0, hx = 0, hz = 1, hHov = -1, hRaf = 0;
-  const foc = { x: 0, y: 0, tx: 0, ty: 0 };                            // focus point (where bubbles are biggest), eased towards the mouse
-  const smooth = t => t * t * (3 - 2 * t);
-  const renderHive = () => {
-    const R = Math.min(innerWidth, innerHeight) * 0.42, driftX = -foc.x * 0.18, driftY = -foc.y * 0.18;
-    const pos = bubs.map(o => {
-      let px = o.x * SP * hz + driftX, py = o.y * SP * hz + driftY;
-      const fish = 1 - smooth(clamp((Math.hypot(px - foc.x, py - foc.y) / R - 0.35) / 0.95));
-      const pull = 1 - 0.16 * (1 - fish);                               // the rim draws in, as on the Watch
-      return { px: px * pull, py: py * pull, fish };
-    });
-    bubs.forEach((o, i) => {
-      const k = seg(hr, 0.02 + o.d * 0.05, 0.24 + o.d * 0.05, outExpo);   // bubbles pop in from the centre outwards
-      let { px, py } = pos[i];
-      const fish = pos[i].fish;
-      bubs.forEach((n, j) => {                                          // neighbours slide away from a hovered bubble to make room
-        if (j === i || n.h < 0.01) return;
-        const dx = px - pos[j].px, dy = py - pos[j].py, d = Math.hypot(dx, dy) || 1, reach = SP * 1.8;
-        if (d < reach) { const f = (1 - d / reach) * 30 * n.h; px += (dx / d) * f; py += (dy / d) * f; }
-      });
-      const e = o.ex, out = seg(hx, e.delay, e.delay + 0.65, inCubic);  // leaving: each bubble spins away into nothing
-      px += Math.cos(e.a) * e.far * out; py += Math.sin(e.a) * e.far * out;
-      const s = (0.38 + 0.46 * fish) * hz * (1 + 0.38 * o.h) * (0.35 + 0.65 * k) * (1 - 0.75 * out);   // hovered: up to 38% bigger
-      // leaving, the bubble flips in 3D like a spun coin (around its vertical axis, slightly tilted)
-      o.b.style.transform = `translate(${px.toFixed(1)}px,${py.toFixed(1)}px) perspective(600px) rotateX(${(e.tilt * out).toFixed(1)}deg) rotateY(${(e.spin * out).toFixed(1)}deg) scale(${s.toFixed(4)})`;
-      o.b.style.opacity = (k * (1 - out)).toFixed(3);
-      o.b.style.zIndex = String(Math.round(fish * 100 + o.h * 200));
-      o.b.style.setProperty("--lo", clamp((s - 0.7) / 0.12).toFixed(3));    // names show once a bubble is big enough
-    });
+  wheelWrap.append(wheelHead, wheel);
+  const wCount = $(".count", wheelHead), wType = typer($(".kicker", wheelHead)), W_N = wCards.length;
+  let wR = 924, wStep = 0.48, wLast = -1;
+  const wheelSize = () => {                                            // drum radius from the screen width; cards 448px apart around it
+    wR = Math.min(1000, Math.max(760, innerWidth * 0.55)); wStep = 448 / wR;
   };
-  const hiveTick = () => {
-    foc.x += (foc.tx - foc.x) * 0.14; foc.y += (foc.ty - foc.y) * 0.14;
-    let busy = Math.abs(foc.tx - foc.x) > 0.3 || Math.abs(foc.ty - foc.y) > 0.3;
-    bubs.forEach((o, i) => {                                            // hover zoom eases in and out
-      const t = i === hHov ? 1 : 0;
-      o.h += (t - o.h) * 0.2;
-      if (Math.abs(t - o.h) > 0.004) busy = true; else o.h = t;
-    });
-    renderHive();
-    hRaf = hOn && busy ? requestAnimationFrame(hiveTick) : 0;
-  };
-  const hiveKick = () => { if (hOn && !hRaf) hRaf = requestAnimationFrame(hiveTick); };
-  addEventListener("pointermove", e => {
-    if (e.pointerType !== "mouse") return;
-    foc.tx = (e.clientX - innerWidth / 2) * 0.65; foc.ty = (e.clientY - innerHeight * 0.55) * 0.65; hiveKick();
-  }, { passive: true });
-  document.addEventListener("pointerleave", () => { foc.tx = 0; foc.ty = 0; hiveKick(); });
-  const HIVE = {
-    off() { hOn = false; },
+  const WHEEL = {
     apply(r, x) {
-      hOn = true; hr = r; hx = x;
-      hType(seg(r, 0, 0.08, lin));
-      const hk = seg(x, 0, 0.6, inCubic);
-      set(hiveHead, { y: -hk * 60, o: 1 - hk });
-      renderHive();
+      const rise = seg(r, 0, 0.1), X = seg(x, 0, 0.8, inCubic);
+      wType(seg(r, 0, 0.06, lin));
+      set(wheelHead, { y: -X * 60, o: 1 - X });
+      set(wheel, { y: (1 - rise) * innerHeight * 0.35 - X * 60, o: rise * (1 - X) });
+      let q = (W_N - 1) * seg(r, 0.1, 0.94, lin) - 1.6 * (1 - rise);  // which card faces you (fractional); spins in from the right
+      if (q > 0) { const i = Math.floor(q), f = q - i; q = i + f * f * (3 - 2 * f); }   // rests briefly on each card
+      const cur = Math.min(W_N - 1, Math.max(0, Math.round(q)));
+      if (cur !== wLast) { wCount.textContent = `${String(cur + 1).padStart(2, "0")} / ${W_N}`; wLast = cur; }
+      wCards.forEach(({ cd, layers }, i) => {
+        const t = i - q, a = Math.abs(t), th = t * wStep;               // th: angle around the drum (radians)
+        if (Math.abs(th) > 1.3) { cd.style.visibility = "hidden"; return; }   // hide before ~75°: near edge-on 3D cards stall Chrome
+        cd.style.visibility = "";
+        const grow = 1 + 0.08 * (1 - Math.min(a, 1)) ** 2;              // the card facing you is slightly bigger
+        cd.style.transform = `translate3d(${(wR * Math.sin(th)).toFixed(1)}px,0,${(wR * (Math.cos(th) - 1)).toFixed(1)}px) rotateY(${(th * 57.2958).toFixed(2)}deg) scale(${grow.toFixed(4)})`;
+        cd.style.zIndex = String(100 - Math.round(a * 10));             // the card facing you is always on top
+        cd.style.opacity = (Math.max(0, 1 - 0.35 * Math.min(a, 1) - 0.3 * clamp(a - 1)) * clamp((1.3 - Math.abs(th)) / 0.35)).toFixed(3);
+        cd.classList.toggle("front", a < 0.5);
+        const tc = Math.max(-2, Math.min(2, t));
+        layers.forEach(([el, px]) => { if (el) el.style.translate = `${(-tc * px).toFixed(1)}px 0`; });
+      });
     },
   };
 
@@ -1572,7 +1524,7 @@ body.invert .scene .kicker{color:#6E6E78}
   const DEF = [
     { id: "top", nodes: [hero], fx: TOP, len: 0, hold: 0.12, out: 0.9, hand: 0.75 },
     { id: "legacy", nodes: [lh], fx: LEGACY, len: 0.65, hold: 0.35, out: 0.5, hand: 0.6 },
-    { id: "hive", nodes: [hiveWrap], fx: HIVE, len: 0.8, hold: 0.8, out: 1.0, hand: 0.7, fixed: true },
+    { id: "wheel", nodes: [wheelWrap], fx: WHEEL, len: 3.6, hold: 0.3, out: 0.6, hand: 0.6, fixed: true },
     { id: "about", nodes: [about], fx: ABOUT, len: 1.0, hold: 0.35, out: 0.8, hand: 0.92 },
     { id: "team", nodes: [org], fx: ORG, len: 1.2, hold: 0.35, out: 0.55, hand: 0.6 },
     { id: "founder", nodes: [fo], fx: FOUNDER, len: 1.0, hold: 0.4, out: 0.6, hand: 0.6 },
@@ -1584,10 +1536,11 @@ body.invert .scene .kicker{color:#6E6E78}
   const measure = () => {
     const vh = innerHeight;
     let t = 0;
+    wheelSize();
     scenes.forEach((sc, i) => {
       sc.box = sc.node.firstElementChild; sc.box.style.translate = ""; sc.node.style.alignItems = "";
       const cs = getComputedStyle(sc.node), avail = vh - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
-      sc.over = sc.fixed ? 0 : Math.max(0, sc.box.scrollHeight - avail);  // the honeycomb always fits: its bubbles are placed, not stacked
+      sc.over = sc.fixed ? 0 : Math.max(0, sc.box.scrollHeight - avail);  // the drum always fits: its cards are placed, not stacked
       if (sc.over) sc.node.style.alignItems = "flex-start";
       sc.t0 = i === 0 ? 0 : t; sc.tIn = sc.t0 + sc.len * vh; sc.tOut = sc.tIn + sc.hold * vh + sc.over; sc.t1 = sc.tOut + sc.out * vh;
       t = sc.tOut + sc.out * vh * sc.hand;
