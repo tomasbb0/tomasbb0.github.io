@@ -1457,11 +1457,15 @@ body.invert .scene .kicker{color:#6E6E78}
   hint.textContent = document.documentElement.lang === "pt" ? "Mova o rato para explorar · clique para abrir" : "Move to explore · click to open";
   hiveWrap.append(hiveHead, hive);
   const hType = typer($(".kicker", hiveHead));
-  // the hex cells closest to the centre (axial coordinates), flagship in the middle
-  const CELLS = [[0, 0], [1, 0], [0, 1], [-1, 1], [-1, 0], [0, -1], [1, -1], [1, 1], [-1, 2], [-2, 1], [-1, -1], [1, -2], [2, -1], [2, 0], [-2, 0],
-    [2, -2], [0, 2], [-2, 2], [0, -2], [3, 0], [-3, 0], [3, -1]];
-  const bubs = $$(".pgrid .card").map((cd, i) => {
-    const b = document.createElement("button"), name = $("h3", cd).textContent.trim(), [q, rr] = CELLS[i];
+  // a symmetric hex block, rows of 4, 5, 4, 5, 4 (22 places), mirrored top to bottom and left to right. Rows sit a
+  // little further apart than true hex packing so the names under the bubbles never touch the row below. Products fill
+  // it from the centre outwards, so the flagship sits in the middle.
+  const SP = 150, ROW = 140;                                           // centre-to-centre spacing across and between rows (bubbles are 120px)
+  const SLOTS = [];
+  [4, 5, 4, 5, 4].forEach((n, r) => { for (let c = 0; c < n; c++) SLOTS.push({ x: c - (n - 1) / 2, y: ((r - 2) * ROW) / SP }); });
+  SLOTS.sort((a, b) => Math.hypot(a.x, a.y) - Math.hypot(b.x, b.y) || Math.atan2(a.y, a.x) - Math.atan2(b.y, b.x));
+  const bubs = $$(".pgrid .card").slice(0, SLOTS.length).map((cd, i) => {
+    const b = document.createElement("button"), name = $("h3", cd).textContent.trim();
     b.type = "button"; b.className = "bub"; b.setAttribute("aria-label", name);
     b.innerHTML = `<span class="bub-c"><img alt="" src="${$(".icon img", cd).getAttribute("src")}"></span><span class="bub-n"></span>`;
     $(".bub-n", b).textContent = name;
@@ -1469,10 +1473,9 @@ body.invert .scene .kicker{color:#6E6E78}
     b.addEventListener("pointerenter", () => { hHov = i; hiveKick(); });
     b.addEventListener("pointerleave", () => { if (hHov === i) hHov = -1; hiveKick(); });
     hive.append(b);
-    const x = q + rr / 2, y = rr * 0.866;
+    const { x, y } = SLOTS[i];
     return { b, x, y, d: Math.hypot(x, y), h: 0 };
   });
-  const SP = 136;                                                      // centre-to-centre spacing at zoom 1 (bubbles are 120px)
   let hOn = false, hr = 0, hx = 0, hz = 1, hHov = -1, hRaf = 0;
   const foc = { x: 0, y: 0, tx: 0, ty: 0 };                            // focus point (where bubbles are biggest), eased towards the mouse
   const smooth = t => t * t * (3 - 2 * t);
@@ -1480,8 +1483,8 @@ body.invert .scene .kicker{color:#6E6E78}
     const R = Math.min(innerWidth, innerHeight) * 0.42, driftX = -foc.x * 0.18, driftY = -foc.y * 0.18;
     const pos = bubs.map(o => {
       let px = o.x * SP * hz + driftX, py = o.y * SP * hz + driftY;
-      const fish = 1 - smooth(clamp((Math.hypot(px - foc.x, py - foc.y) / R - 0.35) / 0.95));
-      const pull = 1 - 0.16 * (1 - fish);                               // the rim draws in, as on the Watch
+      const fish = 1 - smooth(clamp((Math.hypot(px - foc.x, py - foc.y) / R - 0.12) / 0.8));   // strong Watch lens: big at the focus, small at the rim
+      const pull = 1 - 0.22 * (1 - fish);                               // the rim draws in, as on the Watch
       return { px: px * pull, py: py * pull, fish };
     });
     bubs.forEach((o, i) => {
@@ -1497,7 +1500,7 @@ body.invert .scene .kicker{color:#6E6E78}
       // neighbouring rings turn in opposite directions: the ring swings round the centre and each bubble flips the same way
       const dir = Math.round(o.d) % 2 ? -1 : 1, turn = dir * 0.7 * out, cs = Math.cos(turn), sn = Math.sin(turn);
       [px, py] = [px * cs - py * sn, px * sn + py * cs];
-      const s = (0.38 + 0.46 * fish) * hz * (1 + 0.38 * o.h) * (0.35 + 0.65 * k) * (1 - 0.2 * out);    // hovered: up to 38% bigger
+      const s = (0.3 + 0.72 * fish) * hz * (1 + 0.38 * o.h) * (0.35 + 0.65 * k) * (1 - 0.2 * out);    // hovered: up to 38% bigger
       // leaving, the bubble flips edge-on (a quarter turn in 3D) and fades
       o.b.style.transform = `translate(${px.toFixed(1)}px,${py.toFixed(1)}px) perspective(600px) rotateY(${(dir * 90 * out).toFixed(1)}deg) scale(${s.toFixed(4)})`;
       o.b.style.opacity = (k * (1 - out)).toFixed(3);
@@ -1519,7 +1522,7 @@ body.invert .scene .kicker{color:#6E6E78}
   const hiveKick = () => { if (hOn && !hRaf) hRaf = requestAnimationFrame(hiveTick); };
   addEventListener("pointermove", e => {
     if (e.pointerType !== "mouse") return;
-    foc.tx = (e.clientX - innerWidth / 2) * 0.65; foc.ty = (e.clientY - innerHeight * 0.55) * 0.65; hiveKick();
+    foc.tx = (e.clientX - innerWidth / 2) * 0.85; foc.ty = (e.clientY - innerHeight * 0.55) * 0.85; hiveKick();
   }, { passive: true });
   document.addEventListener("pointerleave", () => { foc.tx = 0; foc.ty = 0; hiveKick(); });
   const HIVE = {
