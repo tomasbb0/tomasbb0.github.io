@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+  <!-- LifeOrganizer: you at the centre, your relationships around you -->
+  <rect width="120" height="120" rx="27" fill="#0D9488"/>
+  <g stroke="#FFFFFF" stroke-width="6" stroke-linecap="round">
+    <path d="M60 67V37"/>
+    <path d="M60 67L86 82"/>
+    <path d="M60 67L34 82"/>
+  </g>
+  <g fill="#FFFFFF">
+    <circle cx="60" cy="67" r="10"/>
+    <circle cx="60" cy="35" r="7"/>
+    <circle cx="86" cy="82" r="7"/>
+    <circle cx="34" cy="82" r="7"/>
+  </g>
+</svg>

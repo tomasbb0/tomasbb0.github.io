@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+  <!-- TopResume.ai: lines of a CV under an upward chevron -->
+  <rect width="120" height="120" rx="27" fill="#2F5BFF"/>
+  <g stroke="#FFFFFF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M42 52L60 34L78 52"/>
+    <path d="M40 70H80"/>
+    <path d="M40 86H66"/>
+  </g>
+</svg>

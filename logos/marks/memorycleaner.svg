@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+  <!-- MemoryCleaner: a memory gauge -->
+  <rect width="120" height="120" rx="27" fill="#0EA5E9"/>
+  <g stroke="#FFFFFF" stroke-linecap="round">
+    <path d="M41.6 81.4A26 26 0 1 1 78.4 81.4" stroke-width="9"/>
+    <path d="M60 63L74 49" stroke-width="8"/>
+  </g>
+  <circle cx="60" cy="63" r="6.5" fill="#FFFFFF"/>
+</svg>

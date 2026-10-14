@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+  <!-- MindMatch: two people, one match -->
+  <rect width="120" height="120" rx="27" fill="#7C3AED"/>
+  <g stroke="#FFFFFF" stroke-width="8">
+    <circle cx="48" cy="60" r="20"/>
+    <circle cx="72" cy="60" r="20"/>
+  </g>
+</svg>

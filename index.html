@@ -18,15 +18,15 @@
    consulting. With motion allowed on a large screen, the page plays
    as full-screen scenes driven by the scroll (scenes script at the end); otherwise it is a normal scrolling page. */
 :root{
-  --bg:#050506; --hair:rgba(255,255,255,.08);
+  --bg:#050506;
   --text:#F5F5F7; --text-2:#A3A3AD; --text-3:#6E6E78;
   --g2:#059669; --g3:#10B981; --g4:#5EEAD4;
   --grad:linear-gradient(120deg,var(--g2) 0%,var(--g3) 50%,var(--g4) 100%);
   --font:"Geist",ui-sans-serif,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
   --mono:"Geist Mono",ui-monospace,"SF Mono",Menlo,monospace;
   --maxw:1200px; --r:20px;
-  --shadow:inset 0 1px 0 rgba(255,255,255,.05), 0 1px 2px rgba(0,0,0,.5), 0 18px 44px -22px rgba(0,0,0,.9);
-  --shadow-hi:inset 0 1px 0 rgba(255,255,255,.06), 0 1px 2px rgba(0,0,0,.5), 0 28px 64px -24px rgba(0,0,0,.95);
+  --shadow:0 1px 2px rgba(0,0,0,.5), 0 18px 44px -22px rgba(0,0,0,.9);
+  --shadow-hi:0 1px 2px rgba(0,0,0,.5), 0 28px 64px -24px rgba(0,0,0,.95);
   color-scheme:dark;
 }
 *{box-sizing:border-box}
@@ -54,7 +54,7 @@ button{font:inherit;color:inherit}
 .nav-right{display:flex;align-items:center;gap:8px}
 @media (max-width:1000px){.nav-links{display:none}.nav-right{margin-left:auto}}
 /* the three pills on the right (language, GitHub, Connect) share one height and one style */
-.nav-pill,.nav .btn{height:36px;border-radius:999px;background:rgba(255,255,255,.06);box-shadow:inset 0 0 0 1px rgba(255,255,255,.07),0 10px 28px -14px rgba(0,0,0,.95)}
+.nav-pill,.nav .btn{height:36px;border-radius:999px;background:rgba(255,255,255,.07);box-shadow:0 1px 2px rgba(0,0,0,.5),0 10px 28px -14px rgba(0,0,0,.95)}
 .nav .btn{padding:0 16px;font-size:13.5px;font-weight:600}
 .nav .btn:hover{background:rgba(255,255,255,.1)}
 .lang{display:inline-flex;align-items:center;padding:3px}
@@ -179,13 +179,15 @@ html.scenes .grid-head{display:flex;align-items:baseline;justify-content:space-b
   background:linear-gradient(180deg,#131318,#0C0C10);box-shadow:var(--shadow);transition:box-shadow .3s,background .3s}
 button.node{cursor:pointer}
 button.node:hover{background:linear-gradient(180deg,#17171D,#0E0E12);box-shadow:var(--shadow-hi)}
-.node .ic{width:34px;height:34px;border-radius:10px;flex:0 0 auto;display:grid;place-items:center;background:rgba(139,92,246,.16);color:#C4B5FD;transition:background .35s, color .35s}
-.node .ic svg{width:18px;height:18px}
-.js-fx .node:not(.on) .ic{background:rgba(255,255,255,.05);color:var(--text-3)}
+/* agent icons: one thin line each, no chip; in the scenes they brighten as each agent arrives */
+.node .ic{flex:0 0 auto;display:grid;place-items:center;width:20px;height:20px;color:var(--text-2);transition:color .35s}
+.node .ic svg{display:block;width:20px;height:20px}
+.js-fx .node:not(.on) .ic{color:var(--text-3)}
+.js-fx .node.on .ic{color:var(--text)}
 .node b{display:block;font-weight:600;font-size:14.5px;letter-spacing:-.01em;line-height:1.3}
 .node small{display:block;margin-top:3px;font-family:var(--mono);font-size:11px;line-height:1.35;color:var(--text-3)}
 .node.ceo{width:auto;min-width:280px;padding:16px 22px 14px}
-.node.ceo .ic,.js-fx .node.ceo .ic{background:rgba(16,185,129,.14);color:#6EE7B7}
+.node.ceo .ic,.js-fx .node.ceo .ic{color:var(--text)}
 .node.ceo b{font-size:16px}
 .org-conn{width:1px;height:28px;margin:10px 0;background:linear-gradient(rgba(255,255,255,.24),rgba(255,255,255,.06));transform-origin:top;transform:scaleY(var(--k,1))}
 .org-label{margin:0 0 14px;font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--text-3)}
@@ -197,8 +199,8 @@ button.node:hover{background:linear-gradient(180deg,#17171D,#0E0E12);box-shadow:
 .founder{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:64px;align-items:center;margin-top:120px}
 @media (max-width:900px){.founder{grid-template-columns:1fr;gap:36px;margin-top:80px}}
 .portrait{position:relative;justify-self:center;width:100%;max-width:440px;aspect-ratio:4/5;border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow-hi);
-  background:radial-gradient(70% 55% at 50% 80%,rgba(16,185,129,.38),transparent 72%),radial-gradient(60% 40% at 82% 8%,rgba(94,234,212,.12),transparent 70%),linear-gradient(180deg,#131318,#09090C)}
-.portrait img{position:absolute;left:50%;bottom:0;width:104%;height:auto;max-width:none;translate:-50% 0;transform-origin:50% 100%;filter:grayscale(var(--gs,0)) contrast(1.04)}
+  background:radial-gradient(70% 55% at 50% 78%,rgba(255,255,255,.12),transparent 72%),linear-gradient(180deg,#16161B,#09090C)}
+.portrait img{position:absolute;left:50%;bottom:0;width:104%;height:auto;max-width:none;translate:-50% 0;transform-origin:50% 100%;filter:grayscale(1) contrast(1.06)}
 .portrait::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 62%,rgba(5,5,6,.55));pointer-events:none}
 .founder-text h2{font-size:clamp(28px,3.4vw,44px)}
 .founder-text p{margin:18px 0 0;color:var(--text-2);font-size:15.5px;line-height:1.62;max-width:62ch}
@@ -235,7 +237,7 @@ footer{padding-block:48px 56px}
 .active>.modal-box,.active>.agent-modal{translate:none;scale:none}
 .modal-close,.agent-modal-close{position:absolute;top:14px;right:14px;width:36px;height:36px;border:0;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.06);color:var(--text-2);font-size:22px;line-height:1;transition:background .2s,color .2s}
 .modal-close:hover,.agent-modal-close:hover{background:rgba(255,255,255,.12);color:#fff}
-.modal-icon{width:72px;height:72px;border-radius:18px;display:grid;place-items:center;border:1px solid var(--hair);margin-bottom:20px}
+.modal-icon{width:72px;height:72px;border-radius:18px;display:grid;place-items:center;margin-bottom:20px;box-shadow:var(--shadow)}
 .modal-box h2{font-size:28px;letter-spacing:-.03em}
 .modal-desc{margin:12px 0 0;color:var(--text-2);font-size:15.5px}
 .modal-features{margin-top:22px}
@@ -244,7 +246,7 @@ footer{padding-block:48px 56px}
 .modal-features li{position:relative;padding-left:18px;font-size:14.5px}
 .modal-features li::before{content:"";position:absolute;left:0;top:.62em;width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.32)}
 .modal-tags,.agent-modal-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:22px}
-.modal-tag,.agent-modal-tag{font-size:12px;color:var(--text-2);background:rgba(255,255,255,.06);border:1px solid transparent;border-radius:999px;padding:4px 11px}
+.modal-tag,.agent-modal-tag{font-size:12px;color:var(--text-2);background:rgba(255,255,255,.06);border-radius:999px;padding:4px 11px}
 .agent-modal-header{display:flex;align-items:center;gap:16px;margin-bottom:16px;padding-right:40px}
 .agent-modal-emoji{width:56px;height:56px;border-radius:16px;flex:0 0 auto;display:grid;place-items:center;font-size:28px;background:rgba(139,92,246,.14)}
 .agent-modal-title h3{margin:0;font-size:26px;letter-spacing:-.03em;line-height:1.15}
@@ -450,14 +452,14 @@ body.invert .scene .kicker{color:#6E6E78}
           <span class="go"><span data-en="Learn More" data-pt="Saber Mais">Learn More</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></span>
         </div>
         <a class="card live" href="/cv-platform/" target="_blank" rel="noopener">
-          <div class="card-top"><span class="icon"><img src="logos/topresume.svg" alt="TopResume.ai" width="44" height="44"></span><span class="badges"><span class="badge live">Product · Live</span></span></div>
+          <div class="card-top"><span class="icon"><img src="logos/marks/topresume.svg" alt="TopResume.ai" width="44" height="44"></span><span class="badges"><span class="badge live">Product · Live</span></span></div>
           <div class="title"><span class="num">04</span><h3>TopResume.ai</h3></div>
           <p data-en="AI-powered CV editor platform. Write, edit, and optimize your resume with real-time AI assistance. Modern editor with templates, sections, and instant PDF export." data-pt="Plataforma de edição de CV com IA. Escreve, edita e otimiza o teu currículo com assistência em tempo real. Editor moderno com templates, secções e exportação para PDF.">AI-powered CV editor platform. Write, edit, and optimize your resume with real-time AI assistance. Modern editor with templates, sections, and instant PDF export.</p>
           <ul class="chips"><li data-en="AI" data-pt="IA">AI</li><li data-en="Careers" data-pt="Carreira">Careers</li><li data-en="Editor" data-pt="Editor">Editor</li></ul>
           <span class="go"><span data-en="Open Platform" data-pt="Abrir Plataforma">Open Platform</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></span>
         </a>
         <a class="card live" href="/burnaylabs-site/" target="_blank" rel="noopener">
-          <div class="card-top"><span class="icon"><img src="logos/burnaylabs.svg" alt="Burnay Labs" width="44" height="44"></span><span class="badges"><span class="badge live">Product · Live</span></span></div>
+          <div class="card-top"><span class="icon"><img src="logos/marks/burnaylabs-education.svg" alt="Burnay Labs" width="44" height="44"></span><span class="badges"><span class="badge live">Product · Live</span></span></div>
           <div class="title"><span class="num">05</span><h3>Burnay Labs Education</h3></div>
           <p data-en="Portuguese language tutoring platform for young learners. Teacher dashboard with 12 interactive games, curriculum tracking, vocab tools, and student progress analytics." data-pt="Plataforma de tutoria de língua portuguesa para crianças. Dashboard para professores com 12 jogos interativos, gestão de currículo, ferramentas de vocabulário e analytics de progresso dos alunos.">Portuguese language tutoring platform for young learners. Teacher dashboard with 12 interactive games, curriculum tracking, vocab tools, and student progress analytics.</p>
           <ul class="chips"><li>EdTech</li><li data-en="Games" data-pt="Jogos">Games</li><li>Firebase</li></ul>
@@ -470,21 +472,21 @@ body.invert .scene .kicker{color:#6E6E78}
       <div class="grid-head"><div class="kicker" data-en="Legacy" data-pt="Legado">Legacy</div><span class="count">06 — 10 / 15</span></div>
       <div class="cards">
         <div class="card beta wide" role="button" tabindex="0" data-modal="vendasia">
-          <div class="card-top"><span class="icon"><img src="logos/vendasia.svg" alt="VendasIA" width="44" height="44"></span><span class="badges"><span class="badge beta">Product · Beta</span></span></div>
+          <div class="card-top"><span class="icon"><img src="logos/marks/vendasia.svg" alt="VendasIA" width="44" height="44"></span><span class="badges"><span class="badge beta">Product · Beta</span></span></div>
           <div class="title"><span class="num">06</span><h3>VendasIA</h3></div>
           <p data-en="AI sales toolkit for modern teams. Autonomous SDR agent that generates personalized Portuguese B2B messages at scale, plus an M&amp;A CRM with AI-powered deal analysis." data-pt="Toolkit de vendas com IA para equipas modernas. Agente SDR autónomo que gera mensagens B2B em português à medida e em escala, com CRM de M&amp;A e análise de negócios por IA.">AI sales toolkit for modern teams. Autonomous SDR agent that generates personalized Portuguese B2B messages at scale, plus an M&amp;A CRM with AI-powered deal analysis.</p>
           <ul class="chips"><li data-en="AI" data-pt="IA">AI</li><li data-en="Sales" data-pt="Vendas">Sales</li><li>B2B</li></ul>
           <span class="go"><span data-en="Learn More" data-pt="Saber Mais">Learn More</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></span>
         </div>
         <div class="card beta wide" role="button" tabindex="0" data-modal="mbacoach">
-          <div class="card-top"><span class="icon"><img src="logos/mbacoach.svg" alt="MBA Coach" width="44" height="44"></span><span class="badges"><span class="badge beta">Product · Beta</span></span></div>
+          <div class="card-top"><span class="icon"><img src="logos/marks/mbacoach.svg" alt="MBA Coach" width="44" height="44"></span><span class="badges"><span class="badge beta">Product · Beta</span></span></div>
           <div class="title"><span class="num">07</span><h3>MBA Coach</h3></div>
           <p data-en="AI-powered MBA coaching platform. Personalized preparation for MBA applications with competitive research, market analysis, and structured guidance through the entire process." data-pt="Plataforma de coaching para MBA com IA. Preparação à medida para candidaturas, com pesquisa competitiva, análise de mercado e acompanhamento estruturado em todo o processo.">AI-powered MBA coaching platform. Personalized preparation for MBA applications with competitive research, market analysis, and structured guidance through the entire process.</p>
           <ul class="chips"><li data-en="AI" data-pt="IA">AI</li><li data-en="Education" data-pt="Educação">Education</li><li>Coaching</li></ul>
           <span class="go"><span data-en="Learn More" data-pt="Saber Mais">Learn More</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></span>
         </div>
         <a class="card live" href="https://lifeorg-app.web.app" target="_blank" rel="noopener">
-          <div class="card-top"><span class="icon"><img src="logos/lifeorganizer.svg" alt="LifeOrganizer" width="44" height="44"></span><span class="badges"><span class="badge live">Product · Live</span></span></div>
+          <div class="card-top"><span class="icon"><img src="logos/marks/lifeorganizer.svg" alt="LifeOrganizer" width="44" height="44"></span><span class="badges"><span class="badge live">Product · Live</span></span></div>
           <div class="title"><span class="num">08</span><h3>LifeOrganizer</h3></div>
           <p data-en="Personal life management platform. Tracks communications across WhatsApp, Gmail, and Instagram, maps relationships with frequency analysis, and keeps you balanced with smart alerts." data-pt="Plataforma de gestão de vida pessoal. Acompanha conversas no WhatsApp, Gmail e Instagram, mapeia relações por frequência e mantém o equilíbrio com alertas inteligentes.">Personal life management platform. Tracks communications across WhatsApp, Gmail, and Instagram, maps relationships with frequency analysis, and keeps you balanced with smart alerts.</p>
           <ul class="chips"><li data-en="Productivity" data-pt="Produtividade">Productivity</li><li data-en="AI" data-pt="IA">AI</li><li>CRM</li></ul>
@@ -498,7 +500,7 @@ body.invert .scene .kicker{color:#6E6E78}
           <span class="go"><span data-en="Learn More" data-pt="Saber Mais">Learn More</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></span>
         </div>
         <a class="card live" href="/sleep-diary/" target="_blank" rel="noopener">
-          <div class="card-top"><span class="icon"><img src="logos/sleep-diary.svg" alt="Diário de Sono" width="44" height="44"></span><span class="badges"><span class="badge live">Product · Live</span></span></div>
+          <div class="card-top"><span class="icon"><img src="logos/marks/sleep-diary.svg" alt="Diário de Sono" width="44" height="44"></span><span class="badges"><span class="badge live">Product · Live</span></span></div>
           <div class="title"><span class="num">10</span><h3>Diário de Sono</h3></div>
           <p data-en="Sleep tracking app. Log your sleep patterns, analyze habits over time, and get personalized recommendations to improve sleep quality. Beautiful, calming interface." data-pt="App de registo do sono. Regista os teus padrões de sono, analisa hábitos ao longo do tempo e recebe recomendações à medida para melhorar a qualidade do descanso. Interface bonita e calma.">Sleep tracking app. Log your sleep patterns, analyze habits over time, and get personalized recommendations to improve sleep quality. Beautiful, calming interface.</p>
           <ul class="chips"><li data-en="Health" data-pt="Saúde">Health</li><li data-en="Tracking" data-pt="Registo">Tracking</li><li>Analytics</li></ul>
@@ -511,28 +513,28 @@ body.invert .scene .kicker{color:#6E6E78}
       <div class="grid-head"><div class="kicker" data-en="Legacy" data-pt="Legado">Legacy</div><span class="count">11 — 15 / 15</span></div>
       <div class="cards">
         <div class="card beta wide" role="button" tabindex="0" data-modal="memorycleaner">
-          <div class="card-top"><span class="icon"><img src="logos/memorycleaner.svg" alt="MemoryCleaner" width="44" height="44"></span><span class="badges"><span class="badge beta">Product · Beta</span></span></div>
+          <div class="card-top"><span class="icon"><img src="logos/marks/memorycleaner.svg" alt="MemoryCleaner" width="44" height="44"></span><span class="badges"><span class="badge beta">Product · Beta</span></span></div>
           <div class="title"><span class="num">11</span><h3>MemoryCleaner</h3></div>
           <p data-en="Smart macOS memory optimizer. Lives in your menu bar with Tinder-style recommendation cards. Swipe to keep or kill processes, freeing up RAM instantly." data-pt="Otimizador inteligente de memória para macOS. Vive na barra de menus com cartões de recomendação ao estilo Tinder. Faz swipe para manter ou terminar processos e libertar RAM ao instante.">Smart macOS memory optimizer. Lives in your menu bar with Tinder-style recommendation cards. Swipe to keep or kill processes, freeing up RAM instantly.</p>
           <ul class="chips"><li>macOS</li><li data-en="Utility" data-pt="Utilitário">Utility</li><li>Python</li></ul>
           <span class="go"><span data-en="Learn More" data-pt="Saber Mais">Learn More</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></span>
         </div>
         <div class="card beta wide" role="button" tabindex="0" data-modal="browseragent">
-          <div class="card-top"><span class="icon"><img src="logos/browser-agent.svg" alt="Browser Agent" width="44" height="44"></span><span class="badges"><span class="badge beta">Product · Beta</span></span></div>
+          <div class="card-top"><span class="icon"><img src="logos/marks/browser-agent.svg" alt="Browser Agent" width="44" height="44"></span><span class="badges"><span class="badge beta">Product · Beta</span></span></div>
           <div class="title"><span class="num">12</span><h3>Browser Agent</h3></div>
           <p data-en="AI browser automation agent with visible navigation and chat interface. Control a real Chromium browser with natural language, powered by GPT-4o via browser-use." data-pt="Agente de automação de browser com IA, com navegação visível e interface de chat. Controla um browser Chromium real em linguagem natural, com GPT-4o via browser-use.">AI browser automation agent with visible navigation and chat interface. Control a real Chromium browser with natural language, powered by GPT-4o via browser-use.</p>
           <ul class="chips"><li data-en="AI" data-pt="IA">AI</li><li data-en="Automation" data-pt="Automação">Automation</li><li>CLI</li></ul>
           <span class="go"><span data-en="Learn More" data-pt="Saber Mais">Learn More</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></span>
         </div>
         <div class="card beta" role="button" tabindex="0" data-modal="mindmatch">
-          <div class="card-top"><span class="icon"><img src="logos/mindmatch-mark.svg" alt="MindMatch" width="44" height="44"></span><span class="badges"><span class="badge beta">Product · Beta</span></span></div>
+          <div class="card-top"><span class="icon"><img src="logos/marks/mindmatch.svg" alt="MindMatch" width="44" height="44"></span><span class="badges"><span class="badge beta">Product · Beta</span></span></div>
           <div class="title"><span class="num">13</span><h3>MindMatch</h3></div>
           <p data-en="Nova-funded prototype for a mental health marketplace connecting patients with local psychologists through AI-powered matching. Designed for a Lisbon-first rollout." data-pt="Protótipo financiado pela Nova para um marketplace de saúde mental que liga pacientes a psicólogos locais com matching por IA. Pensado para arrancar primeiro em Lisboa.">Nova-funded prototype for a mental health marketplace connecting patients with local psychologists through AI-powered matching. Designed for a Lisbon-first rollout.</p>
           <ul class="chips"><li data-en="Health" data-pt="Saúde">Health</li><li data-en="AI" data-pt="IA">AI</li><li>Marketplace</li></ul>
           <span class="go"><span data-en="Learn More" data-pt="Saber Mais">Learn More</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></span>
         </div>
         <a class="card live" href="CasePreper/" target="_blank" rel="noopener">
-          <div class="card-top"><span class="icon"><img src="logos/casepreper.svg" alt="CasePreper" width="44" height="44"></span><span class="badges"><span class="badge live">Product · Live</span></span></div>
+          <div class="card-top"><span class="icon"><img src="logos/marks/casepreper.svg" alt="CasePreper" width="44" height="44"></span><span class="badges"><span class="badge live">Product · Live</span></span></div>
           <div class="title"><span class="num">14</span><h3>CasePreper</h3></div>
           <p data-en="AI-powered consulting case interview preparation platform. End-to-end career support from firm research to application tracking, with an agentic assistant that executes tasks." data-pt="Plataforma de preparação para entrevistas de consultoria com IA. Apoio de carreira ponta a ponta, da pesquisa de empresas ao acompanhamento de candidaturas, com um assistente agentic que executa tarefas.">AI-powered consulting case interview preparation platform. End-to-end career support from firm research to application tracking, with an agentic assistant that executes tasks.</p>
           <ul class="chips"><li data-en="AI" data-pt="IA">AI</li><li data-en="Careers" data-pt="Carreira">Careers</li><li data-en="Consulting" data-pt="Consultoria">Consulting</li></ul>
@@ -575,25 +577,25 @@ body.invert .scene .kicker{color:#6E6E78}
         <p class="org-sub" data-en="The OpenClaw Agents Org Chart" data-pt="Organigrama dos Agentes OpenClaw">The OpenClaw Agents Org Chart</p>
       </div>
       <div class="org">
-        <div class="node ceo"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" /></svg></span><span><b>Tomás Batalha</b><small data-en="Founder and CEO" data-pt="Fundador e CEO">Founder and CEO</small></span></div>
+        <div class="node ceo"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c1.3-3.7 4-5.5 7-5.5s5.7 1.8 7 5.5"/></svg></span><span><b>Tomás Batalha</b><small data-en="Founder and CEO" data-pt="Fundador e CEO">Founder and CEO</small></span></div>
         <div class="org-conn"></div>
         <div class="org-label" data-en="HOLDING LEVEL AGENTS" data-pt="AGENTES DE HOLDING">HOLDING LEVEL AGENTS</div>
         <div class="org-row r6">
-          <button class="node" type="button" data-agent="oracle"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 0 0 1.5-.189m-1.5.189a6.01 6.01 0 0 1-1.5-.189m3.75 7.478a12.06 12.06 0 0 1-4.5 0m3.75 2.383a14.406 14.406 0 0 1-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 1 0-7.517 0c.85.493 1.509 1.333 1.509 2.316V18" /></svg></span><span><b>Oracle</b><small data-en="VP Strategy &amp; Mentor" data-pt="VP Estratégia &amp; Mentor">VP Strategy &amp; Mentor</small></span></button>
-          <button class="node" type="button" data-agent="atlas"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0 0 12 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75Z" /></svg></span><span><b>Atlas</b><small data-en="COO / Right Hand" data-pt="COO / Braço Direito">COO / Right Hand</small></span></button>
-          <button class="node" type="button" data-agent="sage"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25Z" /></svg></span><span><b>Sage</b><small data-en="Secretary / PA" data-pt="Secretário / PA">Secretary / PA</small></span></button>
-          <button class="node" type="button" data-agent="iris"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg></span><span><b>Iris</b><small data-en="Browser Agent" data-pt="Agente de Browser">Browser Agent</small></span></button>
-          <button class="node" type="button" data-agent="hera"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" /></svg></span><span><b>Hera</b><small data-en="HR &amp; Onboarding" data-pt="RH &amp; Integração">HR &amp; Onboarding</small></span></button>
-          <button class="node" type="button" data-agent="sentinel"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17 17.25 21A2.652 2.652 0 0 0 21 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 1 1-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 0 0 4.486-6.336l-3.276 3.277a3.004 3.004 0 0 1-2.25-2.25l3.276-3.276a4.5 4.5 0 0 0-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437 1.745-1.437m6.615 8.206L15.75 15.75" /></svg></span><span><b>Sentinel</b><small data-en="Tech Ops / SRE" data-pt="Ops Técnico / SRE">Tech Ops / SRE</small></span></button>
+          <button class="node" type="button" data-agent="oracle"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l1.9 6.6 6.6 1.9-6.6 1.9-1.9 6.6-1.9-6.6-6.6-1.9 6.6-1.9z"/></svg></span><span><b>Oracle</b><small data-en="VP Strategy &amp; Mentor" data-pt="VP Estratégia &amp; Mentor">VP Strategy &amp; Mentor</small></span></button>
+          <button class="node" type="button" data-agent="atlas"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17"/><path d="M12 3.5c2.3 2.3 3.5 5.1 3.5 8.5s-1.2 6.2-3.5 8.5c-2.3-2.3-3.5-5.1-3.5-8.5s1.2-6.2 3.5-8.5z"/></svg></span><span><b>Atlas</b><small data-en="COO / Right Hand" data-pt="COO / Braço Direito">COO / Right Hand</small></span></button>
+          <button class="node" type="button" data-agent="sage"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5.5" width="16" height="14.5" rx="3"/><path d="M4 10h16"/><path d="M8.5 3.5v3M15.5 3.5v3"/></svg></span><span><b>Sage</b><small data-en="Secretary / PA" data-pt="Secretário / PA">Secretary / PA</small></span></button>
+          <button class="node" type="button" data-agent="iris"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.8"/></svg></span><span><b>Iris</b><small data-en="Browser Agent" data-pt="Agente de Browser">Browser Agent</small></span></button>
+          <button class="node" type="button" data-agent="hera"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="8" r="3.3"/><path d="M3.5 20c1.1-3.4 3.6-5.2 6.5-5.2 1.6 0 3 .5 4.1 1.5"/><path d="M18.5 13.5v6M15.5 16.5h6"/></svg></span><span><b>Hera</b><small data-en="HR &amp; Onboarding" data-pt="RH &amp; Integração">HR &amp; Onboarding</small></span></button>
+          <button class="node" type="button" data-agent="sentinel"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h4l2.5-5.5 5 11 2.5-5.5h4"/></svg></span><span><b>Sentinel</b><small data-en="Tech Ops / SRE" data-pt="Ops Técnico / SRE">Tech Ops / SRE</small></span></button>
         </div>
         <div class="org-conn"></div>
         <div class="org-label" data-en="JOBPILOT AI SUBSIDIARY" data-pt="SUBSIDIÁRIA JOBPILOT AI">JOBPILOT AI SUBSIDIARY</div>
         <div class="org-row r5">
-          <button class="node" type="button" data-agent="rex"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" /></svg></span><span><b>Rex</b><small data-en="CEO, JobPilot AI" data-pt="CEO, JobPilot AI">CEO, JobPilot AI</small></span></button>
-          <button class="node" type="button" data-agent="prism"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.847.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z" /></svg></span><span><b>Prism</b><small data-en="VP Strategy" data-pt="VP Estratégia">VP Strategy</small></span></button>
-          <button class="node" type="button" data-agent="kit"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" /></svg></span><span><b>Kit</b><small data-en="Growth Ops Intern" data-pt="Estagiário de Operações de Crescimento">Growth Ops Intern</small></span></button>
-          <button class="node" type="button" data-agent="scout"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" /></svg></span><span><b>Scout</b><small data-en="Intelligence" data-pt="Inteligência">Intelligence</small></span></button>
-          <button class="node" type="button" data-agent="echo"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" d="M10.34 15.84c-.688-.06-1.386-.09-2.09-.09H7.5a4.5 4.5 0 1 1 0-9h.75c.704 0 1.402-.03 2.09-.09m0 9.18c.253.962.584 1.892.985 2.783.247.55.06 1.21-.463 1.511l-.657.38c-.551.318-1.26.117-1.527-.461a20.845 20.845 0 0 1-1.44-4.282m3.102.069a18.03 18.03 0 0 1-.59-4.59c0-1.586.205-3.124.59-4.59m0 9.18a23.848 23.848 0 0 1 8.835 2.535M10.34 6.66a23.847 23.847 0 0 0 8.835-2.535m0 0A23.74 23.74 0 0 0 18.795 3m.38 1.125a23.91 23.91 0 0 1 1.014 5.395m-1.014 8.855c-.118.38-.245.754-.38 1.125m.38-1.125a23.91 23.91 0 0 0 1.014-5.395m0-3.46c.495.413.811 1.035.811 1.73 0 .695-.316 1.317-.811 1.73m0-3.46a24.347 24.347 0 0 1 0 3.46" /></svg></span><span><b>Echo</b><small data-en="Marketing &amp; Growth" data-pt="Marketing &amp; Crescimento">Marketing &amp; Growth</small></span></button>
+          <button class="node" type="button" data-agent="rex"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 17.5l-1-10 5 4 3.5-6.5 3.5 6.5 5-4-1 10z"/></svg></span><span><b>Rex</b><small data-en="CEO, JobPilot AI" data-pt="CEO, JobPilot AI">CEO, JobPilot AI</small></span></button>
+          <button class="node" type="button" data-agent="prism"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4l8.5 15h-17z"/></svg></span><span><b>Prism</b><small data-en="VP Strategy" data-pt="VP Estratégia">VP Strategy</small></span></button>
+          <button class="node" type="button" data-agent="kit"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8.5 12.2l2.4 2.4 4.8-5"/></svg></span><span><b>Kit</b><small data-en="Growth Ops Intern" data-pt="Estagiário de Operações de Crescimento">Growth Ops Intern</small></span></button>
+          <button class="node" type="button" data-agent="scout"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/></svg></span><span><b>Scout</b><small data-en="Intelligence" data-pt="Inteligência">Intelligence</small></span></button>
+          <button class="node" type="button" data-agent="echo"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="1.6"/><path d="M8.6 8.6a4.8 4.8 0 0 0 0 6.8M15.4 8.6a4.8 4.8 0 0 1 0 6.8M5.8 5.8a8.8 8.8 0 0 0 0 12.4M18.2 5.8a8.8 8.8 0 0 1 0 12.4"/></svg></span><span><b>Echo</b><small data-en="Marketing &amp; Growth" data-pt="Marketing &amp; Crescimento">Marketing &amp; Growth</small></span></button>
         </div>
       </div>
     </div>
@@ -767,7 +769,7 @@ body.invert .scene .kicker{color:#6E6E78}
   var projectData = {
     topresume: {
       name: "TopResume.ai",
-      logo: "logos/topresume.svg",
+      logo: "logos/marks/topresume.svg",
       color: "#8b5cf6",
       desc: "AI-powered CV editor platform. Write, edit, and optimize your resume with real-time AI assistance. Modern editor with templates, sections, and instant PDF export.",
       features: [
@@ -781,7 +783,7 @@ body.invert .scene .kicker{color:#6E6E78}
     },
     vendasia: {
       name: "VendasIA",
-      logo: "logos/vendasia.svg",
+      logo: "logos/marks/vendasia.svg",
       color: "#10b981",
       desc: "AI sales toolkit for modern teams. Autonomous SDR agent that generates personalized Portuguese B2B messages at scale, plus an M&A CRM with AI-powered deal analysis.",
       features: [
@@ -795,7 +797,7 @@ body.invert .scene .kicker{color:#6E6E78}
     },
     mbacoach: {
       name: "MBA Coach",
-      logo: "logos/mbacoach.svg",
+      logo: "logos/marks/mbacoach.svg",
       color: "#f59e0b",
       desc: "AI-powered MBA coaching platform. Personalized preparation for MBA applications with competitive research, market analysis, and structured guidance through the entire process.",
       features: [
@@ -809,7 +811,7 @@ body.invert .scene .kicker{color:#6E6E78}
     },
     lifeorganizer: {
       name: "LifeOrganizer",
-      logo: "logos/lifeorganizer.svg",
+      logo: "logos/marks/lifeorganizer.svg",
       color: "#3b82f6",
       desc: "Personal life management platform. Tracks communications across WhatsApp, Gmail, and Instagram, maps relationships with frequency analysis, and keeps you balanced with smart alerts.",
       features: [
@@ -837,7 +839,7 @@ body.invert .scene .kicker{color:#6E6E78}
     },
     sleepdiary: {
       name: "Diário de Sono",
-      logo: "logos/sleep-diary.svg",
+      logo: "logos/marks/sleep-diary.svg",
       color: "#8b5cf6",
       desc: "Sleep tracking app. Log your sleep patterns, analyze habits over time, and get personalized recommendations to improve sleep quality. Beautiful, calming interface.",
       features: [
@@ -851,7 +853,7 @@ body.invert .scene .kicker{color:#6E6E78}
     },
     memorycleaner: {
       name: "MemoryCleaner",
-      logo: "logos/memorycleaner.svg",
+      logo: "logos/marks/memorycleaner.svg",
       color: "#10b981",
       desc: "Smart macOS memory optimizer. Lives in your menu bar with Tinder-style recommendation cards. Swipe to keep or kill processes, freeing up RAM instantly.",
       features: [
@@ -865,7 +867,7 @@ body.invert .scene .kicker{color:#6E6E78}
     },
     browseragent: {
       name: "Browser Agent",
-      logo: "logos/browser-agent.svg",
+      logo: "logos/marks/browser-agent.svg",
       color: "#3b82f6",
       desc: "AI browser automation agent with visible navigation and chat interface. Control a real Chromium browser with natural language, powered by GPT-4o via browser-use.",
       features: [
@@ -923,7 +925,7 @@ body.invert .scene .kicker{color:#6E6E78}
     },
     mindmatch: {
       name: "MindMatch",
-      logo: "logos/mindmatch-mark.svg",
+      logo: "logos/marks/mindmatch.svg",
       color: "#8b5cf6",
       desc: "Nova-funded prototype for a mental health marketplace connecting patients with local psychologists through AI-powered matching. Designed for a Lisbon-first rollout.",
       features: [
@@ -938,7 +940,7 @@ body.invert .scene .kicker{color:#6E6E78}
     },
     casepreper: {
       name: "CasePreper",
-      logo: "logos/casepreper.svg",
+      logo: "logos/marks/casepreper.svg",
       color: "#10b981",
       desc: "AI-powered consulting case interview preparation platform. End-to-end career support from firm research to application tracking, with an agentic assistant that executes tasks.",
       features: [
@@ -967,7 +969,6 @@ body.invert .scene .kicker{color:#6E6E78}
     if (p.logo) iconEl.innerHTML = '<img src="' + esc(p.logo) + '" alt="' + esc(p.name) + '" style="width:56px;height:56px;border-radius:12px;">';
     else if (p.emoji) iconEl.innerHTML = '<span style="font-size:48px;">' + p.emoji + "</span>";
     iconEl.style.background = p.color + "22";
-    iconEl.style.borderColor = p.color + "44";
     document.getElementById("modalFeatures").innerHTML = "<h4>Key Features</h4><ul>" + p.features.map(function (f) { return "<li>" + esc(f) + "</li>"; }).join("") + "</ul>";
     document.getElementById("modalTags").innerHTML = p.tags.map(function (t) { return '<span class="modal-tag">' + esc(t) + "</span>"; }).join("");
     document.getElementById("projectModal").classList.add("active");
@@ -991,7 +992,7 @@ body.invert .scene .kicker{color:#6E6E78}
     document.getElementById("agentDesc").textContent = a.desc;
     document.getElementById("agentMeta").innerHTML =
       a.tags.map(function (t) { return '<span class="agent-modal-tag">' + esc(t) + "</span>"; }).join("") +
-      '<span class="agent-modal-tag" style="background:rgba(139,92,246,0.1);color:#a78bfa;border-color:rgba(139,92,246,0.2);">Reports to: ' + esc(a.reportsTo) + "</span>";
+      '<span class="agent-modal-tag" style="background:rgba(139,92,246,0.14);color:#c4b5fd;">Reports to: ' + esc(a.reportsTo) + "</span>";
     document.getElementById("agentModalOverlay").classList.add("active");
     lockScroll(true);
     document.querySelector("#agentModalOverlay .agent-modal-close").focus({ preventScroll: true });
@@ -1391,7 +1392,6 @@ body.invert .scene .kicker{color:#6E6E78}
       if (xk > 0) portrait.style.clipPath = `inset(0 0 ${(xk * 100).toFixed(2)}% 0 round 20px)`; else wipe(portrait, k, "up", 20);
       set(portrait, { y: -xk * 40 });
       pimg.style.scale = (1.16 - 0.16 * seg(r, 0, 0.7) + xk * 0.06).toFixed(4);
-      portrait.style.setProperty("--gs", (1 - seg(r, 0.3, 0.8)).toFixed(3));
       const X = i => outK(x, i, 0.5, 0.06);
       foType(seg(r, 0.16, 0.28, lin)); foLight(seg(r, 0.2, 0.5, lin));
       const h = seg(r, 0.18, 0.42, outExpo);

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+  <!-- VendasIA: the growth arrow -->
+  <rect width="120" height="120" rx="27" fill="#16A34A"/>
+  <g stroke="#FFFFFF" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M41 79L78 42"/>
+    <path d="M51 42H78V69"/>
+  </g>
+</svg>
