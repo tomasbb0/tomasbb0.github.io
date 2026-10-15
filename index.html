@@ -230,8 +230,16 @@ footer{padding-block:48px 56px}
 .card-view-box .card{width:100%;box-shadow:var(--shadow-hi)}
 .cv-close{position:absolute;top:20px;right:20px;width:40px;height:40px;border:0;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.08);color:var(--text-2);font-size:24px;line-height:1;box-shadow:var(--shadow);transition:background .2s,color .2s}
 .cv-close:hover{background:rgba(255,255,255,.14);color:#fff}
-/* app launch: the tapped bubble swells a little before its card opens, as on the Watch */
-.launch{position:fixed;z-index:179;border-radius:50%;pointer-events:none;will-change:transform}
+/* honeycomb launch: the bubble grows to cover the watch face, then flips to show the product on its back */
+.card-view.disc-mode{background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none}
+.card-view.disc-mode .card-view-box{display:none}
+.disc{position:fixed;will-change:transform}
+.disc-flip{position:relative;width:100%;height:100%;transform-style:preserve-3d}
+.disc-face{position:absolute;inset:0;border-radius:50%;overflow:hidden;-webkit-backface-visibility:hidden;backface-visibility:hidden;box-shadow:0 40px 90px -30px rgba(0,0,0,.95)}
+.disc-front{background:#000}
+.disc-front img{display:block;width:100%;height:100%;object-fit:cover;scale:1.02}
+.disc-back{transform:rotateY(180deg);display:grid;place-items:center;background:linear-gradient(180deg,#131318,#0C0C10)}
+.disc-back .card{width:min(380px,68%);padding:0;background:none;box-shadow:none;overflow:visible}
 
 /* modals (product details and agents) */
 .modal-overlay,.agent-modal-overlay{position:fixed;inset:0;z-index:200;display:grid;place-items:center;padding:20px;background:rgba(5,5,6,.62);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);opacity:0;visibility:hidden;transition:opacity .25s ease,visibility .25s}
@@ -1093,21 +1101,34 @@ body.invert .scene .kicker{color:#6E6E78}
 
   // a product card opened from the honeycomb; its own link or "Learn More" still works from here
   var cardFocus = null;
-  function openCard(cd) {
-    var box = document.querySelector("#cardView .card-view-box"), clone = cd.cloneNode(true);
-    clone.removeAttribute("style");
-    box.replaceChildren(clone);
+  // mount, when given, puts the honeycomb's flipping disc in the view instead of a plain copy of the card
+  function openCard(cd, mount) {
+    var v = document.getElementById("cardView"), box = v.querySelector(".card-view-box");
     cardFocus = document.activeElement;
-    document.getElementById("cardView").classList.add("active");
+    if (mount) {
+      box.replaceChildren();
+      v.classList.add("disc-mode");
+      mount(v);
+    } else {
+      var clone = cd.cloneNode(true);
+      clone.removeAttribute("style");
+      box.replaceChildren(clone);
+    }
+    v.classList.add("active");
     lockScroll(true);
-    document.querySelector("#cardView .cv-close").focus({ preventScroll: true });
+    v.querySelector(".cv-close").focus({ preventScroll: true });
   }
   function closeCard() {
     var v = document.getElementById("cardView");
     if (!v.classList.contains("active")) return;
-    v.classList.remove("active");
+    if (window.onCardClose && window.onCardClose()) return;   // the disc plays its exit first, then calls finishCard
+    finishCard();
+  }
+  function finishCard() {
+    var v = document.getElementById("cardView");
+    v.classList.remove("active", "disc-mode");
+    v.querySelector(".cv-close").removeAttribute("style");
     lockScroll(false);
-    if (window.onCardClose) window.onCardClose();
     if (cardFocus) cardFocus.focus({ preventScroll: true });
   }
   // Escape closes the top layer only: the details modal first, then the card
@@ -1486,37 +1507,76 @@ body.invert .scene .kicker{color:#6E6E78}
   const SLOTS = [];
   [4, 5, 4, 5, 4].forEach((n, r) => { for (let c = 0; c < n; c++) SLOTS.push({ x: c - (n - 1) / 2, y: ((r - 2) * ROW) / SP }); });
   SLOTS.sort((a, b) => Math.hypot(a.x, a.y) - Math.hypot(b.x, b.y) || Math.atan2(a.y, a.x) - Math.atan2(b.y, b.x));
-  // Opening a product works like launching an app on the Watch, discreetly: the bubble swells where it sits and only then
-  // does its card appear over it; closing settles the bubble back to its size.
+  // Opening a product works like launching an app on the Watch: the bubble grows until it covers the whole face, then
+  // flips over to show the product on its back. Closing flips it back and settles it into its slot.
   let launched = null;
-  const LAUNCH_MS = 300, LAND_MS = 320, ZOOM = 1.6;
-  const place = (el, r) => Object.assign(el.style, { left: r.left + "px", top: r.top + "px", width: r.width + "px", height: r.height + "px" });
+  const PERSP = "perspective(1800px) ";
+  // resolves when the animation ends, or after its duration if the tab is hidden and animations are paused
+  const settle = (anim, ms) => new Promise(res => {
+    let done = false;
+    const fin = () => { if (!done) { done = true; res(); } };
+    anim.finished.then(fin, fin);
+    setTimeout(fin, ms + 200);
+  });
+  const toBubble = (b, cx, cy, R) => {
+    const r = $(".bub-c", b).getBoundingClientRect();
+    return `translate(${(r.left + r.width / 2 - cx).toFixed(1)}px,${(r.top + r.height / 2 - cy).toFixed(1)}px) scale(${(r.width / (2 * R)).toFixed(4)})`;
+  };
   const launch = (b, cd) => {
     if (launched || !window.openCard) return;
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) { window.openCard(cd); return; }
-    const el = document.createElement("div");
-    el.className = "launch";
-    el.innerHTML = `<span class="bub-c"><img alt="" src="${$("img", b).getAttribute("src")}"></span>`;
-    place(el, $(".bub-c", b).getBoundingClientRect());
-    document.body.append(el);
+    const hc = hive.getBoundingClientRect(), cx = hc.left, cy = hc.top;
+    let R = 0;                                                          // the watch face: just big enough to cover every app
+    bubs.forEach(o => {
+      if (+o.b.style.opacity < 0.05) return;
+      const r = $(".bub-c", o.b).getBoundingClientRect();
+      R = Math.max(R, Math.hypot(r.left + r.width / 2 - cx, r.top + r.height / 2 - cy) + r.width / 2);
+    });
+    R = Math.max(260, Math.min(R + 12, Math.min(innerWidth, innerHeight) / 2 - 10));
+    const disc = document.createElement("div"), name = b.getAttribute("aria-label");
+    disc.className = "disc";
+    disc.setAttribute("role", "dialog"); disc.setAttribute("aria-modal", "true"); disc.setAttribute("aria-label", name);
+    Object.assign(disc.style, { left: cx - R + "px", top: cy - R + "px", width: 2 * R + "px", height: 2 * R + "px" });
+    disc.innerHTML = `<div class="disc-flip"><div class="disc-face disc-front"><img alt="" src="${$("img", b).getAttribute("src")}"></div><div class="disc-face disc-back"></div></div>`;
+    const clone = cd.cloneNode(true);
+    clone.removeAttribute("style");
+    $(".disc-back", disc).append(clone);
+    const flip = $(".disc-flip", disc);
+    launched = { b, disc, flip, R, cx, cy, grow: null, turn: null, closing: false };
+    const from = toBubble(b, cx, cy, R);
     b.style.visibility = "hidden";
-    launched = { b, el };
-    let shown = false;
-    const show = () => { if (!shown && launched && launched.el === el && !launched.landing) { shown = true; window.openCard(cd); } };
-    el.animate([{ transform: "none" }, { transform: `scale(${ZOOM})` }], { duration: LAUNCH_MS, easing: "cubic-bezier(.2,.7,.2,1)", fill: "forwards" })
-      .finished.then(show, show);
-    setTimeout(show, LAUNCH_MS + 150);                                  // animations pause in a hidden tab; never leave the visitor waiting
+    window.openCard(cd, v => {
+      const x = $(".cv-close", v);
+      v.insertBefore(disc, x);
+      // the close button sits just off the disc's rim, so reaching for it keeps the pointer (and the lens) on the face
+      Object.assign(x.style, { left: cx + R * 0.78 - 20 + "px", top: cy - R * 0.78 - 20 + "px", right: "auto" });
+    });
+    const me = launched;
+    me.grow = disc.animate([{ transform: from }, { transform: "none" }], { duration: 480, easing: "cubic-bezier(.3,.7,.2,1)", fill: "both" });
+    settle(me.grow, 480).then(() => {
+      if (launched !== me || me.closing) return;
+      me.turn = flip.animate([{ transform: PERSP + "rotateY(0deg)" }, { transform: PERSP + "rotateY(180deg)" }], { duration: 560, easing: "cubic-bezier(.45,0,.2,1)", fill: "both" });
+    });
   };
+  // called by closeCard: plays the exit and finishes the close itself (returns true while a disc is up)
   window.onCardClose = () => {
-    if (!launched || launched.landing) return;
-    const { b, el } = launched;
-    launched.landing = true;
-    el.getAnimations().forEach(a => a.cancel());
-    place(el, $(".bub-c", b).getBoundingClientRect());                 // land where the bubble is now (the hive drifts with the cursor)
-    const done = () => { if (launched && launched.el === el) { b.style.visibility = ""; el.remove(); launched = null; } };
-    el.animate([{ transform: `scale(${ZOOM})` }, { transform: "none" }], { duration: LAND_MS, delay: 60, easing: "cubic-bezier(.4,0,.2,1)", fill: "both" })
-      .finished.then(done, done);
-    setTimeout(done, LAND_MS + 300);
+    const me = launched;
+    if (!me) return false;
+    if (me.closing) return true;
+    me.closing = true;
+    const unflip = me.turn ? (me.turn.reverse(), settle(me.turn, 560)) : Promise.resolve();
+    unflip.then(() => {
+      const anim = me.disc.animate([{ transform: "none" }, { transform: toBubble(me.b, me.cx, me.cy, me.R) }],   // land where the bubble is now
+        { duration: 420, easing: "cubic-bezier(.5,0,.2,1)", fill: "both" });
+      if (me.grow) me.grow.cancel();
+      return settle(anim, 420);
+    }).then(() => {
+      me.b.style.visibility = "";
+      me.disc.remove();
+      launched = null;
+      window.finishCard();
+    });
+    return true;
   };
   const bubs = $$(".pgrid .card").slice(0, SLOTS.length).map((cd, i) => {
     const b = document.createElement("button"), name = $("h3", cd).textContent.trim();
