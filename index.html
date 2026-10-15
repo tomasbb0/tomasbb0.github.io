@@ -179,15 +179,19 @@ html.scenes .grid-head{display:flex;align-items:baseline;justify-content:space-b
 .org-head h2{max-width:none}
 .org-sub{margin:14px auto 0;color:var(--text-2);font-size:17px}
 .org{display:flex;flex-direction:column;align-items:center}
-.node{position:relative;display:flex;align-items:center;gap:10px;width:100%;padding:15px 14px 13px;border:0;border-radius:14px;text-align:left;color:var(--text);
-  background:linear-gradient(180deg,#131318,#0C0C10);box-shadow:var(--shadow);transition:box-shadow .3s,transform .3s,background .45s}
+.node{position:relative;display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;gap:18px;width:100%;min-height:132px;
+  padding:18px 16px 16px;border:0;border-radius:22px;text-align:left;color:var(--text);
+  background:linear-gradient(155deg,rgba(255,255,255,.11),rgba(255,255,255,.02) 50%,rgba(255,255,255,.05)),#111116;
+  box-shadow:0 30px 60px -32px rgba(0,0,0,.95),0 3px 10px rgba(0,0,0,.35);transition:box-shadow .3s,transform .3s}
+.node::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:radial-gradient(260px circle at var(--gx,28%) var(--gy,0%),rgba(255,255,255,.17),transparent 62%)}
 button.node{cursor:pointer}
-button.node:hover{transform:translateY(-2px);box-shadow:var(--shadow-hi)}
+button.node:hover{transform:translateY(-3px);box-shadow:0 38px 70px -32px rgba(0,0,0,1),0 3px 10px rgba(0,0,0,.35)}
 /* agent icons: one plain white filled shape each */
-.node .ic{flex:0 0 auto;display:grid;place-items:center;width:20px;height:20px;color:#fff}
-.node .ic svg{display:block;width:20px;height:20px}
-.node b{display:block;font-weight:600;font-size:14.5px;letter-spacing:-.01em;line-height:1.3}
-.node small{display:block;margin-top:3px;font-family:var(--mono);font-size:11px;line-height:1.35;letter-spacing:-.03em;color:var(--text-3);white-space:nowrap}
+.node .ic{flex:0 0 auto;display:grid;place-items:center;width:28px;height:28px;color:#fff}
+.node .ic svg{display:block;width:28px;height:28px}
+.node b{display:block;font-weight:600;font-size:17px;letter-spacing:-.02em;line-height:1.25}
+.node small{display:block;margin-top:4px;font-family:var(--mono);font-size:11.5px;line-height:1.35;letter-spacing:-.01em;color:#A3A3AD}
 .org-conn{width:1px;height:28px;margin:10px 0;background:linear-gradient(rgba(255,255,255,.24),rgba(255,255,255,.06));transform-origin:top;transform:scaleY(var(--k,1))}
 .org-label{margin:0 0 14px;font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--text-3)}
 .org-row{display:grid;gap:10px;width:100%}
@@ -195,12 +199,29 @@ button.node:hover{transform:translateY(-2px);box-shadow:var(--shadow-hi)}
 .org-row.r5{grid-template-columns:repeat(5,minmax(0,1fr));max-width:84%}
 @media (max-width:1240px){.org-row.r6{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media (max-width:1100px){.org-row.r6,.org-row.r5{grid-template-columns:repeat(3,minmax(0,1fr));max-width:none}}
+/* Team in the scroll scenes: an arena in depth. The agents fly in from far away and settle into two gently curved rows
+   over a dotted floor; the pointer tilts the arena (the rows slide against each other) and moves a soft light across
+   the glass. Positions are set by the scene script. */
+#orgScene.org3d .org{position:relative;display:block;width:100%;height:min(60vh,540px);perspective:1500px;perspective-origin:50% 36%}
+.org-arena{position:absolute;inset:0;transform-style:preserve-3d}
+.org-floor{position:absolute;left:50%;top:50%;width:3200px;height:2600px;margin:-1300px 0 0 -1600px;pointer-events:none;opacity:0;
+  background:radial-gradient(circle,rgba(255,255,255,.2) 1.3px,transparent 1.9px) 0 var(--fy,0px)/38px 38px;
+  -webkit-mask-image:radial-gradient(ellipse 34% 44% at 50% 50%,#000 20%,transparent 72%);mask-image:radial-gradient(ellipse 34% 44% at 50% 50%,#000 20%,transparent 72%)}
+.org-floor::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 20% 24% at 50% 56%,rgba(140,170,255,.12),transparent 70%)}
+#orgScene.org3d .node{position:absolute;left:50%;top:50%;width:176px;height:158px;min-height:0;margin:-79px 0 0 -88px;padding:20px 18px 17px;border-radius:26px;
+  transition:none;will-change:transform,opacity}
+#orgScene.org3d button.node:hover{transform:none}
+#orgScene.org3d .node .ic,#orgScene.org3d .node .ic svg{width:30px;height:30px}
+#orgScene.org3d .node b{font-size:19px}
+#orgScene.org3d .node small{white-space:nowrap}
+#orgScene.org3d .org-label{position:absolute;left:50%;top:50%;margin:0;white-space:nowrap;will-change:transform,opacity}
 @media (max-width:560px){.org-row.r6,.org-row.r5{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .founder{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:64px;align-items:center;margin-top:120px}
 @media (max-width:900px){.founder{grid-template-columns:1fr;gap:36px;margin-top:80px}}
 .portrait{position:relative;justify-self:center;width:100%;max-width:440px;aspect-ratio:4/5}
 .portrait img,.portrait .pix{position:absolute;left:50%;bottom:0;width:106%;height:auto;max-width:none;translate:-50% 0;transform-origin:50% 100%;-webkit-mask-image:linear-gradient(#000 80%,transparent);mask-image:linear-gradient(#000 80%,transparent)}
-.portrait .pix{opacity:0;pointer-events:none;image-rendering:pixelated}   /* the cut at the bottom fades out */
+.portrait .pix{opacity:0;pointer-events:none;image-rendering:pixelated}
+.portrait img,.portrait .pix{transition:opacity .4s ease}   /* the cut at the bottom fades out */
 .founder-text h2{font-size:clamp(28px,3.4vw,44px)}
 .founder-text p{margin:18px 0 0;color:var(--text-2);font-size:15.5px;line-height:1.62;max-width:62ch}
 .founder-text .label{margin:28px 0 -4px}
@@ -345,25 +366,11 @@ html.scenes main,html.scenes footer{display:none}
   .scene .go{padding-top:12px}
   .scene .org-head{margin-bottom:24px}
   .scene .org-sub{margin-top:8px}
-  .scene .org-conn{height:20px;margin:6px 0}
   .scene .org-label{margin-bottom:10px}
   .scene .node{padding:11px 14px 10px}
 }
 /* About: full-screen white panel that opens from a line */
 .m-panel{position:absolute;inset:0;background:#F4F4F6;clip-path:inset(50% 0);visibility:hidden}
-.m-panel.m-graphite{background:#1C1C21}
-#orgScene .kicker,#orgScene .org-sub,#orgScene .org-label,#orgScene .node b,#orgScene .node small,#orgScene .node .ic{transition:color .45s ease}
-#orgScene .org-conn{transition:background .45s ease}
-/* Team: black cards on a graphite page, the dark twin of About's white cards on grey (the page is lighter than the
-   cards, so their shadows are darker than the page and show) */
-#orgScene.gra .kicker,#orgScene.gra .org-label{color:#8A8A94}
-#orgScene.gra .org-sub{color:#B4B4BC}
-#orgScene.gra .org-conn{background:rgba(255,255,255,.22)}
-#orgScene.gra .node{background:#050506;box-shadow:0 1px 2px rgba(0,0,0,.35),0 24px 50px -26px rgba(0,0,0,.95)}
-#orgScene.gra button.node:hover{box-shadow:0 1px 2px rgba(0,0,0,.35),0 30px 56px -22px rgba(0,0,0,1)}
-#orgScene.gra .node b{color:#F5F5F7}
-#orgScene.gra .node small{color:#8A8A94}
-#orgScene.gra .node .ic{color:#fff}
 /* scene navigation */
 .scene-dots{position:fixed;right:12px;top:50%;translate:0 -50%;z-index:60;display:flex;flex-direction:column}
 .scene-dots button{width:18px;height:18px;padding:6px;border:0;border-radius:50%;background:rgba(255,255,255,.25) content-box;transition:background .3s, scale .3s}
@@ -475,7 +482,7 @@ body.invert .scene .kicker{color:#6E6E78}
       <h1 class="rise d1" data-en="We build software<br>and advise<br><em><span class=&quot;sr-only&quot;>founders, enterprises and executive teams</span><span class=&quot;tw&quot; aria-hidden=&quot;true&quot;>founders</span><i class=&quot;caret&quot; aria-hidden=&quot;true&quot;></i>.</em>" data-pt="Construímos software<br>e aconselhamos<br><em><span class=&quot;sr-only&quot;>fundadores, empresas e equipas executivas</span><span class=&quot;tw&quot; aria-hidden=&quot;true&quot;>fundadores</span><i class=&quot;caret&quot; aria-hidden=&quot;true&quot;></i>.</em>">We build software<br>and advise<br><em><span class="sr-only">founders, enterprises and executive teams</span><span class="tw" aria-hidden="true">founders</span><i class="caret" aria-hidden="true"></i>.</em></h1>
       <p class="lead rise d2" data-en="Burnay Labs is a holding company in Lisbon. We design, build and ship our own products, and work with founders and executive teams on strategy and go-to-market." data-pt="A Burnay Labs é uma holding em Lisboa. Desenhamos, construímos e lançamos os nossos próprios produtos, e trabalhamos com fundadores e equipas executivas em estratégia e go-to-market.">Burnay Labs is a holding company in Lisbon. We design, build and ship our own products, and work with founders and executive teams on strategy and go-to-market.</p>
       <div class="hero-ctas rise d3">
-        <a class="btn btn-white" href="#products"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13 2L4 14h7l-2 8 9-12h-7l2-8z"/></svg><span data-en="See Legacy" data-pt="Ver Legado">See Legacy</span></a>
+        <a class="btn btn-white" href="#products"><span data-en="See Legacy" data-pt="Ver Legado">See Legacy</span></a>
         <a class="btn btn-ghost" href="#about" data-en="About Us" data-pt="Sobre Nós">About Us</a>
       </div>
       <div class="hero-meta rise d4">
@@ -707,7 +714,6 @@ body.invert .scene .kicker{color:#6E6E78}
           <button class="node" type="button" data-agent="hera"><span class="ic"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="7.5" r="4.5"/><path d="M3.5 21.5a8.5 8.5 0 0 1 17 0z"/></svg></span><span><b>Hera</b><small data-en="HR &amp; Onboarding" data-pt="RH &amp; Integração">HR &amp; Onboarding</small></span></button>
           <button class="node" type="button" data-agent="sentinel"><span class="ic"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l8.5 3.5v6.2c0 5-3.6 8.9-8.5 10.3-4.9-1.4-8.5-5.3-8.5-10.3V5.5z"/></svg></span><span><b>Sentinel</b><small data-en="Tech Ops / SRE" data-pt="Ops Técnico / SRE">Tech Ops / SRE</small></span></button>
         </div>
-        <div class="org-conn"></div>
         <div class="org-label" data-en="JOBPILOT AI SUBSIDIARY" data-pt="SUBSIDIÁRIA JOBPILOT AI">JOBPILOT AI SUBSIDIARY</div>
         <div class="org-row r5">
           <button class="node" type="button" data-agent="rex"><span class="ic"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M2.5 19.5l-1-12.5 6 5L12 3.5l4.5 8.5 6-5-1 12.5z"/></svg></span><span><b>Rex</b><small data-en="CEO, JobPilot AI" data-pt="CEO, JobPilot AI">CEO, JobPilot AI</small></span></button>
@@ -1433,6 +1439,67 @@ body.invert .scene .kicker{color:#6E6E78}
 
 <script>window.SCENES = window.SCENES && ["#heroBg", "#bigmark", ".hero h1", ".hero .lead", ".hero .hero-ctas", ".hero .hero-meta", "#legacyHead h2", ".pgrid .card", "#about .stat", "#founderScene .portrait img", "#stack .tag", "#contact .cta", "footer .foot", "#nav"].every(q => document.querySelector(q));</script>
 <script>
+/* ---------- founder photo: it arrives as colour pixels and resolves on its own clock, so it is seen however fast you
+   scroll: big blocks pop in at random, then step down in size, each size held long enough to see, until it is the
+   photo. The scroll scenes start it when the founder arrives (and reset it when it leaves); without them it starts the
+   first time the photo comes into view. ---------- */
+window.pixelReveal = (() => {
+  const img = document.querySelector("#founderScene .portrait img");
+  if (!img || matchMedia("(prefers-reduced-motion: reduce)").matches) return null;
+  const portrait = img.parentElement;
+  const pix = Object.assign(document.createElement("canvas"), { className: "pix" });
+  pix.setAttribute("aria-hidden", "true");
+  portrait.append(pix);
+  const ctx = pix.getContext("2d"), small = document.createElement("canvas"), sctx = small.getContext("2d"), order = [];
+  const STEPS = [56, 44, 34, 26, 20, 15, 11, 8, 6, 4, 3, 2];             // block sizes it resolves through, in photo pixels
+  const POP_MS = 1100, STEP_MS = 360;
+  let key = "", t0 = 0, raf = 0;
+  const draw = (shown, sharp) => {
+    const done = sharp >= 1;
+    img.style.opacity = done ? "" : "0";
+    pix.style.opacity = done ? "0" : "1";
+    if (done || !img.complete || !img.naturalWidth) return;
+    const W = img.naturalWidth, H = img.naturalHeight;
+    if (pix.width !== W) { pix.width = W; pix.height = H; }
+    const size = STEPS[Math.min(STEPS.length - 1, Math.floor(sharp * STEPS.length))], k = size + ":" + shown.toFixed(3);
+    if (k === key) return;
+    key = k;
+    const cols = Math.ceil(W / size), rows = Math.ceil(H / size), n = cols * rows;
+    small.width = cols; small.height = rows;
+    sctx.drawImage(img, 0, 0, cols, rows);                                // each block is the average colour of its patch
+    ctx.clearRect(0, 0, W, H);
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(small, 0, 0, cols * size, rows * size);
+    if (shown >= 1) return;
+    if (order.length !== n) {                                             // a fixed random order for the blocks to pop in
+      order.length = 0;
+      for (let i = 0; i < n; i++) order.push(i);
+      for (let i = n - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [order[i], order[j]] = [order[j], order[i]]; }
+    }
+    for (let q = Math.floor(shown * n); q < n; q++) { const i = order[q]; ctx.clearRect((i % cols) * size, Math.floor(i / cols) * size, size, size); }
+  };
+  const run = now => {
+    const t = now - t0, shown = Math.min(1, t / POP_MS), sharp = t < POP_MS ? 0 : Math.min(1, (t - POP_MS) / (STEP_MS * STEPS.length));
+    draw(shown, sharp);
+    raf = sharp < 1 ? requestAnimationFrame(run) : 0;
+  };
+  const start = () => {
+    if (t0) return;
+    if (!img.complete || !img.naturalWidth) { img.addEventListener("load", start, { once: true }); return; }
+    t0 = performance.now(); key = ""; raf = requestAnimationFrame(run);
+  };
+  const reset = () => { cancelAnimationFrame(raf); raf = 0; t0 = 0; key = ""; ctx.clearRect(0, 0, pix.width, pix.height); img.style.opacity = "0"; pix.style.opacity = "1"; };
+  reset();
+  if (!window.SCENES) {
+    if ("IntersectionObserver" in window) {
+      const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { start(); io.disconnect(); } }), { threshold: 0.35 });
+      io.observe(portrait);
+    } else start();
+  }
+  return { start, reset, pix };
+})();
+</script>
+<script>
 /* ---------- scenes: each section is a full-screen scene that builds, holds and leaves as you scroll ---------- */
 (() => {
   if (!window.SCENES) return;
@@ -1764,35 +1831,87 @@ body.invert .scene .kicker{color:#6E6E78}
     },
   };
 
-  // ---------- 7. Team: the org chart grows from the founder down; each agent's purple line draws and its icon lights up
-  const org = $("#orgScene");
-  const ogA = { kick: $(".kicker", org), h2: $("h2", org), sub: $(".org-sub", org), conns: $$(".org-conn", org), labels: $$(".org-label", org), rows: $$(".org-row", org).map(rw => $$(".node", rw)) };
+  // ---------- 7. Team: an ogArena in depth. The agents fly in from far away and settle into two gently curved rows over a
+  // dotted floor that streams towards you as the camera moves; the pointer tilts the arena (the rows slide against each
+  // other) and moves a soft light across the glass; the agent under the pointer comes forward. Leaving, they fly past you.
+  const org = $("#orgScene"), orgBox = $(".org", org);
+  const ogA = { kick: $(".kicker", org), h2: $("h2", org), sub: $(".org-sub", org), labels: $$(".org-label", org), rows: $$(".org-row", org).map(rw => $$(".node", rw)) };
   const ogType = typer(ogA.kick), ogLight = lighter(ogA.h2), ogLabels = ogA.labels.map(l => typer(l));
-  const TIERS = [0.24, 0.56];
-  const teamPanel = document.createElement("div"); teamPanel.className = "m-panel m-graphite"; stage.append(teamPanel);
+  org.classList.add("org3d");
+  const ogArena = Object.assign(document.createElement("div"), { className: "org-arena" });
+  const ogFloor = Object.assign(document.createElement("div"), { className: "org-floor" });
+  ogFloor.style.transform = "translate3d(0,248px,-760px) rotateX(90deg)";
+  ogArena.append(ogFloor, ...ogA.labels, ...ogA.rows.flat());
+  orgBox.replaceChildren(ogArena);
+  const OG_ARC = 2600, OG_TW = 176, OG_TH = 158, OG_GAP = 24;                       // the rows curve gently round the viewer
+  const OG_ROW = [{ y: -126, z: -340, at: 0.14 }, { y: 138, z: 0, at: 0.31 }]; // holding level (behind, higher), JobPilot AI (front)
+  let ogSd = 11;
+  const ogRnd = () => (ogSd = (ogSd * 16807) % 2147483647) / 2147483647;
+  let ogOn = false, ogR = 0, ogX = 0, ogT = 0, ogRaf = 0, ogHov = null;
+  const ogP = { x: 0, y: 0, tx: 0, ty: 0 };
+  let ogOrder = 0;
+  const ogTiles = ogA.rows.flatMap((nodes, t) => nodes.map((nd, i) => {
+    const n = nodes.length, phi = (i - (n - 1) / 2) * (OG_TW + OG_GAP) / OG_ARC;
+    const tl = {
+      nd, t, k: ogOrder++, x: OG_ARC * Math.sin(phi), y: OG_ROW[t].y, z: OG_ROW[t].z - OG_ARC * (1 - Math.cos(phi)), ry: (-phi * 180) / Math.PI,
+      sx: (ogRnd() - 0.5) * 2400, sy: (ogRnd() - 0.5) * 1200, sz: -1500 - ogRnd() * 1700, srx: (ogRnd() - 0.5) * 110, sry: (ogRnd() - 0.5) * 130,
+      h: 0, ph: ogRnd() * 6.283,
+    };
+    const on = () => { ogHov = tl; }, offH = () => { if (ogHov === tl) ogHov = null; };
+    nd.addEventListener("pointerenter", on); nd.addEventListener("pointerleave", offH);
+    nd.addEventListener("focus", on); nd.addEventListener("blur", offH);
+    return tl;
+  }));
+  const ogLerp = (a, b, k) => a + (b - a) * k;
+  const renderOrg = () => {
+    const r = ogR, x = ogX, fit = Math.min(innerHeight / 880, innerWidth / 1260, 1.06), settle = seg(r, 0, 0.72, inOut);
+    ogArena.style.transform = `scale(${fit.toFixed(4)}) translateZ(${(-170 * (1 - settle) + 80 * seg(x, 0, 1, inCubic)).toFixed(1)}px) ` +
+      `rotateX(${(19 - 11 * settle - ogP.y * 5).toFixed(2)}deg) rotateY(${(ogP.x * 7).toFixed(2)}deg)`;
+    ogFloor.style.opacity = (seg(r, 0.04, 0.42) * (1 - seg(x, 0.22, 0.85))).toFixed(3);
+    ogFloor.style.setProperty("--fy", `${(r * 760 + x * 2800 + ogT * 6).toFixed(1)}px`);   // the floor streams towards you
+    const hovMax = Math.max(0, ...ogTiles.map(tl => tl.h)), gx = `${(50 + ogP.x * 60).toFixed(1)}%`, gy = `${(16 + ogP.y * 55).toFixed(1)}%`;
+    ogTiles.forEach(tl => {
+      const a = 0.14 + tl.k * 0.028, k = seg(r, a, a + 0.32, outCubic);
+      const e0 = 0.02 + (tl.t ? 0 : 0.1) + Math.abs(tl.x) / 9000, b = seg(x, e0, e0 + 0.55, inCubic);   // the front row leaves first
+      const px = ogLerp(tl.sx, tl.x, k) * (1 + b * 0.7), py = ogLerp(tl.sy, tl.y, k) + Math.sign(tl.y) * b * 190;
+      const pz = ogLerp(tl.sz, tl.z, k) + tl.h * 70 + b * 1900, s = 1 + tl.h * 0.05;
+      tl.nd.style.transform = `translate3d(${px.toFixed(1)}px,${py.toFixed(1)}px,${pz.toFixed(1)}px) rotateY(${ogLerp(tl.sry, tl.ry, k).toFixed(2)}deg) ` +
+        `rotateX(${ogLerp(tl.srx, 0, k).toFixed(2)}deg) scale(${s.toFixed(3)})`;
+      tl.nd.style.opacity = (Math.min(1, k * 1.8) * (1 - seg(b, 0.45, 1)) * (1 - 0.45 * hovMax * (1 - tl.h))).toFixed(3);
+      const blur = (1 - k) * 10 + b * 8;                                   // out of focus far away, sharp once in place
+      tl.nd.style.filter = blur > 0.3 ? `blur(${blur.toFixed(1)}px)` : "";
+      tl.nd.style.setProperty("--gx", gx); tl.nd.style.setProperty("--gy", gy);   // the light follows the pointer
+    });
+    ogA.labels.forEach((L, t) => {
+      const lk = seg(r, OG_ROW[t].at - 0.03, OG_ROW[t].at + 0.12), lb = seg(x, 0.02 + (t ? 0 : 0.1), 0.5 + (t ? 0 : 0.1), inCubic);
+      ogLabels[t](lk);
+      L.style.transform = `translate3d(-50%,${(OG_ROW[t].y - OG_TH / 2 - 34).toFixed(1)}px,${(OG_ROW[t].z + lb * 1900).toFixed(1)}px)`;
+      L.style.opacity = (lk * (1 - lb)).toFixed(3);
+    });
+  };
+  const ogTick = now => {
+    ogT = now / 1000;
+    ogP.x += (ogP.tx - ogP.x) * 0.07; ogP.y += (ogP.ty - ogP.y) * 0.07;
+    ogTiles.forEach(tl => { tl.h += ((tl === ogHov ? 1 : 0) - tl.h) * 0.16; });
+    renderOrg();
+    ogRaf = ogOn ? requestAnimationFrame(ogTick) : 0;
+  };
+  addEventListener("pointermove", e => {
+    if (!ogOn || e.pointerType !== "mouse") return;
+    ogP.tx = (e.clientX / innerWidth) * 2 - 1; ogP.ty = (e.clientY / innerHeight) * 2 - 1;
+  }, { passive: true });
   const ORG = {
-    off() { teamPanel.style.visibility = "hidden"; org.classList.remove("gra"); },
+    off() { ogOn = false; cancelAnimationFrame(ogRaf); ogRaf = 0; ogHov = null; },
     apply(r, x) {
-      const open = seg(r, 0, 0.3, outExpo) * (1 - seg(x, 0.35, 0.9, inOut));
-      teamPanel.style.visibility = open > 0.001 ? "visible" : "hidden";
-      teamPanel.style.clipPath = `inset(${((1 - open) * 50).toFixed(2)}% 0)`;
-      org.classList.toggle("gra", open > 0.5);
+      ogR = r; ogX = x;
+      if (!ogOn) { ogOn = true; ogRaf = requestAnimationFrame(ogTick); }
       const X = i => outK(x, i, 0.5, 0.06);
       ogType(seg(r, 0, 0.12, lin)); ogLight(seg(r, 0.04, 0.3, lin));
-      const h = seg(r, 0.02, 0.26, outExpo);
+      const hh = seg(r, 0.02, 0.26, outExpo);
       set(ogA.kick, { y: -X(0) * 70, o: 1 - X(0) });
-      set(ogA.h2, { y: (1 - h) * 24 - X(0) * 70, o: h * (1 - X(0)) });
+      set(ogA.h2, { y: (1 - hh) * 24 - X(0) * 70, o: hh * (1 - X(0)) });
       wipe(ogA.sub, seg(r, 0.12, 0.32, inOut)); set(ogA.sub, { y: -X(1) * 70, o: 1 - X(1) });
-      ogA.rows.forEach((nodes, t) => {
-        const a0 = TIERS[t], Xt = X(2 + t), cn = ogA.conns[t - 1];
-        if (cn) { cn.style.setProperty("--k", seg(r, a0, a0 + 0.07, inOut).toFixed(3)); set(cn, { o: 1 - Xt }); }
-        ogLabels[t](seg(r, a0 + 0.04, a0 + 0.12, lin)); set(ogA.labels[t], { y: -Xt * 70, o: 1 - Xt });
-        nodes.forEach((nd, i) => {
-          const a = a0 + 0.1 + i * 0.03, k = seg(r, a, a + 0.1, outExpo);
-          set(nd, { y: (1 - k) * 24 - Xt * 70, o: k * (1 - Xt) });
-          nd.classList.toggle("on", r > a + 0.12);
-        });
-      });
+      renderOrg();
     },
   };
 
@@ -1800,46 +1919,17 @@ body.invert .scene .kicker{color:#6E6E78}
   const fo = $("#founderScene"), portrait = $(".portrait", fo), pimg = $("img", portrait), ft = $(".founder-text", fo);
   const foA = { kick: $(".kicker", ft), h2: $("h2", ft), bio: $(".bio", ft), label: $(".label", ft), ps: $$(".more", ft) };
   const foType = typer(foA.kick), foLight = lighter(foA.h2), foLabel = typer(foA.label);
-  // the photo arrives as colour pixels: blocks pop in at random, then shrink until they are the photo
-  const pix = Object.assign(document.createElement("canvas"), { className: "pix" });
-  pix.setAttribute("aria-hidden", "true");
-  portrait.append(pix);
-  const pctx = pix.getContext("2d"), small = document.createElement("canvas"), sctx = small.getContext("2d"), order = [];
-  const STEPS = [34, 26, 20, 14, 10, 7, 5, 3, 2];                       // block sizes it resolves through, in photo pixels
-  let pixKey = "";
-  const pixelate = (shown, sharp) => {
-    if (!pimg.complete || !pimg.naturalWidth) return;
-    const W = pimg.naturalWidth, H = pimg.naturalHeight, done = sharp >= 1;
-    pimg.style.opacity = done ? "" : "0";
-    pix.style.opacity = done ? "0" : "1";
-    if (done) return;
-    if (pix.width !== W) { pix.width = W; pix.height = H; }
-    const size = STEPS[Math.min(STEPS.length - 1, Math.floor(sharp * STEPS.length))], key = size + ":" + shown.toFixed(3);
-    if (key === pixKey) return;
-    pixKey = key;
-    const cols = Math.ceil(W / size), rows = Math.ceil(H / size), n = cols * rows;
-    small.width = cols; small.height = rows;
-    sctx.drawImage(pimg, 0, 0, cols, rows);                            // each block is the average colour of its patch
-    pctx.clearRect(0, 0, W, H);
-    pctx.imageSmoothingEnabled = false;
-    pctx.drawImage(small, 0, 0, cols * size, rows * size);
-    if (shown >= 1) return;
-    if (order.length !== n) {                                          // a fixed random order for the blocks to pop in
-      order.length = 0;
-      for (let i = 0; i < n; i++) order.push(i);
-      for (let i = n - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [order[i], order[j]] = [order[j], order[i]]; }
-    }
-    for (let q = Math.floor(shown * n); q < n; q++) { const i = order[q]; pctx.clearRect((i % cols) * size, Math.floor(i / cols) * size, size, size); }
-  };
+  const px = window.pixelReveal, pix = px && px.pix;                  // the colour-pixel reveal (its own clock)
   const FOUNDER = {
+    off() { if (px) px.reset(); },                                   // it plays again the next time the founder arrives
     apply(r, x) {
       const xk = seg(x, 0, 0.7, inCubic);
       portrait.style.clipPath = xk > 0 ? `inset(0 0 ${(xk * 100).toFixed(2)}% 0 round 20px)` : "";
       set(portrait, { y: -xk * 40 });
       const sc = (1.12 - 0.12 * seg(r, 0, 0.7) + xk * 0.06).toFixed(4), drift = `translateY(${((0.5 - r) * 46).toFixed(1)}px)`;
-      pimg.style.scale = pix.style.scale = sc;                          // parallax: the photo drifts against its frame
-      pimg.style.transform = pix.style.transform = drift;
-      pixelate(seg(r, 0, 0.2), seg(r, 0.18, 0.78));
+      pimg.style.scale = sc; pimg.style.transform = drift;            // parallax: the photo drifts against its frame
+      if (pix) { pix.style.scale = sc; pix.style.transform = drift; }
+      if (px && r > 0.04) px.start();
       const X = i => outK(x, i, 0.5, 0.06);
       foType(seg(r, 0.16, 0.28, lin)); foLight(seg(r, 0.2, 0.5, lin));
       const h = seg(r, 0.18, 0.42, outExpo);
