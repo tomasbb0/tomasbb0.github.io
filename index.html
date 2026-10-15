@@ -180,9 +180,9 @@ html.scenes .grid-head{display:flex;align-items:baseline;justify-content:space-b
 .org-sub{margin:14px auto 0;color:var(--text-2);font-size:17px}
 .org{display:flex;flex-direction:column;align-items:center}
 .node{position:relative;display:flex;align-items:center;gap:12px;width:100%;padding:15px 16px 13px;border:0;border-radius:14px;text-align:left;color:var(--text);
-  background:linear-gradient(180deg,#131318,#0C0C10);box-shadow:var(--shadow);transition:box-shadow .3s,background .3s}
+  background:#000;box-shadow:0 1px 2px rgba(0,0,0,.6),0 24px 50px -28px rgba(150,170,210,.26);transition:box-shadow .3s,transform .3s}
 button.node{cursor:pointer}
-button.node:hover{background:linear-gradient(180deg,#17171D,#0E0E12);box-shadow:var(--shadow-hi)}
+button.node:hover{transform:translateY(-2px);box-shadow:0 1px 2px rgba(0,0,0,.6),0 30px 56px -26px rgba(150,170,210,.36)}
 /* agent icons: one plain white filled shape each */
 .node .ic{flex:0 0 auto;display:grid;place-items:center;width:20px;height:20px;color:#fff}
 .node .ic svg{display:block;width:20px;height:20px}
