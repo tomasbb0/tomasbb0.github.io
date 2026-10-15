@@ -1,0 +1,18 @@
+# Every link, logo and image the site depends on must work: checked on every push and every Monday, so a link that
+# dies later (a site going down, an app moving) shows up as a failed run and an email instead of a broken page.
+name: Check links
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: "0 7 * * 1"
+  workflow_dispatch:
+jobs:
+  links:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python3 tools/check_links.py index.html
