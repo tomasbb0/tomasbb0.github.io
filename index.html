@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-<script>window.SCENES_OK = !matchMedia('(prefers-reduced-motion: reduce)').matches && innerWidth >= 900 && innerHeight >= 600; window.SCENES = window.SCENES_OK;</script>
+<script>window.SCENES_COMPACT = innerWidth < 900; window.SCENES_OK = !matchMedia('(prefers-reduced-motion: reduce)').matches && (window.SCENES_COMPACT ? innerHeight >= 500 && innerHeight > innerWidth : innerHeight >= 600); window.SCENES = window.SCENES_OK;</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Burnay Labs · Products by Tomás Batalha</title>
@@ -93,6 +93,7 @@ button{font:inherit;color:inherit}
 .btn-ghost{background:rgba(255,255,255,.06);color:var(--text);box-shadow:0 1px 2px rgba(0,0,0,.6),0 10px 28px -14px rgba(0,0,0,.95)}
 .btn-ghost:hover{background:rgba(255,255,255,.1)}
 @media (max-width:560px){.nav .btn-github{display:none}}
+@media (max-width:470px){.nav .btn-connect{display:none}}
 @media (max-width:360px){.brand span{display:none}}
 
 /* hero */
@@ -420,6 +421,36 @@ html.scenes main,html.scenes footer{display:none}
 body.invert .scene-dots button:not(.on){background:rgba(0,0,0,.2) content-box}
 body.invert .scene-dots button.on{background:#0A0A0D content-box}
 body.invert .scene .kicker{color:#6E6E78}
+/* phones (portrait): the same scenes, laid out for a tall narrow screen. svh is the height with the address bar showing */
+html.compact .scene{padding:68px 0 16px}
+html.compact .hero-meta{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:40px;font-size:11.5px;line-height:1.35}
+html.compact .hero-meta b{font-size:19px}
+html.compact .scene-dots,html.compact .scroll-cue{display:none}   /* phones: the menu covers navigation, and people scroll anyway */
+html.compact .grid-head{flex-direction:column;align-items:flex-start;gap:6px}
+html.compact .hive-wrap{height:calc(100vh - 92px);height:calc(100svh - 92px)}
+html.compact .bub-n{font-size:16px;top:calc(100% + 7px)}   /* scaled with the bubble: about 12px at the lens */
+html.compact .scene .portrait{height:min(40vh,340px);height:min(40svh,340px)}
+html.compact .scene .founder{gap:22px}
+html.compact .scene .founder-text{position:relative;z-index:1}   /* the story passes over the pinned photo */
+html.compact .scene .founder-text p{font-size:14.5px}
+html.compact .scene .org-head{margin-bottom:8px}
+html.compact .scene .org-sub{font-size:15px}
+html.compact #orgScene.org3d .org{height:min(52vh,460px);height:min(52svh,460px)}
+html.compact #orgScene.org3d .node{width:150px;height:136px;margin:-68px 0 0 -75px;padding:16px 14px 14px;border-radius:22px}
+html.compact #orgScene.org3d .node .ic,html.compact #orgScene.org3d .node .ic svg{width:26px;height:26px}
+html.compact #orgScene.org3d .node b{font-size:16px}
+html.compact #orgScene.org3d .node small{font-size:10.5px}
+html.compact .scene .stack-track{justify-content:flex-start}
+html.compact .scene .cta{padding:40px 20px}
+html.compact .scene .foot{margin-top:16px}
+html.compact .disc-back .card{width:84%}
+html.compact .disc-back .card h3{font-size:23px}
+html.compact .disc-back .card p{font-size:14.5px;line-height:1.5}
+html.compact .disc-back .icon{width:44px;height:44px;border-radius:11px}
+html.compact .disc-back .go{font-size:14px}
+html.compact .disc-more{width:86%}
+html.compact .disc-more h3{font-size:22px}
+html.compact .disc-more p,html.compact .disc-more ul{font-size:14px}
 </style>
 </head>
 <body>
@@ -483,7 +514,7 @@ body.invert .scene .kicker{color:#6E6E78}
       <button class="lang-btn" type="button" onclick="setLang('pt')">PT</button>
     </div>
     <a class="btn btn-ghost btn-github" href="https://github.com/tomasbb0" target="_blank" rel="noopener">GitHub</a>
-    <a class="btn btn-ghost" href="https://linkedin.com/in/tomasmbatalha" target="_blank" rel="noopener">Connect</a>
+    <a class="btn btn-ghost btn-connect" href="https://linkedin.com/in/tomasmbatalha" target="_blank" rel="noopener">Connect</a>
   </div>
 </div></header>
 <div class="menu-sheet" id="menuSheet">
@@ -1463,10 +1494,12 @@ body.invert .scene .kicker{color:#6E6E78}
   if (cue) { const fade = () => { cue.style.opacity = Math.max(0, 1 - scrollY / 180).toFixed(2); }; addEventListener("scroll", fade, { passive: true }); fade(); }
   // the hero entrance animates transform/opacity; once done it steps aside so the scroll effects can take over
   document.querySelectorAll(".rise").forEach(el => el.addEventListener("animationend", () => el.classList.remove("rise"), { once: true }));
-  // switching between the scenes and the plain page needs a fresh page
-  const want = () => !reduce && innerWidth >= 900 && innerHeight >= 600;
+  // switching between the wide scenes, the phone scenes and the plain page needs a fresh page. Phones get the scenes in
+  // portrait; the address bar sliding in and out as you scroll never counts as a change
+  const mode = () => reduce ? "plain" : innerWidth < 900 ? (innerHeight >= 500 && innerHeight > innerWidth ? "compact" : "plain") : innerHeight >= 600 ? "wide" : "plain";
+  const MODE = window.SCENES_OK ? (window.SCENES_COMPACT ? "compact" : "wide") : "plain";
   let rt;
-  addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { if (want() !== window.SCENES_OK) location.reload(); }, 350); });
+  addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { if (mode() !== MODE) location.reload(); }, 350); });
   if (reduce) return;
 
   // hero numbers count up to their value
@@ -1610,6 +1643,12 @@ window.pixelReveal = (() => {
   const inOut = t => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
   const seg = (r, a, b, f = outCubic) => f(clamp((r - a) / (b - a)));
   document.documentElement.classList.add("scenes", "js-fx");
+  const COMPACT = !!window.SCENES_COMPACT;                             // phones (portrait): the same scenes, laid out for a tall narrow screen
+  if (COMPACT) document.documentElement.classList.add("compact");
+  // the screen height the timeline is measured in. On phones the address bar slides in and out as you scroll and changes
+  // innerHeight by about 80px; that must not shift every scene, so only a real change (rotation, a new window) counts
+  let vhW = 0, vhH = 0;
+  const VH = () => { if (!vhH || innerWidth !== vhW || Math.abs(innerHeight - vhH) > 160) { vhW = innerWidth; vhH = innerHeight; } return vhH; };
 
   // ---------- stage and scenes (the page's own elements are moved, nothing is duplicated or lost)
   const stage = document.createElement("div"); stage.className = "stage"; document.body.prepend(stage);
@@ -1720,15 +1759,19 @@ window.pixelReveal = (() => {
   const hiveHead = $(".pgrid .grid-head"), hive = Object.assign(document.createElement("div"), { className: "hive" });
   const hint = $(".count", hiveHead);
   hint.className = "hive-hint";
-  hint.textContent = document.documentElement.lang === "pt" ? "Mova o rato para explorar · clique para abrir" : "Move to explore · click to open";
+  hint.textContent = document.documentElement.lang === "pt"
+    ? (COMPACT ? "Deslize para explorar · toque para abrir" : "Mova o rato para explorar · clique para abrir")
+    : (COMPACT ? "Scroll to explore · tap to open" : "Move to explore · click to open");
   hiveWrap.append(hiveHead, hive);
   const hType = typer($(".kicker", hiveHead));
   // a symmetric hex block, rows of 4, 5, 4, 5, 4 (22 places), mirrored top to bottom and left to right. Rows sit a
   // little further apart than true hex packing so the names under the bubbles never touch the row below. Products fill
   // it from the centre outwards, so the flagship sits in the middle.
-  const SP = 150, ROW = 140;                                           // centre-to-centre spacing across and between rows (bubbles are 120px)
-  const SLOTS = [];
-  [4, 5, 4, 5, 4].forEach((n, r) => { for (let c = 0; c < n; c++) SLOTS.push({ x: c - (n - 1) / 2, y: ((r - 2) * ROW) / SP }); });
+  // Phones get a tall narrow comb (rows of 3, 4, 3, 4, 3, 4, 3) that scrolls up under the lens as you scroll.
+  const SP = 150, ROW = COMPACT ? 150 : 140;                           // centre-to-centre spacing across and between rows (bubbles are 120px)
+  const SLOTS = [], HROWS = COMPACT ? [3, 4, 3, 4, 3, 4, 3] : [4, 5, 4, 5, 4];
+  HROWS.forEach((n, r) => { for (let c = 0; c < n; c++) SLOTS.push({ x: c - (n - 1) / 2, y: ((r - (HROWS.length - 1) / 2) * ROW) / SP }); });
+  const hiveZoom = () => COMPACT ? Math.min(1, (innerWidth - 16) / (4 * SP)) : 1;   // phones: the comb shrinks to the screen's width
   SLOTS.sort((a, b) => Math.hypot(a.x, a.y) - Math.hypot(b.x, b.y) || Math.atan2(a.y, a.x) - Math.atan2(b.y, b.x));
   // Opening a product works like launching an app on the Watch: the bubble grows until it covers the whole face, turning
   // from a circle into a rounded square on the way, then flips over to show the product on its back. Closing plays it
@@ -1757,7 +1800,7 @@ window.pixelReveal = (() => {
       const r = $(".bub-c", o.b).getBoundingClientRect();
       R = Math.max(R, Math.hypot(r.left + r.width / 2 - cx, r.top + r.height / 2 - cy) + r.width / 2);
     });
-    R = Math.max(260, Math.min(R + 12, Math.min(innerWidth, innerHeight) / 2 - 10));
+    R = Math.min(Math.min(innerWidth, innerHeight) / 2 - 10, Math.max(260, R + 12));   // never wider than the screen (phones)
     const disc = document.createElement("div"), name = b.getAttribute("aria-label");
     disc.className = "disc";
     disc.setAttribute("role", "dialog"); disc.setAttribute("aria-modal", "true"); disc.setAttribute("aria-label", name);
@@ -1839,13 +1882,14 @@ window.pixelReveal = (() => {
     const { x, y } = SLOTS[i];
     return { b, x, y, d: Math.hypot(x, y), h: 0 };
   });
-  let hOn = false, hr = 0, hx = 0, hz = 1, hHov = -1, hRaf = 0;
+  let hOn = false, hr = 0, hx = 0, hHov = -1, hRaf = 0, hPan = 0;
   const foc = { x: 0, y: 0, tx: 0, ty: 0 };                            // focus point (where bubbles are biggest), eased towards the mouse
   const smooth = t => t * t * (3 - 2 * t);
   const renderHive = () => {
-    const R = Math.min(innerWidth, innerHeight) * 0.42, driftX = -foc.x * 0.18, driftY = -foc.y * 0.18;
+    const hz = hiveZoom(), R = Math.min(innerWidth, VH()) * (COMPACT ? 0.5 : 0.42), driftX = -foc.x * 0.18, driftY = -foc.y * 0.18;
+    const under = COMPACT ? hiveHead.getBoundingClientRect().bottom - hive.getBoundingClientRect().top : -1e4;   // phones: the heading's edge
     const pos = bubs.map(o => {
-      let px = o.x * SP * hz + driftX, py = o.y * SP * hz + driftY;
+      let px = o.x * SP * hz + driftX, py = o.y * SP * hz + driftY + hPan;
       const fish = 1 - smooth(clamp((Math.hypot(px - foc.x, py - foc.y) / R - 0.12) / 0.8));   // strong Watch lens: big at the focus, small at the rim
       const pull = 1 - 0.22 * (1 - fish);                               // the rim draws in, as on the Watch
       return { px: px * pull, py: py * pull, fish };
@@ -1856,19 +1900,19 @@ window.pixelReveal = (() => {
       const fish = pos[i].fish;
       bubs.forEach((n, j) => {                                          // neighbours slide away from a hovered bubble to make room
         if (j === i || n.h < 0.01) return;
-        const dx = px - pos[j].px, dy = py - pos[j].py, d = Math.hypot(dx, dy) || 1, reach = SP * 1.8;
-        if (d < reach) { const f = (1 - d / reach) * 30 * n.h; px += (dx / d) * f; py += (dy / d) * f; }
+        const dx = px - pos[j].px, dy = py - pos[j].py, d = Math.hypot(dx, dy) || 1, reach = SP * hz * 1.8;
+        if (d < reach) { const f = (1 - d / reach) * 30 * hz * n.h; px += (dx / d) * f; py += (dy / d) * f; }
       });
       const out = seg(hx, o.d * 0.12, o.d * 0.12 + 0.55, inCubic);     // leaving: ring by ring from the centre outwards
       // neighbouring rings turn in opposite directions: the ring swings round the centre and each bubble flips the same way
       const dir = Math.round(o.d) % 2 ? -1 : 1, turn = dir * 0.7 * out, cs = Math.cos(turn), sn = Math.sin(turn);
       [px, py] = [px * cs - py * sn, px * sn + py * cs];
-      const s = (0.3 + 0.72 * fish) * hz * (1 + 0.38 * o.h) * (0.35 + 0.65 * k) * (1 - 0.2 * out);    // hovered: up to 38% bigger
+      const s = (0.3 + 0.72 * fish * (COMPACT ? 1.18 : 1)) * hz * (1 + 0.38 * o.h) * (0.35 + 0.65 * k) * (1 - 0.2 * out);    // hovered: up to 38% bigger
       // leaving, the bubble flips edge-on (a quarter turn in 3D) and fades
       o.b.style.transform = `translate(${px.toFixed(1)}px,${py.toFixed(1)}px) perspective(600px) rotateY(${(dir * 90 * out).toFixed(1)}deg) scale(${s.toFixed(4)})`;
-      o.b.style.opacity = (k * (1 - out)).toFixed(3);
+      o.b.style.opacity = (k * (1 - out) * clamp((py - under - 14) / 70)).toFixed(3);   // phones: fade out under the heading
       o.b.style.zIndex = String(Math.round(fish * 100 + o.h * 200));
-      o.b.style.setProperty("--lo", clamp((s - 0.7) / 0.12).toFixed(3));    // names show once a bubble is big enough
+      o.b.style.setProperty("--lo", clamp((s / hz - 0.7) / 0.12).toFixed(3));    // names show once a bubble is big enough
     });
   };
   const hiveTick = () => {
@@ -1888,10 +1932,23 @@ window.pixelReveal = (() => {
     foc.tx = (e.clientX - innerWidth / 2) * 0.85; foc.ty = (e.clientY - innerHeight * 0.55) * 0.85; hiveKick();
   }, { passive: true });
   document.addEventListener("pointerleave", () => { foc.tx = 0; foc.ty = 0; hiveKick(); });
+  if (COMPACT) {                                                       // phones: the bubbles under your finger swell, like on the Watch
+    const touchLens = e => {
+      const t = e.touches[0];
+      if (!t || !hOn || launched) return;
+      const hc = hive.getBoundingClientRect();
+      foc.tx = t.clientX - hc.left; foc.ty = t.clientY - hc.top; hiveKick();
+    };
+    hiveWrap.addEventListener("touchstart", touchLens, { passive: true });
+    hiveWrap.addEventListener("touchmove", touchLens, { passive: true });
+    hiveWrap.addEventListener("touchend", () => { foc.tx = 0; foc.ty = 0; hiveKick(); }, { passive: true });
+  }
   const HIVE = {
     off() { hOn = false; },
-    apply(r, x) {
+    apply(r, x, p) {
       hOn = true; hr = r; hx = x;
+      // phones: the comb scrolls up under the lens, two and a half rows each way, so every row passes through the middle
+      if (COMPACT) hPan = (0.5 - seg(p, 0.12, 0.92, inOut)) * 5 * ROW * hiveZoom();
       hType(seg(r, 0, 0.08, lin));
       const hk = seg(x, 0, 0.6, inCubic);
       set(hiveHead, { y: -hk * 60, o: 1 - hk });
@@ -1941,8 +1998,12 @@ window.pixelReveal = (() => {
   ogFloor.style.transform = "translate3d(0,248px,-760px) rotateX(90deg)";
   ogArena.append(ogFloor, ...ogA.labels, ...ogA.rows.flat());
   orgBox.replaceChildren(ogArena);
-  const OG_ARC = 2600, OG_TW = 176, OG_TH = 158, OG_GAP = 24;                       // the rows curve gently round the viewer
-  const OG_ROW = [{ y: -126, z: -340, at: 0.14 }, { y: 138, z: 0, at: 0.31 }]; // holding level (behind, higher), JobPilot AI (front)
+  // Phones: smaller tiles on a tighter curve, and each row is a carousel that travels as you scroll (the two rows in
+  // opposite directions), so every agent passes the middle of the screen at full size.
+  const OG_ARC = COMPACT ? 760 : 2600, OG_TW = COMPACT ? 150 : 176, OG_TH = COMPACT ? 136 : 158, OG_GAP = COMPACT ? 14 : 24;   // the rows curve round the viewer
+  const OG_ROW = COMPACT ? [{ y: -92, z: -120, at: 0.14 }, { y: 108, z: 0, at: 0.31 }]
+    : [{ y: -126, z: -340, at: 0.14 }, { y: 138, z: 0, at: 0.31 }];  // holding level (behind, higher), JobPilot AI (front)
+  let ogQ = 0;                                                        // phones: how far the carousels have travelled, 0 to 1
   let ogSd = 11;
   const ogRnd = () => (ogSd = (ogSd * 16807) % 2147483647) / 2147483647;
   let ogOn = false, ogR = 0, ogX = 0, ogT = 0, ogRaf = 0, ogHov = null;
@@ -1951,7 +2012,7 @@ window.pixelReveal = (() => {
   const ogTiles = ogA.rows.flatMap((nodes, t) => nodes.map((nd, i) => {
     const n = nodes.length, phi = (i - (n - 1) / 2) * (OG_TW + OG_GAP) / OG_ARC;
     const tl = {
-      nd, t, k: ogOrder++, x: OG_ARC * Math.sin(phi), y: OG_ROW[t].y, z: OG_ROW[t].z - OG_ARC * (1 - Math.cos(phi)), ry: (-phi * 180) / Math.PI,
+      nd, t, i, n, k: ogOrder++, x: OG_ARC * Math.sin(phi), y: OG_ROW[t].y, z: OG_ROW[t].z - OG_ARC * (1 - Math.cos(phi)), ry: (-phi * 180) / Math.PI,
       sx: (ogRnd() - 0.5) * 2400, sy: (ogRnd() - 0.5) * 1200, sz: -1500 - ogRnd() * 1700, srx: (ogRnd() - 0.5) * 110, sry: (ogRnd() - 0.5) * 130,
       h: 0, ph: ogRnd() * 6.283,
     };
@@ -1962,13 +2023,18 @@ window.pixelReveal = (() => {
   }));
   const ogLerp = (a, b, k) => a + (b - a) * k;
   const renderOrg = () => {
-    const r = ogR, x = ogX, fit = Math.min(innerHeight / 880, innerWidth / 1260, 1.06), settle = seg(r, 0, 0.72, inOut);
+    // phones: the two rows and their labels (about 380px tall) are scaled to the room left under the heading
+    const r = ogR, x = ogX, fit = COMPACT ? Math.min(1, innerWidth / 400, orgBox.clientHeight / 380) : Math.min(innerHeight / 880, innerWidth / 1260, 1.06), settle = seg(r, 0, 0.72, inOut);
     ogArena.style.transform = `scale(${fit.toFixed(4)}) translateZ(${(-170 * (1 - settle) + 80 * seg(x, 0, 1, inCubic)).toFixed(1)}px) ` +
       `rotateX(${(19 - 11 * settle - ogP.y * 5).toFixed(2)}deg) rotateY(${(ogP.x * 7).toFixed(2)}deg)`;
     ogFloor.style.opacity = (seg(r, 0.04, 0.42) * (1 - seg(x, 0.22, 0.85))).toFixed(3);
     ogFloor.style.setProperty("--fy", `${(r * 760 + x * 2800 + ogT * 6).toFixed(1)}px`);   // the floor streams towards you
     const hovMax = Math.max(0, ...ogTiles.map(tl => tl.h)), gx = `${(50 + ogP.x * 60).toFixed(1)}%`, gy = `${(16 + ogP.y * 55).toFixed(1)}%`;
     ogTiles.forEach(tl => {
+      if (COMPACT) {                                                   // the carousel: each tile slides along the curve as you scroll
+        const slot = tl.i - (tl.n - 1) / 2 + (tl.t ? 1 : -1) * (ogQ - 0.5) * (tl.n - 1), phi = (slot * (OG_TW + OG_GAP)) / OG_ARC;
+        tl.x = OG_ARC * Math.sin(phi); tl.z = OG_ROW[tl.t].z - OG_ARC * (1 - Math.cos(phi)); tl.ry = (-phi * 180) / Math.PI;
+      }
       const a = 0.14 + tl.k * 0.028, k = seg(r, a, a + 0.32, outCubic);
       const e0 = 0.02 + (tl.t ? 0 : 0.1) + Math.abs(tl.x) / 9000, b = seg(x, e0, e0 + 0.55, inCubic);   // the front row leaves first
       const px = ogLerp(tl.sx, tl.x, k) * (1 + b * 0.7), py = ogLerp(tl.sy, tl.y, k) + Math.sign(tl.y) * b * 190;
@@ -2000,8 +2066,9 @@ window.pixelReveal = (() => {
   }, { passive: true });
   const ORG = {
     off() { ogOn = false; cancelAnimationFrame(ogRaf); ogRaf = 0; ogHov = null; },
-    apply(r, x) {
+    apply(r, x, p) {
       ogR = r; ogX = x;
+      if (COMPACT) ogQ = seg(p, 0.16, 0.94, lin);
       if (!ogOn) { ogOn = true; ogRaf = requestAnimationFrame(ogTick); }
       const X = i => outK(x, i, 0.5, 0.06);
       ogType(seg(r, 0, 0.12, lin)); ogLight(seg(r, 0.04, 0.3, lin));
@@ -2023,7 +2090,10 @@ window.pixelReveal = (() => {
     apply(r, x, p) {                                                 // p runs 0 to 1 from the founder arriving to it leaving
       const xk = seg(x, 0, 0.7, inCubic);
       portrait.style.clipPath = xk > 0 ? `inset(0 0 ${(xk * 100).toFixed(2)}% 0 round 20px)` : "";
-      set(portrait, { y: -xk * 40 });
+      if (COMPACT) {                                                  // phones: the photo stays put while the story scrolls up over it
+        const rise = -parseFloat((fo.parentElement.style.translate || "0 0").split(" ")[1]) || 0;
+        set(portrait, { y: rise - xk * 40, o: 1 - 0.62 * clamp(rise / 220) });
+      } else set(portrait, { y: -xk * 40 });
       const sc = (1.12 - 0.12 * seg(p, 0, 1, lin) + xk * 0.06).toFixed(4), drift = `translateY(${((0.5 - p) * 46).toFixed(1)}px)`;
       pimg.style.scale = sc; pimg.style.transform = drift;            // parallax: the photo drifts against its frame
       if (pix) { pix.style.scale = sc; pix.style.transform = drift; }
@@ -2044,7 +2114,7 @@ window.pixelReveal = (() => {
   const skA = { kick: $(".kicker", stk), h2: $("h2", stk), tags: $$(".tag", stk), cats: $$(".stack-cat", stk), tracks: $$(".stack-track", stk) };
   const skType = typer(skA.kick), skLight = lighter(skA.h2);
   const STACK = {
-    apply(r, x) {
+    apply(r, x, p) {
       skType(seg(r, 0, 0.16, lin)); skLight(seg(r, 0.05, 0.36, lin));
       const h = seg(r, 0.03, 0.3, outExpo);
       set(skA.kick, { y: -outK(x, 0) * 70, o: 1 - outK(x, 0) });
@@ -2053,8 +2123,17 @@ window.pixelReveal = (() => {
         const a = 0.3 + i * 0.03, k = seg(r, a, a + 0.14, outExpo), X = outK(x, 2 + Math.floor(i / 6), 0.5, 0.07);
         set(tg, { y: (1 - k) * 16 - X * 70, s: 0.85 + 0.15 * k, o: k * (1 - X) });
       });
-      // the rows drift in opposite directions as you scroll through (a strip of film each)
-      skA.tracks.forEach((tr, i) => { tr.style.transform = `translateX(${((i % 2 ? -1 : 1) * ((1 - seg(r, 0.2, 0.75, outCubic)) * 150 - seg(x, 0, 1, inCubic) * 150)).toFixed(1)}px)`; });
+      // the rows drift in opposite directions as you scroll through (a strip of film each). Phones: each row is wider
+      // than the screen, so it travels its whole length while the scene holds and every technology passes by
+      skA.tracks.forEach((tr, i) => {
+        if (COMPACT) {
+          if (tr.over == null) tr.over = Math.max(0, tr.scrollWidth - tr.parentElement.clientWidth);
+          const q = seg(p, 0.08, 0.92, lin);
+          tr.style.transform = `translateX(${(-(i % 2 ? 1 - q : q) * tr.over).toFixed(1)}px)`;
+          return;
+        }
+        tr.style.transform = `translateX(${((i % 2 ? -1 : 1) * ((1 - seg(r, 0.2, 0.75, outCubic)) * 150 - seg(x, 0, 1, inCubic) * 150)).toFixed(1)}px)`;
+      });
       skA.cats.forEach((c, i) => { const k = seg(r, 0.26 + i * 0.08, 0.42 + i * 0.08), X = outK(x, 2 + i, 0.5, 0.07); set(c, { y: -X * 70, o: k * (1 - X) }); });
     },
   };
@@ -2088,10 +2167,15 @@ window.pixelReveal = (() => {
     { id: "contact", nodes: [cta, foot], fx: CONTACT, len: 0.9, hold: 0.5, out: 0, hand: 0 },
   ];
   const PACE = 0.55;                                                   // shorter scroll per scene: less scrolling before the next one
-  const scenes = DEF.map(d => Object.assign({ node: makeScene(d.nodes.filter(Boolean), d.id) }, d, { len: d.len * PACE, hold: d.hold * PACE, out: d.out * PACE }));
+  const PHONE_HOLD = { hive: 1.5, team: 1.7, stack: 1.1 };             // phones: longer holds where the scene travels (comb, carousels, film)
+  const scenes = DEF.map(d => {
+    const hold = COMPACT && PHONE_HOLD[d.id] ? PHONE_HOLD[d.id] : d.hold;
+    return Object.assign({ node: makeScene(d.nodes.filter(Boolean), d.id) }, d, { len: d.len * PACE, hold: hold * PACE, out: d.out * PACE });
+  });
 
   const measure = () => {
-    const vh = innerHeight;
+    const vh = VH();
+    skA.tracks.forEach(tr => { tr.over = null; });                     // phones: film strips are measured again
     let t = 0;
     scenes.forEach((sc, i) => {
       sc.box = sc.node.firstElementChild; sc.box.style.translate = ""; sc.node.style.alignItems = "";
@@ -2118,7 +2202,7 @@ window.pixelReveal = (() => {
   [...dots.children].forEach((b, i) => b.addEventListener("click", () => scrollTo({ top: landAt(scenes[i]), behavior: "smooth" })));
 
   const frame = () => {
-    const y = scrollY, vh = innerHeight;
+    const y = Math.max(0, scrollY), vh = VH();                        // iOS bounces past the top: hold the first scene
     let cur = 0;
     scenes.forEach((sc, i) => {
       const last = i === scenes.length - 1, on = y >= sc.t0 - 2 && (last || y <= sc.t1 + 2);
