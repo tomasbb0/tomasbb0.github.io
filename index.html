@@ -1784,7 +1784,7 @@ body.invert .scene .kicker{color:#6E6E78}
   pix.setAttribute("aria-hidden", "true");
   portrait.append(pix);
   const pctx = pix.getContext("2d"), small = document.createElement("canvas"), sctx = small.getContext("2d"), order = [];
-  const BIG = 34;                                                      // block size at the start, in photo pixels
+  const STEPS = [34, 26, 20, 14, 10, 7, 5, 3, 2];                       // block sizes it resolves through, in photo pixels
   let pixKey = "";
   const pixelate = (shown, sharp) => {
     if (!pimg.complete || !pimg.naturalWidth) return;
@@ -1793,7 +1793,7 @@ body.invert .scene .kicker{color:#6E6E78}
     pix.style.opacity = done ? "0" : "1";
     if (done) return;
     if (pix.width !== W) { pix.width = W; pix.height = H; }
-    const size = Math.max(1, Math.round(BIG * Math.pow(1 / BIG, sharp))), key = size + ":" + shown.toFixed(3);
+    const size = STEPS[Math.min(STEPS.length - 1, Math.floor(sharp * STEPS.length))], key = size + ":" + shown.toFixed(3);
     if (key === pixKey) return;
     pixKey = key;
     const cols = Math.ceil(W / size), rows = Math.ceil(H / size), n = cols * rows;
@@ -1818,7 +1818,7 @@ body.invert .scene .kicker{color:#6E6E78}
       const sc = (1.12 - 0.12 * seg(r, 0, 0.7) + xk * 0.06).toFixed(4), drift = `translateY(${((0.5 - r) * 46).toFixed(1)}px)`;
       pimg.style.scale = pix.style.scale = sc;                          // parallax: the photo drifts against its frame
       pimg.style.transform = pix.style.transform = drift;
-      pixelate(seg(r, 0.02, 0.18), seg(r, 0.16, 0.5));
+      pixelate(seg(r, 0, 0.2), seg(r, 0.18, 0.78));
       const X = i => outK(x, i, 0.5, 0.06);
       foType(seg(r, 0.16, 0.28, lin)); foLight(seg(r, 0.2, 0.5, lin));
       const h = seg(r, 0.18, 0.42, outExpo);
