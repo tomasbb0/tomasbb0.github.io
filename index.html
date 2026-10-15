@@ -1,9 +1,10 @@
 <!doctype html>
 <html lang="en">
 <head>
-<script>window.SCENES_COMPACT = innerWidth < 900; window.SCENES_OK = !matchMedia('(prefers-reduced-motion: reduce)').matches && (window.SCENES_COMPACT ? innerHeight >= 500 && innerHeight > innerWidth : innerHeight >= 600); window.SCENES = window.SCENES_OK;</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- after the viewport tag: before it, a phone reports a 980px desktop width and got the desktop scenes -->
+<script>window.SCENES_COMPACT = innerWidth < 900; window.SCENES_OK = !matchMedia('(prefers-reduced-motion: reduce)').matches && (window.SCENES_COMPACT ? innerHeight >= 500 && innerHeight > innerWidth : innerHeight >= 600); window.SCENES = window.SCENES_OK;</script>
 <title>Burnay Labs · Products by Tomás Batalha</title>
 <meta name="description" content="Burnay Labs is a holding company founded by Tomás Batalha. Ex-Google, ex-Amazon, B2B SaaS co-founder. Consulting and software products, built and shipped in house from Lisbon.">
 <link rel="canonical" href="https://burnaylabs.pt">
@@ -452,6 +453,12 @@ html.compact .disc-back .go{font-size:14px}
 html.compact .disc-more{width:86%}
 html.compact .disc-more h3{font-size:22px}
 html.compact .disc-more p,html.compact .disc-more ul{font-size:14px}
+/* phones: nothing on the stage moves when the iOS address bar slides in or out. The stage is as tall as the screen with
+   the bar hidden (no strip is ever uncovered) and each scene as tall as the screen with it showing (the content never re-centres) */
+html.compact .stage{bottom:auto;height:100vh;height:100lvh}
+html.compact .scene{bottom:auto;height:100vh;height:100svh}
+html.compact .org-floor{display:none}   /* a 3200px plane turned in 3D is more than a phone can composite: it flickers */
+html.compact .nav.scrolled{background:rgba(5,5,6,.92);-webkit-backdrop-filter:none;backdrop-filter:none}   /* a blur over moving scenes flickers on iOS */
 </style>
 </head>
 <body>
@@ -1405,10 +1412,11 @@ html.compact .disc-more p,html.compact .disc-more ul{font-size:14px}
   const SP = 24, BASE_R = 1.2;
   let time = 0;
   const mouse = { x: -9999, y: -9999, on: false };
+  const COARSE = matchMedia("(pointer: coarse)").matches;
   const bursts = [];
   function init() {
     dpr = Math.min(window.devicePixelRatio || 1, 2);
-    W = window.innerWidth; H = window.innerHeight;
+    W = window.innerWidth; H = Math.max(window.innerHeight, COARSE ? screen.height : 0);   // phones: as tall as the screen with the address bar hidden
     canvas.width = W * dpr; canvas.height = H * dpr;
     canvas.style.width = W + "px"; canvas.style.height = H + "px";
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -1445,7 +1453,9 @@ html.compact .disc-more p,html.compact .disc-more ul{font-size:14px}
   document.addEventListener("mousemove", function (e) { mouse.x = e.clientX; mouse.y = e.clientY; mouse.on = true; });
   document.addEventListener("mouseleave", function () { mouse.on = false; mouse.x = -9999; mouse.y = -9999; });
   document.addEventListener("click", function (e) { bursts.push({ x: e.clientX, y: e.clientY, str: 200, life: 1 }); });
-  if (!matchMedia("(prefers-reduced-motion: reduce)").matches) { init(); draw(); addEventListener("resize", init); }
+  // resizing the canvas wipes it (a flash), and on phones the address bar sliding in and out fires resize: only a new width
+  // or a taller window redraws it at a new size
+  if (!matchMedia("(prefers-reduced-motion: reduce)").matches) { init(); draw(); addEventListener("resize", () => { if (window.innerWidth !== W || window.innerHeight > H) init(); }); }
 })();
 </script>
 
@@ -1500,8 +1510,11 @@ html.compact .disc-more p,html.compact .disc-more ul{font-size:14px}
   // portrait; the address bar sliding in and out as you scroll never counts as a change
   const mode = () => reduce ? "plain" : innerWidth < 900 ? (innerHeight >= 500 && innerHeight > innerWidth ? "compact" : "plain") : innerHeight >= 600 ? "wide" : "plain";
   const MODE = window.SCENES_OK ? (window.SCENES_COMPACT ? "compact" : "wide") : "plain";
-  let rt;
-  addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { if (mode() !== MODE) location.reload(); }, 350); });
+  // On touch screens only a new width (rotation) counts: the address bar changes the height alone, and reloading for it
+  // reloaded the page every time the bar slid in or out
+  let rt, rw = innerWidth;
+  const touch = matchMedia("(pointer: coarse)").matches;
+  addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { if (mode() !== MODE && (!touch || innerWidth !== rw)) location.reload(); }, 350); });
   if (reduce) return;
 
   // hero numbers count up to their value
@@ -1648,9 +1661,10 @@ window.pixelReveal = (() => {
   const COMPACT = !!window.SCENES_COMPACT;                             // phones (portrait): the same scenes, laid out for a tall narrow screen
   if (COMPACT) document.documentElement.classList.add("compact");
   // the screen height the timeline is measured in. On phones the address bar slides in and out as you scroll and changes
-  // innerHeight by about 80px; that must not shift every scene, so only a real change (rotation, a new window) counts
-  let vhW = 0, vhH = 0;
-  const VH = () => { if (!vhH || innerWidth !== vhW || Math.abs(innerHeight - vhH) > 160) { vhW = innerWidth; vhH = innerHeight; } return vhH; };
+  // innerHeight by about 80px; that must not shift anything, so phones use the scenes' own height (100svh, the screen with
+  // the bar showing), measured in measure()
+  let vhH = 0;
+  const VH = () => (COMPACT && vhH) || innerHeight;
 
   // ---------- stage and scenes (the page's own elements are moved, nothing is duplicated or lost)
   const stage = document.createElement("div"); stage.className = "stage"; document.body.prepend(stage);
@@ -1885,11 +1899,13 @@ window.pixelReveal = (() => {
     return { b, x, y, d: Math.hypot(x, y), h: 0 };
   });
   let hOn = false, hr = 0, hx = 0, hHov = -1, hRaf = 0, hPan = 0;
+  let hUnder = null;                                                   // phones: the heading's lower edge, from the comb's centre (layout only, no transforms)
+  const hiveUnder = () => hUnder ?? (hUnder = hiveHead.offsetTop + hiveHead.offsetHeight - hive.offsetTop);
   const foc = { x: 0, y: 0, tx: 0, ty: 0 };                            // focus point (where bubbles are biggest), eased towards the mouse
   const smooth = t => t * t * (3 - 2 * t);
   const renderHive = () => {
     const hz = hiveZoom(), R = Math.min(innerWidth, VH()) * (COMPACT ? 0.5 : 0.42), driftX = -foc.x * 0.18, driftY = -foc.y * 0.18;
-    const under = COMPACT ? hiveHead.getBoundingClientRect().bottom - hive.getBoundingClientRect().top : -1e4;   // phones: the heading's edge
+    const under = COMPACT ? hiveUnder() : -1e4;                       // phones: the heading's edge
     const pos = bubs.map(o => {
       let px = o.x * SP * hz + driftX, py = o.y * SP * hz + driftY + hPan;
       const fish = 1 - smooth(clamp((Math.hypot(px - foc.x, py - foc.y) / R - 0.12) / 0.8));   // strong Watch lens: big at the focus, small at the rim
@@ -1911,9 +1927,12 @@ window.pixelReveal = (() => {
       [px, py] = [px * cs - py * sn, px * sn + py * cs];
       const s = (0.3 + 0.72 * fish * (COMPACT ? 1.18 : 1)) * hz * (1 + 0.38 * o.h) * (0.35 + 0.65 * k) * (1 - 0.2 * out);    // hovered: up to 38% bigger
       // leaving, the bubble flips edge-on (a quarter turn in 3D) and fades
-      o.b.style.transform = `translate(${px.toFixed(1)}px,${py.toFixed(1)}px) perspective(600px) rotateY(${(dir * 90 * out).toFixed(1)}deg) scale(${s.toFixed(4)})`;
+      // flat until it leaves: a 3D transform on every bubble all the time makes iOS re-layer them as they move
+      const flip = out > 0 ? ` perspective(600px) rotateY(${(dir * 90 * out).toFixed(1)}deg)` : "";
+      o.b.style.transform = `translate(${px.toFixed(1)}px,${py.toFixed(1)}px)${flip} scale(${s.toFixed(4)})`;
       o.b.style.opacity = (k * (1 - out) * clamp((py - under - 14) / 70)).toFixed(3);   // phones: fade out under the heading
-      o.b.style.zIndex = String(Math.round(fish * 100 + o.h * 200));
+      const z = String(Math.round(fish * (COMPACT ? 4 : 100)) + Math.round(o.h * 200));   // phones: a few layers, so the comb is not re-stacked every frame
+      if (o.z !== z) { o.b.style.zIndex = z; o.z = z; }
       o.b.style.setProperty("--lo", clamp((s / hz - 0.7) / 0.12).toFixed(3));    // names show once a bubble is big enough
     });
   };
@@ -1934,17 +1953,8 @@ window.pixelReveal = (() => {
     foc.tx = (e.clientX - innerWidth / 2) * 0.85; foc.ty = (e.clientY - innerHeight * 0.55) * 0.85; hiveKick();
   }, { passive: true });
   document.addEventListener("pointerleave", () => { foc.tx = 0; foc.ty = 0; hiveKick(); });
-  if (COMPACT) {                                                       // phones: the bubbles under your finger swell, like on the Watch
-    const touchLens = e => {
-      const t = e.touches[0];
-      if (!t || !hOn || launched) return;
-      const hc = hive.getBoundingClientRect();
-      foc.tx = t.clientX - hc.left; foc.ty = t.clientY - hc.top; hiveKick();
-    };
-    hiveWrap.addEventListener("touchstart", touchLens, { passive: true });
-    hiveWrap.addEventListener("touchmove", touchLens, { passive: true });
-    hiveWrap.addEventListener("touchend", () => { foc.tx = 0; foc.ty = 0; hiveKick(); }, { passive: true });
-  }
+  // phones: the lens stays in the middle, as on the Watch, and the comb scrolls under it. Following the finger made the big
+  // spot jump to wherever a scroll began and snap back when it ended
   const HIVE = {
     off() { hOn = false; },
     apply(r, x, p) {
@@ -2005,7 +2015,7 @@ window.pixelReveal = (() => {
   const OG_ARC = COMPACT ? 760 : 2600, OG_TW = COMPACT ? 150 : 176, OG_TH = COMPACT ? 136 : 158, OG_GAP = COMPACT ? 14 : 24;   // the rows curve round the viewer
   const OG_ROW = COMPACT ? [{ y: -92, z: -120, at: 0.14 }, { y: 108, z: 0, at: 0.31 }]
     : [{ y: -126, z: -340, at: 0.14 }, { y: 138, z: 0, at: 0.31 }];  // holding level (behind, higher), JobPilot AI (front)
-  let ogQ = 0;                                                        // phones: how far the carousels have travelled, 0 to 1
+  let ogQ = 0, ogBoxH = 0;                                            // phones: how far the carousels have travelled, 0 to 1; the room for them
   let ogSd = 11;
   const ogRnd = () => (ogSd = (ogSd * 16807) % 2147483647) / 2147483647;
   let ogOn = false, ogR = 0, ogX = 0, ogT = 0, ogRaf = 0, ogHov = null;
@@ -2026,7 +2036,8 @@ window.pixelReveal = (() => {
   const ogLerp = (a, b, k) => a + (b - a) * k;
   const renderOrg = () => {
     // phones: the two rows and their labels (about 380px tall) are scaled to the room left under the heading
-    const r = ogR, x = ogX, fit = COMPACT ? Math.min(1, innerWidth / 400, orgBox.clientHeight / 380) : Math.min(innerHeight / 880, innerWidth / 1260, 1.06), settle = seg(r, 0, 0.72, inOut);
+    if (COMPACT && !ogBoxH) ogBoxH = orgBox.clientHeight;
+    const r = ogR, x = ogX, fit = COMPACT ? Math.min(1, innerWidth / 400, ogBoxH / 380) : Math.min(innerHeight / 880, innerWidth / 1260, 1.06), settle = seg(r, 0, 0.72, inOut);
     ogArena.style.transform = `scale(${fit.toFixed(4)}) translateZ(${(-170 * (1 - settle) + 80 * seg(x, 0, 1, inCubic)).toFixed(1)}px) ` +
       `rotateX(${(19 - 11 * settle - ogP.y * 5).toFixed(2)}deg) rotateY(${(ogP.x * 7).toFixed(2)}deg)`;
     ogFloor.style.opacity = (seg(r, 0.04, 0.42) * (1 - seg(x, 0.22, 0.85))).toFixed(3);
@@ -2045,7 +2056,7 @@ window.pixelReveal = (() => {
         `rotateX(${ogLerp(tl.srx, 0, k).toFixed(2)}deg) scale(${s.toFixed(3)})`;
       tl.nd.style.opacity = (Math.min(1, k * 1.8) * (1 - seg(b, 0.45, 1)) * (1 - 0.45 * hovMax * (1 - tl.h))).toFixed(3);
       const blur = (1 - k) * 10 + b * 8;                                   // out of focus far away, sharp once in place
-      tl.nd.style.filter = blur > 0.3 ? `blur(${blur.toFixed(1)}px)` : "";
+      tl.nd.style.filter = blur > 0.3 && !COMPACT ? `blur(${blur.toFixed(1)}px)` : "";   // phones: a filter inside a 3D scene flickers on iOS
       tl.nd.style.setProperty("--gx", gx); tl.nd.style.setProperty("--gy", gy);   // the light follows the pointer
     });
     ogA.labels.forEach((L, t) => {
@@ -2071,7 +2082,8 @@ window.pixelReveal = (() => {
     apply(r, x, p) {
       ogR = r; ogX = x;
       if (COMPACT) ogQ = seg(p, 0.16, 0.94, lin);
-      if (!ogOn) { ogOn = true; ogRaf = requestAnimationFrame(ogTick); }
+      // phones have no pointer to follow and no floor to stream, so the scene is drawn by scroll alone, not every frame
+      if (!ogOn) { ogOn = true; if (!COMPACT) ogRaf = requestAnimationFrame(ogTick); }
       const X = i => outK(x, i, 0.5, 0.06);
       ogType(seg(r, 0, 0.12, lin)); ogLight(seg(r, 0.04, 0.3, lin));
       const hh = seg(r, 0.02, 0.26, outExpo);
@@ -2176,6 +2188,8 @@ window.pixelReveal = (() => {
   });
 
   const measure = () => {
+    if (COMPACT) vhH = scenes[0].node.clientHeight;
+    hUnder = null; ogBoxH = 0;                                         // phones: measured again on the next frame
     const vh = VH();
     skA.tracks.forEach(tr => { tr.over = null; });                     // phones: film strips are measured again
     let t = 0;
@@ -2228,7 +2242,8 @@ window.pixelReveal = (() => {
   };
   let ticking = false;
   addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(frame); } }, { passive: true });
-  addEventListener("resize", measure);
+  let lastW = innerWidth;                                              // phones: the address bar sliding fires resize too; only a real change re-measures
+  addEventListener("resize", () => { if (!COMPACT || innerWidth !== lastW || scenes[0].node.clientHeight !== vhH) { lastW = innerWidth; measure(); } });
   addEventListener("load", measure);
 
   // menu: jump to the scene already built
