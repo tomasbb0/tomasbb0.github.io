@@ -232,14 +232,25 @@ footer{padding-block:48px 56px}
 .cv-close:hover{background:rgba(255,255,255,.14);color:#fff}
 /* honeycomb launch: the bubble grows to cover the watch face, then flips to show the product on its back */
 .card-view.disc-mode{background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none}
-.card-view.disc-mode .card-view-box{display:none}
-.disc{position:fixed;will-change:transform}
+.card-view.disc-mode .card-view-box,.card-view.disc-mode .cv-close{display:none}
+.disc{position:fixed;will-change:transform;outline:none;cursor:pointer}
 .disc-flip{position:relative;width:100%;height:100%;transform-style:preserve-3d}
-.disc-face{position:absolute;inset:0;border-radius:50%;overflow:hidden;-webkit-backface-visibility:hidden;backface-visibility:hidden;box-shadow:0 40px 90px -30px rgba(0,0,0,.95)}
-.disc-front{background:#000}
-.disc-front img{display:block;width:100%;height:100%;object-fit:cover;scale:1.02}
+.disc-face{position:absolute;inset:0;border-radius:50%;clip-path:circle(50%);overflow:hidden;-webkit-backface-visibility:hidden;backface-visibility:hidden;box-shadow:0 40px 90px -30px rgba(0,0,0,.95)}
+.disc-front{background:#000 center/cover no-repeat}
 .disc-back{transform:rotateY(180deg);display:grid;place-items:center;background:linear-gradient(180deg,#131318,#0C0C10)}
-.disc-back .card{width:min(380px,68%);padding:0;background:none;box-shadow:none;overflow:visible}
+.disc-back .card{width:min(380px,68%);padding:0;background:none;box-shadow:none;overflow:visible;transition:opacity .22s,translate .22s}
+.disc-back .go{cursor:pointer}
+/* Learn More: the details take the card's place on the same disc */
+.disc-more{width:min(400px,70%);max-height:76%;overflow:auto;scrollbar-width:none;animation:discIn .3s cubic-bezier(.2,.7,.2,1)}
+.disc-more::-webkit-scrollbar{display:none}
+.disc-more .dm-top{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.disc-more .dm-top img{width:44px;height:44px;border-radius:11px;object-fit:cover}
+.disc-more h3{margin:0;font-size:21px;font-weight:600;letter-spacing:-.02em}
+.disc-more p{margin:0;color:var(--text-2);font-size:14px;line-height:1.55}
+.disc-more h4{margin:16px 0 8px;font:500 10.5px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--text-3)}
+.disc-more ul{margin:0;padding-left:18px;color:var(--text-2);font-size:13.5px;line-height:1.5}
+.disc-more li+li{margin-top:4px}
+@keyframes discIn{from{opacity:0;translate:0 10px}}
 
 /* modals (product details and agents) */
 .modal-overlay,.agent-modal-overlay{position:fixed;inset:0;z-index:200;display:grid;place-items:center;padding:20px;background:rgba(5,5,6,.62);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);opacity:0;visibility:hidden;transition:opacity .25s ease,visibility .25s}
@@ -459,21 +470,21 @@ body.invert .scene .kicker{color:#6E6E78}
       <div class="grid-head"><div class="kicker" data-en="Legacy" data-pt="Legado">Legacy</div><span class="count">01 — 05 / 22</span></div>
       <div class="cards">
         <a class="card live wide" href="https://jobpilot.pt" target="_blank" rel="noopener">
-          <div class="card-top"><span class="icon"><img src="logos/jobpilot.png" alt="JobPilot AI" width="44" height="44"></span><span class="badges"><span class="badge live">Product · Live</span></span></div>
+          <div class="card-top"><span class="icon"><img src="logos/hq/jobpilot.svg" alt="JobPilot AI" width="44" height="44"></span><span class="badges"><span class="badge live">Product · Live</span></span></div>
           <div class="title"><span class="num">01</span><h3>JobPilot AI</h3></div>
           <p data-en="The complete AI job search Chrome extension. Discover matching jobs, autofill every application, generate cover letters, and track it all. Across 50+ ATS platforms." data-pt="A extensão Chrome completa de pesquisa de emprego com IA. Encontra vagas compatíveis, preenche candidaturas, gera cartas de apresentação e organiza tudo. Funciona em mais de 50 plataformas ATS.">The complete AI job search Chrome extension. Discover matching jobs, autofill every application, generate cover letters, and track it all. Across 50+ ATS platforms.</p>
           <ul class="chips"><li data-en="Chrome Extension" data-pt="Extensão Chrome">Chrome Extension</li><li data-en="AI" data-pt="IA">AI</li><li>SaaS</li></ul>
           <span class="go">jobpilot.pt<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></span>
         </a>
         <div class="card live wide" role="button" tabindex="0" data-modal="maktub">
-          <div class="card-top"><span class="icon"><img src="logos/maktub.png" alt="Maktub" width="44" height="44"></span><span class="badges"><span class="badge live">Product · Live</span></span></div>
+          <div class="card-top"><span class="icon"><img src="logos/hq/maktub.svg" alt="Maktub" width="44" height="44"></span><span class="badges"><span class="badge live">Product · Live</span></span></div>
           <div class="title"><span class="num">02</span><h3>Maktub</h3></div>
           <p data-en="Custom operations platform built for a private client. Bespoke data model, internal dashboards, tailored reporting. Details under NDA." data-pt="Plataforma de operações feita à medida para um cliente privado. Modelo de dados próprio, dashboards internos, relatórios à medida. Detalhes sob NDA.">Custom operations platform built for a private client. Bespoke data model, internal dashboards, tailored reporting. Details under NDA.</p>
           <ul class="chips"><li data-en="Operations" data-pt="Operações">Operations</li><li data-en="Custom" data-pt="À Medida">Custom</li><li data-en="Internal Tool" data-pt="Ferramenta Interna">Internal Tool</li></ul>
           <span class="go"><span data-en="Learn More" data-pt="Saber Mais">Learn More</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></span>
         </div>
         <div class="card live" role="button" tabindex="0" data-modal="mrblue">
-          <div class="card-top"><span class="icon"><img src="logos/mrblue.jpg" alt="Mr Blue" width="44" height="44"></span><span class="badges"><span class="badge live">Product · Live</span><span class="badge consult">Consulting</span></span></div>
+          <div class="card-top"><span class="icon"><img src="logos/hq/mrblue.svg" alt="Mr Blue" width="44" height="44"></span><span class="badges"><span class="badge live">Product · Live</span><span class="badge consult">Consulting</span></span></div>
           <div class="title"><span class="num">03</span><h3>Mr Blue</h3></div>
           <p data-en="Custom AI tool built for a private client. Aggregates and analyses customer feedback at scale. Details under NDA." data-pt="Ferramenta de IA feita à medida para um cliente privado. Agrega e analisa feedback de clientes em escala. Detalhes sob NDA.">Custom AI tool built for a private client. Aggregates and analyses customer feedback at scale. Details under NDA.</p>
           <ul class="chips"><li data-en="AI" data-pt="IA">AI</li><li data-en="Custom" data-pt="À Medida">Custom</li><li data-en="Internal Tool" data-pt="Ferramenta Interna">Internal Tool</li></ul>
@@ -521,7 +532,7 @@ body.invert .scene .kicker{color:#6E6E78}
           <span class="go">lifeorg-app.web.app<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></span>
         </a>
         <a class="card beta" href="https://burnaylabs.pt/emcasa/" target="_blank" rel="noopener">
-          <div class="card-top"><span class="icon"><img src="logos/emcasa.jpg" alt="EmCasa" width="44" height="44"></span><span class="badges"><span class="badge beta">Product · Beta</span></span></div>
+          <div class="card-top"><span class="icon"><img src="logos/hq/emcasa.svg" alt="EmCasa" width="44" height="44"></span><span class="badges"><span class="badge beta">Product · Beta</span></span></div>
           <div class="title"><span class="num">09</span><h3>EmCasa</h3></div>
           <p data-en="Home concert booking platform. &quot;Concertos em Casa&quot;. Connect music lovers with artists for intimate, private performances in residential settings across Portugal." data-pt="Plataforma de marcação de concertos em casa. &quot;Concertos em Casa&quot;. Liga melómanos a artistas para concertos íntimos em casas particulares por todo o país.">Home concert booking platform. "Concertos em Casa". Connect music lovers with artists for intimate, private performances in residential settings across Portugal.</p>
           <ul class="chips"><li>Marketplace</li><li data-en="Music" data-pt="Música">Music</li><li data-en="Events" data-pt="Eventos">Events</li></ul>
@@ -569,7 +580,7 @@ body.invert .scene .kicker{color:#6E6E78}
           <span class="go"><span data-en="Open Platform" data-pt="Abrir Plataforma">Open Platform</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></span>
         </a>
         <div class="card consult" role="button" tabindex="0" data-modal="uzer">
-          <div class="card-top"><span class="icon"><img src="logos/uzer-original.png" alt="Uzer" width="44" height="44"></span><span class="badges"><span class="badge consult">Consulting</span></span></div>
+          <div class="card-top"><span class="icon"><img src="logos/hq/uzer.svg" alt="Uzer" width="44" height="44"></span><span class="badges"><span class="badge consult">Consulting</span></span></div>
           <div class="title"><span class="num">15</span><h3>Uzer</h3></div>
           <p data-en="AI consulting for executive education. Helped the Uzer team design and deliver AI-focused executive education programs, providing resources and in-class facilitation support." data-pt="Consultoria em IA para educação executiva. Apoiou a equipa Uzer no desenho e entrega de programas de educação executiva focados em IA, com recursos e facilitação em sala.">AI consulting for executive education. Helped the Uzer team design and deliver AI-focused executive education programs, providing resources and in-class facilitation support.</p>
           <ul class="chips"><li data-en="AI" data-pt="IA">AI</li><li data-en="Consulting" data-pt="Consultoria">Consulting</li><li data-en="Education" data-pt="Educação">Education</li></ul>
@@ -965,7 +976,7 @@ body.invert .scene .kicker{color:#6E6E78}
     },
     emcasa: {
       name: "EmCasa",
-      logo: "logos/emcasa.jpg",
+      logo: "logos/hq/emcasa.svg",
       color: "#f59e0b",
       desc: '"Concertos em Casa". Home concert booking platform. Connect music lovers with artists for intimate, private performances in residential settings across Portugal.',
       features: [
@@ -1021,7 +1032,7 @@ body.invert .scene .kicker{color:#6E6E78}
     },
     maktub: {
       name: "Maktub",
-      logo: "logos/maktub.png",
+      logo: "logos/hq/maktub.svg",
       color: "#10b981",
       desc: "Custom operations platform built for a private client. Bespoke data model, internal dashboards, tailored reporting. Details under NDA.",
       features: [
@@ -1036,7 +1047,7 @@ body.invert .scene .kicker{color:#6E6E78}
     },
     mrblue: {
       name: "Mr Blue",
-      logo: "logos/mrblue.jpg",
+      logo: "logos/hq/mrblue.svg",
       color: "#3b82f6",
       desc: "Custom AI tool built for a private client. Aggregates and analyses customer feedback at scale. Details under NDA.",
       features: [
@@ -1051,7 +1062,7 @@ body.invert .scene .kicker{color:#6E6E78}
     },
     uzer: {
       name: "Uzer",
-      logo: "logos/uzer-original.png",
+      logo: "logos/hq/uzer.svg",
       color: "#f59e0b",
       desc: "AI consulting for executive education. Helped the Uzer team design and deliver AI-focused executive education programs, providing resources and in-class facilitation support.",
       features: [
@@ -1537,7 +1548,9 @@ body.invert .scene .kicker{color:#6E6E78}
     disc.className = "disc";
     disc.setAttribute("role", "dialog"); disc.setAttribute("aria-modal", "true"); disc.setAttribute("aria-label", name);
     Object.assign(disc.style, { left: cx - R + "px", top: cy - R + "px", width: 2 * R + "px", height: 2 * R + "px" });
-    disc.innerHTML = `<div class="disc-flip"><div class="disc-face disc-front"><img alt="" src="${$("img", b).getAttribute("src")}"></div><div class="disc-face disc-back"></div></div>`;
+    disc.tabIndex = -1;
+    disc.innerHTML = `<div class="disc-flip"><div class="disc-face disc-front"></div><div class="disc-face disc-back"></div></div>`;
+    $(".disc-front", disc).style.backgroundImage = `url("${$("img", b).getAttribute("src")}")`;
     const clone = cd.cloneNode(true);
     clone.removeAttribute("style");
     $(".disc-back", disc).append(clone);
@@ -1545,18 +1558,37 @@ body.invert .scene .kicker{color:#6E6E78}
     launched = { b, disc, flip, R, cx, cy, grow: null, turn: null, closing: false };
     const from = toBubble(b, cx, cy, R);
     b.style.visibility = "hidden";
-    window.openCard(cd, v => {
-      const x = $(".cv-close", v);
-      v.insertBefore(disc, x);
-      // the close button sits just off the disc's rim, so reaching for it keeps the pointer (and the lens) on the face
-      Object.assign(x.style, { left: cx + R * 0.78 - 20 + "px", top: cy - R * 0.78 - 20 + "px", right: "auto" });
-    });
+    window.openCard(cd, v => v.insertBefore(disc, $(".cv-close", v)));
+    disc.focus({ preventScroll: true });
     const me = launched;
+    // a click anywhere closes it; only the product's own link opens, and Learn More turns the disc to the details
+    disc.addEventListener("click", e => {
+      const go = e.target.closest(".go"), card = e.target.closest(".card");
+      if (go && card && card.matches("a.card")) return;
+      e.preventDefault(); e.stopPropagation();
+      if (go && card && card.dataset.modal && !me.more && me.turn) { showMore(me, card.dataset.modal); return; }
+      window.closeCard();
+    }, true);
     me.grow = disc.animate([{ transform: from }, { transform: "none" }], { duration: 480, easing: "cubic-bezier(.3,.7,.2,1)", fill: "both" });
     settle(me.grow, 480).then(() => {
       if (launched !== me || me.closing) return;
+      hive.style.visibility = "hidden";                                 // the face now covers the hive: nothing may peek out
       me.turn = flip.animate([{ transform: PERSP + "rotateY(0deg)" }, { transform: PERSP + "rotateY(180deg)" }], { duration: 560, easing: "cubic-bezier(.45,0,.2,1)", fill: "both" });
     });
+  };
+  // Learn More: the card fades out and the product's details take its place on the same disc
+  const escH = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+  const showMore = (me, id) => {
+    const p = window.projectData && window.projectData[id];
+    if (!p) return;
+    me.more = true;
+    const back = $(".disc-back", me.disc), card = $(".card", back);
+    card.style.opacity = "0"; card.style.translate = "0 -10px";
+    setTimeout(() => {
+      back.innerHTML = `<div class="disc-more"><div class="dm-top">${p.logo ? `<img alt="" src="${escH(p.logo)}">` : ""}<h3>${escH(p.name)}</h3></div>`
+        + `<p>${escH(p.desc)}</p><h4>Key features</h4><ul>${p.features.map(f => `<li>${escH(f)}</li>`).join("")}</ul>`
+        + `<ul class="chips">${p.tags.map(t => `<li>${escH(t)}</li>`).join("")}</ul></div>`;
+    }, 200);
   };
   // called by closeCard: plays the exit and finishes the close itself (returns true while a disc is up)
   window.onCardClose = () => {
@@ -1564,6 +1596,7 @@ body.invert .scene .kicker{color:#6E6E78}
     if (!me) return false;
     if (me.closing) return true;
     me.closing = true;
+    hive.style.visibility = "";
     const unflip = me.turn ? (me.turn.reverse(), settle(me.turn, 560)) : Promise.resolve();
     unflip.then(() => {
       const anim = me.disc.animate([{ transform: "none" }, { transform: toBubble(me.b, me.cx, me.cy, me.R) }],   // land where the bubble is now
