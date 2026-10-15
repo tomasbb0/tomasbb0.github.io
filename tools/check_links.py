@@ -72,6 +72,11 @@ def main(pages):
         col = Collector()
         col.feed(text)
         refs = col.refs + refs_in_scripts(text)
+        # every product card that is not a link must have details to show (projectData entry for its data-modal)
+        for mid in sorted(set(re.findall(r'class="card [^"]*"[^>]*data-modal="([\w-]+)"', text))):
+            checked += 1
+            if not re.search(r"\n\s+" + re.escape(mid) + r"\s*:\s*\{", text):
+                broken.append(f"{page}: product card '{mid}' has no link and no details (projectData.{mid} missing)")
         external, local = set(), set()
         for tag, key, ref in refs:
             if not ref or ref.startswith(SKIP_SCHEMES) or "${" in ref:
