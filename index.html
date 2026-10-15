@@ -8,6 +8,16 @@
 <meta name="description" content="Burnay Labs is a holding company founded by Tomás Batalha. Ex-Google, ex-Amazon, B2B SaaS co-founder. Consulting and software products, built and shipped in house from Lisbon.">
 <link rel="canonical" href="https://burnaylabs.pt">
 <meta name="theme-color" content="#050506">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Burnay Labs">
+<meta property="og:url" content="https://burnaylabs.pt/">
+<meta property="og:title" content="Burnay Labs · We build software and advise founders">
+<meta property="og:description" content="A Lisbon holding company: our own products, designed, built and shipped in house, and strategy and go-to-market for founders and executive teams.">
+<meta property="og:image" content="https://burnaylabs.pt/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-2 -2 100 114' fill='none'%3E%3Cpath d='M10,6 L48,6 L58,16 L58,38 L48,48 L58,58 L58,84 L48,96 L10,96 Z' stroke='%23fafafa' stroke-width='2.5' fill='none' stroke-linejoin='miter'/%3E%3Cline x1='10' y1='48' x2='48' y2='48' stroke='%23fafafa' stroke-width='2.5'/%3E%3Cpolyline points='70,4 70,70 48,96 92,96' stroke='%23fafafa' stroke-width='2.5' fill='none' stroke-linejoin='miter'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
@@ -19,7 +29,7 @@
    as full-screen scenes driven by the scroll (scenes script at the end); otherwise it is a normal scrolling page. */
 :root{
   --bg:#050506;
-  --text:#F5F5F7; --text-2:#A3A3AD; --text-3:#6E6E78;
+  --text:#F5F5F7; --text-2:#A3A3AD; --text-3:#86868F;
   --g2:#1D5BFF; --g3:#2F8BFF; --g4:#7CD4FF;
   --grad:linear-gradient(120deg,var(--g2) 0%,var(--g3) 50%,var(--g4) 100%);
   --font:"Geist",ui-sans-serif,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
@@ -48,9 +58,23 @@ button{font:inherit;color:inherit}
 .nav-in{display:flex;align-items:center;gap:28px;height:72px}
 .brand{display:inline-flex;align-items:center;gap:11px;font-weight:600;font-size:17px;letter-spacing:-.02em;color:#fff;white-space:nowrap}
 .brand svg{display:block;width:21px;height:24px;overflow:visible}
-.nav-links{display:flex;gap:26px;margin-left:auto;font-size:14px;color:var(--text-2)}
-.nav-links a{transition:color .2s}
+.nav-links{display:flex;gap:4px;margin-left:auto;margin-right:14px;font-size:14px;color:var(--text-2)}
+.nav-links a{padding:8px 12px;border-radius:999px;transition:color .2s,background .25s}
 .nav-links a:hover{color:var(--text)}
+.nav-links a.cur{color:var(--text);background:rgba(255,255,255,.08)}   /* the section you are in */
+/* phones and tablets: the sections live in a full-screen menu */
+.menu-btn{display:none;padding:0 16px;border:0;color:var(--text);font:600 13.5px/1 var(--font);cursor:pointer}
+@media (max-width:1000px){.menu-btn{display:inline-flex;align-items:center}}
+.menu-sheet{position:fixed;inset:0;z-index:45;display:flex;flex-direction:column;justify-content:center;gap:44px;padding:110px 28px 48px;background:rgba(5,5,6,.97);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
+.menu-sheet.open{opacity:1;visibility:visible}
+.menu-sheet nav{display:flex;flex-direction:column;gap:4px}
+.menu-sheet nav a{width:max-content;font-size:clamp(34px,9vw,54px);font-weight:600;letter-spacing:-.045em;line-height:1.18;color:var(--text);translate:0 16px;opacity:0;transition:translate .55s cubic-bezier(.2,.7,.2,1),opacity .55s}
+.menu-sheet.open nav a{translate:none;opacity:1}
+.menu-sheet.open nav a:nth-child(2){transition-delay:0.05s}
+.menu-sheet.open nav a:nth-child(3){transition-delay:0.10s}
+.menu-sheet.open nav a:nth-child(4){transition-delay:0.15s}
+.menu-sheet.open nav a:nth-child(5){transition-delay:0.20s}
+.menu-foot{display:flex;gap:22px;font-family:var(--mono);font-size:13px;color:var(--text-2)}
 .nav-right{display:flex;align-items:center;gap:8px}
 @media (max-width:1000px){.nav-links{display:none}.nav-right{margin-left:auto}}
 /* the three pills on the right (language, GitHub, Connect) share one height and one style */
@@ -72,6 +96,11 @@ button{font:inherit;color:inherit}
 @media (max-width:360px){.brand span{display:none}}
 
 /* hero */
+.scroll-cue{position:absolute;left:50%;bottom:22px;translate:-50% 0;z-index:3;display:flex;flex-direction:column;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--text-3);transition:color .2s}
+.scroll-cue:hover{color:var(--text)}
+.scroll-cue svg{width:18px;height:18px;animation:cueBob 1.8s ease-in-out infinite}
+@keyframes cueBob{50%{translate:0 5px}}
+@media (prefers-reduced-motion:reduce){.scroll-cue svg{animation:none}}
 .hero{position:relative;min-height:92vh;display:flex;align-items:center;padding-block:130px 90px;overflow-x:clip}
 .hero-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden;-webkit-mask-image:linear-gradient(#000 60%,transparent);mask-image:linear-gradient(#000 60%,transparent)}
 .hero-bg::before{content:"";position:absolute;width:900px;height:900px;right:-240px;top:-220px;border-radius:50%;
@@ -203,7 +232,8 @@ button.node:hover{transform:translateY(-3px);box-shadow:0 38px 70px -32px rgba(0
    over a dotted floor; the pointer tilts the arena (the rows slide against each other) and moves a soft light across
    the glass. Positions are set by the scene script. */
 #orgScene.org3d .org{position:relative;display:block;width:100%;height:min(60vh,540px);perspective:1500px;perspective-origin:50% 36%}
-.org-arena{position:absolute;inset:0;transform-style:preserve-3d}
+.org-arena{position:absolute;inset:0;transform-style:preserve-3d;pointer-events:none}   /* only the tiles take the pointer: the arena's own plane would sit in front of the back row */
+#orgScene.org3d .node{pointer-events:auto}
 .org-floor{position:absolute;left:50%;top:50%;width:3200px;height:2600px;margin:-1300px 0 0 -1600px;pointer-events:none;opacity:0;
   background:radial-gradient(circle,rgba(255,255,255,.2) 1.3px,transparent 1.9px) 0 var(--fy,0px)/38px 38px;
   -webkit-mask-image:radial-gradient(ellipse 34% 44% at 50% 50%,#000 20%,transparent 72%);mask-image:radial-gradient(ellipse 34% 44% at 50% 50%,#000 20%,transparent 72%)}
@@ -214,7 +244,7 @@ button.node:hover{transform:translateY(-3px);box-shadow:0 38px 70px -32px rgba(0
 #orgScene.org3d .node .ic,#orgScene.org3d .node .ic svg{width:30px;height:30px}
 #orgScene.org3d .node b{font-size:19px}
 #orgScene.org3d .node small{white-space:nowrap}
-#orgScene.org3d .org-label{position:absolute;left:50%;top:50%;margin:0;white-space:nowrap;will-change:transform,opacity}
+#orgScene.org3d .org-label{position:absolute;left:50%;top:50%;margin:0;white-space:nowrap;pointer-events:none;will-change:transform,opacity}
 @media (max-width:560px){.org-row.r6,.org-row.r5{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .founder{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:64px;align-items:center;margin-top:120px}
 @media (max-width:900px){.founder{grid-template-columns:1fr;gap:36px;margin-top:80px}}
@@ -231,6 +261,13 @@ button.node:hover{transform:translateY(-3px);box-shadow:0 38px 70px -32px rgba(0
 .stack-wrap{text-align:center}
 .stack-wrap h2{max-width:20ch;margin:0 auto}
 .tags{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;max-width:920px;margin:44px auto 0}
+.stack-rows{flex-direction:column;flex-wrap:nowrap;justify-content:flex-start;gap:18px;max-width:1060px}
+.stack-row{display:grid;grid-template-columns:210px minmax(0,1fr);align-items:center;gap:22px}
+.stack-cat{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--text-3);text-align:right}
+.stack-track{display:flex;flex-wrap:wrap;gap:10px;will-change:transform}
+.stack-track .tag{flex:0 0 auto;white-space:nowrap}
+.scene .stack-track{flex-wrap:nowrap}
+@media (max-width:760px){.stack-row{grid-template-columns:1fr;gap:10px}.stack-cat{text-align:left}}
 .tag{font-family:var(--mono);font-size:14px;font-weight:500;line-height:1;padding:12px 18px;border-radius:999px;background:linear-gradient(180deg,#15151B,#0C0C10);box-shadow:var(--shadow);transition:box-shadow .25s}
 .tag:hover{background:linear-gradient(180deg,#1A1A21,#101015);box-shadow:var(--shadow-hi)}
 
@@ -306,7 +343,9 @@ footer{padding-block:48px 56px}
 .modal-tags,.agent-modal-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:22px}
 .modal-tag,.agent-modal-tag{font-size:12px;color:var(--text-2);background:rgba(255,255,255,.06);border-radius:999px;padding:4px 11px}
 .agent-modal-header{display:flex;align-items:center;gap:16px;margin-bottom:16px;padding-right:40px}
-.agent-modal-emoji{width:56px;height:56px;border-radius:16px;flex:0 0 auto;display:grid;place-items:center;font-size:28px;background:rgba(139,92,246,.14)}
+.agent-modal-emoji{width:56px;height:56px;border-radius:16px;flex:0 0 auto;display:grid;place-items:center;font-size:28px;color:#fff;background:linear-gradient(155deg,rgba(255,255,255,.12),rgba(255,255,255,.03)),#17171D;box-shadow:0 14px 30px -16px rgba(0,0,0,.9)}
+.agent-modal-emoji svg{width:28px;height:28px}
+.agent-reports{background:rgba(47,139,255,.14)!important;color:#A9CFFF!important}
 .agent-modal-title h3{margin:0;font-size:26px;letter-spacing:-.03em;line-height:1.15}
 .agent-modal-title span{display:block;margin-top:4px;font-family:var(--mono);font-size:12px;color:var(--text-3)}
 .agent-modal p{margin:0;color:var(--text-2);font-size:15.5px}
@@ -375,6 +414,10 @@ html.scenes main,html.scenes footer{display:none}
 .scene-dots{position:fixed;right:12px;top:50%;translate:0 -50%;z-index:60;display:flex;flex-direction:column}
 .scene-dots button{width:18px;height:18px;padding:6px;border:0;border-radius:50%;background:rgba(255,255,255,.25) content-box;transition:background .3s, scale .3s}
 .scene-dots button.on{background:#fff content-box;scale:1.5}
+.scene-dots button{position:relative}
+.scene-dots button::before{content:attr(data-label);position:absolute;right:28px;top:50%;translate:6px -50%;padding:6px 11px;border-radius:999px;background:rgba(22,22,28,.94);color:var(--text);font:500 12px/1 var(--font);white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s,translate .2s;box-shadow:var(--shadow)}
+.scene-dots button:hover::before,.scene-dots button:focus-visible::before{opacity:1;translate:0 -50%}
+.scene-dots button.on::before{scale:.667;transform-origin:right center}
 body.invert .scene-dots button:not(.on){background:rgba(0,0,0,.2) content-box}
 body.invert .scene-dots button.on{background:#0A0A0D content-box}
 body.invert .scene .kicker{color:#6E6E78}
@@ -435,6 +478,7 @@ body.invert .scene .kicker{color:#6E6E78}
     <a href="https://burnaylabs.pt/burnaylabs-site/" data-en="Education" data-pt="Educação">Education</a>
   </nav>
   <div class="nav-right">
+    <button class="menu-btn nav-pill" type="button" aria-expanded="false" aria-controls="menuSheet" data-en="Menu" data-pt="Menu">Menu</button>
     <div class="lang nav-pill" role="group" aria-label="Language">
       <button class="lang-btn active" type="button" onclick="setLang('en')">EN</button>
       <button class="lang-btn" type="button" onclick="setLang('pt')">PT</button>
@@ -443,6 +487,16 @@ body.invert .scene .kicker{color:#6E6E78}
     <a class="btn btn-ghost" href="https://linkedin.com/in/tomasmbatalha" target="_blank" rel="noopener">Connect</a>
   </div>
 </div></header>
+<div class="menu-sheet" id="menuSheet">
+  <nav aria-label="Menu">
+    <a href="#products" data-en="Legacy" data-pt="Legado">Legacy</a>
+    <a href="#about" data-en="About" data-pt="Sobre">About</a>
+    <a href="#team" data-en="Team" data-pt="Equipa">Team</a>
+    <a href="#stack" data-en="Stack" data-pt="Tecnologias">Stack</a>
+    <a href="https://burnaylabs.pt/burnaylabs-site/" data-en="Education" data-pt="Educação">Education</a>
+  </nav>
+  <div class="menu-foot"><a href="https://github.com/tomasbb0" target="_blank" rel="noopener">GitHub</a><a href="https://linkedin.com/in/tomasmbatalha" target="_blank" rel="noopener">LinkedIn</a></div>
+</div>
 
 <main id="top">
   <section class="hero">
@@ -492,6 +546,7 @@ body.invert .scene .kicker{color:#6E6E78}
         <div><b>100%</b><span data-en="In House" data-pt="Feito Internamente">In House</span></div>
       </div>
     </div>
+    <a class="scroll-cue" href="#products"><span data-en="Scroll" data-pt="Deslize">Scroll</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></a>
   </section>
 
   <section class="sec" id="products"><div class="wrap">
@@ -741,10 +796,13 @@ body.invert .scene .kicker{color:#6E6E78}
   <section class="sec" id="stack"><div class="wrap stack-wrap">
     <div class="kicker" data-en="Stack" data-pt="Tecnologias">Stack</div>
     <h2 data-en="Technologies we work with" data-pt="Tecnologias com que trabalhamos">Technologies we work with</h2>
-    <div class="tags">
-      <span class="tag">JavaScript</span><span class="tag">TypeScript</span><span class="tag">Python</span><span class="tag">HTML / CSS</span><span class="tag">Node.js</span><span class="tag">React</span>
-      <span class="tag">Firebase</span><span class="tag">Firestore</span><span class="tag">Chrome Extensions</span><span class="tag">OpenAI API</span><span class="tag">Gemini API</span><span class="tag">Anthropic API</span>
-      <span class="tag">Electron</span><span class="tag">GitHub Pages</span><span class="tag">Render</span><span class="tag">Playwright</span><span class="tag">WebAudio API</span><span class="tag">SpeechSynthesis</span>
+    <div class="tags stack-rows">
+      <div class="stack-row"><span class="stack-cat" data-en="Languages &amp; frameworks" data-pt="Linguagens e frameworks">Languages &amp; frameworks</span><div class="stack-track">
+        <span class="tag">JavaScript</span><span class="tag">TypeScript</span><span class="tag">Python</span><span class="tag">HTML / CSS</span><span class="tag">Node.js</span><span class="tag">React</span><span class="tag">Electron</span></div></div>
+      <div class="stack-row"><span class="stack-cat" data-en="AI &amp; automation" data-pt="IA e automação">AI &amp; automation</span><div class="stack-track">
+        <span class="tag">OpenAI API</span><span class="tag">Gemini API</span><span class="tag">Anthropic API</span><span class="tag">Playwright</span></div></div>
+      <div class="stack-row"><span class="stack-cat" data-en="Platforms &amp; browser APIs" data-pt="Plataformas e APIs do browser">Platforms &amp; browser APIs</span><div class="stack-track">
+        <span class="tag">Firebase</span><span class="tag">Firestore</span><span class="tag">Chrome Extensions</span><span class="tag">GitHub Pages</span><span class="tag">Render</span><span class="tag">WebAudio API</span><span class="tag">SpeechSynthesis</span></div></div>
     </div>
   </div></section>
 
@@ -765,7 +823,7 @@ body.invert .scene .kicker{color:#6E6E78}
     <path d="M10,6 L48,6 L58,16 L58,38 L48,48 L58,58 L58,84 L48,96 L10,96 Z" stroke="currentColor" stroke-width="5" stroke-linejoin="miter"/>
     <line x1="10" y1="48" x2="48" y2="48" stroke="currentColor" stroke-width="5"/>
     <polyline points="70,4 70,70 48,96 92,96" stroke="currentColor" stroke-width="5" stroke-linejoin="miter"/>
-  </svg><span>&copy; 2026 Burnay Labs &middot; <a href="/">Burnay Labs</a></span></p>
+  </svg><span data-en="&copy; 2026 Burnay Labs &middot; Built in house in Lisbon" data-pt="&copy; 2026 Burnay Labs &middot; Feito internamente em Lisboa">&copy; 2026 Burnay Labs &middot; Built in house in Lisbon</span></p>
   <div class="foot-links">
     <a href="https://github.com/tomasbb0" target="_blank" rel="noopener">GitHub</a>
     <a href="https://linkedin.com/in/tomasmbatalha" target="_blank" rel="noopener">LinkedIn</a>
@@ -1209,23 +1267,52 @@ body.invert .scene .kicker{color:#6E6E78}
     var a = agentData[id];
     if (!a) return;
     lastFocus = document.activeElement;
-    document.getElementById("agentEmoji").textContent = a.emoji;
+    var em = document.getElementById("agentEmoji"), ic = document.querySelector('.node[data-agent="' + id + '"] .ic svg');
+    em.textContent = "";
+    if (ic) em.appendChild(ic.cloneNode(true)); else em.textContent = a.emoji;   // the agent's own white icon
     document.getElementById("agentName").textContent = a.name;
     document.getElementById("agentRole").textContent = a.role;
     document.getElementById("agentDesc").textContent = a.desc;
     document.getElementById("agentMeta").innerHTML =
       a.tags.map(function (t) { return '<span class="agent-modal-tag">' + esc(t) + "</span>"; }).join("") +
-      '<span class="agent-modal-tag" style="background:rgba(139,92,246,0.14);color:#c4b5fd;">Reports to: ' + esc(a.reportsTo) + "</span>";
+      '<span class="agent-modal-tag agent-reports">Reports to ' + esc(a.reportsTo) + "</span>";
     document.getElementById("agentModalOverlay").classList.add("active");
     lockScroll(true);
+    agentTile = document.querySelector('.node[data-agent="' + id + '"]');
+    flipAgent(true);
     document.querySelector("#agentModalOverlay .agent-modal-close").focus({ preventScroll: true });
+  }
+  // the card grows out of the tile you clicked, and shrinks back into it when it closes
+  var agentTile = null;
+  function flipAgent(open) {
+    var box = document.querySelector("#agentModalOverlay .agent-modal");
+    if (!agentTile || !box.animate || matchMedia("(prefers-reduced-motion: reduce)").matches) return null;
+    box.style.translate = "none"; box.style.scale = "none";
+    var f = agentTile.getBoundingClientRect(), t = box.getBoundingClientRect();
+    if (!f.width || !t.width) return null;
+    var dx = f.left + f.width / 2 - (t.left + t.width / 2), dy = f.top + f.height / 2 - (t.top + t.height / 2);
+    var from = { transform: "translate(" + dx.toFixed(1) + "px," + dy.toFixed(1) + "px) scale(" + (f.width / t.width).toFixed(4) + "," + (f.height / t.height).toFixed(4) + ")", opacity: 0.5 };
+    var to = { transform: "none", opacity: 1 };
+    var kids = [].slice.call(box.children);
+    kids.forEach(function (k) { k.animate(open ? [{ opacity: 0 }, { opacity: 0, offset: 0.35 }, { opacity: 1 }] : [{ opacity: 1 }, { opacity: 0, offset: 0.4 }, { opacity: 0 }], { duration: open ? 480 : 300, fill: open ? "none" : "forwards" }); });
+    return box.animate(open ? [from, to] : [to, from], { duration: open ? 480 : 320, easing: open ? "cubic-bezier(.2,.8,.2,1)" : "cubic-bezier(.55,0,.75,.2)", fill: open ? "none" : "forwards" });
   }
   function closeAgentModal() {
     var o = document.getElementById("agentModalOverlay");
-    if (!o.classList.contains("active")) return;
-    o.classList.remove("active");
-    lockScroll(false);
-    if (lastFocus) lastFocus.focus({ preventScroll: true });
+    if (!o.classList.contains("active") || o.dataset.closing) return;
+    o.dataset.closing = "1";
+    var box = o.querySelector(".agent-modal"), anim = flipAgent(false), fin = false;
+    var done = function () {
+      if (fin) return; fin = true;
+      o.classList.remove("active"); delete o.dataset.closing;
+      lockScroll(false);
+      if (lastFocus) lastFocus.focus({ preventScroll: true });
+      setTimeout(function () {                                        // once the backdrop has faded, put the card back
+        box.getAnimations({ subtree: true }).forEach(function (a) { a.cancel(); });
+        box.style.translate = ""; box.style.scale = "";
+      }, 300);
+    };
+    if (anim) { anim.finished.then(done, done); setTimeout(done, 450); } else done();
   }
   document.addEventListener("keydown", function (e) {
     if (e.key === "Escape") { closeAgentModal(); if (document.getElementById("projectModal").classList.contains("active")) closeModal(e, true); return; }
@@ -1358,6 +1445,23 @@ body.invert .scene .kicker{color:#6E6E78}
     };
     setTimeout(step, 2400);                                              // the entrance plays first, with the first word in place
   })();
+  // phones and tablets: the menu opens a full-screen list of the sections
+  const menuBtn = document.querySelector(".menu-btn"), sheet = document.getElementById("menuSheet");
+  if (menuBtn && sheet) {
+    const pt = document.documentElement.lang === "pt";
+    const setOpen = open => {
+      sheet.classList.toggle("open", open);
+      menuBtn.setAttribute("aria-expanded", String(open));
+      menuBtn.textContent = open ? (pt ? "Fechar" : "Close") : "Menu";
+      document.body.style.overflow = open ? "hidden" : "";
+    };
+    menuBtn.addEventListener("click", () => setOpen(!sheet.classList.contains("open")));
+    sheet.addEventListener("click", e => { if (e.target.closest("a")) setOpen(false); });
+    addEventListener("keydown", e => { if (e.key === "Escape" && sheet.classList.contains("open")) setOpen(false); });
+  }
+  // the scroll cue fades out as soon as you start
+  const cue = document.querySelector(".scroll-cue");
+  if (cue) { const fade = () => { cue.style.opacity = Math.max(0, 1 - scrollY / 180).toFixed(2); }; addEventListener("scroll", fade, { passive: true }); fade(); }
   // the hero entrance animates transform/opacity; once done it steps aside so the scroll effects can take over
   document.querySelectorAll(".rise").forEach(el => el.addEventListener("animationend", () => el.classList.remove("rise"), { once: true }));
   // switching between the scenes and the plain page needs a fresh page
@@ -1943,7 +2047,7 @@ window.pixelReveal = (() => {
 
   // ---------- 9. Stack: the technologies pop in one after another
   const stk = $("#stack .wrap");
-  const skA = { kick: $(".kicker", stk), h2: $("h2", stk), tags: $$(".tag", stk) };
+  const skA = { kick: $(".kicker", stk), h2: $("h2", stk), tags: $$(".tag", stk), cats: $$(".stack-cat", stk), tracks: $$(".stack-track", stk) };
   const skType = typer(skA.kick), skLight = lighter(skA.h2);
   const STACK = {
     apply(r, x) {
@@ -1955,6 +2059,9 @@ window.pixelReveal = (() => {
         const a = 0.3 + i * 0.03, k = seg(r, a, a + 0.14, outExpo), X = outK(x, 2 + Math.floor(i / 6), 0.5, 0.07);
         set(tg, { y: (1 - k) * 16 - X * 70, s: 0.85 + 0.15 * k, o: k * (1 - X) });
       });
+      // the rows drift in opposite directions as you scroll through (a strip of film each)
+      skA.tracks.forEach((tr, i) => { tr.style.transform = `translateX(${((i % 2 ? -1 : 1) * ((1 - seg(r, 0.2, 0.75, outCubic)) * 150 - seg(x, 0, 1, inCubic) * 150)).toFixed(1)}px)`; });
+      skA.cats.forEach((c, i) => { const k = seg(r, 0.26 + i * 0.08, 0.42 + i * 0.08), X = outK(x, 2 + i, 0.5, 0.07); set(c, { y: -X * 70, o: k * (1 - X) }); });
     },
   };
 
@@ -2006,7 +2113,12 @@ window.pixelReveal = (() => {
 
   // dots on the right: where you are, and a shortcut to each scene (built)
   const dots = document.createElement("nav"); dots.className = "scene-dots"; dots.setAttribute("aria-label", "Scenes");
-  dots.innerHTML = scenes.map((s, i) => `<button type="button" aria-label="${i + 1} / ${scenes.length}"></button>`).join("");
+  const NAMES = { top: ["Home", "Início"], legacy: ["Legacy", "Legado"], hive: ["Products", "Produtos"], about: ["About", "Sobre"],
+    team: ["Team", "Equipa"], founder: ["Founder", "Fundador"], stack: ["Stack", "Tecnologias"], contact: ["Contact", "Contacto"] };
+  const ptLang = document.documentElement.lang === "pt";
+  dots.innerHTML = scenes.map(s => { const n = (NAMES[s.id] || [s.id, s.id])[ptLang ? 1 : 0]; return `<button type="button" aria-label="${n}" data-label="${n}"></button>`; }).join("");
+  // the menu shows which section you are in
+  const navLinks = $$(".nav-links a"), NAV_OF = { legacy: "#products", hive: "#products", about: "#about", team: "#team", founder: "#team", stack: "#stack" };
   document.body.append(dots);
   [...dots.children].forEach((b, i) => b.addEventListener("click", () => scrollTo({ top: Math.max(0, scenes[i].tIn), behavior: "smooth" })));
 
@@ -2028,6 +2140,8 @@ window.pixelReveal = (() => {
       sc.fx.apply(r, x);
     });
     [...dots.children].forEach((d, k) => d.classList.toggle("on", k === cur));
+    const navCur = NAV_OF[scenes[cur].id] || "";
+    navLinks.forEach(a => a.classList.toggle("cur", a.getAttribute("href") === navCur));
     ticking = false;
   };
   let ticking = false;
