@@ -20,7 +20,7 @@
 :root{
   --bg:#050506;
   --text:#F5F5F7; --text-2:#A3A3AD; --text-3:#6E6E78;
-  --g2:#059669; --g3:#10B981; --g4:#5EEAD4;
+  --g2:#1D5BFF; --g3:#2F8BFF; --g4:#7CD4FF;
   --grad:linear-gradient(120deg,var(--g2) 0%,var(--g3) 50%,var(--g4) 100%);
   --font:"Geist",ui-sans-serif,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
   --mono:"Geist Mono",ui-monospace,"SF Mono",Menlo,monospace;
@@ -75,9 +75,9 @@ button{font:inherit;color:inherit}
 .hero{position:relative;min-height:92vh;display:flex;align-items:center;padding-block:130px 90px;overflow-x:clip}
 .hero-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden;-webkit-mask-image:linear-gradient(#000 60%,transparent);mask-image:linear-gradient(#000 60%,transparent)}
 .hero-bg::before{content:"";position:absolute;width:900px;height:900px;right:-240px;top:-220px;border-radius:50%;
-  background:radial-gradient(closest-side,rgba(5,150,105,.42),rgba(16,185,129,.16) 45%,transparent 72%);filter:blur(20px);animation:drift 18s ease-in-out infinite alternate}
+  background:radial-gradient(closest-side,rgba(29,91,255,.42),rgba(47,139,255,.16) 45%,transparent 72%);filter:blur(20px);animation:drift 18s ease-in-out infinite alternate}
 .hero-bg::after{content:"";position:absolute;width:620px;height:620px;right:8%;bottom:-320px;border-radius:50%;
-  background:radial-gradient(closest-side,rgba(94,234,212,.22),transparent 70%);filter:blur(30px);animation:drift 22s ease-in-out infinite alternate-reverse}
+  background:radial-gradient(closest-side,rgba(124,212,255,.22),transparent 70%);filter:blur(30px);animation:drift 22s ease-in-out infinite alternate-reverse}
 @keyframes drift{from{transform:translate(0,0)}to{transform:translate(-60px,40px)}}
 .grain{position:absolute;inset:0;opacity:.05;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 .markwrap{position:absolute;right:max(-20px,calc(50% - 680px));top:50%;width:min(500px,44vw);aspect-ratio:1;transform:translateY(-50%);pointer-events:none}
@@ -94,11 +94,15 @@ button{font:inherit;color:inherit}
 main>section:not(.hero),footer{position:relative;z-index:3}
 .hero .wrap{position:relative;z-index:2;width:100%}
 .eyebrow{display:inline-flex}
-.hero h1{margin:0 0 24px;font-size:clamp(40px,5.4vw,76px);line-height:1.02;letter-spacing:-.04em;font-weight:600;max-width:15ch}
+.hero h1{margin:0 0 24px;font-size:clamp(40px,5.4vw,76px);line-height:1.02;letter-spacing:-.04em;font-weight:600}
+.hero h1 em{white-space:nowrap}
+.caret{display:inline-block;width:.055em;height:.8em;margin-left:.05em;vertical-align:-.05em;background:var(--g4);animation:caretPulse 2s cubic-bezier(.4,0,.6,1) infinite}
+@keyframes caretPulse{50%{opacity:.5}}
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .hero h1 em{font-style:normal;background-image:
-    radial-gradient(38% 58% at 22% 38%,rgba(94,234,212,.95),transparent 72%),
-    radial-gradient(46% 70% at 74% 62%,rgba(5,150,105,.95),transparent 72%),
-    radial-gradient(34% 52% at 52% 18%,rgba(16,185,129,.9),transparent 70%),
+    radial-gradient(38% 58% at 22% 38%,rgba(124,212,255,.95),transparent 72%),
+    radial-gradient(46% 70% at 74% 62%,rgba(29,91,255,.95),transparent 72%),
+    radial-gradient(34% 52% at 52% 18%,rgba(47,139,255,.9),transparent 70%),
     linear-gradient(120deg,var(--g2),var(--g3) 50%,var(--g4));
   background-size:230% 230%,240% 240%,260% 260%,100% 100%;background-position:30% 40%,70% 60%,50% 30%,0 0;
   -webkit-background-clip:text;background-clip:text;color:transparent;
@@ -166,8 +170,8 @@ html.scenes .grid-head{display:flex;align-items:baseline;justify-content:space-b
 #about.inv .kicker{color:#6E6E78}
 #about.inv h2{color:#0A0A0D}
 #about.inv p{color:#4A4A52}
-#about.inv .stat{background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.06),0 24px 50px -28px rgba(20,60,40,.4)}
-#about.inv .stat strong{background-image:linear-gradient(120deg,#047857,#059669 50%,#0D9488)}
+#about.inv .stat{background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.06),0 24px 50px -28px rgba(20,40,90,.4)}
+#about.inv .stat strong{background-image:linear-gradient(120deg,#1442D6,#1D5BFF 50%,#3AA0FF)}
 #about.inv .stat span{color:#55555E}
 
 /* team: the OpenClaw org chart (agents in purple) and the founder */
@@ -194,7 +198,8 @@ button.node:hover{background:linear-gradient(180deg,#17171D,#0E0E12);box-shadow:
 .founder{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:64px;align-items:center;margin-top:120px}
 @media (max-width:900px){.founder{grid-template-columns:1fr;gap:36px;margin-top:80px}}
 .portrait{position:relative;justify-self:center;width:100%;max-width:440px;aspect-ratio:4/5}
-.portrait img{position:absolute;left:50%;bottom:0;width:106%;height:auto;max-width:none;translate:-50% 0;transform-origin:50% 100%;-webkit-mask-image:linear-gradient(#000 80%,transparent);mask-image:linear-gradient(#000 80%,transparent)}   /* the cut at the bottom fades out */
+.portrait img,.portrait .pix{position:absolute;left:50%;bottom:0;width:106%;height:auto;max-width:none;translate:-50% 0;transform-origin:50% 100%;-webkit-mask-image:linear-gradient(#000 80%,transparent);mask-image:linear-gradient(#000 80%,transparent)}
+.portrait .pix{opacity:0;pointer-events:none;image-rendering:pixelated}   /* the cut at the bottom fades out */
 .founder-text h2{font-size:clamp(28px,3.4vw,44px)}
 .founder-text p{margin:18px 0 0;color:var(--text-2);font-size:15.5px;line-height:1.62;max-width:62ch}
 .founder-text .label{margin:28px 0 -4px}
@@ -208,9 +213,9 @@ button.node:hover{background:linear-gradient(180deg,#17171D,#0E0E12);box-shadow:
 .tag:hover{background:linear-gradient(180deg,#1A1A21,#101015);box-shadow:var(--shadow-hi)}
 
 /* closing CTA + footer */
-.cta{position:relative;border-radius:28px;padding:80px 48px;overflow:hidden;text-align:center;background:#0C0C10;box-shadow:var(--shadow-hi), 0 50px 140px -50px rgba(5,150,105,.5)}
+.cta{position:relative;border-radius:28px;padding:80px 48px;overflow:hidden;text-align:center;background:#0C0C10;box-shadow:var(--shadow-hi), 0 50px 140px -50px rgba(29,91,255,.5)}
 @media (max-width:600px){.cta{padding:56px 22px}}
-.cta::before{content:"";position:absolute;inset:0;background:radial-gradient(700px 300px at 50% 120%,rgba(5,150,105,.5),transparent 70%),radial-gradient(500px 240px at 80% -20%,rgba(94,234,212,.2),transparent 70%);opacity:var(--cg,1)}
+.cta::before{content:"";position:absolute;inset:0;background:radial-gradient(700px 300px at 50% 120%,rgba(29,91,255,.5),transparent 70%),radial-gradient(500px 240px at 80% -20%,rgba(124,212,255,.2),transparent 70%);opacity:var(--cg,1)}
 .cta>*{position:relative}
 .cta h2{max-width:18ch;margin:0 auto}
 .cta p{color:var(--text-2);max-width:56ch;margin:20px auto 0;font-size:17px}
@@ -230,25 +235,32 @@ footer{padding-block:48px 56px}
 .card-view-box .card{width:100%;box-shadow:var(--shadow-hi)}
 .cv-close{position:absolute;top:20px;right:20px;width:40px;height:40px;border:0;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.08);color:var(--text-2);font-size:24px;line-height:1;box-shadow:var(--shadow);transition:background .2s,color .2s}
 .cv-close:hover{background:rgba(255,255,255,.14);color:#fff}
-/* honeycomb launch: the bubble grows to cover the watch face, then flips to show the product on its back */
+/* honeycomb launch: the bubble grows over the watch face while turning from a circle into a rounded square, then flips
+   to show the product on its back */
 .card-view.disc-mode{background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none}
 .card-view.disc-mode .card-view-box,.card-view.disc-mode .cv-close{display:none}
 .disc{position:fixed;will-change:transform;outline:none;cursor:pointer}
 .disc-flip{position:relative;width:100%;height:100%;transform-style:preserve-3d}
-.disc-face{position:absolute;inset:0;border-radius:50%;clip-path:circle(50%);overflow:hidden;-webkit-backface-visibility:hidden;backface-visibility:hidden;box-shadow:0 40px 90px -30px rgba(0,0,0,.95)}
+.disc-face{position:absolute;inset:0;border-radius:50%;clip-path:inset(0 round 50%);overflow:hidden;-webkit-backface-visibility:hidden;backface-visibility:hidden;box-shadow:0 40px 90px -30px rgba(0,0,0,.95)}
 .disc-front{background:#000 center/cover no-repeat}
 .disc-back{transform:rotateY(180deg);display:grid;place-items:center;background:linear-gradient(180deg,#131318,#0C0C10)}
-.disc-back .card{width:min(380px,68%);padding:0;background:none;box-shadow:none;overflow:visible;transition:opacity .22s,translate .22s}
-.disc-back .go{cursor:pointer}
+.disc-back .card{width:min(520px,80%);padding:0;background:none;box-shadow:none;overflow:visible;transition:opacity .22s,translate .22s}
+.disc-back .go{cursor:pointer;font-size:15px}
+.disc-back .icon{width:58px;height:58px;border-radius:14px}
+.disc-back .badge{font-size:12px;padding:7px 12px}
+.disc-back .num{font-size:14px}
+.disc-back .card h3{font-size:31px}
+.disc-back .card p{font-size:17.5px;line-height:1.55}
+.disc-back .chips li{font-size:14px;padding:5px 12px}
 /* Learn More: the details take the card's place on the same disc */
-.disc-more{width:min(400px,70%);max-height:76%;overflow:auto;scrollbar-width:none;animation:discIn .3s cubic-bezier(.2,.7,.2,1)}
+.disc-more{width:min(520px,80%);max-height:84%;overflow:auto;scrollbar-width:none;animation:discIn .3s cubic-bezier(.2,.7,.2,1)}
 .disc-more::-webkit-scrollbar{display:none}
 .disc-more .dm-top{display:flex;align-items:center;gap:12px;margin-bottom:12px}
-.disc-more .dm-top img{width:44px;height:44px;border-radius:11px;object-fit:cover}
-.disc-more h3{margin:0;font-size:21px;font-weight:600;letter-spacing:-.02em}
-.disc-more p{margin:0;color:var(--text-2);font-size:14px;line-height:1.55}
-.disc-more h4{margin:16px 0 8px;font:500 10.5px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--text-3)}
-.disc-more ul{margin:0;padding-left:18px;color:var(--text-2);font-size:13.5px;line-height:1.5}
+.disc-more .dm-top img{width:54px;height:54px;border-radius:13px;object-fit:cover}
+.disc-more h3{margin:0;font-size:30px;font-weight:600;letter-spacing:-.02em}
+.disc-more p{margin:0;color:var(--text-2);font-size:16.5px;line-height:1.55}
+.disc-more h4{margin:18px 0 10px;font:500 12px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--text-3)}
+.disc-more ul{margin:0;padding-left:20px;color:var(--text-2);font-size:16px;line-height:1.5}
 .disc-more li+li{margin-top:4px}
 @keyframes discIn{from{opacity:0;translate:0 10px}}
 
@@ -359,7 +371,7 @@ body.invert .scene .kicker{color:#6E6E78}
 .bl-loader.play .lp{stroke-dashoffset:1;animation:bl-draw 1s cubic-bezier(.65,0,.35,1) calc(var(--i) * .16s) forwards}
 .bl-loader.play.fast .lp{animation-duration:.5s;animation-delay:calc(var(--i) * .08s)}
 .bl-loader .bl-bar{width:min(180px,46vw);height:2px;border-radius:2px;background:rgba(255,255,255,.1);overflow:hidden}
-.bl-loader .bl-bar i{display:block;height:100%;width:38%;border-radius:2px;background:linear-gradient(90deg,#059669,#10B981,#5EEAD4);transform:translateX(-110%);animation:bl-bar 1.25s cubic-bezier(.65,0,.35,1) .35s infinite}
+.bl-loader .bl-bar i{display:block;height:100%;width:38%;border-radius:2px;background:linear-gradient(90deg,#1D5BFF,#2F8BFF,#7CD4FF);transform:translateX(-110%);animation:bl-bar 1.25s cubic-bezier(.65,0,.35,1) .35s infinite}
 @keyframes bl-draw{to{stroke-dashoffset:0}}
 @keyframes bl-bar{to{transform:translateX(280%)}}
 @media (prefers-reduced-motion: reduce){.bl-loader .lp,.bl-loader.play .lp{animation:none;stroke-dashoffset:0}.bl-loader .bl-bar i{animation:none;transform:none;width:100%;opacity:.5}}
@@ -416,11 +428,11 @@ body.invert .scene .kicker{color:#6E6E78}
     <div class="markwrap" aria-hidden="true">
       <svg class="bigmark bm-draw" id="bigmark" viewBox="0 0 100 100" overflow="visible" focusable="false">
         <defs>
-          <linearGradient id="bmG" gradientUnits="userSpaceOnUse" x1="0" y1="100" x2="100" y2="0"><stop offset="0" stop-color="#059669"/><stop offset=".55" stop-color="#10B981"/><stop offset="1" stop-color="#5EEAD4"/></linearGradient>
+          <linearGradient id="bmG" gradientUnits="userSpaceOnUse" x1="0" y1="100" x2="100" y2="0"><stop offset="0" stop-color="#1D5BFF"/><stop offset=".55" stop-color="#2F8BFF"/><stop offset="1" stop-color="#7CD4FF"/></linearGradient>
           <!-- the lines pulled out of the monogram on scroll: full strength, with only a short taper at the leading tip -->
-          <linearGradient id="exL"><stop offset="0" stop-color="#0FA877" stop-opacity="0"/><stop offset=".12" stop-color="#0FA877"/></linearGradient>
-          <linearGradient id="exR"><stop offset=".88" stop-color="#22C79A"/><stop offset="1" stop-color="#22C79A" stop-opacity="0"/></linearGradient>
-          <linearGradient id="exU" x1="0" y1="1" x2="0" y2="0"><stop offset=".88" stop-color="#4FE0C8"/><stop offset="1" stop-color="#4FE0C8" stop-opacity="0"/></linearGradient>
+          <linearGradient id="exL"><stop offset="0" stop-color="#1F63FF" stop-opacity="0"/><stop offset=".12" stop-color="#1F63FF"/></linearGradient>
+          <linearGradient id="exR"><stop offset=".88" stop-color="#2F8BFF"/><stop offset="1" stop-color="#2F8BFF" stop-opacity="0"/></linearGradient>
+          <linearGradient id="exU" x1="0" y1="1" x2="0" y2="0"><stop offset=".88" stop-color="#6CC6FF"/><stop offset="1" stop-color="#6CC6FF" stop-opacity="0"/></linearGradient>
           <filter id="bmBlur" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="2.4"/></filter>
           <filter id="exBlur" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2.4"/></filter>
         </defs>
@@ -445,7 +457,7 @@ body.invert .scene .kicker{color:#6E6E78}
       </svg>
     </div>
     <div class="wrap">
-      <h1 class="rise d1" data-en="We build software<br>and advise <em>founders.</em>" data-pt="Construímos software<br>e aconselhamos <em>fundadores.</em>">We build software<br>and advise <em>founders.</em></h1>
+      <h1 class="rise d1" data-en="We build software<br>and advise<br><em><span class=&quot;sr-only&quot;>founders, enterprises and executive teams</span><span class=&quot;tw&quot; aria-hidden=&quot;true&quot;>founders</span><i class=&quot;caret&quot; aria-hidden=&quot;true&quot;></i>.</em>" data-pt="Construímos software<br>e aconselhamos<br><em><span class=&quot;sr-only&quot;>fundadores, empresas e equipas executivas</span><span class=&quot;tw&quot; aria-hidden=&quot;true&quot;>fundadores</span><i class=&quot;caret&quot; aria-hidden=&quot;true&quot;></i>.</em>">We build software<br>and advise<br><em><span class="sr-only">founders, enterprises and executive teams</span><span class="tw" aria-hidden="true">founders</span><i class="caret" aria-hidden="true"></i>.</em></h1>
       <p class="lead rise d2" data-en="Burnay Labs is a holding company in Lisbon. We design, build and ship our own products, and work with founders and executive teams on strategy and go-to-market." data-pt="A Burnay Labs é uma holding em Lisboa. Desenhamos, construímos e lançamos os nossos próprios produtos, e trabalhamos com fundadores e equipas executivas em estratégia e go-to-market.">Burnay Labs is a holding company in Lisbon. We design, build and ship our own products, and work with founders and executive teams on strategy and go-to-market.</p>
       <div class="hero-ctas rise d3">
         <a class="btn btn-white" href="#products"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13 2L4 14h7l-2 8 9-12h-7l2-8z"/></svg>See Legacy</a>
@@ -1305,6 +1317,26 @@ body.invert .scene .kicker{color:#6E6E78}
   addEventListener("scroll", on, { passive: true }); on();
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const clamp = v => Math.min(1, Math.max(0, v)), ease = t => t * t * (3 - 2 * t);
+  // hero: the last word types out, holds, erases and the next one types in (the Nova SBE Alumni site's rhythm)
+  (() => {
+    const tw = document.querySelector(".hero h1 .tw");
+    if (!tw || reduce) return;
+    const WORDS = document.documentElement.lang === "pt"
+      ? ["fundadores", "empresas", "equipas executivas", "startups", "scale-ups", "operadores"]
+      : ["founders", "enterprises", "executive teams", "startups", "scale-ups", "operators"];
+    let i = 0, text = WORDS[0], phase = "holding";
+    const step = () => {
+      const w = WORDS[i];
+      if (phase === "typing") {
+        if (text.length < w.length) { tw.textContent = text = w.slice(0, text.length + 1); return setTimeout(step, 80); }
+        phase = "holding"; return setTimeout(step, 1400);
+      }
+      if (phase === "holding") { phase = "erasing"; return setTimeout(step, 0); }
+      if (text.length) { tw.textContent = text = text.slice(0, -1); return setTimeout(step, 45); }
+      phase = "typing"; i = (i + 1) % WORDS.length; setTimeout(step, 350);
+    };
+    setTimeout(step, 2400);                                              // the entrance plays first, with the first word in place
+  })();
   // the hero entrance animates transform/opacity; once done it steps aside so the scroll effects can take over
   document.querySelectorAll(".rise").forEach(el => el.addEventListener("animationend", () => el.classList.remove("rise"), { once: true }));
   // switching between the scenes and the plain page needs a fresh page
@@ -1518,10 +1550,12 @@ body.invert .scene .kicker{color:#6E6E78}
   const SLOTS = [];
   [4, 5, 4, 5, 4].forEach((n, r) => { for (let c = 0; c < n; c++) SLOTS.push({ x: c - (n - 1) / 2, y: ((r - 2) * ROW) / SP }); });
   SLOTS.sort((a, b) => Math.hypot(a.x, a.y) - Math.hypot(b.x, b.y) || Math.atan2(a.y, a.x) - Math.atan2(b.y, b.x));
-  // Opening a product works like launching an app on the Watch: the bubble grows until it covers the whole face, then
-  // flips over to show the product on its back. Closing flips it back and settles it into its slot.
+  // Opening a product works like launching an app on the Watch: the bubble grows until it covers the whole face, turning
+  // from a circle into a rounded square on the way, then flips over to show the product on its back. Closing plays it
+  // all backwards into the bubble's slot.
   let launched = null;
-  const PERSP = "perspective(1800px) ";
+  const PERSP = "perspective(1800px) ", SQ = "22%";
+  const ROUND = { borderRadius: "50%", clipPath: "inset(0 round 50%)" }, SQUARE = { borderRadius: SQ, clipPath: `inset(0 round ${SQ})` };
   // resolves when the animation ends, or after its duration if the tab is hidden and animations are paused
   const settle = (anim, ms) => new Promise(res => {
     let done = false;
@@ -1570,6 +1604,7 @@ body.invert .scene .kicker{color:#6E6E78}
       window.closeCard();
     }, true);
     me.grow = disc.animate([{ transform: from }, { transform: "none" }], { duration: 480, easing: "cubic-bezier(.3,.7,.2,1)", fill: "both" });
+    me.shape = $$(".disc-face", disc).map(f => f.animate([ROUND, SQUARE], { duration: 480, easing: "cubic-bezier(.5,0,.2,1)", fill: "both" }));
     settle(me.grow, 480).then(() => {
       if (launched !== me || me.closing) return;
       hive.style.visibility = "hidden";                                 // the face now covers the hive: nothing may peek out
@@ -1600,9 +1635,10 @@ body.invert .scene .kicker{color:#6E6E78}
     const unflip = me.turn ? (me.turn.reverse(), settle(me.turn, 560)) : Promise.resolve();
     unflip.then(() => {
       const anim = me.disc.animate([{ transform: "none" }, { transform: toBubble(me.b, me.cx, me.cy, me.R) }],   // land where the bubble is now
-        { duration: 420, easing: "cubic-bezier(.5,0,.2,1)", fill: "both" });
+        { duration: 480, easing: "cubic-bezier(.5,0,.2,1)", fill: "both" });
       if (me.grow) me.grow.cancel();
-      return settle(anim, 420);
+      me.shape.forEach(a => a.reverse());                               // and round off again on the way
+      return settle(anim, 480);
     }).then(() => {
       me.b.style.visibility = "";
       me.disc.remove();
@@ -1743,12 +1779,46 @@ body.invert .scene .kicker{color:#6E6E78}
   const fo = $("#founderScene"), portrait = $(".portrait", fo), pimg = $("img", portrait), ft = $(".founder-text", fo);
   const foA = { kick: $(".kicker", ft), h2: $("h2", ft), bio: $(".bio", ft), label: $(".label", ft), ps: $$(".more", ft) };
   const foType = typer(foA.kick), foLight = lighter(foA.h2), foLabel = typer(foA.label);
+  // the photo arrives as colour pixels: blocks pop in at random, then shrink until they are the photo
+  const pix = Object.assign(document.createElement("canvas"), { className: "pix" });
+  pix.setAttribute("aria-hidden", "true");
+  portrait.append(pix);
+  const pctx = pix.getContext("2d"), small = document.createElement("canvas"), sctx = small.getContext("2d"), order = [];
+  const BIG = 34;                                                      // block size at the start, in photo pixels
+  let pixKey = "";
+  const pixelate = (shown, sharp) => {
+    if (!pimg.complete || !pimg.naturalWidth) return;
+    const W = pimg.naturalWidth, H = pimg.naturalHeight, done = sharp >= 1;
+    pimg.style.opacity = done ? "" : "0";
+    pix.style.opacity = done ? "0" : "1";
+    if (done) return;
+    if (pix.width !== W) { pix.width = W; pix.height = H; }
+    const size = Math.max(1, Math.round(BIG * Math.pow(1 / BIG, sharp))), key = size + ":" + shown.toFixed(3);
+    if (key === pixKey) return;
+    pixKey = key;
+    const cols = Math.ceil(W / size), rows = Math.ceil(H / size), n = cols * rows;
+    small.width = cols; small.height = rows;
+    sctx.drawImage(pimg, 0, 0, cols, rows);                            // each block is the average colour of its patch
+    pctx.clearRect(0, 0, W, H);
+    pctx.imageSmoothingEnabled = false;
+    pctx.drawImage(small, 0, 0, cols * size, rows * size);
+    if (shown >= 1) return;
+    if (order.length !== n) {                                          // a fixed random order for the blocks to pop in
+      order.length = 0;
+      for (let i = 0; i < n; i++) order.push(i);
+      for (let i = n - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [order[i], order[j]] = [order[j], order[i]]; }
+    }
+    for (let q = Math.floor(shown * n); q < n; q++) { const i = order[q]; pctx.clearRect((i % cols) * size, Math.floor(i / cols) * size, size, size); }
+  };
   const FOUNDER = {
     apply(r, x) {
-      const k = seg(r, 0, 0.42, inOut), xk = seg(x, 0, 0.7, inCubic);
-      if (xk > 0) portrait.style.clipPath = `inset(0 0 ${(xk * 100).toFixed(2)}% 0 round 20px)`; else wipe(portrait, k, "up", 20);
+      const xk = seg(x, 0, 0.7, inCubic);
+      portrait.style.clipPath = xk > 0 ? `inset(0 0 ${(xk * 100).toFixed(2)}% 0 round 20px)` : "";
       set(portrait, { y: -xk * 40 });
-      pimg.style.scale = (1.16 - 0.16 * seg(r, 0, 0.7) + xk * 0.06).toFixed(4);
+      const sc = (1.12 - 0.12 * seg(r, 0, 0.7) + xk * 0.06).toFixed(4), drift = `translateY(${((0.5 - r) * 46).toFixed(1)}px)`;
+      pimg.style.scale = pix.style.scale = sc;                          // parallax: the photo drifts against its frame
+      pimg.style.transform = pix.style.transform = drift;
+      pixelate(seg(r, 0.02, 0.18), seg(r, 0.16, 0.5));
       const X = i => outK(x, i, 0.5, 0.06);
       foType(seg(r, 0.16, 0.28, lin)); foLight(seg(r, 0.2, 0.5, lin));
       const h = seg(r, 0.18, 0.42, outExpo);
@@ -1855,7 +1925,7 @@ body.invert .scene .kicker{color:#6E6E78}
   addEventListener("load", measure);
 
   // menu: jump to the scene already built
-  const map = { "#top": "top", "#products": "legacy", "#about": "about", "#team": "team", "#stack": "stack", "#contact": "contact" };
+  const map = { "#top": "top", "#products": "hive", "#about": "about", "#team": "team", "#stack": "stack", "#contact": "contact" };
   $$('a[href^="#"]').forEach(a => a.addEventListener("click", e => {
     const sc = scenes.find(s => s.id === map[a.getAttribute("href")]); if (!sc) return;
     e.preventDefault(); scrollTo({ top: Math.max(0, sc.tIn), behavior: "smooth" });
