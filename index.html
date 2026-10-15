@@ -179,7 +179,7 @@ html.scenes .grid-head{display:flex;align-items:baseline;justify-content:space-b
 .org-head h2{max-width:none}
 .org-sub{margin:14px auto 0;color:var(--text-2);font-size:17px}
 .org{display:flex;flex-direction:column;align-items:center}
-.node{position:relative;display:flex;align-items:center;gap:12px;width:100%;padding:15px 16px 13px;border:0;border-radius:14px;text-align:left;color:var(--text);
+.node{position:relative;display:flex;align-items:center;gap:10px;width:100%;padding:15px 14px 13px;border:0;border-radius:14px;text-align:left;color:var(--text);
   background:linear-gradient(180deg,#131318,#0C0C10);box-shadow:var(--shadow);transition:box-shadow .3s,transform .3s,background .45s}
 button.node{cursor:pointer}
 button.node:hover{transform:translateY(-2px);box-shadow:var(--shadow-hi)}
@@ -187,12 +187,13 @@ button.node:hover{transform:translateY(-2px);box-shadow:var(--shadow-hi)}
 .node .ic{flex:0 0 auto;display:grid;place-items:center;width:20px;height:20px;color:#fff}
 .node .ic svg{display:block;width:20px;height:20px}
 .node b{display:block;font-weight:600;font-size:14.5px;letter-spacing:-.01em;line-height:1.3}
-.node small{display:block;margin-top:3px;font-family:var(--mono);font-size:11px;line-height:1.35;color:var(--text-3)}
+.node small{display:block;margin-top:3px;font-family:var(--mono);font-size:11px;line-height:1.35;letter-spacing:-.03em;color:var(--text-3);white-space:nowrap}
 .org-conn{width:1px;height:28px;margin:10px 0;background:linear-gradient(rgba(255,255,255,.24),rgba(255,255,255,.06));transform-origin:top;transform:scaleY(var(--k,1))}
 .org-label{margin:0 0 14px;font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--text-3)}
 .org-row{display:grid;gap:10px;width:100%}
 .org-row.r6{grid-template-columns:repeat(6,minmax(0,1fr))}
 .org-row.r5{grid-template-columns:repeat(5,minmax(0,1fr));max-width:84%}
+@media (max-width:1240px){.org-row.r6{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media (max-width:1100px){.org-row.r6,.org-row.r5{grid-template-columns:repeat(3,minmax(0,1fr));max-width:none}}
 @media (max-width:560px){.org-row.r6,.org-row.r5{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .founder{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:64px;align-items:center;margin-top:120px}
@@ -350,17 +351,19 @@ html.scenes main,html.scenes footer{display:none}
 }
 /* About: full-screen white panel that opens from a line */
 .m-panel{position:absolute;inset:0;background:#F4F4F6;clip-path:inset(50% 0);visibility:hidden}
-.m-panel.m-blue{background:#1D5BFF}
+.m-panel.m-graphite{background:#1C1C21}
 #orgScene .kicker,#orgScene .org-sub,#orgScene .org-label,#orgScene .node b,#orgScene .node small,#orgScene .node .ic{transition:color .45s ease}
 #orgScene .org-conn{transition:background .45s ease}
-#orgScene.blu .kicker,#orgScene.blu .org-label{color:rgba(255,255,255,.72)}
-#orgScene.blu .org-sub{color:rgba(255,255,255,.86)}
-#orgScene.blu .org-conn{background:rgba(255,255,255,.55)}
-#orgScene.blu .node{background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.08),0 24px 50px -28px rgba(6,18,80,.6)}
-#orgScene.blu button.node:hover{box-shadow:0 1px 2px rgba(0,0,0,.08),0 30px 56px -24px rgba(6,18,80,.7)}
-#orgScene.blu .node b{color:#0A0A0D}
-#orgScene.blu .node small{color:#55555E}
-#orgScene.blu .node .ic{color:#1D5BFF}
+/* Team: black cards on a graphite page, the dark twin of About's white cards on grey (the page is lighter than the
+   cards, so their shadows are darker than the page and show) */
+#orgScene.gra .kicker,#orgScene.gra .org-label{color:#8A8A94}
+#orgScene.gra .org-sub{color:#B4B4BC}
+#orgScene.gra .org-conn{background:rgba(255,255,255,.22)}
+#orgScene.gra .node{background:#050506;box-shadow:0 1px 2px rgba(0,0,0,.35),0 24px 50px -26px rgba(0,0,0,.95)}
+#orgScene.gra button.node:hover{box-shadow:0 1px 2px rgba(0,0,0,.35),0 30px 56px -22px rgba(0,0,0,1)}
+#orgScene.gra .node b{color:#F5F5F7}
+#orgScene.gra .node small{color:#8A8A94}
+#orgScene.gra .node .ic{color:#fff}
 /* scene navigation */
 .scene-dots{position:fixed;right:12px;top:50%;translate:0 -50%;z-index:60;display:flex;flex-direction:column}
 .scene-dots button{width:18px;height:18px;padding:6px;border:0;border-radius:50%;background:rgba(255,255,255,.25) content-box;transition:background .3s, scale .3s}
@@ -1766,14 +1769,14 @@ body.invert .scene .kicker{color:#6E6E78}
   const ogA = { kick: $(".kicker", org), h2: $("h2", org), sub: $(".org-sub", org), conns: $$(".org-conn", org), labels: $$(".org-label", org), rows: $$(".org-row", org).map(rw => $$(".node", rw)) };
   const ogType = typer(ogA.kick), ogLight = lighter(ogA.h2), ogLabels = ogA.labels.map(l => typer(l));
   const TIERS = [0.24, 0.56];
-  const bluePanel = document.createElement("div"); bluePanel.className = "m-panel m-blue"; stage.append(bluePanel);
+  const teamPanel = document.createElement("div"); teamPanel.className = "m-panel m-graphite"; stage.append(teamPanel);
   const ORG = {
-    off() { bluePanel.style.visibility = "hidden"; org.classList.remove("blu"); },
+    off() { teamPanel.style.visibility = "hidden"; org.classList.remove("gra"); },
     apply(r, x) {
       const open = seg(r, 0, 0.3, outExpo) * (1 - seg(x, 0.35, 0.9, inOut));
-      bluePanel.style.visibility = open > 0.001 ? "visible" : "hidden";
-      bluePanel.style.clipPath = `inset(${((1 - open) * 50).toFixed(2)}% 0)`;
-      org.classList.toggle("blu", open > 0.5);
+      teamPanel.style.visibility = open > 0.001 ? "visible" : "hidden";
+      teamPanel.style.clipPath = `inset(${((1 - open) * 50).toFixed(2)}% 0)`;
+      org.classList.toggle("gra", open > 0.5);
       const X = i => outK(x, i, 0.5, 0.06);
       ogType(seg(r, 0, 0.12, lin)); ogLight(seg(r, 0.04, 0.3, lin));
       const h = seg(r, 0.02, 0.26, outExpo);
