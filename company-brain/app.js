@@ -2,7 +2,7 @@ const platforms = ["1Password","Adobe Acrobat","Airtable","Amplitude","Asana","A
 
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
-const apiBase = location.hostname === "burnaylabs.com" ? "https://company-brain-api.tomas-b-batalha.workers.dev" : ".";
+const apiBase = ["bytarc.com", "bytarc.pt"].includes(location.hostname) ? "https://company-brain-api.tomas-b-batalha.workers.dev" : ".";
 const initialMessage = "Let’s map how the company actually works, starting with your own work as CEO. What is one recurring workflow you personally own?";
 
 let state = {
