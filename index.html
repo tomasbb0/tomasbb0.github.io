@@ -537,16 +537,7 @@ html.compact .nav.scrolled{background:rgba(5,5,6,.92);-webkit-backdrop-filter:no
     <div class="hero-bg" id="heroBg"><div class="grain"></div></div>
     <div class="markwrap" aria-hidden="true">
       <svg class="bigmark bm-draw" id="bigmark" viewBox="0 0 100 100" overflow="visible" focusable="false">
-        <defs>
-          <!-- the lines pulled out of the arc on scroll: full strength, with only a short taper at the leading tip -->
-          <linearGradient id="exL"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".12" stop-color="#fff"/></linearGradient>
-          <linearGradient id="exR"><stop offset=".88" stop-color="#fff"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
-          <linearGradient id="exU" x1="0" y1="1" x2="0" y2="0"><stop offset=".88" stop-color="#fff"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
-        </defs>
         <path class="bm-d" stroke="#fff" stroke-width="1.2" d="M50 18.727L55.855 18.727C58.197 18.727 59.368 18.727 60.262 19.183C61.049 19.584 61.689 20.224 62.09 21.011C62.545 21.905 62.545 23.076 62.545 25.418L62.545 27.091C62.545 35.455 62.545 35.455 70.909 35.455L72.582 35.455C74.924 35.455 76.095 35.455 76.989 35.91C77.776 36.311 78.416 36.951 78.817 37.738C79.273 38.632 79.273 39.803 79.273 42.145L79.273 43.818C79.273 52.182 79.273 52.182 87.636 52.182L89.309 52.182C91.651 52.182 92.822 52.182 93.717 52.638C94.504 53.039 95.143 53.678 95.544 54.465C96 55.36 96 56.531 96 58.873L96 64.727L96 70.582C96 72.924 96 74.095 95.544 74.989C95.143 75.776 94.504 76.416 93.717 76.817C92.822 77.273 91.651 77.273 89.309 77.273L85.964 77.273C83.622 77.273 82.451 77.273 81.556 76.817C80.769 76.416 80.129 75.776 79.729 74.989C79.273 74.095 79.273 72.924 79.273 70.582L79.273 60.545C79.273 52.182 79.273 52.182 70.909 52.182L69.236 52.182C66.894 52.182 65.723 52.182 64.829 51.726C64.042 51.325 63.402 50.685 63.001 49.899C62.545 49.004 62.545 47.833 62.545 45.491L62.545 43.818C62.545 35.455 62.545 35.455 54.182 35.455L50 35.455L45.818 35.455C37.455 35.455 37.455 35.455 37.455 43.818L37.455 45.491C37.455 47.833 37.455 49.004 36.999 49.899C36.598 50.685 35.958 51.325 35.171 51.726C34.277 52.182 33.106 52.182 30.764 52.182L29.091 52.182C20.727 52.182 20.727 52.182 20.727 60.545L20.727 70.582C20.727 72.924 20.727 74.095 20.271 74.989C19.871 75.776 19.231 76.416 18.444 76.817C17.549 77.273 16.378 77.273 14.036 77.273L10.691 77.273C8.349 77.273 7.178 77.273 6.283 76.817C5.496 76.416 4.857 75.776 4.456 74.989C4 74.095 4 72.924 4 70.582L4 64.727L4 58.873C4 56.531 4 55.36 4.456 54.465C4.857 53.678 5.496 53.039 6.283 52.638C7.178 52.182 8.349 52.182 10.691 52.182L12.364 52.182C20.727 52.182 20.727 52.182 20.727 43.818L20.727 42.145C20.727 39.803 20.727 38.632 21.183 37.738C21.584 36.951 22.224 36.311 23.011 35.91C23.905 35.455 25.076 35.455 27.418 35.455L29.091 35.455C37.455 35.455 37.455 35.455 37.455 27.091L37.455 25.418C37.455 23.076 37.455 21.905 37.91 21.011C38.311 20.224 38.951 19.584 39.738 19.183C40.632 18.727 41.803 18.727 44.145 18.727Z"/>
-        <rect class="ex" data-side="L" x="3.4" y="64.127" width="0" height="1.2" fill="url(#exL)"/>
-        <rect class="ex" data-side="R" x="96.6" y="64.127" width="0" height="1.2" fill="url(#exR)"/>
-        <rect class="ex" data-side="U" x="49.4" y="18.127" width="1.2" height="0" fill="url(#exU)"/>
       </svg>
     </div>
     <div class="wrap">
@@ -1690,17 +1681,13 @@ window.pixelReveal = (() => {
   // common exit: rises and dissolves, cascading from top to bottom
   const outK = (x, i, span = 0.5, step = 0.07) => seg(x, i * step, span + i * step, inCubic);
 
-  // ---------- 1. top: the text rises away; the arc unravels like thread pulled through three exits.
-  // Its outline leaves upwards through the middle of the top edge and sideways through the outer side of each leg.
-  // Each exit draws the line in from both sides; every line outside is exactly as long as the outline it has taken,
-  // and once the arc is empty the lines fly off.
+  // ---------- 1. top: the text rises away; the arc unravels through three exits.
+  // Its outline leaves through the middle of the top edge and through the outer side of each leg; each exit eats
+  // the line from both sides until the arc is empty.
   const hero = $(".hero"), heroBg = $("#heroBg"), mark = $("#bigmark"), canvas = $("#heroWave");
   const heroText = [$(".hero h1"), $(".hero .lead"), $(".hero .hero-ctas"), $(".hero .hero-meta")];
   const outline = $$(".bm-d", mark), TOTAL = outline[0].getTotalLength();   // the outline's length in viewBox units
-  const lines = $$(".ex", mark).map(el => ({ el, side: el.dataset.side }));
   const EXIT = { R: 0.23804, L: 0.76196 };                                   // where the side exits sit along the outline, clockwise from the top exit
-  const LEN = { L: 133.21, U: 83.23, R: 133.21 };                       // outline each exit pulls out (viewBox units): half of each stretch beside it
-  const FLY = { L: 260, U: 120, R: 100 };                              // how far the finished lines travel to clear the screen
   const dash = (els, arr, off) => els.forEach(p => { p.style.strokeDasharray = arr; p.style.strokeDashoffset = off; });
   mark.addEventListener("animationend", e => { if (e.target.classList.contains("bm-d")) mark.classList.remove("bm-draw"); });
   const TOP = {
@@ -1710,19 +1697,13 @@ window.pixelReveal = (() => {
         el.style.translate = T ? `0 ${(-T).toFixed(1)}px` : "";
         el.style.clipPath = T ? `inset(${T.toFixed(1)}px 0 0 0)` : "";
       });
-      const c = seg(x, 0.02, 0.62, inOut), f = seg(x, 0.62, 1, inCubic);   // c: share of the arc pulled out; f: lines flying away
+      const c = seg(x, 0.02, 0.62, inOut);                               // share of the arc pulled out
       if (c > 0) {
         mark.classList.remove("bm-draw");                              // the drawing-in animation would otherwise hold the line
         const a = EXIT.R, b = EXIT.L - EXIT.R, d = 1 - EXIT.L, k = 1 - c;   // stretches: top to right, right to left (round the bottom), left to top
         const arr = [k * a, c * (a + b) / 2, k * b, c * (b + d) / 2, k * d, c * (d + a) / 2].map(v => (v * TOTAL).toFixed(3)).join(" ");
         dash(outline, arr, (-c * a / 2 * TOTAL).toFixed(3));                   // a gap opens at each exit and eats the outline from both sides
       } else dash(outline, "", "");
-      lines.forEach(({ el, side }) => {
-        const tail = f * FLY[side], head = tail + c * LEN[side], len = c * LEN[side] > 0.2 ? (c * LEN[side]).toFixed(2) : "0";
-        if (side === "L") { el.setAttribute("x", (3.4 - head).toFixed(2)); el.setAttribute("width", len); }
-        else if (side === "R") { el.setAttribute("x", (96.6 + tail).toFixed(2)); el.setAttribute("width", len); }
-        else { el.setAttribute("y", (18.127 - head).toFixed(2)); el.setAttribute("height", len); }
-      });
       heroBg.style.opacity = (1 - seg(x, 0.2, 0.9)).toFixed(3);
       if (canvas) canvas.style.opacity = (1 - 0.7 * seg(x, 0.1, 0.9)).toFixed(3);
     },
