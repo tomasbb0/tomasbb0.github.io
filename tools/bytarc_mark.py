@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""The Bytarc mark (v4) and every icon cut from it.
+"""The BytArc mark (v4) and every icon cut from it.
 
 The mark sits on a 25-unit grid (u = 25): squares 2u, long blocks 3u, corners rounded by u/2 with Figma's 60% corner
 smoothing, and where two blocks touch corner to corner a gooey joint reaches 1u along each edge. It is one outline,
