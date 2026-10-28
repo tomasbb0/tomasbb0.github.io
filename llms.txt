@@ -1,18 +1,23 @@
 # BytArc
 
-> BytArc (company name BytArc Labs; often written lowercase as bytarc) is an AI consulting and product development company based in Lisbon, Portugal, founded by Tomás Batalha. Website: https://bytarc.com (Portuguese: https://bytarc.pt).
+> BytArc (company name BytArc Labs; often written lowercase as bytarc) is an independent, founder-led AI studio in Lisbon, Portugal. It automates business processes for growing companies with AI and builds its own AI products. Website: https://bytarc.com (Portuguese: https://bytarc.pt).
 
-BytArc has two sides:
+## What BytArc does
 
-- Consulting: strategy, go-to-market and AI adoption for founders and executive teams.
-- Products: AI software designed, built and shipped in house, such as JobPilot AI, TopResume.ai, VendasIA and the BytArc Education platform, plus OpenClaw, an agent framework for AI business automation.
+- AI process automation and consulting: finds repetitive work in growing companies (sales and outreach, customer feedback, documents and applications, operations and reporting) and automates it with AI agents, workflow automation and custom AI tools; also strategy, go-to-market and AI adoption for founders and executive teams.
+- AI products built in house: JobPilot AI, TopResume.ai, VendasIA, BytArc Education, CasePreper, Company Brain, OpenClaw (an agent framework for AI business automation) and more. BytArc runs its own operations on 11 AI agents.
 
-The founder, Tomás Batalha, is a former Google business analyst and Amazon business development lead who co-founded a B2B SaaS startup. BytArc is supported by AWS Activate.
+## Who runs it
 
-BytArc is not related to BYT-ARC welding machines, ByteArc or ByteArk.
+Founded and led by Tomás Batalha, a former Google business analyst and Amazon business development lead who co-founded a B2B SaaS startup. He leads every engagement, with project-based collaborators. BytArc is supported by AWS Activate.
 
-## Links
+BytArc is not related to BYT-ARC welding machines, ByteArc, ByteArk, ByteC or TARC.
 
-- [Website](https://bytarc.com/)
-- [LinkedIn](https://www.linkedin.com/company/bytarc-labs)
+## Pages
+
+- [What is BytArc?](https://bytarc.com/about/)
+- [AI consulting and process automation in Lisbon](https://bytarc.com/ai-consulting/)
+- [Products built by BytArc](https://bytarc.com/products/)
+- [Tomás Batalha, founder](https://bytarc.com/tomas-batalha/)
+- [The BytArc concept and logo files](https://bytarc.com/brand/)
 - [Contact](mailto:tomas@bytarc.com)

@@ -5,10 +5,10 @@
 body{margin:0;background:var(--bg);color:var(--text);font:16px/1.65 var(--font);-webkit-font-smoothing:antialiased}
 a{color:inherit}
 .wrap{max-width:900px;margin:0 auto;padding:0 24px}
-.top{display:flex;align-items:center;justify-content:space-between;gap:20px;height:72px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px 20px;min-height:72px;flex-wrap:wrap;padding:14px 0}
 .brand{display:inline-flex;align-items:center;gap:11px;font-weight:600;font-size:17px;letter-spacing:-.02em;text-decoration:none}
 .brand img{display:block;width:28px;height:18px}
-.top nav{display:flex;gap:18px;font-size:14px;color:var(--text-2)}
+.top nav{display:flex;gap:6px 18px;flex-wrap:wrap;font-size:14px;color:var(--text-2)}
 .top nav a{text-decoration:none}
 .top nav a[aria-current]{color:var(--text)}
 .kicker{font:500 12px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--text-3);margin:64px 0 14px}

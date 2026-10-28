@@ -7,14 +7,17 @@
 <!-- after the viewport tag: before it, a phone reports a 980px desktop width and got the desktop scenes -->
 <script>window.SCENES_COMPACT = innerWidth < 900; window.SCENES_OK = !matchMedia('(prefers-reduced-motion: reduce)').matches && (window.SCENES_COMPACT ? innerHeight >= 500 && innerHeight > innerWidth : innerHeight >= 600); window.SCENES = window.SCENES_OK;</script>
 <title>BytArc | AI Consulting &amp; Product Development</title>
-<meta name="description" content="BytArc is an AI consulting and product development company in Lisbon, founded by Tomás Batalha (ex-Google, ex-Amazon). We advise founders and executive teams and build our own AI products.">
+<meta name="description" content="BytArc is an independent, founder-led AI studio in Lisbon. We automate business processes for growing companies with AI and build our own AI products. Founded by Tomás Batalha (ex-Google, ex-Amazon).">
 <link rel="canonical" href="https://bytarc.com">
+<link rel="alternate" hreflang="en" href="https://bytarc.com/">
+<link rel="alternate" hreflang="pt" href="https://bytarc.pt/">
+<link rel="alternate" hreflang="x-default" href="https://bytarc.com/">
 <meta name="theme-color" content="#020203">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="BytArc">
 <meta property="og:url" content="https://bytarc.com/">
 <meta property="og:title" content="BytArc · We build software and advise founders">
-<meta property="og:description" content="A Lisbon holding company: our own products, designed, built and shipped in house, and strategy and go-to-market for founders and executive teams.">
+<meta property="og:description" content="An independent, founder-led AI studio in Lisbon: we automate business processes with AI and build our own AI products.">
 <meta property="og:image" content="https://bytarc.com/assets/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -23,7 +26,7 @@
 <link rel="icon" href="/favicon.ico?v=5" sizes="48x48">
 <link rel="icon" href="/favicon.svg?v=5" type="image/svg+xml">
 <link rel="icon" href="/assets/icon-192.png?v=5" type="image/png" sizes="192x192">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://bytarc.com/#website","name":"BytArc","alternateName":["BytArc Labs","Bytarc"],"url":"https://bytarc.com/","inLanguage":["en","pt"],"publisher":{"@id":"https://bytarc.com/#org"}},{"@type":"Organization","@id":"https://bytarc.com/#org","name":"BytArc","alternateName":["BytArc Labs","Bytarc","Bytarc Labs"],"url":"https://bytarc.com/","logo":{"@type":"ImageObject","url":"https://bytarc.com/assets/icon-512.png","width":512,"height":512},"image":"https://bytarc.com/assets/og.png","description":"BytArc is an AI consulting and product development company based in Lisbon, Portugal, founded by Tomás Batalha. It advises founders and executive teams on strategy, go-to-market and AI adoption, and designs, builds and ships its own AI software products, including JobPilot AI, TopResume.ai and VendasIA.","slogan":"AI Consulting & Product Development","email":"tomas@bytarc.com","founder":{"@type":"Person","@id":"https://bytarc.com/#founder","name":"Tomás Batalha","jobTitle":"Founder","worksFor":{"@id":"https://bytarc.com/#org"},"sameAs":["https://www.linkedin.com/in/tomasmbatalha"],"image":"https://bytarc.com/assets/tomas-bw.jpg"},"address":{"@type":"PostalAddress","addressLocality":"Lisbon","addressCountry":"PT"},"areaServed":["PT","EU"],"knowsAbout":["AI consulting","Artificial intelligence","AI agents","Product development","Software development","Go-to-market strategy","SaaS"],"sameAs":["https://www.linkedin.com/company/bytarc-labs","https://bytarc.pt/","https://github.com/tomasbb0"],"legalName":"BytArc Labs"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://bytarc.com/#website","name":"BytArc","alternateName":["BytArc Labs","Bytarc"],"url":"https://bytarc.com/","inLanguage":["en","pt"],"publisher":{"@id":"https://bytarc.com/#org"}},{"@type":"Organization","@id":"https://bytarc.com/#org","name":"BytArc","alternateName":["BytArc Labs","Bytarc","Bytarc Labs"],"url":"https://bytarc.com/","logo":{"@type":"ImageObject","url":"https://bytarc.com/assets/icon-512.png","width":512,"height":512},"image":"https://bytarc.com/assets/og.png","description":"BytArc is an independent, founder-led AI studio in Lisbon, Portugal. It automates business processes for growing companies with AI agents, workflow automation and custom AI tools, advises founders and executive teams on strategy, go-to-market and AI adoption, and builds its own AI products, including JobPilot AI, TopResume.ai and VendasIA.","slogan":"AI process automation and AI products, from Lisbon","email":"tomas@bytarc.com","founder":{"@type":"Person","@id":"https://bytarc.com/#founder","name":"Tomás Batalha","jobTitle":"Founder","worksFor":{"@id":"https://bytarc.com/#org"},"sameAs":["https://www.linkedin.com/in/tomasmbatalha"],"image":"https://bytarc.com/assets/tomas-bw.jpg","url":"https://bytarc.com/tomas-batalha/"},"address":{"@type":"PostalAddress","addressLocality":"Lisbon","addressCountry":"PT"},"areaServed":["Lisbon","Portugal","European Union"],"knowsAbout":["AI process automation","Business process automation","Workflow automation","AI agents","AI consulting","Custom AI development","Product development","Go-to-market strategy","SaaS"],"sameAs":["https://www.linkedin.com/company/bytarc-labs","https://bytarc.pt/","https://github.com/tomasbb0"],"legalName":"BytArc Labs"}]}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
 <style>
@@ -288,6 +291,7 @@ footer{padding-block:48px 56px}
 .foot-copy svg{width:22px;height:14px;flex:0 0 auto;overflow:visible}
 .foot a:hover{color:var(--text)}
 .foot-links{display:flex;gap:22px;flex-wrap:wrap}
+.foot-more{flex-basis:100%;display:flex;gap:16px;flex-wrap:wrap;font-size:11.5px;opacity:.6}   /* the plain pages: a quiet row under the footer */
 
 /* card view (a product card opened from the honeycomb) */
 .card-view{position:fixed;inset:0;z-index:180;display:grid;place-items:center;padding:20px;background:rgba(2,2,3,.62);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);opacity:0;visibility:hidden;transition:opacity .25s ease,visibility .25s}
@@ -941,7 +945,7 @@ html.compact .nav.scrolled{background:rgba(2,2,3,.92);-webkit-backdrop-filter:no
     </script>
     <div class="wrap">
       <h1 class="rise d1" data-en="We build software<br>and advise<br><em><span class=&quot;sr-only&quot;>founders, enterprises and executive teams</span><span class=&quot;tw&quot; aria-hidden=&quot;true&quot;>founders</span><i class=&quot;caret&quot; aria-hidden=&quot;true&quot;></i>.</em>" data-pt="Construímos software<br>e aconselhamos<br><em><span class=&quot;sr-only&quot;>fundadores, empresas e equipas executivas</span><span class=&quot;tw&quot; aria-hidden=&quot;true&quot;>fundadores</span><i class=&quot;caret&quot; aria-hidden=&quot;true&quot;></i>.</em>">We build software<br>and advise<br><em><span class="sr-only">founders, enterprises and executive teams</span><span class="tw" aria-hidden="true">founders</span><i class="caret" aria-hidden="true"></i>.</em></h1>
-      <p class="lead rise d2" data-en="BytArc is a holding company in Lisbon. We design, build and ship our own products, and work with founders and executive teams on strategy and go-to-market." data-pt="A BytArc é uma holding em Lisboa. Desenhamos, construímos e lançamos os nossos próprios produtos, e trabalhamos com fundadores e equipas executivas em estratégia e go-to-market.">BytArc is a holding company in Lisbon. We design, build and ship our own products, and work with founders and executive teams on strategy and go-to-market.</p>
+      <p class="lead rise d2" data-en="BytArc is an independent, founder-led AI studio in Lisbon. We automate business processes for growing companies and build our own AI products." data-pt="A BytArc é um estúdio de IA independente, liderado pelo fundador, em Lisboa. Automatizamos processos de negócio de empresas em crescimento e criamos os nossos próprios produtos de IA.">BytArc is an independent, founder-led AI studio in Lisbon. We automate business processes for growing companies and build our own AI products.</p>
       <div class="hero-ctas rise d3">
         <a class="btn btn-white" href="#products"><span data-en="See Legacy" data-pt="Ver Legado">See Legacy</span></a>
         <a class="btn btn-ghost" href="#about" data-en="About Us" data-pt="Sobre Nós">About Us</a>
@@ -1145,7 +1149,7 @@ html.compact .nav.scrolled{background:rgba(2,2,3,.92);-webkit-backdrop-filter:no
     <div class="about-text">
       <div class="kicker" data-en="About" data-pt="Sobre">About</div>
       <h2 data-en="Meet BytArc." data-pt="Conheça a BytArc.">Meet BytArc.</h2>
-      <p data-en="BytArc is a Lisbon-based holding company. Two sides: management consulting, and tech products built in house. Supported by AWS Activate." data-pt="A BytArc é uma holding sediada em Lisboa. Dois lados: consultoria de gestão e produtos tecnológicos feitos internamente. Apoiada pelo AWS Activate.">BytArc is a Lisbon-based holding company. Two sides: management consulting, and tech products built in house. Supported by AWS Activate.</p>
+      <p data-en="BytArc is an independent AI studio in Lisbon, led by its founder. Two sides: AI consulting and process automation for growing companies, and AI products built in house. Supported by AWS Activate." data-pt="A BytArc é um estúdio de IA independente em Lisboa, liderado pelo fundador. Dois lados: consultoria de IA e automação de processos para empresas em crescimento, e produtos de IA feitos internamente. Apoiada pelo AWS Activate.">BytArc is an independent AI studio in Lisbon, led by its founder. Two sides: AI consulting and process automation for growing companies, and AI products built in house. Supported by AWS Activate.</p>
       <p data-en="Consulting side: we work with founders and executive teams on strategy, go-to-market and operating design. Tech side: Tomás personally designs, engineers and ships products. AI platforms, SaaS tools, consumer apps." data-pt="Consultoria: trabalhamos com fundadores e equipas executivas em estratégia, go-to-market e design operacional. Tecnologia: o Tomás desenha, desenvolve e lança os produtos pessoalmente. Plataformas de IA, ferramentas SaaS, apps para consumidores.">Consulting side: we work with founders and executive teams on strategy, go-to-market and operating design. Tech side: Tomás personally designs, engineers and ships products. AI platforms, SaaS tools, consumer apps.</p>
       <p data-en="BytArc Education is the company's Portuguese-tutoring platform for young learners. We're also building OpenClaw, an agent framework for AI business automation." data-pt="A BytArc Education é a plataforma de tutoria de português para crianças. Estamos também a construir o OpenClaw, um framework de agentes para automação empresarial com IA.">BytArc Education is the company's Portuguese-tutoring platform for young learners. We're also building OpenClaw, an agent framework for AI business automation.</p>
     </div>
@@ -1167,7 +1171,7 @@ html.compact .nav.scrolled{background:rgba(2,2,3,.92);-webkit-backdrop-filter:no
         <p class="org-sub" data-en="The OpenClaw Agents Org Chart" data-pt="Organigrama dos Agentes OpenClaw">The OpenClaw Agents Org Chart</p>
       </div>
       <div class="org">
-        <div class="org-label" data-en="HOLDING LEVEL AGENTS" data-pt="AGENTES DE HOLDING">HOLDING LEVEL AGENTS</div>
+        <div class="org-label" data-en="STUDIO AGENTS" data-pt="AGENTES DO ESTÚDIO">STUDIO AGENTS</div>
         <div class="org-row r6">
           <button class="node" type="button" data-agent="oracle"><span class="ic"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.6 7.4L22 12l-7.4 2.6L12 22l-2.6-7.4L2 12l7.4-2.6z"/></svg></span><span><b>Oracle</b><small data-en="VP Strategy &amp; Mentor" data-pt="VP Estratégia &amp; Mentor">VP Strategy &amp; Mentor</small></span></button>
           <button class="node" type="button" data-agent="atlas"><span class="ic"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/></svg></span><span><b>Atlas</b><small data-en="COO / Right Hand" data-pt="COO / Braço Direito">COO / Right Hand</small></span></button>
@@ -1194,7 +1198,7 @@ html.compact .nav.scrolled{background:rgba(2,2,3,.92);-webkit-backdrop-filter:no
         <h2 data-en="Tomás Batalha, Founder" data-pt="Tomás Batalha, Fundador">Tomás Batalha, Founder</h2>
         <p class="bio" data-en="Tomás Batalha is the Founder of BytArc. Former Google business analyst and Amazon business development lead. Co-founded a B2B SaaS startup where he built a €147K enterprise pipeline from zero and closed 23 enterprise deals, including Fortune 500 and Big 4 firms. MSc in Strategic Management from Rotterdam School of Management, BSc in Management from Nova SBE, additional studies at the National University of Singapore. At BytArc, Tomás personally designs, builds and ships every product. 15+ shipped in under 4 months." data-pt="Tomás Batalha é o Fundador da BytArc. Ex-analista de negócio na Google, ex-líder de desenvolvimento de negócio na Amazon. Co-fundou uma startup B2B SaaS onde construiu um pipeline empresarial de €147K do zero e fechou 23 contratos empresariais, incluindo Fortune 500 e Big 4. MSc em Gestão Estratégica pela Rotterdam School of Management, Licenciatura em Gestão pela Nova SBE, estudos adicionais na National University of Singapore. Na BytArc, o Tomás desenha, constrói e lança pessoalmente cada produto. Mais de 15 lançados em menos de 4 meses.">Tomás Batalha is the Founder of BytArc. Former Google business analyst and Amazon business development lead. Co-founded a B2B SaaS startup where he built a €147K enterprise pipeline from zero and closed 23 enterprise deals, including Fortune 500 and Big 4 firms. MSc in Strategic Management from Rotterdam School of Management, BSc in Management from Nova SBE, additional studies at the National University of Singapore. At BytArc, Tomás personally designs, builds and ships every product. 15+ shipped in under 4 months.</p>
         <div class="kicker label" data-en="ABOUT BYTARC" data-pt="SOBRE A BYTARC">ABOUT BYTARC</div>
-        <p class="more" data-en="BytArc is a strategic holding company that operates like a venture studio. The company runs 11 AI agents that handle everything from strategic planning to marketing to code reviews, creating a fully autonomous AI-powered organization. Each agent has a defined role, decision authority, and escalation protocol." data-pt="A BytArc é uma holding estratégica que opera como um estúdio de ventures. A empresa opera 11 agentes de IA que tratam de tudo, desde planeamento estratégico a marketing e revisões de código, criando uma organização totalmente autónoma movida a IA. Cada agente tem um papel definido, autoridade de decisão e protocolo de escalação.">BytArc is a strategic holding company that operates like a venture studio. The company runs 11 AI agents that handle everything from strategic planning to marketing to code reviews, creating a fully autonomous AI-powered organization. Each agent has a defined role, decision authority, and escalation protocol.</p>
+        <p class="more" data-en="BytArc is a founder-led AI studio that also builds its own ventures. The company runs 11 AI agents that handle everything from strategic planning to marketing to code reviews, creating a fully autonomous AI-powered organization. Each agent has a defined role, decision authority, and escalation protocol." data-pt="A BytArc é um estúdio de IA liderado pelo fundador que também cria as suas próprias ventures. A empresa opera 11 agentes de IA que tratam de tudo, desde planeamento estratégico a marketing e revisões de código, criando uma organização totalmente autónoma movida a IA. Cada agente tem um papel definido, autoridade de decisão e protocolo de escalação.">BytArc is a founder-led AI studio that also builds its own ventures. The company runs 11 AI agents that handle everything from strategic planning to marketing to code reviews, creating a fully autonomous AI-powered organization. Each agent has a defined role, decision authority, and escalation protocol.</p>
         <p class="more" data-en="Each agent has a specific role, personality, and set of tools. They communicate through structured workflows and escalation protocols. The org chart on the left shows the current team structure." data-pt="Cada agente tem um papel específico, personalidade e conjunto de ferramentas. Comunicam através de workflows estruturados e protocolos de escalação. O organigrama à esquerda mostra a estrutura atual da equipa.">Each agent has a specific role, personality, and set of tools. They communicate through structured workflows and escalation protocols. The org chart on the left shows the current team structure.</p>
       </div>
     </div>
@@ -1233,9 +1237,14 @@ html.compact .nav.scrolled{background:rgba(2,2,3,.92);-webkit-backdrop-filter:no
     <a href="https://github.com/tomasbb0" target="_blank" rel="noopener">GitHub</a>
     <a href="https://linkedin.com/in/tomasmbatalha" target="_blank" rel="noopener">LinkedIn</a>
     <a href="https://bytarc.com/bytarclabs-site/" data-en="Education Platform" data-pt="Plataforma de Educação">Education Platform</a>
-    <a href="/about/" data-en="About BytArc" data-pt="Sobre a BytArc">About BytArc</a>
-    <a href="/brand/" data-en="Concept &amp; logo" data-pt="Conceito e logótipo">Concept &amp; logo</a>
   </div>
+  <nav class="foot-more" aria-label="More about BytArc">
+    <a href="/about/" data-en="About BytArc" data-pt="Sobre a BytArc">About BytArc</a>
+    <a href="/ai-consulting/" data-en="AI consulting" data-pt="Consultoria de IA">AI consulting</a>
+    <a href="/products/" data-en="Products" data-pt="Produtos">Products</a>
+    <a href="/tomas-batalha/" data-en="Founder" data-pt="Fundador">Founder</a>
+    <a href="/brand/" data-en="Concept &amp; logo" data-pt="Conceito e logótipo">Concept &amp; logo</a>
+  </nav>
 </div></footer>
 
 <!-- project modal -->
@@ -1324,7 +1333,7 @@ html.compact .nav.scrolled{background:rgba(2,2,3,.92);-webkit-backdrop-filter:no
       emoji: "⭐",
       name: "Rex",
       role: "CEO, JobPilot AI",
-      desc: "The hands-on boss of JobPilot AI. Runs daily operations, coordinates his team (Prism, Kit, Scout, Echo), executes on product decisions, and reports to Tomás. Has direct access to all holding-level agents when needed. Manages the Chrome extension's growth and competitive positioning.",
+      desc: "The hands-on boss of JobPilot AI. Runs daily operations, coordinates his team (Prism, Kit, Scout, Echo), executes on product decisions, and reports to Tomás. Has direct access to all studio agents when needed. Manages the Chrome extension's growth and competitive positioning.",
       tags: ["Extension Growth", "Review Strategy", "Daily Operations", "Team Mgmt"],
       reportsTo: "Tomás",
     },
