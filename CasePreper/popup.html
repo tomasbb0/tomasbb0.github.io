@@ -1,0 +1,756 @@
+<!doctype html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      http-equiv="Cache-Control"
+      content="no-cache, no-store, must-revalidate"
+    />
+    <title>CasePreper Schedule</title>
+    <style>
+      :root {
+        --bcg: #00a651;
+        --text: #e0e0e0;
+        --muted: #888;
+        --bg: #111;
+        --card: #1a1a1a;
+        --border: #2a2a2a;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family:
+          "SF Pro Display",
+          -apple-system,
+          sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        font-size: 12px;
+        overflow-x: hidden;
+      }
+
+      /* ═══ HEADER ═══ */
+      .header {
+        background: linear-gradient(135deg, #0d0d0d, #1a1a1a);
+        padding: 10px 14px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid var(--border);
+        cursor: move;
+        -webkit-app-region: drag;
+        user-select: none;
+      }
+      .header h1 {
+        font-size: 11px;
+        font-weight: 800;
+        color: #fff;
+        letter-spacing: 1.5px;
+      }
+      .header h1 span {
+        color: var(--bcg);
+      }
+      .header .cd {
+        font-size: 10px;
+        color: var(--bcg);
+        font-weight: 700;
+      }
+      .header .close-btn {
+        background: none;
+        border: none;
+        color: #666;
+        font-size: 16px;
+        cursor: pointer;
+        -webkit-app-region: no-drag;
+        padding: 0 4px;
+      }
+      .header .close-btn:hover {
+        color: #f44;
+      }
+
+      /* ═══ NOW BAR ═══ */
+      .now-bar {
+        background: rgba(0, 166, 81, 0.1);
+        border-bottom: 1px solid rgba(0, 166, 81, 0.2);
+        padding: 6px 14px;
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--bcg);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .now-pulse {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--bcg);
+        animation: pulse 2s infinite;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          box-shadow: 0 0 0 0 rgba(0, 166, 81, 0.5);
+        }
+        50% {
+          box-shadow: 0 0 0 6px rgba(0, 166, 81, 0);
+        }
+      }
+
+      /* ═══ DAY TABS ═══ */
+      .tabs {
+        display: flex;
+        gap: 3px;
+        padding: 6px 10px;
+        background: #0d0d0d;
+        border-bottom: 1px solid var(--border);
+      }
+      .tab {
+        flex: 1;
+        padding: 5px 0;
+        text-align: center;
+        font-size: 10px;
+        font-weight: 700;
+        color: #666;
+        background: transparent;
+        border: 1px solid transparent;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.15s;
+      }
+      .tab:hover {
+        color: #aaa;
+        background: #1a1a1a;
+      }
+      .tab.active {
+        background: var(--bcg);
+        color: #fff;
+        border-color: var(--bcg);
+      }
+      .tab.today {
+        border-bottom: 2px solid var(--bcg);
+      }
+
+      /* ═══ PROGRESS ═══ */
+      .progress {
+        height: 2px;
+        background: #222;
+      }
+      .progress-fill {
+        height: 100%;
+        background: var(--bcg);
+        transition: width 0.5s;
+      }
+
+      /* ═══ TIMELINE ═══ */
+      .timeline {
+        overflow-y: auto;
+        padding: 8px 10px 60px 10px;
+        max-height: calc(100vh - 130px);
+      }
+      .timeline::-webkit-scrollbar {
+        width: 4px;
+      }
+      .timeline::-webkit-scrollbar-thumb {
+        background: #333;
+        border-radius: 2px;
+      }
+
+      .slot {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        padding: 8px 10px;
+        margin-bottom: 3px;
+        border-radius: 8px;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-left: 3px solid #444;
+        transition: all 0.15s;
+        position: relative;
+      }
+      .slot:hover {
+        background: #222;
+      }
+      .slot.current {
+        background: rgba(0, 166, 81, 0.08);
+        border-left-color: var(--bcg);
+        border-color: rgba(0, 166, 81, 0.3);
+      }
+      .slot.done {
+        opacity: 0.3;
+      }
+      .slot.done .s-act {
+        text-decoration: line-through;
+      }
+
+      .s-time {
+        font-size: 9px;
+        font-weight: 800;
+        color: var(--muted);
+        min-width: 34px;
+        padding-top: 1px;
+      }
+      .slot.current .s-time {
+        color: var(--bcg);
+      }
+
+      .s-body {
+        flex: 1;
+        min-width: 0;
+      }
+      .s-act {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--text);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .s-det {
+        font-size: 10px;
+        color: #666;
+        margin-top: 2px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .s-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 3px;
+        margin-top: 4px;
+      }
+      .s-link {
+        font-size: 9px;
+        padding: 2px 6px;
+        border-radius: 4px;
+        background: rgba(0, 166, 81, 0.1);
+        color: var(--bcg);
+        text-decoration: none;
+        font-weight: 600;
+        border: 1px solid rgba(0, 166, 81, 0.2);
+      }
+      .s-link:hover {
+        background: rgba(0, 166, 81, 0.2);
+      }
+      .s-openall {
+        font-size: 9px;
+        padding: 2px 6px;
+        border-radius: 4px;
+        background: var(--bcg);
+        color: #fff;
+        border: none;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .s-check {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        border: 2px solid #444;
+        background: transparent;
+        cursor: pointer;
+        font-size: 10px;
+        color: transparent;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        margin-top: 1px;
+      }
+      .s-check:hover {
+        border-color: var(--bcg);
+      }
+      .s-check.checked {
+        background: var(--bcg);
+        border-color: var(--bcg);
+        color: #fff;
+      }
+
+      /* ═══ CATEGORY COLORS ═══ */
+      .cat-video {
+        border-left-color: #1976d2;
+      }
+      .cat-drill {
+        border-left-color: #e8a500;
+      }
+      .cat-practice {
+        border-left-color: #00a651;
+      }
+      .cat-solo {
+        border-left-color: #7b1fa2;
+      }
+      .cat-fit {
+        border-left-color: #d32f2f;
+      }
+      .cat-break {
+        border-left-color: #ff9800;
+      }
+      .cat-meds {
+        border-left-color: #e91e63;
+      }
+
+      /* ═══ DRAG & DROP ═══ */
+      .slot.dragging { opacity: 0.4; transform: scale(0.96); }
+      .slot.drag-over { border-top: 3px solid var(--bcg); margin-top: -2px; }
+      .drag-handle { cursor: grab; opacity: 0.3; font-size: 12px; margin-right: 4px; user-select: none; }
+      .drag-handle:hover { opacity: 0.8; }
+      .slot.dragging .drag-handle { cursor: grabbing; }
+
+      /* ═══ OVERLAP ═══ */
+      .slot.overlap { border-left-color: #ff1744 !important; box-shadow: inset 0 0 0 1px rgba(255,23,68,0.3); }
+      .overlap-badge { background: #ff1744; color: #fff; font-size: 9px; padding: 1px 5px; border-radius: 8px; margin-left: 4px; animation: flash 1.5s infinite; white-space: nowrap; }
+      @keyframes flash { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+      /* ═══ TIME EDITING ═══ */
+      .time-edit-input { background: rgba(0,166,81,0.15); border: 1px solid var(--bcg); border-radius: 4px; color: var(--text); font-size: 11px; padding: 2px 4px; width: 60px; font-family: inherit; }
+      .time-edit-container { display: inline-flex; align-items: center; gap: 3px; }
+      .time-edit-sep { color: var(--dim); font-size: 11px; }
+      .time-edit-ok, .time-edit-cancel { background: none; border: 1px solid var(--border); color: var(--text); border-radius: 4px; cursor: pointer; font-size: 11px; padding: 1px 5px; }
+      .time-edit-ok:hover { border-color: var(--bcg); color: var(--bcg); }
+      .time-edit-cancel:hover { border-color: #ff1744; color: #ff1744; }
+      .s-time.editable { cursor: pointer; border-bottom: 1px dashed rgba(255,255,255,0.2); }
+      .s-time.editable:hover { border-bottom-color: var(--bcg); }
+    </style>
+  </head>
+  <body>
+    <div class="header" id="drag-header">
+      <h1><span>CASE</span> PREP SCHEDULE</h1>
+      <span class="cd" id="countdown">⏱</span>
+      <button class="close-btn" onclick="window.close()" title="Close">
+        ✕
+      </button>
+    </div>
+
+    <div class="now-bar" id="now-bar">
+      <span class="now-pulse"></span>
+      <span id="now-text">Loading...</span>
+    </div>
+
+    <div class="tabs" id="tabs"></div>
+    <div class="progress"><div class="progress-fill" id="pbar"></div></div>
+    <div class="timeline" id="timeline"></div>
+
+    <script>
+      const SCHEDULE = {
+        d1: {
+          label: "Day 1",
+          date: "",
+          slots: [
+            { s: "09:00", e: "09:30", a: "\u2600\ufe0f Morning Setup", d: "Review goals for the day.", l: [] },
+            { s: "09:30", e: "11:00", a: "\ud83d\udcf9 Study Block 1", d: "Core concepts and frameworks.", l: [] },
+            { s: "11:00", e: "12:00", a: "\u26a1 Drills", d: "Practice problems.", l: [] },
+            { s: "12:00", e: "13:00", a: "\ud83c\udf7d\ufe0f Lunch Break", d: "Rest and recharge.", l: [] },
+            { s: "13:00", e: "14:30", a: "\ud83d\udcda Study Block 2", d: "Applied practice.", l: [] },
+            { s: "14:30", e: "15:30", a: "\ud83d\udcdd Review & Notes", d: "Summarize key takeaways.", l: [] },
+          ],
+        },
+        d2: {
+          label: "Day 2",
+          date: "",
+          slots: [
+            { s: "09:00", e: "09:30", a: "\u2600\ufe0f Morning Setup", d: "Review goals for the day.", l: [] },
+            { s: "09:30", e: "11:00", a: "\ud83d\udcf9 Study Block 1", d: "Intermediate concepts.", l: [] },
+            { s: "11:00", e: "12:00", a: "\ud83e\udd1d Practice Session", d: "Live practice.", l: [] },
+            { s: "12:00", e: "13:00", a: "\ud83c\udf7d\ufe0f Lunch Break", d: "Rest and recharge.", l: [] },
+            { s: "13:00", e: "14:30", a: "\ud83d\udcda Study Block 2", d: "Deep dive.", l: [] },
+            { s: "14:30", e: "15:30", a: "\ud83d\udcdd Review & Notes", d: "Summarize key takeaways.", l: [] },
+          ],
+        },
+        d3: {
+          label: "Day 3",
+          date: "",
+          slots: [
+            { s: "09:00", e: "09:30", a: "\u2600\ufe0f Morning Setup", d: "Review goals for the day.", l: [] },
+            { s: "09:30", e: "11:00", a: "\ud83d\udcf9 Study Block 1", d: "Advanced topics.", l: [] },
+            { s: "11:00", e: "12:00", a: "\ud83e\udd1d Practice Session", d: "Timed practice.", l: [] },
+            { s: "12:00", e: "13:00", a: "\ud83c\udf7d\ufe0f Lunch Break", d: "Rest and recharge.", l: [] },
+            { s: "13:00", e: "14:30", a: "\ud83d\udcda Solo Practice", d: "Work through cases independently.", l: [] },
+            { s: "14:30", e: "15:30", a: "\ud83d\udcdd Review & Notes", d: "Summarize key takeaways.", l: [] },
+          ],
+        },
+        d4: {
+          label: "Day 4",
+          date: "",
+          slots: [
+            { s: "09:00", e: "09:30", a: "\u2600\ufe0f Morning Setup", d: "Review goals for the day.", l: [] },
+            { s: "09:30", e: "11:00", a: "\ud83d\udcf9 Study Block 1", d: "Weak areas focus.", l: [] },
+            { s: "11:00", e: "12:00", a: "\ud83e\udd1d Practice Session", d: "Mock session.", l: [] },
+            { s: "12:00", e: "13:00", a: "\ud83c\udf7d\ufe0f Lunch Break", d: "Rest and recharge.", l: [] },
+            { s: "13:00", e: "14:30", a: "\ud83d\udcda Study Block 2", d: "Final review of core material.", l: [] },
+            { s: "14:30", e: "15:30", a: "\ud83d\udcdd Review & Notes", d: "Summarize key takeaways.", l: [] },
+          ],
+        },
+        d5: {
+          label: "Day 5",
+          date: "",
+          slots: [
+            { s: "09:00", e: "09:30", a: "\u2600\ufe0f Morning Setup", d: "Review goals for the day.", l: [] },
+            { s: "09:30", e: "11:00", a: "\ud83d\udcf9 Study Block 1", d: "Confidence builders.", l: [] },
+            { s: "11:00", e: "12:00", a: "\ud83e\udd1d Practice Session", d: "Final practice round.", l: [] },
+            { s: "12:00", e: "13:00", a: "\ud83c\udf7d\ufe0f Lunch Break", d: "Rest and recharge.", l: [] },
+            { s: "13:00", e: "14:30", a: "\ud83d\udcdd Final Review", d: "Skim all notes and frameworks.", l: [] },
+            { s: "14:30", e: "15:00", a: "\ud83c\udfaf Prep Complete", d: "You are ready!", l: [] },
+          ],
+        },
+        d6: {
+          label: "Day 6 \ud83c\udfc6",
+          date: "",
+          slots: [
+            { s: "09:00", e: "09:30", a: "\u2600\ufe0f Morning Routine", d: "Light breakfast, stay calm.", l: [] },
+            { s: "09:30", e: "10:00", a: "\ud83d\udcd6 Light Review", d: "Skim key frameworks only.", l: [] },
+            { s: "10:00", e: "10:30", a: "\ud83c\udfaf Quick Warm-up", d: "A few practice problems.", l: [] },
+            { s: "10:30", e: "11:30", a: "\ud83c\udf7d\ufe0f Lunch & Rest", d: "Relax. You are prepared.", l: [] },
+            { s: "11:30", e: "12:00", a: "\ud83d\udc54 Get Ready", d: "Final preparations.", l: [] },
+            { s: "14:00", e: "16:00", a: "\ud83c\udfc6 INTERVIEW", d: "You have got this. Good luck!", l: [] },
+          ],
+        },
+      };
+
+      const DAYS =  ["tue", "wed", "thu", "fri"];
+      let curDay = getToday();
+      let checks = JSON.parse(localStorage.getItem("popup-checks") || "{}");
+
+      // ═══ SCHEDULE SYNC (shared with timeline.html) ═══
+      const SCHEDULE_KEY = "bcg-schedule-sync";
+
+      function loadScheduleFromStorage() {
+        const raw = localStorage.getItem(SCHEDULE_KEY);
+        if (!raw) return;
+        try {
+          const saved = JSON.parse(raw);
+          DAYS.forEach(k => {
+            if (saved[k] && saved[k].slots) {
+              // Convert from timeline format (start/end/activity/detail/links) to popup format (s/e/a/d/l)
+              SCHEDULE[k].slots = saved[k].slots.map(slot => ({
+                s: slot.start || slot.s,
+                e: slot.end || slot.e,
+                a: slot.activity || slot.a,
+                d: slot.detail || slot.d,
+                l: (slot.links || slot.l || []).map(lnk => ({
+                  t: lnk.text || lnk.t,
+                  h: lnk.href || lnk.h
+                }))
+              }));
+            }
+          });
+        } catch(e) {}
+      }
+
+      function saveScheduleToStorage() {
+        // Convert from popup format (s/e/a/d/l) to timeline format (start/end/activity/detail/links)
+        const data = {};
+        DAYS.forEach(k => {
+          data[k] = {
+            label: SCHEDULE[k].label,
+            date: SCHEDULE[k].date,
+            slots: SCHEDULE[k].slots.map(slot => ({
+              start: slot.s,
+              end: slot.e,
+              activity: slot.a,
+              detail: slot.d,
+              links: (slot.l || []).map(lnk => ({
+                text: lnk.t,
+                href: lnk.h
+              }))
+            }))
+          };
+        });
+        localStorage.setItem(SCHEDULE_KEY, JSON.stringify(data));
+      }
+
+      window.addEventListener("storage", (e) => {
+        if (e.key === SCHEDULE_KEY) {
+          loadScheduleFromStorage();
+          render();
+        }
+      });
+
+      loadScheduleFromStorage();
+
+      function getToday() {
+        return "d1";
+      }
+      function pt(s) {
+        const [h, m] = s.split(":").map(Number);
+        return h * 60 + m;
+      }
+      function cat(t) {
+        t = t.toLowerCase();
+        if (/💊|meds/.test(t))
+          return "meds";
+        if (/practice room|🤝/.test(t)) return "practice";
+        if (/caso solo|📚/.test(t)) return "solo";
+        if (/📹|course|bloco|sample/.test(t)) return "video";
+        if (/drill|⚡/.test(t)) return "drill";
+        if (/fit|scar/.test(t) && /📝/.test(t)) return "fit";
+        if (
+          /jantar|pausa|almoço|rest|nap|🍽️|😌|livre|relax|preparar|👔|duche|📖|☀️/.test(
+            t,
+          )
+        )
+          return "break";
+        if (/🏆|interview|game/.test(t)) return "practice";
+        return "";
+      }
+      function esc(t) {
+        const d = document.createElement("div");
+        d.textContent = t;
+        return d.innerHTML;
+      }
+
+      function updateCD() {
+        // No specific countdown date set
+        const diff = 0;
+        if (diff <= 0) {
+          document.getElementById("countdown").textContent = "🎯 GAME TIME!";
+          return;
+        }
+        const d = Math.floor(diff / 864e5),
+          h = Math.floor((diff % 864e5) / 36e5),
+          m = Math.floor((diff % 36e5) / 6e4);
+        document.getElementById("countdown").textContent = `⏱${d}d${h}h${m}m`;
+      }
+
+      function renderTabs() {
+        const c = document.getElementById("tabs");
+        c.innerHTML = "";
+        DAYS.forEach((k) => {
+          const b = document.createElement("button");
+          b.className =
+            "tab" +
+            (k === curDay ? " active" : "") +
+            (k === getToday() ? " today" : "");
+          b.textContent = SCHEDULE[k].label;
+          b.onclick = () => {
+            curDay = k;
+            renderTabs();
+            render();
+          };
+          c.appendChild(b);
+        });
+      }
+
+      function render() {
+        const c = document.getElementById("timeline");
+        const day = SCHEDULE[curDay];
+        if (!day) {
+          c.innerHTML = "";
+          return;
+        }
+        const now = new Date(),
+          nm = now.getHours() * 60 + now.getMinutes(),
+          isT = curDay === getToday();
+        c.innerHTML = "";
+        let done = 0;
+
+        // Now bar
+        const nb = document.getElementById("now-bar"),
+          nt = document.getElementById("now-text");
+        if (isT) {
+          let cur = null;
+          day.slots.forEach((s) => {
+            const sm = pt(s.s);
+            let em = pt(s.e);
+            if (em <= sm) em += 1440;
+            if (nm >= sm && nm < em) cur = s;
+          });
+          nt.textContent = cur
+            ? "▶ " + cur.a.substring(0, 45)
+            : "🕐 Entre sessões";
+          nb.style.display = "flex";
+        } else {
+          nb.style.display = "none";
+        }
+
+        const overlapping = pDetectOverlaps(day.slots);
+
+        day.slots.forEach((s, i) => {
+          const sm = pt(s.s);
+          let em = pt(s.e);
+          if (em <= sm) em += 1440;
+          const isCur = isT && nm >= sm && nm < em;
+          const ck = curDay + "-" + i,
+            isDone = checks[ck] || false;
+          if (isDone) done++;
+          const ct = cat(s.a);
+          const isOverlap = overlapping.has(i);
+
+          const div = document.createElement("div");
+          div.className =
+            "slot" +
+            (ct ? " cat-" + ct : "") +
+            (isCur ? " current" : "") +
+            (isDone ? " done" : "") +
+            (isOverlap ? " overlap" : "");
+          div.draggable = true;
+          div.addEventListener("dragstart", (e) => pSlotDragStart(e, i));
+          div.addEventListener("dragover", (e) => pSlotDragOver(e, i));
+          div.addEventListener("drop", (e) => pSlotDrop(e, i));
+          div.addEventListener("dragend", pSlotDragEnd);
+
+          let lh = "";
+          if (s.l.length) {
+            lh = '<div class="s-links">';
+            s.l.forEach((l) => {
+              lh += `<a class="s-link" href="${esc(l.h)}" target="_blank">${esc(l.t)}</a>`;
+            });
+            if (s.l.length >= 2)
+              lh += `<button class="s-openall" onclick="event.stopPropagation();this.parentElement.querySelectorAll(\'a\').forEach(a=>window.open(a.href,\'_blank\'))">▶ All</button>`;
+            lh += "</div>";
+          }
+
+          div.innerHTML =
+            `<span class="drag-handle">⠿</span>` +
+            `<span class="s-time editable" ondblclick="event.stopPropagation(); pStartTimeEdit(${i})" title="Double-click to edit">${s.s}</span>` +
+            `<div class="s-body"><div class="s-act">${esc(s.a)}${isOverlap ? ' <span class="overlap-badge">⚠️ OVERLAP</span>' : ''}</div><div class="s-det">${esc(s.d)}</div>${lh}</div>` +
+            `<button class="s-check${isDone ? " checked" : ""}" onclick="event.stopPropagation();tgl('${ck}',${i})">${isDone ? "✓" : ""}</button>`;
+
+          c.appendChild(div);
+          if (isCur)
+            setTimeout(
+              () => div.scrollIntoView({ block: "center", behavior: "smooth" }),
+              150,
+            );
+        });
+
+        document.getElementById("pbar").style.width =
+          Math.round((done / day.slots.length) * 100) + "%";
+      }
+
+      function tgl(k, i) {
+        checks[k] = !checks[k];
+        localStorage.setItem("popup-checks", JSON.stringify(checks));
+        render();
+      }
+
+      // ═══ DRAG & DROP ═══
+      let pDragSource = null;
+
+      function pSlotDragStart(e, idx) {
+        pDragSource = idx;
+        e.target.closest('.slot').classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', idx);
+      }
+
+      function pSlotDragOver(e, idx) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        document.querySelectorAll('.slot.drag-over').forEach(el => el.classList.remove('drag-over'));
+        if (idx !== pDragSource) {
+          e.target.closest('.slot').classList.add('drag-over');
+        }
+      }
+
+      function pSlotDrop(e, targetIdx) {
+        e.preventDefault();
+        document.querySelectorAll('.slot.drag-over').forEach(el => el.classList.remove('drag-over'));
+        if (pDragSource === null || pDragSource === targetIdx) return;
+
+        const day = SCHEDULE[curDay];
+        const temp = day.slots[pDragSource];
+        day.slots[pDragSource] = day.slots[targetIdx];
+        day.slots[targetIdx] = temp;
+
+        saveScheduleToStorage();
+        render();
+        pDragSource = null;
+      }
+
+      function pSlotDragEnd(e) {
+        document.querySelectorAll('.slot.dragging').forEach(el => el.classList.remove('dragging'));
+        document.querySelectorAll('.slot.drag-over').forEach(el => el.classList.remove('drag-over'));
+        pDragSource = null;
+      }
+
+      // ═══ TIME EDITING ═══
+      function pStartTimeEdit(idx) {
+        const slot = SCHEDULE[curDay].slots[idx];
+        const slotEl = document.querySelectorAll('.slot')[idx];
+        const timeEl = slotEl.querySelector('.s-time');
+
+        timeEl.innerHTML =
+          '<div class="time-edit-container">' +
+          `<input class="time-edit-input" type="time" value="${slot.s}" id="p-edit-start-${idx}">` +
+          '<span class="time-edit-sep">–</span>' +
+          `<input class="time-edit-input" type="time" value="${slot.e}" id="p-edit-end-${idx}">` +
+          `<button class="time-edit-ok" onclick="event.stopPropagation(); pSaveTimeEdit(${idx})">✓</button>` +
+          `<button class="time-edit-cancel" onclick="event.stopPropagation(); render()">✕</button>` +
+          '</div>';
+
+        const startInput = document.getElementById(`p-edit-start-${idx}`);
+        startInput.focus();
+
+        const handler = (e) => {
+          if (e.key === 'Enter') pSaveTimeEdit(idx);
+          if (e.key === 'Escape') render();
+        };
+        startInput.addEventListener('keydown', handler);
+        document.getElementById(`p-edit-end-${idx}`).addEventListener('keydown', handler);
+      }
+
+      function pSaveTimeEdit(idx) {
+        const startVal = document.getElementById(`p-edit-start-${idx}`).value;
+        const endVal = document.getElementById(`p-edit-end-${idx}`).value;
+
+        if (!startVal || !endVal) { render(); return; }
+
+        const slot = SCHEDULE[curDay].slots[idx];
+        slot.s = startVal;
+        slot.e = endVal;
+
+        saveScheduleToStorage();
+        render();
+      }
+
+      // ═══ OVERLAP DETECTION ═══
+      function pDetectOverlaps(slots) {
+        const overlapping = new Set();
+        for (let i = 0; i < slots.length; i++) {
+          const si = pt(slots[i].s);
+          let ei = pt(slots[i].e);
+          if (ei <= si) ei += 1440;
+
+          for (let j = i + 1; j < slots.length; j++) {
+            const sj = pt(slots[j].s);
+            let ej = pt(slots[j].e);
+            if (ej <= sj) ej += 1440;
+
+            if (si < ej && sj < ei) {
+              overlapping.add(i);
+              overlapping.add(j);
+            }
+          }
+        }
+        return overlapping;
+      }
+
+      updateCD();
+      setInterval(updateCD, 60000);
+      renderTabs();
+      render();
+      setInterval(render, 60000);
+
+      document.addEventListener("keydown", (e) => {
+        const i = DAYS.indexOf(curDay);
+        if (e.key === "ArrowLeft" && i > 0) {
+          curDay = DAYS[i - 1];
+          renderTabs();
+          render();
+        }
+        if (e.key === "ArrowRight" && i < DAYS.length - 1) {
+          curDay = DAYS[i + 1];
+          renderTabs();
+          render();
+        }
+      });
+    </script>
+  </body>
+</html>
