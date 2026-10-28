@@ -885,7 +885,7 @@ html.compact .nav.scrolled{background:rgba(2,2,3,.92);-webkit-backdrop-filter:no
               X = a1 * Sx + a2 * (Sx + d.bx * W) + a3 * Ex; Y = a1 * Sy + a2 * (Sy + d.by * H) + a3 * Ey; Zz = a1 * Sz + a2 * (Sz + d.bz) + a3 * Ez;
             }
             // solid while it is part of the picture; in the brain nearer is brighter and the far side is dim
-            const a = gone * (1 - u + u * clamp(.25 + .75 * (Zz + BS) / (2 * BS)) * (side ? 1 : .55)) * clamp((F - Zz - 60) / (F * .35));
+            const a = gone * (1 - u + u * clamp(.25 + .75 * (Zz + BS) / (2 * BS)) * (side ? 1 : .28)) * clamp((F - Zz - 60) / (F * .35));   // phones: faint, it sits behind the text
             const lv = round(a * LV); if (lv < 1) continue;
             // its shape: the tile (seams opening, corners rounding) turning into the glyph
             const tw = d.tw * sc, th = d.th * sc, ts = min(tw, th), gap = .16 * ts * open, rt = .22 * ts * open, gh = ts + (Hg - ts) * u;
@@ -2534,8 +2534,8 @@ window.pixelReveal = (() => {
   const DEF = [
     { id: "top", nodes: [hero], fx: TOP, len: 0, hold: 0.12, out: 1.4, hand: 0.85 },   // a long exit: the mark breaks into digits that become the brain beside Legacy
     { id: "about", nodes: [about], fx: ABOUT, len: 1.0, hold: 0.35, out: 0.8, hand: 0.92 },   // with the brain on its right
+    ...(COMPACT ? [{ id: "legacy", nodes: [lh], fx: LEGACY, len: 0.65, hold: 0.35, out: 0.5, hand: 0.6 }] : []),   // phones: Legacy's text on its own, before the products
     { id: "hive", nodes: [hiveWrap], fx: HIVE, len: 0.8, hold: 0.8, out: 1.0, hand: 0.7, fixed: true },
-    ...(COMPACT ? [{ id: "legacy", nodes: [lh], fx: LEGACY, len: 0.65, hold: 0.35, out: 0.5, hand: 0.6 }] : []),   // phones: Legacy's text on its own, after the products
     { id: "team", nodes: [org], fx: ORG, len: 1.2, hold: 0.35, out: 0.55, hand: 0.6 },
     { id: "founder", nodes: [fo], fx: FOUNDER, len: 1.0, hold: 1.8, out: 0.6, hand: 0.6, land: 0.92 },   // holds while the photo resolves
     { id: "stack", nodes: [stk], fx: STACK, len: 0.8, hold: 0.35, out: 0.55, hand: 0.6 },
