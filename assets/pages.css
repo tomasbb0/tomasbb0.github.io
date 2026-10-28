@@ -35,7 +35,7 @@ dl.facts dd{margin:0}
 .sw b{display:block;font-size:14px;margin-top:8px}
 .sw small{color:var(--text-3);font:12px var(--mono)}
 .boiler{border:1px solid var(--line);border-radius:16px;padding:20px 22px;color:var(--text)}
-.portrait{float:right;width:220px;margin:4px 0 16px 28px}
+.portrait{float:right;width:220px;height:auto;margin:4px 0 16px 28px;border-radius:16px}   /* height:auto: the photo keeps its own proportions */
 footer{border-top:1px solid var(--line);margin-top:90px;padding:24px 0 44px;font-size:13px;color:var(--text-3);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
 footer nav{display:flex;gap:18px;flex-wrap:wrap}
 footer a{color:var(--text-2);text-decoration:none}

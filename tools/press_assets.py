@@ -8,9 +8,11 @@ writes press/bytarc-*.png and copies the SVG logos next to them. The mark is the
 import shutil
 from pathlib import Path
 
-from PIL import Image, ImageDraw
+import math
 
-from bytarc_mark import MARK, mark_outline, mask
+from PIL import Image, ImageChops, ImageDraw, ImageFilter
+
+from bytarc_mark import MARK, flatten, mark_outline, mask
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "press"
@@ -78,6 +80,84 @@ def construction(o, w=1600, h=1018):
     return Image.composite(Image.new("RGB", (w, h), WHITE), img, m)
 
 
+def render3d(o, w, h, rx, ry, depth=34, fill=0.62, light_bg=False, ss=3):
+    """The mark as a solid block, turned in 3D and lit from the top left like the site's hero blocks: white front, silver
+    sides, a soft shadow and a faint reflection on the floor. Rendered ss times larger and scaled down for smooth edges."""
+    W, H = w * ss, h * ss
+    pts = [(x - 137.5, y - 87.5) for x, y in flatten(o, 12)]
+    area = sum(pts[i][0] * pts[i - 1][1] - pts[i - 1][0] * pts[i][1] for i in range(len(pts)))
+    out_sign = 1 if area < 0 else -1                                   # which side of each edge faces out
+    a, b, c, d = math.cos(rx), math.sin(rx), math.cos(ry), math.sin(ry)
+    R = [c, d * b, d * a, 0, a, -b, -d, c * b, c * a]                  # Ry * Rx
+    s = W * fill / 275
+    F = 2.6 * W
+    L = (-0.45, -0.65, 0.62)
+    ln = math.sqrt(sum(v * v for v in L))
+    L = tuple(v / ln for v in L)
+
+    def rot(x, y, z):
+        return (R[0] * x + R[1] * y + R[2] * z, R[3] * x + R[4] * y + R[5] * z, R[6] * x + R[7] * y + R[8] * z)
+
+    def proj(x, y, z, cy):
+        X, Y, Z = rot(x * s, y * s, z * s)
+        k = F / (F - Z)
+        return (W / 2 + X * k, cy + Y * k), Z
+
+    def scene(cy):
+        img = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        dr = ImageDraw.Draw(img)
+        front = [proj(x, y, depth / 2, cy) for x, y in pts]
+        back = [proj(x, y, -depth / 2, cy) for x, y in pts]
+        quads = []
+        for i in range(len(pts)):
+            j = (i + 1) % len(pts)
+            ex, ey = pts[j][0] - pts[i][0], pts[j][1] - pts[i][1]
+            el = math.hypot(ex, ey) or 1
+            nx, ny = out_sign * ey / el, -out_sign * ex / el
+            N = rot(nx, ny, 0)
+            mz = (front[i][1] + front[j][1] + back[i][1] + back[j][1]) / 4
+            mid = rot((pts[i][0] + pts[j][0]) / 2 * s, (pts[i][1] + pts[j][1]) / 2 * s, 0)
+            if N[0] * (0 - mid[0]) + N[1] * (0 - mid[1]) + N[2] * (F - mid[2]) <= 0:
+                continue
+            lit = max(0.0, N[0] * L[0] + N[1] * L[1] + N[2] * L[2])
+            v = round(110 + 115 * lit)
+            quads.append((mz, [front[i][0], front[j][0], back[j][0], back[i][0]], (v, v, v + 4, 255)))
+        for _, q, col in sorted(quads, key=lambda t: t[0]):
+            dr.polygon(q, fill=col, outline=col)
+        fn = rot(0, 0, 1)
+        lit = max(0.0, fn[0] * L[0] + fn[1] * L[1] + fn[2] * L[2])
+        v = round(205 + 50 * lit)
+        dr.polygon([p for p, _ in front], fill=(v, v, v + 2, 255))
+        return img
+
+    top, bot = ((236, 236, 240), (250, 250, 252)) if light_bg else ((14, 14, 18), (2, 2, 3))
+    bg = Image.new("RGB", (W, H))
+    bd = ImageDraw.Draw(bg)
+    for y in range(H):
+        t = y / (H - 1)
+        bd.line((0, y, W, y), fill=tuple(round(top[i] + (bot[i] - top[i]) * t) for i in range(3)))
+    glow = Image.new("L", (W, H), 0)
+    ImageDraw.Draw(glow).ellipse((W * 0.2, H * 0.05, W * 0.8, H * 0.75), fill=60 if not light_bg else 0)
+    bg = Image.composite(Image.new("RGB", (W, H), (40, 40, 48)), bg, glow.filter(ImageFilter.GaussianBlur(W / 10)))
+    cy = H * 0.46
+    obj = scene(cy)
+    floor = H * 0.46 + 175 * s * 0.62
+    shadow = Image.new("L", (W, H), 0)
+    ImageDraw.Draw(shadow).ellipse((W * 0.22, floor - H * 0.03, W * 0.78, floor + H * 0.05), fill=150 if light_bg else 200)
+    bg = Image.composite(Image.new("RGB", (W, H), (0, 0, 0) if not light_bg else (150, 150, 158)), bg, shadow.filter(ImageFilter.GaussianBlur(W / 40)))
+    shift = round(2 * floor - H)                                       # the floor mirrors the block
+    fade = Image.new("L", (W, H), 0)
+    fd = ImageDraw.Draw(fade)
+    for y in range(round(floor), H):
+        fd.line((0, y, W, y), fill=round(max(0, 1 - (y - floor) / (H * 0.22)) * (26 if light_bg else 34)))
+    refl = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    refl.paste(obj.transpose(Image.FLIP_TOP_BOTTOM), (0, shift))
+    refl.putalpha(ImageChops.multiply(refl.getchannel("A"), fade))
+    out = Image.alpha_composite(bg.convert("RGBA"), refl)
+    out = Image.alpha_composite(out, obj)
+    return out.convert("RGB").resize((w, h), Image.LANCZOS)
+
+
 def main():
     OUT.mkdir(exist_ok=True)
     big, _, _ = mark_outline(**MARK)
@@ -95,6 +175,9 @@ def main():
         "bytarc-banner-1584x396.png": flat(coverage(big, 1584, 396, 0.16), WHITE, BLACK),
     }
     files["bytarc-logo-construction.png"] = construction(big)
+    files["bytarc-logo-3d.png"] = render3d(big, 1600, 1000, 0.32, -0.55)
+    files["bytarc-logo-3d-front.png"] = render3d(big, 1200, 1200, 0.18, 0.4, fill=0.56)
+    files["bytarc-logo-3d-light.png"] = render3d(big, 1600, 1000, 0.3, 0.6, light_bg=True)
     for name, img in files.items():
         img.save(OUT / name, optimize=True)
     shutil.copy(ROOT / "assets" / "bytarc-mark-white.svg", OUT / "bytarc-logo-white.svg")
