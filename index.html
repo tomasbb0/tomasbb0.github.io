@@ -3,12 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>if (!/[?&]round\b/.test(location.search)) document.documentElement.classList.add("tiles");   // trial: square product tiles with the name inside (?round: the bubbles)</script>
 <!-- after the viewport tag: before it, a phone reports a 980px desktop width and got the desktop scenes -->
 <script>window.SCENES_COMPACT = innerWidth < 900; window.SCENES_OK = !matchMedia('(prefers-reduced-motion: reduce)').matches && (window.SCENES_COMPACT ? innerHeight >= 500 && innerHeight > innerWidth : innerHeight >= 600); window.SCENES = window.SCENES_OK;</script>
 <title>BytArc | AI Consulting &amp; Product Development</title>
 <meta name="description" content="BytArc Labs is a holding company founded by Tomás Batalha. Ex-Google, ex-Amazon, B2B SaaS co-founder. Consulting and software products, built and shipped in house from Lisbon.">
 <link rel="canonical" href="https://bytarc.com">
-<meta name="theme-color" content="#050506">
+<meta name="theme-color" content="#020203">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="BytArc Labs">
 <meta property="og:url" content="https://bytarc.com/">
@@ -26,13 +27,13 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
 <style>
-/* Layout (inspired by uzerconsulting.pt): one page on near-black, frosted nav, hero with the BytArc arc drawn as one
-   white line, dark cards on subtle neutral shadows (no glowing lines or dots on small containers).
+/* Layout (inspired by uzerconsulting.pt): one page on near-black, frosted nav, hero with the BytArc arc filled white
+   and built from big pixels, dark cards on subtle neutral shadows (no glowing lines or dots on small containers).
    Colour is used sparingly: the brand is black, white and silver, purple tints agents and beta products, gold tints
    consulting. With motion allowed on a large screen, the page plays
    as full-screen scenes driven by the scroll (scenes script at the end); otherwise it is a normal scrolling page. */
 :root{
-  --bg:#050506;
+  --bg:#020203;
   --text:#F5F5F7; --text-2:#A3A3AD; --text-3:#86868F;
   --g2:#8E8E96; --g3:#D4D4D8; --g4:#FFFFFF;   /* silver: the brand gradient runs grey to white */
   --grad:linear-gradient(120deg,var(--g2) 0%,var(--g3) 50%,var(--g4) 100%);
@@ -56,9 +57,9 @@ button{font:inherit;color:inherit}
 
 /* nav */
 .nav{position:fixed;top:0;left:0;right:0;z-index:50;padding-top:env(safe-area-inset-top,0px);transition:background .25s,box-shadow .25s}
-.nav.scrolled{background:rgba(5,5,6,.72);backdrop-filter:saturate(150%) blur(16px);-webkit-backdrop-filter:saturate(150%) blur(16px);box-shadow:0 10px 40px -10px rgba(0,0,0,.9)}
+.nav.scrolled{background:rgba(2,2,3,.72);backdrop-filter:saturate(150%) blur(16px);-webkit-backdrop-filter:saturate(150%) blur(16px);box-shadow:0 10px 40px -10px rgba(0,0,0,.9)}
 /* over the white About band the bar turns solid black: dark glass over white reads as a dull grey */
-.nav.solid{background:#050506;-webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:0 12px 32px -14px rgba(0,0,0,.55)}
+.nav.solid{background:#020203;-webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:0 12px 32px -14px rgba(0,0,0,.55)}
 .nav-in{display:flex;align-items:center;gap:28px;height:72px}
 .brand{display:inline-flex;align-items:center;gap:11px;font-weight:600;font-size:17px;letter-spacing:-.02em;color:#fff;white-space:nowrap}
 .brand svg{display:block;width:28px;height:18px;overflow:visible}
@@ -69,7 +70,7 @@ button{font:inherit;color:inherit}
 /* phones and tablets: the sections live in a full-screen menu */
 .menu-btn{display:none;padding:0 16px;border:0;color:var(--text);font:600 13.5px/1 var(--font);cursor:pointer}
 @media (max-width:1000px){.menu-btn{display:inline-flex;align-items:center}}
-.menu-sheet{position:fixed;inset:0;z-index:45;display:flex;flex-direction:column;justify-content:center;gap:44px;padding:110px 28px 48px;background:rgba(5,5,6,.97);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
+.menu-sheet{position:fixed;inset:0;z-index:45;display:flex;flex-direction:column;justify-content:center;gap:44px;padding:110px 28px 48px;background:rgba(2,2,3,.97);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
 .menu-sheet.open{opacity:1;visibility:visible}
 .menu-sheet nav{display:flex;flex-direction:column;gap:4px}
 .menu-sheet nav a{width:max-content;font-size:clamp(34px,9vw,54px);font-weight:600;letter-spacing:-.045em;line-height:1.18;color:var(--text);translate:0 16px;opacity:0;transition:translate .55s cubic-bezier(.2,.7,.2,1),opacity .55s}
@@ -109,21 +110,17 @@ button{font:inherit;color:inherit}
 .hero{position:relative;min-height:92vh;display:flex;align-items:center;padding-block:130px 90px;overflow-x:clip}
 .hero-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden;-webkit-mask-image:linear-gradient(#000 60%,transparent);mask-image:linear-gradient(#000 60%,transparent)}
 .hero-bg::before{content:"";position:absolute;width:900px;height:900px;right:-240px;top:-220px;border-radius:50%;
-  background:radial-gradient(closest-side,rgba(255,255,255,.075),rgba(255,255,255,.025) 45%,transparent 72%);filter:blur(20px);animation:drift 18s ease-in-out infinite alternate}
+  background:radial-gradient(closest-side,rgba(255,255,255,.035),rgba(255,255,255,.012) 45%,transparent 72%);filter:blur(20px);animation:drift 18s ease-in-out infinite alternate}
 .hero-bg::after{content:"";position:absolute;width:620px;height:620px;right:8%;bottom:-320px;border-radius:50%;
-  background:radial-gradient(closest-side,rgba(255,255,255,.05),transparent 70%);filter:blur(30px);animation:drift 22s ease-in-out infinite alternate-reverse}
+  background:radial-gradient(closest-side,rgba(255,255,255,.022),transparent 70%);filter:blur(30px);animation:drift 22s ease-in-out infinite alternate-reverse}
 @keyframes drift{from{transform:translate(0,0)}to{transform:translate(-60px,40px)}}
-.grain{position:absolute;inset:0;opacity:.05;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.grain{position:absolute;inset:0;opacity:.03;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 .markwrap{position:absolute;right:max(-20px,calc(50% - 680px));top:50%;width:min(500px,44vw);aspect-ratio:1;transform:translateY(-50%);pointer-events:none}
 .bigmark{display:block;width:100%;height:100%;overflow:visible;opacity:calc(.9 * var(--zfade,1))}
-@media (max-width:900px){.markwrap{right:-90px;width:86vw;top:44%}.bigmark{opacity:calc(.3 * var(--zfade,1))}}
-/* the arc draws itself on load as one white line, clockwise from the middle of its top edge. Dashes are in viewBox
-   units, a little over the outline's 349.65 so the line closes (a pathLength-scaled dash stops short of the end in Chrome) */
-.bm-d{fill:none;stroke-linejoin:miter;stroke-linecap:butt;stroke-dasharray:351 351;stroke-dashoffset:0}
-.bm-draw .bm-d{stroke-dashoffset:351;animation:bm-draw 2s cubic-bezier(.65,0,.35,1) .25s forwards}
-@keyframes bm-draw{to{stroke-dashoffset:0}}
+@media (max-width:900px){.markwrap{right:-90px;width:86vw;top:44%}.bigmark{opacity:calc(.18 * var(--zfade,1))}}   /* filled, it sits behind the text */
 main>section:not(.hero),footer{position:relative;z-index:3}
 .hero .wrap{position:relative;z-index:2;width:100%}
+.bm-cv{position:fixed;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;mix-blend-mode:difference}   /* the 3D picture and the brain (hero script): fixed, so its pieces fly over the whole screen; difference: white digits turn black over About's white band */
 .eyebrow{display:inline-flex}
 .hero h1{margin:0 0 24px;font-size:clamp(40px,5.4vw,76px);line-height:1.02;letter-spacing:-.04em;font-weight:600}
 .hero h1 em{white-space:nowrap}
@@ -195,7 +192,12 @@ html.scenes .grid-head{display:flex;align-items:baseline;justify-content:space-b
 .stat{border-radius:var(--r);padding:26px 24px 24px;background:linear-gradient(180deg,#131318,#0C0C10);box-shadow:var(--shadow)}
 .stat strong{display:block;font-family:var(--mono);font-weight:500;font-size:clamp(36px,4vw,52px);line-height:1.05;letter-spacing:-.05em;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
 .stat span{display:block;margin-top:12px;color:var(--text-2);font-size:14px}
-/* About in negative: a white band opens from a line (scenes only) */
+/* the founder in negative: a white band opens from a line (scenes only) */
+#founderScene .kicker,#founderScene h2,#founderScene p{transition:color .45s ease}
+#founderScene.inv .kicker{color:#6E6E78}
+#founderScene.inv h2{color:#0A0A0D}
+#founderScene.inv p{color:#4A4A52}
+/* About in negative (no longer used: the founder is the white slide) */
 #about .kicker,#about h2,#about p,#about .stat span{transition:color .45s ease}
 #about .stat{transition:background .45s ease, box-shadow .45s ease}
 #about.inv .kicker{color:#6E6E78}
@@ -288,7 +290,7 @@ footer{padding-block:48px 56px}
 .foot-links{display:flex;gap:22px;flex-wrap:wrap}
 
 /* card view (a product card opened from the honeycomb) */
-.card-view{position:fixed;inset:0;z-index:180;display:grid;place-items:center;padding:20px;background:rgba(5,5,6,.62);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);opacity:0;visibility:hidden;transition:opacity .25s ease,visibility .25s}
+.card-view{position:fixed;inset:0;z-index:180;display:grid;place-items:center;padding:20px;background:rgba(2,2,3,.62);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);opacity:0;visibility:hidden;transition:opacity .25s ease,visibility .25s}
 .card-view.active{opacity:1;visibility:visible}
 .card-view-box{width:min(460px,100%);scale:.94;translate:0 14px;transition:scale .35s cubic-bezier(.2,.7,.2,1),translate .35s cubic-bezier(.2,.7,.2,1)}
 .card-view.active .card-view-box{scale:none;translate:none}
@@ -326,7 +328,7 @@ footer{padding-block:48px 56px}
 @keyframes discIn{from{opacity:0;translate:0 10px}}
 
 /* modals (product details and agents) */
-.modal-overlay,.agent-modal-overlay{position:fixed;inset:0;z-index:200;display:grid;place-items:center;padding:20px;background:rgba(5,5,6,.62);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);opacity:0;visibility:hidden;transition:opacity .25s ease,visibility .25s}
+.modal-overlay,.agent-modal-overlay{position:fixed;inset:0;z-index:200;display:grid;place-items:center;padding:20px;background:rgba(2,2,3,.62);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);opacity:0;visibility:hidden;transition:opacity .25s ease,visibility .25s}
 .modal-overlay.active,.agent-modal-overlay.active{opacity:1;visibility:visible}
 .modal-box,.agent-modal{position:relative;width:min(560px,100%);max-height:calc(100vh - 40px);overflow:auto;border-radius:24px;padding:32px 32px 28px;background:linear-gradient(180deg,#15151B,#0B0B0F);
   box-shadow:var(--shadow-hi);translate:0 14px;scale:.98;transition:translate .35s cubic-bezier(.2,.7,.2,1),scale .35s cubic-bezier(.2,.7,.2,1)}
@@ -366,7 +368,7 @@ a,button,[role=button],label,summary,.btn{cursor:url("data:image/svg+xml,%3Csvg 
 /* plain page (small screens): blocks rise in as they reach the viewport */
 .rv-on .rv{opacity:0;translate:0 22px;transition:opacity .8s cubic-bezier(.2,.7,.2,1),translate .9s cubic-bezier(.2,.7,.2,1),box-shadow .3s,transform .3s}
 .rv-on .rv.in{opacity:1;translate:none}
-@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}.bm-draw .bm-d{stroke-dashoffset:0}}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style>
 
 <style>
@@ -379,6 +381,15 @@ html.scenes main,html.scenes footer{display:none}
 .scene .hero{min-height:0;padding-block:0;overflow:visible;width:100%;height:100%}
 .scene .sec{padding:0}
 .scene .sec-head{margin-bottom:0}
+html.scenes:not(.compact) #about .about-grid{grid-template-columns:minmax(0,min(560px,44vw));justify-content:start;gap:30px}   /* About on the left (numbers under the text), the brain on the right */
+html.scenes:not(.compact) #about .stats{grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+html.scenes:not(.compact) #about .stat{padding:16px 14px 14px}
+html.scenes:not(.compact) #about .stat strong{font-size:clamp(24px,2.3vw,34px)}
+html.scenes:not(.compact) #about .stat span{font-size:12px}
+/* Legacy's text on the left, the products' honeycomb on the right */
+html.scenes:not(.compact) .hive-wrap #legacyHead{position:absolute;left:0;top:50%;translate:0 -50%;z-index:2;display:grid;grid-template-columns:minmax(0,1fr);gap:24px;max-width:min(470px,38%)}
+html.scenes:not(.compact) .hive{left:69%}
+html.scenes:not(.compact) .hive-wrap .grid-head .kicker{visibility:hidden}
 .scene .wrap .wrap{padding-inline:0}
 .scene .founder{margin-top:0}
 .scene .portrait{width:auto;max-width:100%;height:min(66vh,560px)}
@@ -392,6 +403,12 @@ html.scenes main,html.scenes footer{display:none}
 .bub-c{display:block;width:100%;height:100%;border-radius:50%;overflow:hidden;background:#000;box-shadow:0 1px 2px rgba(0,0,0,.5),0 14px 34px -12px rgba(0,0,0,.9);transition:box-shadow .25s}
 .bub:hover .bub-c{box-shadow:0 1px 2px rgba(0,0,0,.5),0 24px 48px -14px rgba(0,0,0,.95)}
 .bub-c img{display:block;width:100%;height:100%;object-fit:cover;scale:1.02}
+html.tiles .bub,html.tiles .bub-c{border-radius:25%}   /* trial: the logo's rounded square */
+html.tiles .bub-c{position:relative}
+html.tiles .bub-nw{display:none}
+.bub-t{display:none}
+html.tiles .bub-t{display:block;position:absolute;left:0;right:0;bottom:0;padding:24px 8px 10px;font-size:12.5px;font-weight:600;letter-spacing:-.01em;line-height:1.1;color:#fff;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.72));opacity:var(--lo,0);pointer-events:none}
+.bub-nw{position:absolute;left:-60px;top:-60px;width:120px;height:120px;z-index:0;pointer-events:none;will-change:transform,opacity}   /* a bubble's name, on a layer under every bubble so the icons stay in front */
 .bub-n{position:absolute;left:50%;top:calc(100% + 8px);translate:-50% 0;white-space:nowrap;font-size:13px;font-weight:600;letter-spacing:-.01em;color:var(--text);opacity:var(--lo,0);pointer-events:none}
 /* shorter screens (13" laptops): a denser product grid so five cards still fit in one scene */
 @media (max-height:860px){
@@ -457,7 +474,7 @@ html.compact .disc-more p,html.compact .disc-more ul{font-size:14px}
 html.compact .stage{bottom:auto;height:100vh;height:100lvh}
 html.compact .scene{bottom:auto;height:100vh;height:100svh}
 html.compact .org-floor{display:none}   /* a 3200px plane turned in 3D is more than a phone can composite: it flickers */
-html.compact .nav.scrolled{background:rgba(5,5,6,.92);-webkit-backdrop-filter:none;backdrop-filter:none}   /* a blur over moving scenes flickers on iOS */
+html.compact .nav.scrolled{background:rgba(2,2,3,.92);-webkit-backdrop-filter:none;backdrop-filter:none}   /* a blur over moving scenes flickers on iOS */
 </style>
 </head>
 <body>
@@ -465,20 +482,25 @@ html.compact .nav.scrolled{background:rgba(5,5,6,.92);-webkit-backdrop-filter:no
 
 <!--BL-LOADER-->
 <style>
-.bl-loader{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;align-content:center;gap:26px;background:#050506;color:#fff;transition:opacity .45s ease,visibility .45s}
+.bl-loader{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;align-content:center;gap:26px;background:#020203;color:#fff;transition:opacity .45s ease,visibility .45s}
 .bl-loader.done{opacity:0;visibility:hidden;pointer-events:none}
 .bl-loader .bl-lg{width:min(112px,30vw)}
 .bl-loader .bl-lg svg{display:block;width:100%;height:auto;overflow:visible}
 .bl-loader .lp{fill:none;stroke:#fff;stroke-width:7;stroke-linejoin:miter;stroke-dasharray:524 524;stroke-dashoffset:0}   /* each half of the arc is 522.6 units long */
 .bl-loader.play .lp{stroke-dashoffset:524;animation:bl-draw 1s cubic-bezier(.65,0,.35,1) calc(var(--i) * .16s) forwards}
 .bl-loader.play.fast .lp{animation-duration:.5s;animation-delay:calc(var(--i) * .08s)}
+.bl-loader .lf{fill:#fff;opacity:0}   /* the mark fills white as its outline closes */
+.bl-loader.play .lf{animation:bl-fill .22s ease-out .95s forwards}
+.bl-loader.play.fast .lf{animation-duration:.18s;animation-delay:.46s}
 .bl-loader .bl-bar{width:min(180px,46vw);height:2px;border-radius:2px;background:rgba(255,255,255,.1);overflow:hidden}
 .bl-loader .bl-bar i{display:block;height:100%;width:38%;border-radius:2px;background:linear-gradient(90deg,#52525B,#A1A1AA,#fff);transform:translateX(-110%);animation:bl-bar 1.25s cubic-bezier(.65,0,.35,1) .35s infinite}
 @keyframes bl-draw{to{stroke-dashoffset:0}}
+@keyframes bl-fill{to{opacity:1}}
 @keyframes bl-bar{to{transform:translateX(280%)}}
-@media (prefers-reduced-motion: reduce){.bl-loader .lp,.bl-loader.play .lp{animation:none;stroke-dashoffset:0}.bl-loader .bl-bar i{animation:none;transform:none;width:100%;opacity:.5}}
+@media (prefers-reduced-motion: reduce){.bl-loader .lp,.bl-loader.play .lp{animation:none;stroke-dashoffset:0}.bl-loader .lf,.bl-loader.play .lf{animation:none;opacity:1}.bl-loader .bl-bar i{animation:none;transform:none;width:100%;opacity:.5}}
 </style>
 <div id="bl-loader" class="bl-loader done" role="status" aria-live="polite" aria-label="Loading"><div class="bl-lg"><svg viewBox="-4 -4 283 183" aria-hidden="true" focusable="false">
+  <path class="lf" d="M137.5 0L155 0C162.001 0 165.501 0 168.175 1.362C170.527 2.561 172.439 4.473 173.638 6.825C175 9.499 175 12.999 175 20L175 25C175 50 175 50 200 50L205 50C212.001 50 215.501 50 218.175 51.362C220.527 52.561 222.439 54.473 223.638 56.825C225 59.499 225 62.999 225 70L225 75C225 100 225 100 250 100L255 100C262.001 100 265.501 100 268.175 101.362C270.527 102.561 272.439 104.473 273.638 106.825C275 109.499 275 112.999 275 120L275 137.5L275 155C275 162.001 275 165.501 273.638 168.175C272.439 170.527 270.527 172.439 268.175 173.638C265.501 175 262.001 175 255 175L245 175C237.999 175 234.499 175 231.825 173.638C229.473 172.439 227.561 170.527 226.362 168.175C225 165.501 225 162.001 225 155L225 125C225 100 225 100 200 100L195 100C187.999 100 184.499 100 181.825 98.638C179.473 97.439 177.561 95.527 176.362 93.175C175 90.501 175 87.001 175 80L175 75C175 50 175 50 150 50L137.5 50L125 50C100 50 100 50 100 75L100 80C100 87.001 100 90.501 98.638 93.175C97.439 95.527 95.527 97.439 93.175 98.638C90.501 100 87.001 100 80 100L75 100C50 100 50 100 50 125L50 155C50 162.001 50 165.501 48.638 168.175C47.439 170.527 45.527 172.439 43.175 173.638C40.501 175 37.001 175 30 175L20 175C12.999 175 9.499 175 6.825 173.638C4.473 172.439 2.561 170.527 1.362 168.175C0 165.501 0 162.001 0 155L0 137.5L0 120C0 112.999 0 109.499 1.362 106.825C2.561 104.473 4.473 102.561 6.825 101.362C9.499 100 12.999 100 20 100L25 100C50 100 50 100 50 75L50 70C50 62.999 50 59.499 51.362 56.825C52.561 54.473 54.473 52.561 56.825 51.362C59.499 50 62.999 50 70 50L75 50C100 50 100 50 100 25L100 20C100 12.999 100 9.499 101.362 6.825C102.561 4.473 104.473 2.561 106.825 1.362C109.499 0 112.999 0 120 0Z"/>
   <path class="lp" style="--i:0" d="M137.5 0L155 0C162.001 0 165.501 0 168.175 1.362C170.527 2.561 172.439 4.473 173.638 6.825C175 9.499 175 12.999 175 20L175 25C175 50 175 50 200 50L205 50C212.001 50 215.501 50 218.175 51.362C220.527 52.561 222.439 54.473 223.638 56.825C225 59.499 225 62.999 225 70L225 75C225 100 225 100 250 100L255 100C262.001 100 265.501 100 268.175 101.362C270.527 102.561 272.439 104.473 273.638 106.825C275 109.499 275 112.999 275 120L275 137.5L275 155C275 162.001 275 165.501 273.638 168.175C272.439 170.527 270.527 172.439 268.175 173.638C265.501 175 262.001 175 255 175L245 175C237.999 175 234.499 175 231.825 173.638C229.473 172.439 227.561 170.527 226.362 168.175C225 165.501 225 162.001 225 155L225 125C225 100 225 100 200 100L195 100C187.999 100 184.499 100 181.825 98.638C179.473 97.439 177.561 95.527 176.362 93.175C175 90.501 175 87.001 175 80L175 75C175 50 175 50 150 50L137.5 50"/>
   <path class="lp" style="--i:0" d="M137.5 0L120 0C112.999 0 109.499 0 106.825 1.362C104.473 2.561 102.561 4.473 101.362 6.825C100 9.499 100 12.999 100 20L100 25C100 50 100 50 75 50L70 50C62.999 50 59.499 50 56.825 51.362C54.473 52.561 52.561 54.473 51.362 56.825C50 59.499 50 62.999 50 70L50 75C50 100 50 100 25 100L20 100C12.999 100 9.499 100 6.825 101.362C4.473 102.561 2.561 104.473 1.362 106.825C0 109.499 0 112.999 0 120L0 137.5L0 155C0 162.001 0 165.501 1.362 168.175C2.561 170.527 4.473 172.439 6.825 173.638C9.499 175 12.999 175 20 175L30 175C37.001 175 40.501 175 43.175 173.638C45.527 172.439 47.439 170.527 48.638 168.175C50 165.501 50 162.001 50 155L50 125C50 100 50 100 75 100L80 100C87.001 100 90.501 100 93.175 98.638C95.527 97.439 97.439 95.527 98.638 93.175C100 90.501 100 87.001 100 80L100 75C100 50 100 50 125 50L137.5 50"/>
 </svg></div><div class="bl-bar"><i></i></div></div>
@@ -505,8 +527,8 @@ html.compact .nav.scrolled{background:rgba(5,5,6,.92);-webkit-backdrop-filter:no
     <path fill="#fff" d="M137.5 0L155 0C162.001 0 165.501 0 168.175 1.362C170.527 2.561 172.439 4.473 173.638 6.825C175 9.499 175 12.999 175 20L175 25C175 50 175 50 200 50L205 50C212.001 50 215.501 50 218.175 51.362C220.527 52.561 222.439 54.473 223.638 56.825C225 59.499 225 62.999 225 70L225 75C225 100 225 100 250 100L255 100C262.001 100 265.501 100 268.175 101.362C270.527 102.561 272.439 104.473 273.638 106.825C275 109.499 275 112.999 275 120L275 137.5L275 155C275 162.001 275 165.501 273.638 168.175C272.439 170.527 270.527 172.439 268.175 173.638C265.501 175 262.001 175 255 175L245 175C237.999 175 234.499 175 231.825 173.638C229.473 172.439 227.561 170.527 226.362 168.175C225 165.501 225 162.001 225 155L225 125C225 100 225 100 200 100L195 100C187.999 100 184.499 100 181.825 98.638C179.473 97.439 177.561 95.527 176.362 93.175C175 90.501 175 87.001 175 80L175 75C175 50 175 50 150 50L137.5 50L125 50C100 50 100 50 100 75L100 80C100 87.001 100 90.501 98.638 93.175C97.439 95.527 95.527 97.439 93.175 98.638C90.501 100 87.001 100 80 100L75 100C50 100 50 100 50 125L50 155C50 162.001 50 165.501 48.638 168.175C47.439 170.527 45.527 172.439 43.175 173.638C40.501 175 37.001 175 30 175L20 175C12.999 175 9.499 175 6.825 173.638C4.473 172.439 2.561 170.527 1.362 168.175C0 165.501 0 162.001 0 155L0 137.5L0 120C0 112.999 0 109.499 1.362 106.825C2.561 104.473 4.473 102.561 6.825 101.362C9.499 100 12.999 100 20 100L25 100C50 100 50 100 50 75L50 70C50 62.999 50 59.499 51.362 56.825C52.561 54.473 54.473 52.561 56.825 51.362C59.499 50 62.999 50 70 50L75 50C100 50 100 50 100 25L100 20C100 12.999 100 9.499 101.362 6.825C102.561 4.473 104.473 2.561 106.825 1.362C109.499 0 112.999 0 120 0Z"/>
   </svg><span>BytArc Labs</span></a>
   <nav class="nav-links" aria-label="Sections">
-    <a href="#products" data-en="Legacy" data-pt="Legado">Legacy</a>
     <a href="#about" data-en="About" data-pt="Sobre">About</a>
+    <a href="#products" data-en="Legacy" data-pt="Legado">Legacy</a>
     <a href="#team" data-en="Team" data-pt="Equipa">Team</a>
     <a href="#stack" data-en="Stack" data-pt="Tecnologias">Stack</a>
     <a href="https://bytarc.com/bytarclabs-site/" data-en="Education" data-pt="Educação">Education</a>
@@ -523,8 +545,8 @@ html.compact .nav.scrolled{background:rgba(5,5,6,.92);-webkit-backdrop-filter:no
 </div></header>
 <div class="menu-sheet" id="menuSheet">
   <nav aria-label="Menu">
-    <a href="#products" data-en="Legacy" data-pt="Legado">Legacy</a>
     <a href="#about" data-en="About" data-pt="Sobre">About</a>
+    <a href="#products" data-en="Legacy" data-pt="Legado">Legacy</a>
     <a href="#team" data-en="Team" data-pt="Equipa">Team</a>
     <a href="#stack" data-en="Stack" data-pt="Tecnologias">Stack</a>
     <a href="https://bytarc.com/bytarclabs-site/" data-en="Education" data-pt="Educação">Education</a>
@@ -536,10 +558,386 @@ html.compact .nav.scrolled{background:rgba(5,5,6,.92);-webkit-backdrop-filter:no
   <section class="hero">
     <div class="hero-bg" id="heroBg"><div class="grain"></div></div>
     <div class="markwrap" aria-hidden="true">
-      <svg class="bigmark bm-draw" id="bigmark" viewBox="0 0 100 100" overflow="visible" focusable="false">
-        <path class="bm-d" stroke="#fff" stroke-width="1.2" d="M50 18.727L55.855 18.727C58.197 18.727 59.368 18.727 60.262 19.183C61.049 19.584 61.689 20.224 62.09 21.011C62.545 21.905 62.545 23.076 62.545 25.418L62.545 27.091C62.545 35.455 62.545 35.455 70.909 35.455L72.582 35.455C74.924 35.455 76.095 35.455 76.989 35.91C77.776 36.311 78.416 36.951 78.817 37.738C79.273 38.632 79.273 39.803 79.273 42.145L79.273 43.818C79.273 52.182 79.273 52.182 87.636 52.182L89.309 52.182C91.651 52.182 92.822 52.182 93.717 52.638C94.504 53.039 95.143 53.678 95.544 54.465C96 55.36 96 56.531 96 58.873L96 64.727L96 70.582C96 72.924 96 74.095 95.544 74.989C95.143 75.776 94.504 76.416 93.717 76.817C92.822 77.273 91.651 77.273 89.309 77.273L85.964 77.273C83.622 77.273 82.451 77.273 81.556 76.817C80.769 76.416 80.129 75.776 79.729 74.989C79.273 74.095 79.273 72.924 79.273 70.582L79.273 60.545C79.273 52.182 79.273 52.182 70.909 52.182L69.236 52.182C66.894 52.182 65.723 52.182 64.829 51.726C64.042 51.325 63.402 50.685 63.001 49.899C62.545 49.004 62.545 47.833 62.545 45.491L62.545 43.818C62.545 35.455 62.545 35.455 54.182 35.455L50 35.455L45.818 35.455C37.455 35.455 37.455 35.455 37.455 43.818L37.455 45.491C37.455 47.833 37.455 49.004 36.999 49.899C36.598 50.685 35.958 51.325 35.171 51.726C34.277 52.182 33.106 52.182 30.764 52.182L29.091 52.182C20.727 52.182 20.727 52.182 20.727 60.545L20.727 70.582C20.727 72.924 20.727 74.095 20.271 74.989C19.871 75.776 19.231 76.416 18.444 76.817C17.549 77.273 16.378 77.273 14.036 77.273L10.691 77.273C8.349 77.273 7.178 77.273 6.283 76.817C5.496 76.416 4.857 75.776 4.456 74.989C4 74.095 4 72.924 4 70.582L4 64.727L4 58.873C4 56.531 4 55.36 4.456 54.465C4.857 53.678 5.496 53.039 6.283 52.638C7.178 52.182 8.349 52.182 10.691 52.182L12.364 52.182C20.727 52.182 20.727 52.182 20.727 43.818L20.727 42.145C20.727 39.803 20.727 38.632 21.183 37.738C21.584 36.951 22.224 36.311 23.011 35.91C23.905 35.455 25.076 35.455 27.418 35.455L29.091 35.455C37.455 35.455 37.455 35.455 37.455 27.091L37.455 25.418C37.455 23.076 37.455 21.905 37.91 21.011C38.311 20.224 38.951 19.584 39.738 19.183C40.632 18.727 41.803 18.727 44.145 18.727Z"/>
+      <!-- the mark filled white. It is drawn on a 25-unit grid (11 x 7 squares), which the pixel effects below follow -->
+      <svg class="bigmark" id="bigmark" viewBox="0 0 100 100" overflow="visible" focusable="false">
+        <g transform="translate(4 18.727) scale(.334545)"><path class="bm-f" fill="#fff" d="M137.5 0L155 0C162.001 0 165.501 0 168.175 1.362C170.527 2.561 172.439 4.473 173.638 6.825C175 9.499 175 12.999 175 20L175 25C175 50 175 50 200 50L205 50C212.001 50 215.501 50 218.175 51.362C220.527 52.561 222.439 54.473 223.638 56.825C225 59.499 225 62.999 225 70L225 75C225 100 225 100 250 100L255 100C262.001 100 265.501 100 268.175 101.362C270.527 102.561 272.439 104.473 273.638 106.825C275 109.499 275 112.999 275 120L275 137.5L275 155C275 162.001 275 165.501 273.638 168.175C272.439 170.527 270.527 172.439 268.175 173.638C265.501 175 262.001 175 255 175L245 175C237.999 175 234.499 175 231.825 173.638C229.473 172.439 227.561 170.527 226.362 168.175C225 165.501 225 162.001 225 155L225 125C225 100 225 100 200 100L195 100C187.999 100 184.499 100 181.825 98.638C179.473 97.439 177.561 95.527 176.362 93.175C175 90.501 175 87.001 175 80L175 75C175 50 175 50 150 50L137.5 50L125 50C100 50 100 50 100 75L100 80C100 87.001 100 90.501 98.638 93.175C97.439 95.527 95.527 97.439 93.175 98.638C90.501 100 87.001 100 80 100L75 100C50 100 50 100 50 125L50 155C50 162.001 50 165.501 48.638 168.175C47.439 170.527 45.527 172.439 43.175 173.638C40.501 175 37.001 175 30 175L20 175C12.999 175 9.499 175 6.825 173.638C4.473 172.439 2.561 170.527 1.362 168.175C0 165.501 0 162.001 0 155L0 137.5L0 120C0 112.999 0 109.499 1.362 106.825C2.561 104.473 4.473 102.561 6.825 101.362C9.499 100 12.999 100 20 100L25 100C50 100 50 100 50 75L50 70C50 62.999 50 59.499 51.362 56.825C52.561 54.473 54.473 52.561 56.825 51.362C59.499 50 62.999 50 70 50L75 50C100 50 100 50 100 25L100 20C100 12.999 100 9.499 101.362 6.825C102.561 4.473 104.473 2.561 106.825 1.362C109.499 0 112.999 0 120 0Z"/></g>
       </svg>
     </div>
+    <canvas class="bm-cv" id="bmCanvas" aria-hidden="true"></canvas>
+    <script>
+    /* the hero picture in 3D: a pixel-art picture for each word the headline types (a flag for founders, a skyline,
+       heads round a table, a rocket, rising bars, a gear), built only of the logo's own pieces, smaller: squares and 3:2
+       rectangles laid in courses like a wall, rounded like the logo, with white faces and silver sides. It tilts slowly and follows the pointer; when the word changes, the
+       blocks fly in 3D from one picture to the next. As the page scrolls the picture breaks into 1s and 0s that fly out
+       and gather into a brain, side on, on the right of the Legacy scene; the brain holds still while its digits flow round
+       it, and it scatters as Legacy leaves. Drawn on a canvas over the whole screen; the SVG mark above stays as the still
+       version (reduced motion). The scenes call BM.out() with the hero's exit and BM.legacy() with Legacy's, the plain page
+       uses its own scroll, and the headline's typewriter calls BM.word() */
+    window.BM = (() => {
+      const svg = document.getElementById("bigmark"), g = svg && svg.querySelector("g"), cv = document.getElementById("bmCanvas");
+      const ctx = cv && cv.getContext && cv.getContext("2d");
+      if (!g || !ctx || matchMedia("(prefers-reduced-motion: reduce)").matches) { if (cv) cv.remove(); return null; }
+      svg.style.visibility = "hidden";                                  // the canvas draws from here on (the SVG still sets the picture's place)
+      const { sin, cos, min, max, PI, hypot, round } = Math, clamp = v => min(1, max(0, v));
+      const easeInOut = u => (u < .5 ? 4 * u * u * u : 1 - (2 - 2 * u) ** 3 / 2), smooth = u => u * u * (3 - 2 * u);
+      const MW = 275, MD = 1100, DUR = .45;                            // the logo's width in its units; ms per change of picture; each digit's flight, in hero-exit units
+
+      // ---- the pictures, on a grid of GW x GH cells (a quarter of the logo's 25-unit grid): each is drawn with simple shapes
+      // and every cell whose centre falls inside becomes a block
+      const GW = 22, GH = 14, CELL = 12.5, GAP = 1.6, TH = 7.2;   // the blocks: the logo's own square (2 x 2 cells) and 3:2 rectangle (3 x 2), half the logo's size
+      const circ = (cx, cy, r) => (x, y) => (x - cx) ** 2 + (y - cy) ** 2 <= r * r;
+      const ell = (cx, cy, rx, ry) => (x, y) => ((x - cx) / rx) ** 2 + ((y - cy) / ry) ** 2 <= 1;
+      const box = (x0, y0, x1, y1) => (x, y) => x >= x0 && x <= x1 && y >= y0 && y <= y1;
+      const poly = pts => (x, y) => { let c = false; for (let i = 0, j = pts.length - 1; i < pts.length; j = i++) { const [xi, yi] = pts[i], [xj, yj] = pts[j]; if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) c = !c; } return c; };
+      const seg = (x0, y0, x1, y1, w) => (x, y) => { const dx = x1 - x0, dy = y1 - y0, t = Math.max(0, Math.min(1, ((x - x0) * dx + (y - y0) * dy) / (dx * dx + dy * dy))); return Math.hypot(x - x0 - dx * t, y - y0 - dy * t) <= w / 2; };
+      const any = (...f) => (x, y) => f.some(g => g(x, y)), cut = (a, b) => (x, y) => a(x, y) && !b(x, y);
+      const turned = (f, cx, cy, a) => (x, y) => { const dx = x - cx, dy = y - cy, c = Math.cos(a), s = Math.sin(a); return f(cx + c * dx + s * dy, cy - s * dx + c * dy); };
+      // the pictures are drawn on a 44 x 28 design grid and sampled at each cell's centre
+      const raster = f => Array.from({ length: GH }, (_, r) => Array.from({ length: GW }, (_, c) => (f((c + .5) * 44 / GW, (r + .5) * 28 / GH) ? "#" : ".")).join(""));
+      // or drawn course by course: seven rows of 22 cells, each course two cells high
+      const courses = rows => rows.flatMap(r => [r, r]);
+      const arrowHead = (from, tip, len, half) => { const dx = tip[0] - from[0], dy = tip[1] - from[1], l = Math.hypot(dx, dy), ux = dx / l, uy = dy / l; return poly([[tip[0] + ux * len, tip[1] + uy * len], [tip[0] - uy * half, tip[1] + ux * half], [tip[0] + uy * half, tip[1] - ux * half]]); };
+      const ART = {
+        founders: courses([
+          "......##.##########...",
+          "......##.########.....",
+          "......##.##########...",
+          "......##..............",
+          "......##..............",
+          "......##..............",
+          "....######............",
+        ]),   // a flag on a pole: planting the flag
+        enterprises: raster(any(box(9, 13, 17, 27.6), box(17, 6, 27, 27.6), box(20.5, 1, 23.5, 6), box(27, 16, 35, 27.6))),   // a skyline: one block of towers, a spire on the tallest
+        "executive teams": raster(any(circ(11, 13, 4.2), circ(22, 9, 5.4), circ(33, 13, 4.2), box(5, 21, 39, 27.6))),   // heads round a table
+        startups: courses([
+          "..........##..........",
+          ".........####.........",
+          "........##..##........",
+          "........######........",
+          ".....##.######.##.....",
+          "....###.######.###....",
+          "..........##..........",
+        ]),   // an upright rocket: a porthole, fins and a flame
+        "scale-ups": raster(any(box(7, 19, 14, 27.6), box(18.5, 11, 25.5, 27.6), box(30, 2, 37, 27.6))),               // three rising bars
+        operators: raster((x, y) => { const dx = x - 22, dy = y - 14.5, d = Math.hypot(dx, dy), a = Math.atan2(dy, dx); return d >= 4.4 && (d <= 9.4 || (d <= 12.6 && Math.cos(6 * a) > .15)); }),   // one gear
+      };
+      // tile each picture with the logo's pieces only, laid in courses like a wall: every course is two cells high, each run of
+      // it is filled with flat 3:2 bricks, and squares (2 x 2) close the run, at its start on one course and at its end on the
+      // next, so the joints stagger. A course column counts when either of its two cells is in the picture
+      const blocksOf = art => {
+        const rows = art.length, cols = art[0].length, out = [];
+        for (let r = 0, band = 0; r < rows; r += 2, band++) {
+          const on = c => art[r][c] === "#" || (r + 1 < rows && art[r + 1][c] === "#");
+          for (let c = 0; c < cols;) {
+            if (!on(c)) { c++; continue; }
+            let L = 0; while (c + L < cols && on(c + L)) L++;
+            let n3 = Math.floor(L / 3), n2 = 0;
+            if (L % 3 === 1) { if (n3) { n3--; n2 = 2; } } else if (L % 3 === 2) n2 = 1;
+            const sizes = band % 2 ? [...Array(n2).fill(2), ...Array(n3).fill(3)] : [...Array(n3).fill(3), ...Array(n2).fill(2)];
+            let x = c + (L === 1 ? -.5 : 0);                                // a lone column still gets a square, centred on it
+            (L === 1 ? [2] : sizes).forEach(w => { out.push([(x + w / 2 - cols / 2) * CELL, (r + 1 - rows / 2) * CELL, w * CELL - 2 * GAP, 2 * CELL - 2 * GAP]); x += w; });
+            c += L;
+          }
+        }
+        return out;
+      };
+      // every picture shares one pool of K blocks: block i of the pool takes the picture's block at the same share of its
+      // order (so rows go to rows when the picture changes), and pool blocks a picture has no use for sit, shrunk to nothing,
+      // on the block they share. Between pictures each pool block flies, grows or shrinks
+      const PICS = Object.values(ART).map(blocksOf), K = max(...PICS.map(b => b.length));
+      const SLOTS = PICS.map(bl => {
+        const n = bl.length, s = { x: new Float32Array(K), y: new Float32Array(K), w: new Float32Array(K), h: new Float32Array(K), v: new Float32Array(K) };
+        for (let i = 0; i < K; i++) {
+          const j = Math.floor(i * n / K), [x, y, w, h] = bl[j];
+          s.x[i] = x; s.y[i] = y; s.w[i] = w; s.h[i] = h; s.v[i] = i === 0 || Math.floor((i - 1) * n / K) !== j ? 1 : 0;
+        }
+        return s;
+      });
+      const SPIN = Array.from({ length: K }, () => [Math.random() - .5, Math.random() - .5]);   // each block's tumble on its way
+      const lerpSlots = (A, B, m, i) => [A.x[i] + (B.x[i] - A.x[i]) * m, A.y[i] + (B.y[i] - A.y[i]) * m, A.w[i] + (B.w[i] - A.w[i]) * m, A.h[i] + (B.h[i] - A.h[i]) * m, A.v[i] + (B.v[i] - A.v[i]) * m];
+      let from = SLOTS[0], to = SLOTS[0], m0 = -1e9;
+      const wave = (B, i) => .35 * clamp((B.x[i] + MW / 2) / MW);      // the change sweeps across the picture, left to right
+      const stateAt = now => {                                          // where every pool block is, part way through a change
+        const m = clamp((now - m0) / MD);
+        if (m >= 1) return null;
+        const S2 = { x: new Float32Array(K), y: new Float32Array(K), w: new Float32Array(K), h: new Float32Array(K), v: new Float32Array(K) };
+        for (let i = 0; i < K; i++) { const u = easeInOut(clamp((m - wave(to, i)) / .65)), q = lerpSlots(from, to, u, i); S2.x[i] = q[0]; S2.y[i] = q[1]; S2.w[i] = q[2]; S2.h[i] = q[3]; S2.v[i] = q[4]; }
+        return S2;
+      };
+
+      // ---- the brain, side on: the cerebrum's profile is a dome with the frontal lobe in front, the temporal lobe bulging
+      // under the middle and a notch between them; each hemisphere is that profile with flat sides, and the cerebellum sits
+      // under the back. Each digit is a direction on a sphere; the directions turn about the vertical axis while the shape
+      // never does, so the digits flow round it and it looks as if it spins
+      const wrap = d => ((d + PI) % (2 * PI) + 2 * PI) % (2 * PI) - PI, gs = (d, w) => Math.exp(-((d / w) ** 2));
+      const profile = th => {
+        let z = cos(th), y = -sin(th) * .74;
+        if (y > 0) y *= .6;
+        y += .2 * gs(wrap(th - 4.95), .32);                              // temporal lobe
+        const k = 1 - .08 * gs(wrap(th - 5.6), .14);                     // the notch in front of it
+        return [y * k, z * k * (1 + .05 * gs(wrap(th - PI), .5))];
+      };
+      const cerebrum = ([x, y, z]) => {
+        const s = Math.sign(x || 1), a = Math.abs(x), c = Math.cbrt(Math.max(0, 1 - a ** 3)), [py, pz] = profile(Math.atan2(-y, z));
+        return [s * (.05 + .6 * a ** .85), py * c, pz * c];
+      };
+      const cerebellum = ([x, y, z]) => [x * .42, .42 + y * .17, -.6 + z * .27];
+      const unit = v => { const l = Math.hypot(...v) || 1; return v.map(x => x / l); };
+      const cross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
+      const PTS = [];
+      for (let f = 0; f < 54; f++) {                                      // winding folds over the cerebrum
+        let p = unit([Math.random() * 2 - 1, Math.random() * 1.8 - 1.1, Math.random() * 2 - 1]), h = unit(cross(p, [Math.random() - .5, Math.random() - .5, Math.random() - .5]));
+        for (let k = 0; k < 24; k++) {
+          PTS.push({ p, part: 0 });
+          p = unit(p.map((v, i) => v + h[i] * .085));
+          const d = p[0] * h[0] + p[1] * h[1] + p[2] * h[2]; h = unit(h.map((v, i) => v - p[i] * d));
+          const a = (Math.random() - .5) * .9, c = cross(p, h); h = unit(h.map((v, i) => v * cos(a) + c[i] * sin(a)));
+        }
+      }
+      for (let k = 0; k < 150; k++) PTS.push({ p: unit([Math.random() - .5, (Math.random() - .5) * .8, Math.random() - .5]), part: 1 });   // cerebellum
+      PTS.forEach(q => { q.bit = Math.random() < .5 ? 1 : 0; });
+      const N = PTS.length, byY = PTS.map((q, i) => i).sort((a, b) => (PTS[a].part ? cerebellum : cerebrum)(PTS[a].p)[1] - (PTS[b].part ? cerebellum : cerebrum)(PTS[b].p)[1]);
+      // ---- the picture becomes the digits, without a fade. As the page scrolls the blocks square their corners (to SPLIT),
+      // then seams open along a grid and split them into small tiles, one per digit, whose corners round (to SPLIT + OPEN).
+      // Then each tile flies to its place in the brain and on the way reshapes, in 3D, into its 0 or 1: a 0 is a pill-shaped
+      // ring, a 1 a bar with a flag, and a flicker between them reshapes too
+      const SPLIT = .03, OPEN = .07;
+      const DIG = PTS.map(q => ({ st: [0, 0], tw: 1, th: 1, s0: 0, bt: q.bit, bx: (Math.random() - .7) * .3, by: (Math.random() - .5) * .5, bz: -350 + Math.random() * 750 }));
+      // the tiles: the picture's blocks cut on a grid, then the biggest tiles split in two until there is exactly one per digit
+      // (the brain keeps all of them). The top of the picture goes to the top of the brain, and leaves first
+      const sample = Sl => {
+        const vis = []; let tot = 0;
+        for (let i = 0; i < K; i++) if (Sl.v[i] > .5) { vis.push(i); tot += Sl.w[i] * Sl.h[i]; }
+        if (!vis.length) return;
+        let g = Math.sqrt(tot / N), tiles = [];
+        for (let tries = 0; tries < 80; tries++, g *= 1.02) {
+          tiles = [];
+          vis.forEach(i => {
+            const nx = max(1, round(Sl.w[i] / g)), ny = max(1, round(Sl.h[i] / g)), cw = Sl.w[i] / nx, ch = Sl.h[i] / ny;
+            for (let a = 0; a < nx; a++) for (let b = 0; b < ny; b++) tiles.push([Sl.x[i] - Sl.w[i] / 2 + (a + .5) * cw, Sl.y[i] - Sl.h[i] / 2 + (b + .5) * ch, cw, ch]);
+          });
+          if (tiles.length <= N) break;
+        }
+        while (tiles.length < N) {
+          let bi = 0; tiles.forEach((tl, i) => { if (tl[2] * tl[3] > tiles[bi][2] * tiles[bi][3]) bi = i; });
+          const [x, y, w, h] = tiles[bi];
+          tiles.splice(bi, 1, ...(w >= h ? [[x - w / 4, y, w / 2, h], [x + w / 4, y, w / 2, h]] : [[x, y - h / 4, w, h / 2], [x, y + h / 4, w, h / 2]]));
+        }
+        tiles.sort((A, B) => A[1] - B[1] || A[0] - B[0]);
+        tiles.slice(0, N).forEach((tl, k) => Object.assign(DIG[byY[k]], { st: [tl[0], tl[1]], tw: tl[2], th: tl[3], s0: SPLIT + OPEN + .25 * (k / N) + Math.random() * .1 }));
+      };
+      // a tile's outline in its own plane (px), as loops of points: a rounded rectangle (clockwise; anticlockwise cuts a hole)
+      const LB = new Float64Array(200), LS = [];
+      let ln = 0;
+      const pt = (x, y) => { LB[2 * ln] = x; LB[2 * ln + 1] = y; ln++; };
+      const rrLoop = (w, h, r, ccw, px) => {                            // px: screen pixels per unit here, so tiny corners get few points
+        r = max(0, min(r, w / 2, h / 2)); LS.push(ln);
+        const rp = r * px, n = rp < .9 ? 1 : rp < 2.5 ? 2 : 4;
+        for (let c = 0; c < 4; c++) {
+          const cc = ccw ? 3 - c : c, sx = cc < 2 ? 1 : -1, sy = cc === 1 || cc === 2 ? 1 : -1, a0 = -PI / 2 + cc * PI / 2;
+          if (n === 1) { pt(sx * w / 2, sy * h / 2); continue; }
+          for (let j = 0; j < n; j++) { const a = ccw ? a0 + PI / 2 - j * PI / 2 / (n - 1) : a0 + j * PI / 2 / (n - 1); pt(sx * (w / 2 - r) + r * cos(a), sy * (h / 2 - r) + r * sin(a)); }
+        }
+      };
+
+      // ---- 3D: the camera sits in front of the middle of the screen; z comes towards you
+      const rot = (ax, ay, az) => {                                    // Rz * Ry * Rx
+        const a = cos(ax), b = sin(ax), c = cos(ay), d = sin(ay), e = cos(az), f = sin(az);
+        return [e * c, e * d * b - f * a, e * d * a + f * b, f * c, f * d * b + e * a, f * d * a - e * b, -d, c * b, c * a];
+      };
+      const mul = (A, B) => { const o = new Array(9); for (let i = 0; i < 3; i++) for (let j = 0; j < 3; j++) o[3 * i + j] = A[3 * i] * B[j] + A[3 * i + 1] * B[3 + j] + A[3 * i + 2] * B[6 + j]; return o; };
+      const app = (M, x, y, z) => [M[0] * x + M[1] * y + M[2] * z, M[3] * x + M[4] * y + M[5] * z, M[6] * x + M[7] * y + M[8] * z];
+      let W = 1, H = 1, dpr = 1, F = 1000, S = 1, cvL = 0, cvT = 0, base = .9, need = true, startPic = -1;
+      // light from the top left, in front: faces turned to it are white, faces turned away go silver
+      const LN = hypot(-.45, -.65, .62), LX = -.45 / LN, LY = -.65 / LN, LZ = .62 / LN, cols = new Map();
+      const col = (nx, ny, nz, side, lit) => {                         // lit: how bright the picture is drawn (it is opaque, so edges never show through)
+        const q = round(clamp(.4 + .6 * (nx * LX + ny * LY + nz * LZ) / LZ) * 48), l = round(lit * 32), key = (l * 2 + side) * 64 + q;
+        let s = cols.get(key);
+        if (!s) { const v = q / 48, a = round((side ? 150 + 70 * v : 120 + 135 * v) * l / 32); s = `rgb(${a},${a},${min(255, a + (side ? 6 : 3))})`; cols.set(key, s); }
+        return s;
+      };
+      // a block's outline: a rectangle rounded like the logo's (a quarter of its short side), NC points to each corner so the
+      // curve and the sides that turn with it are smooth, clockwise
+      const NC = 9, NP = 4 * NC;
+      const rr = (w, h, kr = 1) => {                                    // kr: how round (1 is the logo's rounding, 0 square)
+        const r = .25 * min(w, h) * kr, pts = [];
+        [[w / 2 - r, -h / 2 + r, -PI / 2], [w / 2 - r, h / 2 - r, 0], [-w / 2 + r, h / 2 - r, PI / 2], [-w / 2 + r, -h / 2 + r, PI]].forEach(([cx, cy, a0]) => {
+          for (let i = 0; i < NC; i++) { const a = a0 + i / (NC - 1) * PI / 2; pts.push([cx + r * cos(a), cy + r * sin(a)]); }
+        });
+        return pts;
+      };
+      const NRM = [];                                                  // its edges' outward normals: round each corner, then the straight side after it
+      for (let k = 0; k < 4; k++) {
+        const a0 = -PI / 2 + k * PI / 2;
+        for (let i = 0; i < NC - 1; i++) { const a = a0 + (i + .5) / (NC - 1) * PI / 2; NRM.push([cos(a), sin(a)]); }
+        NRM.push([cos(a0 + PI / 2), sin(a0 + PI / 2)]);
+      }
+      // a tumbling block: its sides that face the camera, then the face towards it
+      const P8 = new Float64Array(2 * NP), Q8 = new Float64Array(2 * NP);
+      const block = (w, h, R, T, sc, hz, a, lit) => {
+        const pts = rr(w, h), hw = W / 2, hh = H / 2;
+        for (let i = 0; i < NP; i++) {
+          const x = pts[i][0] * sc, y = pts[i][1] * sc, X = T[0] + R[0] * x + R[1] * y, Y = T[1] + R[3] * x + R[4] * y, Z = T[2] + R[6] * x + R[7] * y;
+          const f1 = Z + R[8] * hz, b1 = Z - R[8] * hz;
+          let k = F / max(F - f1, 40); P8[2 * i] = hw + (X + R[2] * hz) * k; P8[2 * i + 1] = hh + (Y + R[5] * hz) * k;
+          k = F / max(F - b1, 40); Q8[2 * i] = hw + (X - R[2] * hz) * k; Q8[2 * i + 1] = hh + (Y - R[5] * hz) * k;
+        }
+        ctx.globalAlpha = a;
+        ctx.lineWidth = .6;
+        for (let i = 0; i < NP; i++) {
+          const j = (i + 1) % NP, nx = NRM[i][0], ny = NRM[i][1], NX = R[0] * nx + R[1] * ny, NY = R[3] * nx + R[4] * ny, NZ = R[6] * nx + R[7] * ny;
+          if (-NX * T[0] - NY * T[1] + NZ * (F - T[2]) <= 0) continue;    // does this side face the camera (seen from the block's centre)
+          ctx.fillStyle = col(NX, NY, NZ, 1, lit);
+          ctx.beginPath(); ctx.moveTo(P8[2 * i], P8[2 * i + 1]); ctx.lineTo(P8[2 * j], P8[2 * j + 1]); ctx.lineTo(Q8[2 * j], Q8[2 * j + 1]); ctx.lineTo(Q8[2 * i], Q8[2 * i + 1]); ctx.closePath(); ctx.fill(); ctx.strokeStyle = ctx.fillStyle; ctx.stroke();   // a hairline of its own colour: no seams between the curve's pieces
+        }
+        const front = R[8] > 0, C = front ? P8 : Q8, s = front ? 1 : -1;
+        ctx.fillStyle = col(s * R[2], s * R[5], s * R[8], 0, lit);
+        ctx.beginPath(); ctx.moveTo(C[0], C[1]); for (let i = 1; i < NP; i++) ctx.lineTo(C[2 * i], C[2 * i + 1]); ctx.closePath(); ctx.fill();
+      };
+
+      const measure = () => {
+        need = false;
+        const r = cv.getBoundingClientRect();
+        W = max(1, r.width); H = max(1, r.height); cvL = r.left; cvT = r.top; dpr = min(devicePixelRatio || 1, 2);
+        cv.width = round(W * dpr); cv.height = round(H * dpr); F = max(900, .9 * max(W, H));
+        base = parseFloat(getComputedStyle(svg).opacity) || .9;           // phones: faint behind the text
+      };
+      let raf = 0, hx = 0, lx = 0, mx = 0, my = 0, tmx = 0, tmy = 0, restAt = -1e9;   // hero exit, Legacy exit (0 to 1); when the picture was last whole again
+      const HOLD = 1400;                                               // ms the picture stays whole after the page comes back up, before the next word
+      const exitTo = q => {                                            // the hero's exit; scrolling away mid-change finishes the change first
+        const was = hx; hx = clamp(q);
+        if (hx > 0 && was === 0 && clamp((performance.now() - m0) / MD) < 1) { m0 = -1e9; sample(to); startPic = to; }
+        if (hx === 0 && was > 0) restAt = performance.now();
+      };
+      const draw = now => {
+        raf = 0;
+        if (need) measure();
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, H);
+        if (lx >= .995) return;                                        // the brain has gone with Legacy: rest until the page scrolls back up
+        const t = now / 1000, r = g.getBoundingClientRect();
+        S = r.width / MW || S;
+        mx += (tmx - mx) * .05; my += (tmy - my) * .05;
+        const mid = stateAt(now), Sl = mid || to, mm = clamp((now - m0) / MD);
+        if (hx === 0 && !mid && startPic !== to) { sample(to); startPic = to; }   // where the digits will start, from the picture as it stands
+        const mcx = r.left + r.width / 2 - cvL, mcy = r.top + r.height / 2 - cvT, sc = S * 1.25;   // the pictures a little bigger than the logo's box
+        const Rg = rot(.08 * sin(t * .23 + 1) - .12 * my, .14 * sin(t * .31) + .2 * mx, 0), T = [mcx - W / 2, mcy - H / 2, 0], hz = TH / 2 * sc;
+        const cornerK = 1 - smooth(clamp(hx / SPLIT)), solid = hx < SPLIT ? 1 : 0;   // the blocks square off, then the tiles take over (they look the same)
+        if (solid > 0 && !mid) {
+          // at rest every block faces the same way: all their sides in one path, then all their faces in another
+          const hw = W / 2, hh = H / 2, sideC = col(-.35 * Rg[0] + .9 * Rg[1], -.35 * Rg[3] + .9 * Rg[4], -.35 * Rg[6] + .9 * Rg[7], 1, base);
+          const faceC = col(Rg[2], Rg[5], Rg[8], 0, base), pass = (dz, color) => {
+            ctx.fillStyle = color; ctx.beginPath();
+            for (let i = 0; i < K; i++) {
+              if (Sl.v[i] < .5) continue;
+              const pts = rr(Sl.w[i], Sl.h[i], cornerK), cx = Sl.x[i] * sc, cy = Sl.y[i] * sc;
+              for (let k = 0; k < NP; k++) {
+                const x = cx + pts[k][0] * sc, y = cy + pts[k][1] * sc, X = T[0] + Rg[0] * x + Rg[1] * y + Rg[2] * dz, Y = T[1] + Rg[3] * x + Rg[4] * y + Rg[5] * dz, Z = T[2] + Rg[6] * x + Rg[7] * y + Rg[8] * dz, f = F / max(F - Z, 40);
+                if (k) ctx.lineTo(hw + X * f, hh + Y * f); else ctx.moveTo(hw + X * f, hh + Y * f);
+              }
+              ctx.closePath();
+            }
+            ctx.fill();
+          };
+          ctx.globalAlpha = solid; pass(-hz, sideC); pass(hz * .35, sideC); pass(hz, faceC);
+        } else if (solid > 0) {
+          // changing picture: each block flies, lifting towards you and tumbling once, nearest drawn last
+          const list = [];
+          for (let i = 0; i < K; i++) {
+            const v = Sl.v[i]; if (v < .02) continue;
+            const u = easeInOut(clamp((mm - wave(to, i)) / .65)), hop = sin(PI * u), sp = SPIN[i];
+            const R = hop > .001 ? mul(Rg, rot(sp[0] * hop * 2.4, sp[1] * hop * 2.4, 0)) : Rg;
+            const o = app(Rg, Sl.x[i] * sc, Sl.y[i] * sc, hop * 70);
+            list.push([o[2], i, R, [T[0] + o[0], T[1] + o[1], T[2] + o[2]], v]);
+          }
+          list.sort((A, B) => A[0] - B[0]).forEach(([, i, R, P, v]) => block(Sl.w[i] * v, Sl.h[i] * v, R, P, sc, hz * v, solid, base));
+        }
+        if (hx >= SPLIT) {
+          // the brain: side on, on the right of the Legacy scene (behind the text on phones); it holds still while its digits
+          // flow round it, a little faster while it forms
+          const side = !matchMedia("(max-width: 900px)").matches, BS = side ? min(.17 * W, .38 * H) : min(.36 * W, .25 * H);
+          const B0 = [(side ? .73 : .5) * W - W / 2, (side ? .5 : .66) * H - H / 2, 0];
+          const Rb = mul(rot(-.1 + .1 * my, 0, 0), rot(0, -PI / 2 + .1 + .12 * mx, 0)), flow = t * .16 + 1.5 * (1 - smooth(clamp(hx))), fc = cos(flow), fs = sin(flow);
+          const gone = 1 - smooth(clamp(lx / .6)), spread = 1 + .5 * smooth(clamp(lx / .6)), Hg = .56 * max(9, BS * .05);
+          const open = smooth(clamp((hx - SPLIT) / OPEN)), hw = W / 2, hh = H / 2, LV = 16, rims = [], faces = [];
+          const sideC = col(-.35 * Rg[0] + .9 * Rg[1], -.35 * Rg[3] + .9 * Rg[4], -.35 * Rg[6] + .9 * Rg[7], 1, base);
+          // the tile's loops, turned by M about its centre (X, Y, Z) and pushed dz along its depth, projected into path P
+          const emit = (P, X, Y, Z, M, dz) => {
+            for (let s2 = 0; s2 < LS.length; s2++) {
+              const a = LS[s2], b = s2 + 1 < LS.length ? LS[s2 + 1] : ln;
+              for (let j = a; j < b; j++) {
+                const lx = LB[2 * j], ly = LB[2 * j + 1], x = X + M[0] * lx + M[1] * ly + M[2] * dz, y = Y + M[3] * lx + M[4] * ly + M[5] * dz, z = Z + M[6] * lx + M[7] * ly + M[8] * dz, k = F / max(F - z, 40);
+                if (j === a) P.moveTo(hw + x * k, hh + y * k); else P.lineTo(hw + x * k, hh + y * k);
+              }
+              P.closePath();
+            }
+          };
+          for (let i = 0; i < N; i++) {
+            const d = DIG[i], q0 = PTS[i], p0 = q0.p, u = easeInOut(clamp((hx - d.s0) / DUR)), m = smooth(clamp(u / .55));
+            if (Math.random() < .002) q0.bit ^= 1;                      // they flicker
+            d.bt += (q0.bit - d.bt) * .18;
+            const sa = app(Rg, d.st[0] * sc, d.st[1] * sc, 0), Sx = T[0] + sa[0], Sy = T[1] + sa[1], Sz = T[2] + sa[2];
+            let X = Sx, Y = Sy, Zz = Sz;
+            if (u > 0) {                                                // a curved flight: out past a bend point, then into its place in the brain
+              const p = [fc * p0[0] + fs * p0[2], p0[1], -fs * p0[0] + fc * p0[2]], q = q0.part ? cerebellum(p) : cerebrum(p);
+              const ba = app(Rb, q[0] * BS * spread, q[1] * BS * spread, q[2] * BS * spread), Ex = B0[0] + ba[0], Ey = B0[1] + ba[1], Ez = B0[2] + ba[2];
+              const a1 = (1 - u) * (1 - u), a2 = 2 * (1 - u) * u, a3 = u * u;
+              X = a1 * Sx + a2 * (Sx + d.bx * W) + a3 * Ex; Y = a1 * Sy + a2 * (Sy + d.by * H) + a3 * Ey; Zz = a1 * Sz + a2 * (Sz + d.bz) + a3 * Ez;
+            }
+            // solid while it is part of the picture; in the brain nearer is brighter and the far side is dim
+            const a = gone * (1 - u + u * clamp(.25 + .75 * (Zz + BS) / (2 * BS)) * (side ? 1 : .55)) * clamp((F - Zz - 60) / (F * .35));
+            const lv = round(a * LV); if (lv < 1) continue;
+            // its shape: the tile (seams opening, corners rounding) turning into the glyph
+            const tw = d.tw * sc, th = d.th * sc, ts = min(tw, th), gap = .16 * ts * open, rt = .22 * ts * open, gh = ts + (Hg - ts) * u;
+            const gw = gh * (.58 - .42 * d.bt), rg = gw / 2 * (1 - .6 * d.bt), wg = gh * (.15 - .07 * d.bt);
+            const w = tw - gap + (gw - tw + gap) * m, h = th - gap + (gh - th + gap) * m, r = rt + (rg - rt) * m, wall = ts / 2 + (wg - ts / 2) * m;
+            const kp = F / max(F - Zz, 40);
+            ln = 0; LS.length = 0;
+            rrLoop(w, h, r, false, kp);
+            if (wall < min(w, h) / 2 - .2) rrLoop(w - 2 * wall, h - 2 * wall, r - wall, true, kp);
+            const fl = d.bt * m;                                        // a 1's flag
+            if (fl > .02) {
+              const x0 = -w / 2, y0 = -h / 2 + .02 * gh, Lx = .3 * gh * fl, Ly = .2 * gh * fl, t = w * .95;
+              LS.push(ln); pt(x0 - Lx, y0 + Ly); pt(x0 + w / 2, y0); pt(x0 + w / 2, y0 + t); pt(x0 - Lx, y0 + Ly + t);
+            }
+            // it turns from the picture's tilt to face you, and its thickness goes as it becomes a digit
+            const M = m ? Rg.map((v, j) => v + ((j % 4 ? 0 : 1) - v) * m) : Rg, h3 = hz * (1 - m), ci = round(m * 3);
+            if (h3 > .15) emit(rims[lv] || (rims[lv] = new Path2D()), X, Y, Zz, M, -h3);   // its side: the outline at the back, under the face
+            const key = ci * (LV + 1) + lv, F1 = faces[key] || (faces[key] = new Path2D());
+            emit(F1, X, Y, Zz, M, h3);
+          }
+          ctx.fillStyle = sideC; rims.forEach((P, lv) => { if (P) { ctx.globalAlpha = lv / LV; ctx.fill(P); } });
+          faces.forEach((P, key) => {
+            if (!P) return;
+            const ci = Math.floor(key / (LV + 1)), lv = key % (LV + 1);
+            ctx.fillStyle = col(Rg[2], Rg[5], Rg[8], 0, base + (1 - base) * ci / 3); ctx.globalAlpha = lv / LV; ctx.fill(P);
+          });
+        }
+        raf = requestAnimationFrame(draw);
+      };
+      const wake = () => { if (!raf) raf = requestAnimationFrame(draw); };
+      addEventListener("resize", () => { need = true; wake(); });
+      if (document.fonts) document.fonts.ready.then(() => { need = true; wake(); });   // the page's text, once its font is in
+      if (matchMedia("(pointer: fine)").matches) addEventListener("pointermove", e => { tmx = e.clientX / innerWidth * 2 - 1; tmy = e.clientY / innerHeight * 2 - 1; wake(); }, { passive: true });
+      addEventListener("DOMContentLoaded", () => {                     // after the scenes have built their stage
+        need = true; wake();
+        const stage = document.querySelector(".stage");
+        if (window.SCENES && stage) { stage.append(cv); return; }        // over every scene, so the brain stays on into Legacy
+        const hero = document.querySelector(".hero");                  // the plain page: the brain forms past the hero, then fades
+        addEventListener("scroll", () => { const q = scrollY / (hero.offsetHeight * .75); exitTo(q); lx = clamp((q - 1.3) / .5); wake(); }, { passive: true });
+      });
+      return {
+        out: q => { exitTo(q); if (hx < 1) lx = 0; wake(); },
+        // may the headline move on to its next word: only with the page at the top and the picture whole for a moment
+        ready: () => hx === 0 && performance.now() - restAt > HOLD && clamp((performance.now() - m0) / MD) >= 1,
+        legacy: q => { lx = clamp(q); wake(); },                       // Legacy leaving (1 once it has gone)
+        word: i => {                                                   // the headline typed word i: its picture, from wherever the blocks are now
+          if (hx > 0) { from = to = SLOTS[i] || SLOTS[0]; m0 = -1e9; sample(to); startPic = to; wake(); return; }   // scrolled away: the digits come back as this word's picture
+          const now = performance.now(), mid = stateAt(now);
+          from = mid || to; to = SLOTS[i] || SLOTS[0]; m0 = now; wake();
+        },
+      };
+    })();
+    </script>
     <div class="wrap">
       <h1 class="rise d1" data-en="We build software<br>and advise<br><em><span class=&quot;sr-only&quot;>founders, enterprises and executive teams</span><span class=&quot;tw&quot; aria-hidden=&quot;true&quot;>founders</span><i class=&quot;caret&quot; aria-hidden=&quot;true&quot;></i>.</em>" data-pt="Construímos software<br>e aconselhamos<br><em><span class=&quot;sr-only&quot;>fundadores, empresas e equipas executivas</span><span class=&quot;tw&quot; aria-hidden=&quot;true&quot;>fundadores</span><i class=&quot;caret&quot; aria-hidden=&quot;true&quot;></i>.</em>">We build software<br>and advise<br><em><span class="sr-only">founders, enterprises and executive teams</span><span class="tw" aria-hidden="true">founders</span><i class="caret" aria-hidden="true"></i>.</em></h1>
       <p class="lead rise d2" data-en="BytArc Labs is a holding company in Lisbon. We design, build and ship our own products, and work with founders and executive teams on strategy and go-to-market." data-pt="A BytArc Labs é uma holding em Lisboa. Desenhamos, construímos e lançamos os nossos próprios produtos, e trabalhamos com fundadores e equipas executivas em estratégia e go-to-market.">BytArc Labs is a holding company in Lisbon. We design, build and ship our own products, and work with founders and executive teams on strategy and go-to-market.</p>
@@ -554,7 +952,7 @@ html.compact .nav.scrolled{background:rgba(5,5,6,.92);-webkit-backdrop-filter:no
         <div><b>100%</b><span data-en="In House" data-pt="Feito Internamente">In House</span></div>
       </div>
     </div>
-    <a class="scroll-cue" href="#products"><span data-en="Scroll" data-pt="Deslize">Scroll</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></a>
+    <a class="scroll-cue" href="#about"><span data-en="Scroll" data-pt="Deslize">Scroll</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></a>
   </section>
 
   <section class="sec" id="products"><div class="wrap">
@@ -1400,14 +1798,14 @@ html.compact .nav.scrolled{background:rgba(5,5,6,.92);-webkit-backdrop-filter:no
         const w3 = Math.sin((bx + by) * 0.015 + time * 1.1) * 5, w4 = Math.cos(bx * 0.03 - by * 0.02 + time * 0.5) * 4;
         let ox = w1 * 0.5 + w4 * 0.3, oy = w2 * 0.5 + w3 * 0.4;
         const bri = Math.sin(bx * 0.018 + time * 0.7) * 0.5 + Math.sin(by * 0.022 + time * 0.9) * 0.3 + Math.sin((bx - by) * 0.012 + time * 1.3) * 0.2;
-        let a = 0.06 + (bri * 0.5 + 0.5) * 0.12, r = BASE_R + (bri * 0.5 + 0.5) * 0.8;
+        let a = 0.028 + (bri * 0.5 + 0.5) * 0.055, r = BASE_R + (bri * 0.5 + 0.5) * 0.8;   // very faint: the background stays subtle
         if (mouse.on) {
           const dx = bx + ox - mouse.x, dy = by + oy - mouse.y, d = Math.sqrt(dx * dx + dy * dy);
           if (d < 140) { const f = 1 - d / 140, f2 = f * f; ox += (dx / (d || 1)) * f2 * 35; oy += (dy / (d || 1)) * f2 * 35; }
         }
         for (let j = 0; j < bursts.length; j++) {
           const b = bursts[j], dx = bx - b.x, dy = by - b.y, d = Math.sqrt(dx * dx + dy * dy), reach = b.str * (1 - b.life * 0.4);
-          if (d < reach) { const f = (1 - d / reach) * b.life; ox += (dx / (d || 1)) * f * 30; oy += (dy / (d || 1)) * f * 30; a += f * 0.2; r += f * 0.8; }
+          if (d < reach) { const f = (1 - d / reach) * b.life; ox += (dx / (d || 1)) * f * 30; oy += (dy / (d || 1)) * f * 30; a += f * 0.1; r += f * 0.8; }
         }
         ctx.beginPath();
         ctx.arc(bx + ox, by + oy, Math.max(r, 0.5), 0, Math.PI * 2);
@@ -1448,9 +1846,13 @@ html.compact .nav.scrolled{background:rgba(5,5,6,.92);-webkit-backdrop-filter:no
         if (text.length < w.length) { tw.textContent = text = w.slice(0, text.length + 1); return setTimeout(step, 80); }
         phase = "holding"; return setTimeout(step, 1400);
       }
-      if (phase === "holding") { phase = "erasing"; return setTimeout(step, 0); }
+      if (phase === "holding") {
+        if (window.BM && !BM.ready()) return setTimeout(step, 250);    // the hero picture must be whole for a moment first
+        phase = "erasing"; return setTimeout(step, 0);
+      }
       if (text.length) { tw.textContent = text = text.slice(0, -1); return setTimeout(step, 45); }
-      phase = "typing"; i = (i + 1) % WORDS.length; setTimeout(step, 350);
+      phase = "typing"; i = (i + 1) % WORDS.length; if (window.BM) BM.word(i);   // the hero shows the next word's picture
+      setTimeout(step, 350);
     };
     setTimeout(step, 2400);                                              // the entrance plays first, with the first word in place
   })();
@@ -1681,32 +2083,21 @@ window.pixelReveal = (() => {
   // common exit: rises and dissolves, cascading from top to bottom
   const outK = (x, i, span = 0.5, step = 0.07) => seg(x, i * step, span + i * step, inCubic);
 
-  // ---------- 1. top: the text rises away; the arc unravels through three exits.
-  // Its outline leaves through the middle of the top edge and through the outer side of each leg; each exit eats
-  // the line from both sides until the arc is empty.
-  const hero = $(".hero"), heroBg = $("#heroBg"), mark = $("#bigmark"), canvas = $("#heroWave");
+  // ---------- 1. top: the text rises away; the 3D picture breaks into 1s and 0s that fly into a brain beside Legacy (window.BM, by the hero)
+  const hero = $(".hero"), heroBg = $("#heroBg"), canvas = $("#heroWave");
   const heroText = [$(".hero h1"), $(".hero .lead"), $(".hero .hero-ctas"), $(".hero .hero-meta")];
-  const outline = $$(".bm-d", mark), TOTAL = outline[0].getTotalLength();   // the outline's length in viewBox units
-  const EXIT = { R: 0.23804, L: 0.76196 };                                   // where the side exits sit along the outline, clockwise from the top exit
-  const dash = (els, arr, off) => els.forEach(p => { p.style.strokeDasharray = arr; p.style.strokeDashoffset = off; });
-  mark.addEventListener("animationend", e => { if (e.target.classList.contains("bm-d")) mark.classList.remove("bm-draw"); });
   const TOP = {
     apply(r, x) {
       heroText.forEach((el, i) => {
-        const k = outK(x, i, 0.45, 0.09), T = k * (el.offsetHeight + 10);
+        const k = outK(x, i, 0.3, 0.05), T = k * (el.offsetHeight + 10);
         el.style.translate = T ? `0 ${(-T).toFixed(1)}px` : "";
         el.style.clipPath = T ? `inset(${T.toFixed(1)}px 0 0 0)` : "";
       });
-      const c = seg(x, 0.02, 0.62, inOut);                               // share of the arc pulled out
-      if (c > 0) {
-        mark.classList.remove("bm-draw");                              // the drawing-in animation would otherwise hold the line
-        const a = EXIT.R, b = EXIT.L - EXIT.R, d = 1 - EXIT.L, k = 1 - c;   // stretches: top to right, right to left (round the bottom), left to top
-        const arr = [k * a, c * (a + b) / 2, k * b, c * (b + d) / 2, k * d, c * (d + a) / 2].map(v => (v * TOTAL).toFixed(3)).join(" ");
-        dash(outline, arr, (-c * a / 2 * TOTAL).toFixed(3));                   // a gap opens at each exit and eats the outline from both sides
-      } else dash(outline, "", "");
+      if (window.BM) BM.out(x);                                        // the 3D picture turns into digits as the hero leaves
       heroBg.style.opacity = (1 - seg(x, 0.2, 0.9)).toFixed(3);
       if (canvas) canvas.style.opacity = (1 - 0.7 * seg(x, 0.1, 0.9)).toFixed(3);
     },
+    off() { if (window.BM) BM.out(scrollY > scenes[0].t1 ? 1 : 0); },   // skipped past (a jump or a fast scroll): the digits are the brain
   };
 
   // ---------- 2. Legacy: the label types, the headline lights up word by word, the text wipes in
@@ -1736,6 +2127,7 @@ window.pixelReveal = (() => {
     ? (COMPACT ? "Deslize para explorar · toque para abrir" : "Mova o rato para explorar · clique para abrir")
     : (COMPACT ? "Scroll to explore · tap to open" : "Move to explore · click to open");
   hiveWrap.append(hiveHead, hive);
+  if (!COMPACT) hiveWrap.prepend(lh);                                  // Legacy's text sits on the left, the comb on the right
   const hType = typer($(".kicker", hiveHead));
   // a symmetric hex block, rows of 4, 5, 4, 5, 4 (22 places), mirrored top to bottom and left to right. Rows sit a
   // little further apart than true hex packing so the names under the bubbles never touch the row below. Products fill
@@ -1744,14 +2136,14 @@ window.pixelReveal = (() => {
   const SP = 150, ROW = COMPACT ? 150 : 140;                           // centre-to-centre spacing across and between rows (bubbles are 120px)
   const SLOTS = [], HROWS = COMPACT ? [3, 4, 3, 4, 3, 4, 3] : [4, 5, 4, 5, 4];
   HROWS.forEach((n, r) => { for (let c = 0; c < n; c++) SLOTS.push({ x: c - (n - 1) / 2, y: ((r - (HROWS.length - 1) / 2) * ROW) / SP }); });
-  const hiveZoom = () => COMPACT ? Math.min(1, (innerWidth - 16) / (4 * SP)) : 1;   // phones: the comb shrinks to the screen's width
+  const hiveZoom = () => COMPACT ? Math.min(1, (innerWidth - 16) / (4 * SP)) : Math.min(.82, innerWidth * .52 / (5.8 * SP));   // phones: the screen's width; desktop: the right-hand side
   SLOTS.sort((a, b) => Math.hypot(a.x, a.y) - Math.hypot(b.x, b.y) || Math.atan2(a.y, a.x) - Math.atan2(b.y, b.x));
   // Opening a product works like launching an app on the Watch: the bubble grows until it covers the whole face, turning
   // from a circle into a rounded square on the way, then flips over to show the product on its back. Closing plays it
   // all backwards into the bubble's slot.
   let launched = null;
   const PERSP = "perspective(1800px) ", SQ = "22%";
-  const ROUND = { borderRadius: "50%", clipPath: "inset(0 round 50%)" }, SQUARE = { borderRadius: SQ, clipPath: `inset(0 round ${SQ})` };
+  const ROUND = document.documentElement.classList.contains("tiles") ? { borderRadius: "25%", clipPath: "inset(0 round 25%)" } : { borderRadius: "50%", clipPath: "inset(0 round 50%)" }, SQUARE = { borderRadius: SQ, clipPath: `inset(0 round ${SQ})` };
   // resolves when the animation ends, or after its duration if the tab is hidden and animations are paused
   const settle = (anim, ms) => new Promise(res => {
     let done = false;
@@ -1846,14 +2238,17 @@ window.pixelReveal = (() => {
   const bubs = $$(".pgrid .card").slice(0, SLOTS.length).map((cd, i) => {
     const b = document.createElement("button"), name = $("h3", cd).textContent.trim();
     b.type = "button"; b.className = "bub"; b.setAttribute("aria-label", name);
-    b.innerHTML = `<span class="bub-c"><img alt="" src="${$(".icon img", cd).getAttribute("src")}"></span><span class="bub-n"></span>`;
-    $(".bub-n", b).textContent = name;
+    b.innerHTML = `<span class="bub-c"><img alt="" src="${$(".icon img", cd).getAttribute("src")}"><span class="bub-t"></span></span>`;
+    $(".bub-t", b).textContent = name;                                 // the name inside the tile (the ?tiles trial)
+    // its name sits on a layer of its own, under every bubble, and follows it: the icons always stay in front of the names
+    const nw = Object.assign(document.createElement("span"), { className: "bub-nw", innerHTML: '<span class="bub-n"></span>' });
+    nw.setAttribute("aria-hidden", "true"); $(".bub-n", nw).textContent = name; hive.prepend(nw);
     b.addEventListener("click", () => launch(b, cd));
     b.addEventListener("pointerenter", () => { hHov = i; hiveKick(); });
     b.addEventListener("pointerleave", () => { if (hHov === i) hHov = -1; hiveKick(); });
     hive.append(b);
     const { x, y } = SLOTS[i];
-    return { b, x, y, d: Math.hypot(x, y), h: 0 };
+    return { b, nw, x, y, d: Math.hypot(x, y), h: 0 };
   });
   let hOn = false, hr = 0, hx = 0, hHov = -1, hRaf = 0, hPan = 0;
   let hUnder = null;                                                   // phones: the heading's lower edge, from the comb's centre (layout only, no transforms)
@@ -1861,7 +2256,7 @@ window.pixelReveal = (() => {
   const foc = { x: 0, y: 0, tx: 0, ty: 0 };                            // focus point (where bubbles are biggest), eased towards the mouse
   const smooth = t => t * t * (3 - 2 * t);
   const renderHive = () => {
-    const hz = hiveZoom(), R = Math.min(innerWidth, VH()) * (COMPACT ? 0.5 : 0.42), driftX = -foc.x * 0.18, driftY = -foc.y * 0.18;
+    const hz = hiveZoom(), R = Math.min(innerWidth, VH()) * (COMPACT ? 0.5 : 0.42 * hz), driftX = -foc.x * 0.18, driftY = -foc.y * 0.18;
     const under = COMPACT ? hiveUnder() : -1e4;                       // phones: the heading's edge
     const pos = bubs.map(o => {
       let px = o.x * SP * hz + driftX, py = o.y * SP * hz + driftY + hPan;
@@ -1886,11 +2281,12 @@ window.pixelReveal = (() => {
       // leaving, the bubble flips edge-on (a quarter turn in 3D) and fades
       // flat until it leaves: a 3D transform on every bubble all the time makes iOS re-layer them as they move
       const flip = out > 0 ? ` perspective(600px) rotateY(${(dir * 90 * out).toFixed(1)}deg)` : "";
-      o.b.style.transform = `translate(${px.toFixed(1)}px,${py.toFixed(1)}px)${flip} scale(${s.toFixed(4)})`;
-      o.b.style.opacity = (k * (1 - out) * clamp((py - under - 14) / 70)).toFixed(3);   // phones: fade out under the heading
-      const z = String(Math.round(fish * (COMPACT ? 4 : 100)) + Math.round(o.h * 200));   // phones: a few layers, so the comb is not re-stacked every frame
+      o.b.style.transform = o.nw.style.transform = `translate(${px.toFixed(1)}px,${py.toFixed(1)}px)${flip} scale(${s.toFixed(4)})`;
+      o.b.style.opacity = o.nw.style.opacity = (k * (1 - out) * clamp((py - under - 14) / 70)).toFixed(3);   // phones: fade out under the heading
+      const z = String(1 + Math.round(fish * (COMPACT ? 4 : 100)) + Math.round(o.h * 200));   // above the names' layer (0); phones: a few layers, so the comb is not re-stacked every frame
       if (o.z !== z) { o.b.style.zIndex = z; o.z = z; }
-      o.b.style.setProperty("--lo", clamp((s / hz - 0.7) / 0.12).toFixed(3));    // names show once a bubble is big enough
+      const lo = clamp((s / hz - 0.7) / 0.12).toFixed(3);              // names show once a bubble is big enough
+      o.nw.style.setProperty("--lo", lo); o.b.style.setProperty("--lo", lo);
     });
   };
   const hiveTick = () => {
@@ -1907,7 +2303,8 @@ window.pixelReveal = (() => {
   const hiveKick = () => { if (hOn && !hRaf) hRaf = requestAnimationFrame(hiveTick); };
   addEventListener("pointermove", e => {
     if (e.pointerType !== "mouse") return;
-    foc.tx = (e.clientX - innerWidth / 2) * 0.85; foc.ty = (e.clientY - innerHeight * 0.55) * 0.85; hiveKick();
+    const hc = hive.getBoundingClientRect();
+    foc.tx = (e.clientX - hc.left) * 0.85; foc.ty = (e.clientY - hc.top) * 0.85; hiveKick();
   }, { passive: true });
   document.addEventListener("pointerleave", () => { foc.tx = 0; foc.ty = 0; hiveKick(); });
   // phones: the lens stays in the middle, as on the Watch, and the comb scrolls under it. Following the finger made the big
@@ -1915,6 +2312,7 @@ window.pixelReveal = (() => {
   const HIVE = {
     off() { hOn = false; },
     apply(r, x, p) {
+      if (!COMPACT) LEGACY.apply(r, x);                                 // Legacy's text, beside the comb
       hOn = true; hr = r; hx = x;
       // phones: the comb scrolls up under the lens, two and a half rows each way, so every row passes through the middle
       if (COMPACT) hPan = (0.5 - seg(p, 0.12, 0.92, inOut)) * 5 * ROW * hiveZoom();
@@ -1934,14 +2332,10 @@ window.pixelReveal = (() => {
     return m ? { el, n: +m[0], pre: t.slice(0, m.index), suf: t.slice(m.index + m[0].length), last: null } : null;
   });
   const ABOUT = {
-    off() { panel.style.visibility = "hidden"; document.body.classList.remove("invert"); about.classList.remove("inv"); nav.classList.remove("solid"); },
+    off() { if (window.BM) BM.legacy(scrollY > scenes.find(s => s.id === "about").t1 ? 1 : 0); },   // past it: the brain has gone; above it: not yet
     apply(r, x) {
-      const open = seg(r, 0, 0.3, outExpo) * (1 - seg(x, 0.35, 0.9, inOut));
-      panel.style.visibility = open > 0.001 ? "visible" : "hidden";
-      panel.style.clipPath = `inset(${((1 - open) * 50).toFixed(2)}% 0)`;
-      const inv = open > 0.5; document.body.classList.toggle("invert", inv); about.classList.toggle("inv", inv);
-      nav.classList.toggle("solid", open > 0.01);                     // solid black bar over the white
-      const X = i => outK(x, i, 0.3, 0.04);                            // the content leaves before the band closes
+      if (window.BM) { BM.legacy(x); if (scrollY > scenes[0].t1) BM.out(1); }   // the brain on the right (formed, even when landing here), scattering as About leaves
+      const X = i => outK(x, i, 0.3, 0.04);
       abType(seg(r, 0.22, 0.36, lin)); set(abA.kick, { y: -X(0) * 50, o: 1 - X(0) });
       const h = seg(r, 0.26, 0.5, outExpo); abLight(seg(r, 0.3, 0.6, lin));
       set(abA.h2, { y: (1 - h) * 24 - X(1) * 50, o: h * (1 - X(1)) });
@@ -2057,8 +2451,15 @@ window.pixelReveal = (() => {
   const foA = { kick: $(".kicker", ft), h2: $("h2", ft), bio: $(".bio", ft), label: $(".label", ft), ps: $$(".more", ft) };
   const foType = typer(foA.kick), foLight = lighter(foA.h2), foLabel = typer(foA.label);
   const px = window.pixelReveal, pix = px && px.pix;                  // the colour-pixel reveal
+  // the founder is the page's one slide in negative: a white band opens from a line and the text turns dark
   const FOUNDER = {
+    off() { panel.style.visibility = "hidden"; document.body.classList.remove("invert"); fo.classList.remove("inv"); nav.classList.remove("solid"); },
     apply(r, x, p) {                                                 // p runs 0 to 1 from the founder arriving to it leaving
+      const open = seg(r, 0, 0.3, outExpo) * (1 - seg(x, 0.35, 0.9, inOut));
+      panel.style.visibility = open > 0.001 ? "visible" : "hidden";
+      panel.style.clipPath = `inset(${((1 - open) * 50).toFixed(2)}% 0)`;
+      const inv = open > 0.5; document.body.classList.toggle("invert", inv); fo.classList.toggle("inv", inv);
+      nav.classList.toggle("solid", open > 0.01);                     // solid black bar over the white
       const xk = seg(x, 0, 0.7, inCubic);
       portrait.style.clipPath = xk > 0 ? `inset(0 0 ${(xk * 100).toFixed(2)}% 0 round 20px)` : "";
       if (COMPACT) {                                                  // phones: the photo stays put while the story scrolls up over it
@@ -2128,10 +2529,10 @@ window.pixelReveal = (() => {
 
   // ---------- timeline (in screens of scroll): build, hold, leave; the next scene arrives while this one leaves
   const DEF = [
-    { id: "top", nodes: [hero], fx: TOP, len: 0, hold: 0.12, out: 0.9, hand: 0.75 },
-    { id: "legacy", nodes: [lh], fx: LEGACY, len: 0.65, hold: 0.35, out: 0.5, hand: 0.6 },
+    { id: "top", nodes: [hero], fx: TOP, len: 0, hold: 0.12, out: 1.4, hand: 0.85 },   // a long exit: the mark breaks into digits that become the brain beside Legacy
+    { id: "about", nodes: [about], fx: ABOUT, len: 1.0, hold: 0.35, out: 0.8, hand: 0.92 },   // with the brain on its right
     { id: "hive", nodes: [hiveWrap], fx: HIVE, len: 0.8, hold: 0.8, out: 1.0, hand: 0.7, fixed: true },
-    { id: "about", nodes: [about], fx: ABOUT, len: 1.0, hold: 0.35, out: 0.8, hand: 0.92 },
+    ...(COMPACT ? [{ id: "legacy", nodes: [lh], fx: LEGACY, len: 0.65, hold: 0.35, out: 0.5, hand: 0.6 }] : []),   // phones: Legacy's text on its own, after the products
     { id: "team", nodes: [org], fx: ORG, len: 1.2, hold: 0.35, out: 0.55, hand: 0.6 },
     { id: "founder", nodes: [fo], fx: FOUNDER, len: 1.0, hold: 1.8, out: 0.6, hand: 0.6, land: 0.92 },   // holds while the photo resolves
     { id: "stack", nodes: [stk], fx: STACK, len: 0.8, hold: 0.35, out: 0.55, hand: 0.6 },
