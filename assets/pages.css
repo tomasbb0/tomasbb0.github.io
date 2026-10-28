@@ -1,0 +1,42 @@
+/* the plain pages (About BytArc, the concept and logo files): the home page's colours and type, on a simple column */
+:root{--bg:#020203;--text:#F5F5F7;--text-2:#A3A3AD;--text-3:#86868F;--line:rgba(255,255,255,.08);
+  --font:"Geist",ui-sans-serif,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;--mono:"Geist Mono",ui-monospace,"SF Mono",Menlo,monospace;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.65 var(--font);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.wrap{max-width:900px;margin:0 auto;padding:0 24px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:20px;height:72px}
+.brand{display:inline-flex;align-items:center;gap:11px;font-weight:600;font-size:17px;letter-spacing:-.02em;text-decoration:none}
+.brand img{display:block;width:28px;height:18px}
+.top nav{display:flex;gap:18px;font-size:14px;color:var(--text-2)}
+.top nav a{text-decoration:none}
+.top nav a[aria-current]{color:var(--text)}
+.kicker{font:500 12px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--text-3);margin:64px 0 14px}
+h1{font-size:clamp(38px,6vw,64px);line-height:1.04;letter-spacing:-.04em;margin:0 0 22px;font-weight:600}
+h2{font-size:26px;line-height:1.2;letter-spacing:-.03em;margin:60px 0 14px;font-weight:600}
+p,li{color:var(--text-2)}
+p{margin:0 0 14px}
+.lead{font-size:19px;color:var(--text)}
+figure{margin:28px 0}
+figure img{display:block;width:100%;height:auto;border-radius:18px;background:#0b0b0e}
+figcaption{font-size:13px;color:var(--text-3);margin-top:8px}
+dl.facts{display:grid;grid-template-columns:190px 1fr;gap:10px 20px;margin:0}
+dl.facts dt{color:var(--text-3)}
+dl.facts dd{margin:0}
+.faq dt{color:var(--text);font-weight:600;margin-top:22px}
+.faq dd{margin:6px 0 0;color:var(--text-2)}
+.files{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px;margin-top:20px}
+.files figure{margin:0}
+.files img{aspect-ratio:1;object-fit:contain;background:repeating-conic-gradient(#141418 0 25%,#0d0d10 0 50%) 0 0/24px 24px}
+.files figcaption a{color:var(--text-2)}
+.swatches{display:flex;gap:14px;flex-wrap:wrap;margin-top:16px}
+.sw{width:160px}
+.sw i{display:block;height:84px;border-radius:14px;border:1px solid var(--line)}
+.sw b{display:block;font-size:14px;margin-top:8px}
+.sw small{color:var(--text-3);font:12px var(--mono)}
+.boiler{border:1px solid var(--line);border-radius:16px;padding:20px 22px;color:var(--text)}
+.portrait{float:right;width:220px;margin:4px 0 16px 28px}
+footer{border-top:1px solid var(--line);margin-top:90px;padding:24px 0 44px;font-size:13px;color:var(--text-3);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+footer nav{display:flex;gap:18px;flex-wrap:wrap}
+footer a{color:var(--text-2);text-decoration:none}
+@media (max-width:640px){dl.facts{grid-template-columns:1fr;gap:2px 0}dl.facts dd{margin-bottom:10px}.portrait{float:none;width:100%;max-width:320px;margin:0 0 20px}.top nav{gap:12px}}

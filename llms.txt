@@ -1,6 +1,6 @@
 # BytArc Labs
 
-> BytArc (BytArc Labs, written lowercase as bytarc) is an AI consulting and product development company based in Lisbon, Portugal, founded in 2026 by Tomás Batalha. Website: https://bytarc.com (Portuguese: https://bytarc.pt).
+> BytArc (BytArc Labs, written lowercase as bytarc) is an AI consulting and product development company based in Lisbon, Portugal, founded by Tomás Batalha. Website: https://bytarc.com (Portuguese: https://bytarc.pt).
 
 BytArc Labs has two sides:
 
