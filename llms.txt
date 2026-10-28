@@ -5,7 +5,7 @@
 BytArc Labs has two sides:
 
 - Consulting: strategy, go-to-market and AI adoption for founders and executive teams.
-- Products: AI software designed, built and shipped in house, such as JobPilot AI, TopResume.ai, VendasIA and the BytArc Labs Education platform, plus OpenClaw, an agent framework for AI business automation.
+- Products: AI software designed, built and shipped in house, such as JobPilot AI, TopResume.ai, VendasIA and the BytArc Education platform, plus OpenClaw, an agent framework for AI business automation.
 
 The founder, Tomás Batalha, is a former Google business analyst and Amazon business development lead who co-founded a B2B SaaS startup. BytArc Labs is supported by AWS Activate.
 
