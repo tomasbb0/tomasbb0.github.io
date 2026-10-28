@@ -1,0 +1,18 @@
+# BytArc Labs
+
+> BytArc (BytArc Labs, written lowercase as bytarc) is an AI consulting and product development company based in Lisbon, Portugal, founded in 2026 by Tomás Batalha. Website: https://bytarc.com (Portuguese: https://bytarc.pt).
+
+BytArc Labs has two sides:
+
+- Consulting: strategy, go-to-market and AI adoption for founders and executive teams.
+- Products: AI software designed, built and shipped in house, such as JobPilot AI, TopResume.ai, VendasIA and the BytArc Labs Education platform, plus OpenClaw, an agent framework for AI business automation.
+
+The founder, Tomás Batalha, is a former Google business analyst and Amazon business development lead who co-founded a B2B SaaS startup. BytArc Labs is supported by AWS Activate.
+
+BytArc is not related to BYT-ARC welding machines, ByteArc or ByteArk.
+
+## Links
+
+- [Website](https://bytarc.com/)
+- [LinkedIn](https://www.linkedin.com/company/bytarc-labs)
+- [Contact](mailto:tomas@bytarc.com)

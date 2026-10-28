@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://bytarc.com/</loc><lastmod>2026-10-25</lastmod><priority>1.0</priority></url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url><loc>https://bytarc.com/</loc><lastmod>2026-10-28</lastmod><priority>1.0</priority><image:image><image:loc>https://bytarc.com/assets/icon-512.png</image:loc></image:image><image:image><image:loc>https://bytarc.com/assets/og.png</image:loc></image:image><image:image><image:loc>https://bytarc.com/assets/bytarc-mark-white.svg</image:loc></image:image><image:image><image:loc>https://bytarc.com/assets/tomas-portrait.jpg</image:loc></image:image><image:image><image:loc>https://bytarc.com/assets/tomas-cutout.png</image:loc></image:image></url>
   <url><loc>https://bytarc.com/bytarclabs-site/</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority></url>
   <url><loc>https://bytarc.com/cv-platform/</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority></url>
   <url><loc>https://bytarc.com/company-brain/</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority></url>

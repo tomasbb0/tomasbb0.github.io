@@ -186,6 +186,11 @@ def black_on_clear(m):
     return Image.merge("LA", (Image.new("L", m.size, 0), m))
 
 
+def white_on_tile(m):
+    """White mark on a full black square: it reads on light and dark backgrounds alike (Google's results, browser tabs)."""
+    return Image.merge("RGB", (m, m, m))
+
+
 def main():
     big, marks, _ = mark_outline(**MARK)
     px32, _, _ = mark_outline(**PIXEL32)
@@ -197,25 +202,23 @@ def main():
     for name, fill in (("bytarc-mark.svg", "#000"), ("bytarc-mark-white.svg", "#fff")):
         (a / name).write_text(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 275 175" width="275" height="175"><path fill="{fill}" d="{d}"/></svg>\n')
 
-    # tab icon: black on light tabs, white on dark ones
+    # tab and search icons: the white mark on a black square, so it shows on light and dark backgrounds (Google's dark
+    # mode hid the black mark on transparent). The bigger ones leave a margin, as Google crops icons to a circle
     (ROOT / "favicon.svg").write_text(
-        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">'
-        '<style>path{fill:#000}@media (prefers-color-scheme:dark){path{fill:#fff}}</style>'
-        f'<path d="{to_d(px32, 1, 2, 6)}"/></svg>\n')
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" fill="#000"/>'
+        f'<path fill="#fff" d="{to_d(px32, 1, 2, 6)}"/></svg>\n')
 
-    # PNG and ICO: black on transparent (Google shows them on a light background)
     m16 = mask(px16, 16, 1, 2, 3)
     m32 = mask(px32, 32, 1, 2, 6)
-    m48 = bare(big, 48)
-    black_on_clear(m48).save(a / "favicon-48.png", optimize=True)
-    black_on_clear(bare(big, 96)).save(a / "favicon-96.png", optimize=True)
-    black_on_clear(bare(big, 192)).save(a / "icon-192.png", optimize=True)
-    black_on_clear(bare(big, 512)).save(a / "icon-512.png", optimize=True)
+    m48 = bare(big, 48, 0.74)
+    white_on_tile(m48).save(a / "favicon-48.png", optimize=True)
+    for size, name in ((96, "favicon-96.png"), (192, "icon-192.png"), (512, "icon-512.png")):
+        white_on_tile(bare(big, size, 0.74)).save(a / name, optimize=True)
     with tempfile.TemporaryDirectory() as t:
         parts = []
         for size, m in ((16, m16), (32, m32), (48, m48)):
             p = Path(t) / f"{size}.png"
-            black_on_clear(m).convert("RGBA").save(p)
+            white_on_tile(m).convert("RGBA").save(p)
             parts.append(str(p))
         subprocess.run(["magick", *parts, str(ROOT / "favicon.ico")], check=True)
 

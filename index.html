@@ -7,7 +7,7 @@
 <!-- after the viewport tag: before it, a phone reports a 980px desktop width and got the desktop scenes -->
 <script>window.SCENES_COMPACT = innerWidth < 900; window.SCENES_OK = !matchMedia('(prefers-reduced-motion: reduce)').matches && (window.SCENES_COMPACT ? innerHeight >= 500 && innerHeight > innerWidth : innerHeight >= 600); window.SCENES = window.SCENES_OK;</script>
 <title>BytArc | AI Consulting &amp; Product Development</title>
-<meta name="description" content="BytArc Labs is a holding company founded by Tomás Batalha. Ex-Google, ex-Amazon, B2B SaaS co-founder. Consulting and software products, built and shipped in house from Lisbon.">
+<meta name="description" content="BytArc (BytArc Labs) is an AI consulting and product development company in Lisbon, founded by Tomás Batalha (ex-Google, ex-Amazon). We advise founders and executive teams and build our own AI products.">
 <link rel="canonical" href="https://bytarc.com">
 <meta name="theme-color" content="#020203">
 <meta property="og:type" content="website">
@@ -19,11 +19,11 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="apple-touch-icon" href="assets/apple-touch-icon.png?v=4">
-<link rel="icon" href="/favicon.ico?v=4" sizes="48x48">
-<link rel="icon" href="/favicon.svg?v=4" type="image/svg+xml">
-<link rel="icon" href="/assets/icon-192.png?v=4" type="image/png" sizes="192x192">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","name":"BytArc Labs","alternateName":"BytArc","url":"https://bytarc.com/"},{"@type":"Organization","name":"BytArc Labs","url":"https://bytarc.com/","logo":"https://bytarc.com/assets/icon-512.png","founder":{"@type":"Person","name":"Tomás Batalha"},"address":{"@type":"PostalAddress","addressLocality":"Lisbon","addressCountry":"PT"},"sameAs":["https://www.linkedin.com/company/bytarc-labs"]}]}</script>
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png?v=5">
+<link rel="icon" href="/favicon.ico?v=5" sizes="48x48">
+<link rel="icon" href="/favicon.svg?v=5" type="image/svg+xml">
+<link rel="icon" href="/assets/icon-192.png?v=5" type="image/png" sizes="192x192">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://bytarc.com/#website","name":"BytArc Labs","alternateName":["BytArc","Bytarc"],"url":"https://bytarc.com/","inLanguage":["en","pt"],"publisher":{"@id":"https://bytarc.com/#org"}},{"@type":"Organization","@id":"https://bytarc.com/#org","name":"BytArc Labs","alternateName":["BytArc","Bytarc","Bytarc Labs"],"url":"https://bytarc.com/","logo":{"@type":"ImageObject","url":"https://bytarc.com/assets/icon-512.png","width":512,"height":512},"image":"https://bytarc.com/assets/og.png","description":"BytArc Labs is an AI consulting and product development company based in Lisbon, Portugal, founded in 2026 by Tomás Batalha. It advises founders and executive teams on strategy, go-to-market and AI adoption, and designs, builds and ships its own AI software products, including JobPilot AI, TopResume.ai and VendasIA.","slogan":"AI Consulting & Product Development","foundingDate":"2026","email":"tomas@bytarc.com","founder":{"@type":"Person","@id":"https://bytarc.com/#founder","name":"Tomás Batalha","jobTitle":"Founder","worksFor":{"@id":"https://bytarc.com/#org"},"sameAs":["https://www.linkedin.com/in/tomasmbatalha"],"image":"https://bytarc.com/assets/tomas-portrait.jpg"},"address":{"@type":"PostalAddress","addressLocality":"Lisbon","addressCountry":"PT"},"areaServed":["PT","EU"],"knowsAbout":["AI consulting","Artificial intelligence","AI agents","Product development","Software development","Go-to-market strategy","SaaS"],"sameAs":["https://www.linkedin.com/company/bytarc-labs","https://bytarc.pt/","https://github.com/tomasbb0"]}]}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
 <style>
@@ -382,6 +382,7 @@ html.scenes main,html.scenes footer{display:none}
 .scene .sec{padding:0}
 .scene .sec-head{margin-bottom:0}
 html.scenes:not(.compact) #about .about-grid{grid-template-columns:minmax(0,min(560px,44vw));justify-content:start;gap:30px}   /* About on the left (numbers under the text), the brain on the right */
+html.scenes:not(.compact) #orgScene.org3d .org{margin-top:-44px}   /* the agents closer to the title: the 3D box's top was empty */
 html.scenes:not(.compact) #about .stats{grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
 html.scenes:not(.compact) #about .stat{padding:16px 14px 14px}
 html.scenes:not(.compact) #about .stat strong{font-size:clamp(24px,2.3vw,34px)}
@@ -1187,7 +1188,7 @@ html.compact .nav.scrolled{background:rgba(2,2,3,.92);-webkit-backdrop-filter:no
     </div>
 
     <div id="founderScene" class="founder">
-      <div class="portrait"><img src="assets/tomas-cutout.png" alt="Tomás Batalha" width="820" height="830"></div>
+      <div class="portrait"><img src="assets/tomas-cutout.png" alt="Tomás Batalha, founder of BytArc Labs" width="820" height="830"></div>
       <div class="founder-text">
         <div class="kicker only-scenes" data-en="Team" data-pt="Equipa">Team</div>
         <h2 data-en="Tomás Batalha, Founder" data-pt="Tomás Batalha, Fundador">Tomás Batalha, Founder</h2>
