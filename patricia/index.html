@@ -57,6 +57,7 @@ li.is-done .item strong, li.is-done .item .give { color: var(--done); text-decor
 .job { display: inline-block; margin: -4px 0 6px 44px; font-size: 0.9rem; color: var(--accent); }
 .job:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .ponte { display: block; font-size: 0.92rem; color: var(--muted); margin-top: 2px; }
+.ponte .lbl { display: block; font-size: 0.8rem; font-weight: 600; color: var(--ink); margin-top: 2px; }
 .ponte .pt { display: block; position: relative; padding-left: 14px; }
 .ponte .pt::before { content: '•'; position: absolute; left: 2px; }
 li.is-done .item .ponte { color: var(--done); text-decoration: line-through; }
@@ -174,7 +175,7 @@ var FALLBACK = [{"id": "farfetch", "section": "intros", "position": 1, "label": 
     var span = el('span', 'item');
     span.appendChild(el('strong', null, it.label));
     var lines = (it.ponte || '').split('\n').map(function (s) { return s.trim(); }).filter(Boolean);
-    if (lines.length) { var pt = el('span', 'ponte'); lines.forEach(function (l) { pt.appendChild(el('span', 'pt', l)); }); span.appendChild(pt); }
+    if (lines.length) { var pt = el('span', 'ponte'); if (it.section === 'intros') pt.appendChild(el('span', 'lbl', 'Possíveis pontes:')); lines.forEach(function (l) { pt.appendChild(el('span', 'pt', l)); }); span.appendChild(pt); }
     label.appendChild(box); label.appendChild(span); li.appendChild(label);
     (it.links || []).forEach(function (l) {
       if (!l || typeof l.url !== 'string' || l.url.indexOf('https://') !== 0) return;
