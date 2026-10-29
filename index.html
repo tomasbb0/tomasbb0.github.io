@@ -823,7 +823,8 @@ html.compact .nav.scrolled{background:rgba(2,2,3,.92);-webkit-backdrop-filter:no
         if (need) measure();
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, H);
         if (lx >= .995) return;                                        // the brain has gone with Legacy: rest until the page scrolls back up
-        if (hx >= 1 && matchMedia("(max-width: 900px)").matches) return;   // phones have no brain: once the digits have faded, rest
+        const phone = matchMedia("(max-width: 900px)").matches;         // phones: the picture just fades as the hero leaves (no tiles, digits or brain)
+        if (phone && hx >= .6) return;                                  // faded: rest until the page scrolls back up
         const t = now / 1000, r = g.getBoundingClientRect();
         S = r.width / MW || S;
         mx += (tmx - mx) * .05; my += (tmy - my) * .05;
@@ -831,7 +832,7 @@ html.compact .nav.scrolled{background:rgba(2,2,3,.92);-webkit-backdrop-filter:no
         if (hx === 0 && !mid && startPic !== to) { sample(to); startPic = to; }   // where the digits will start, from the picture as it stands
         const mcx = r.left + r.width / 2 - cvL, mcy = r.top + r.height / 2 - cvT, sc = S * 1.25;   // the pictures a little bigger than the logo's box
         const Rg = rot(.08 * sin(t * .23 + 1) - .12 * my, .14 * sin(t * .31) + .2 * mx, 0), T = [mcx - W / 2, mcy - H / 2, 0], hz = TH / 2 * sc;
-        const cornerK = 1 - smooth(clamp(hx / SPLIT)), solid = hx < SPLIT ? 1 : 0;   // the blocks square off, then the tiles take over (they look the same)
+        const cornerK = phone ? 1 : 1 - smooth(clamp(hx / SPLIT)), solid = phone ? 1 - smooth(clamp(hx / .6)) : hx < SPLIT ? 1 : 0;   // the blocks square off, then the tiles take over (they look the same)
         if (solid > 0 && !mid) {
           // at rest every block faces the same way: all their sides in one path, then all their faces in another
           const hw = W / 2, hh = H / 2, sideC = col(-.35 * Rg[0] + .9 * Rg[1], -.35 * Rg[3] + .9 * Rg[4], -.35 * Rg[6] + .9 * Rg[7], 1, base);
@@ -861,7 +862,7 @@ html.compact .nav.scrolled{background:rgba(2,2,3,.92);-webkit-backdrop-filter:no
           }
           list.sort((A, B) => A[0] - B[0]).forEach(([, i, R, P, v]) => block(Sl.w[i] * v, Sl.h[i] * v, R, P, sc, hz * v, solid, base));
         }
-        if (hx >= SPLIT) {
+        if (hx >= SPLIT && !phone) {
           // the brain: side on, on the right of the Legacy scene (desktop only); it holds still while its digits
           // flow round it, a little faster while it forms
           const side = !matchMedia("(max-width: 900px)").matches, BS = side ? min(.17 * W, .38 * H) : min(.36 * W, .25 * H);
