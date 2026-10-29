@@ -71,36 +71,36 @@ button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 footer { font-size: 0.88rem; color: var(--muted); }
 footer a { color: var(--accent); }
 @media (prefers-reduced-motion: reduce) { .bar span { transition: none; } }
+
+.tools { margin: -2px 0 6px 44px; display: flex; gap: 12px; }
+.linkbtn { background: none; border: 0; padding: 0; color: var(--accent); font: 500 0.88rem var(--body); cursor: pointer; text-decoration: underline; }
+.linkbtn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.add { justify-self: start; background: none; color: var(--accent); border: 1px dashed var(--accent); padding: 8px 14px; }
+@media (prefers-color-scheme: dark) { .add { color: var(--accent); } }
+.editor { display: grid; gap: 8px; margin: 6px 0 10px 44px; }
+.editor input, .editor textarea { width: 100%; font: 0.95rem/1.45 var(--body); color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; }
+.editor input:focus-visible, .editor textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.editor .row button.secondary { background: none; color: var(--ink); border: 1px solid var(--line); }
+section > .editor { margin-left: 0; }
 </style>
 </head>
 <body>
 <main>
   <div class="top">
     <h1>Próximos passos</h1>
-    <div class="progress" aria-live="polite"><div class="bar"><span id="bar"></span></div><span id="count">0 de 11</span></div>
+    <div class="progress" aria-live="polite"><div class="bar"><span id="bar"></span></div><span id="count"></span></div>
   </div>
 
   <section aria-labelledby="h-intros">
     <h2 id="h-intros">Apresentações</h2>
-    <ul>
-      <li><label for="farfetch"><input type="checkbox" id="farfetch"><span class="item"><strong>Diretora de IT da Farfetch</strong><span class="ponte"><b>Ponte:</b> apresentar-me como um profissional de topo em implementação de AI (a vaga aberta mais próxima que encontrei é Business Operations Principal, Catalogue &amp; Selection, em Lisboa).</span></span></label><a class="job" href="https://jobs.lever.co/farfetch/8f9080a7-1c17-40ad-a03a-083495b2bcca" target="_blank" rel="noopener">Vaga: Business Operations Principal, Lisboa ↗</a></li>
-      <li><label for="helena"><input type="checkbox" id="helena"><span class="item"><strong>Helena Martins, Sonae (Continente / Worten)</strong><span class="ponte"><b>Ponte:</b> apresentar-me como um profissional de topo em implementação de AI (as vagas abertas mais próximas que encontrei são Strategy Consultant na MC, em Health &amp; Beauty, e CRM Behaviour Specialist na Worten).</span></span></label><a class="job" href="https://pt.linkedin.com/jobs/view/strategy-consultant-at-mc-4484426712" target="_blank" rel="noopener">Vaga: Strategy Consultant, MC ↗</a><a class="job" href="https://pt.linkedin.com/jobs/view/crm-behaviour-specialist-at-worten-portugal-4482512415" target="_blank" rel="noopener">Vaga: CRM Behaviour Specialist, Worten ↗</a></li>
-      <li><label for="bloop"><input type="checkbox" id="bloop"><span class="item"><strong>Francisco, Bloop</strong><span class="ponte"><b>Ponte:</b> pedir uma conversa sobre uma função em go-to-market ou operações na expansão para Espanha.</span></span></label></li>
-      <li><label for="nuno"><input type="checkbox" id="nuno"><span class="item"><strong>Nuno Pimenta, Growth Ignition</strong><span class="ponte"><b>Ponte:</b> pedir um café para explorar uma parceria: ele trabalha o crescimento dos clientes, eu implemento a AI e a automação.</span></span></label></li>
-      <li><label for="tiago"><input type="checkbox" id="tiago"><span class="item"><strong>Tiago Vaz Serra</strong><span class="ponte"><b>Ponte:</b> pedir que me apresente a startups em que investiu que precisem de alguém em go-to-market, operações ou AI.</span></span></label></li>
-      <li><label for="miguel"><input type="checkbox" id="miguel"><span class="item"><strong>Miguel Pina Martins, Science4you</strong><span class="ponte"><b>Ponte:</b> pedir uma conversa sobre onde a AI pode ajudar o e-commerce e as operações, num projeto pela BytArc ou numa função.</span></span></label></li>
-      <li><label for="bruno"><input type="checkbox" id="bruno"><span class="item"><strong>Bruno Gouveia</strong><span class="ponte"><b>Ponte:</b> pedir uma conversa de 20 minutos sobre oportunidades em AI e automação na empresa dele.</span></span></label></li>
-    </ul>
+    <ul id="list-intros"></ul>
+    <button type="button" class="add" data-section="intros">+ Adicionar ponto</button>
   </section>
 
   <section aria-labelledby="h-incubeta">
     <h2 id="h-incubeta">Na Incubeta</h2>
-    <ul>
-      <li><label for="ref-incubeta-madrid"><input type="checkbox" id="ref-incubeta-madrid"><span class="item"><strong>Referral: Data &amp; Analytics Consultant, Madrid</strong><span class="ponte"><b>Ponte:</b> referral interno: apresentar-me como um profissional de topo em implementação de AI (esta é a vaga aberta mais próxima que encontrei).</span></span></label><a class="job" href="https://incubeta-global.breezy.hr/p/13835c83d3ab01-data-analytics-consultant" target="_blank" rel="noopener">Ver a vaga ↗</a></li>
-      <li><label for="ref-incubeta-aeo"><input type="checkbox" id="ref-incubeta-aeo"><span class="item"><strong>Referral: Director of AEO/GEO, Londres (contrato de 9 meses)</strong><span class="ponte"><b>Ponte:</b> referral interno: apresentar-me como um profissional de topo em implementação de AI (esta é a vaga aberta mais próxima que encontrei).</span></span></label><a class="job" href="https://incubeta-global.breezy.hr/p/bab065e4c71e01-uk-director-of-aeo-geo-ftc" target="_blank" rel="noopener">Ver a vaga ↗</a></li>
-      <li><label for="incubeta-lisboa"><input type="checkbox" id="incubeta-lisboa"><span class="item"><strong>Equipa de marketing analytics / PCA / inovação, em Lisboa</strong><span class="ponte"><b>Ponte:</b> ver se há espaço na equipa, em full-time, part-time ou por projeto.</span></span></label></li>
-      <li><label for="incubeta-dubai"><input type="checkbox" id="incubeta-dubai"><span class="item"><strong>Dubai: criatividade + AI, projetos frontier</strong><span class="ponte"><b>Ponte:</b> uma conversa com quem lidera os projetos de AI criativa.</span></span></label></li>
-    </ul>
+    <ul id="list-incubeta"></ul>
+    <button type="button" class="add" data-section="incubeta">+ Adicionar ponto</button>
   </section>
 
   <section aria-labelledby="h-fwd">
@@ -110,81 +110,122 @@ footer a { color: var(--accent); }
     <div class="row"><button type="button" id="copy">Copiar mensagem</button><span id="copied" role="status"></span></div>
   </section>
 
-  <footer><p><span id="status"></span></p><p>Tomás Batalha · <a href="https://bytarc.com">bytarc.com</a></p></footer>
+  <footer><p><span id="status" role="status"></span></p><p>Tomás Batalha · <a href="https://bytarc.com">bytarc.com</a></p></footer>
 </main>
 <script>
-// Shared state lives in a Supabase table (next_steps_checklist: id text, done bool, updated_at timestamptz).
-// Leave SUPABASE_URL empty to run in preview mode, where ticks stay in this browser only.
+// Items live in a Supabase table (next_steps_checklist). The page may read every row, tick/untick, edit the
+// title and "ponte" text, and add rows; it cannot delete rows or change links. Everything is rendered as text.
 var SUPABASE_URL = 'https://pjokdgxjfzigkzfstiky.supabase.co';
-var SUPABASE_ANON_KEY = 'sb_publishable_YlbnFHODef_rM2CTgXdgjQ_82xO-u9x'; // publishable key: the table's rules only allow reading and ticking these 9 rows
+var SUPABASE_ANON_KEY = 'sb_publishable_YlbnFHODef_rM2CTgXdgjQ_82xO-u9x'; // publishable key; the table rules above limit what it can do
+var FALLBACK = [{"id": "farfetch", "section": "intros", "position": 1, "label": "Diretora de IT da Farfetch", "ponte": "apresentar-me como um profissional de topo em implementação de AI (a vaga aberta mais próxima que encontrei é Business Operations Principal, Catalogue & Selection, em Lisboa).", "links": [{"url": "https://jobs.lever.co/farfetch/8f9080a7-1c17-40ad-a03a-083495b2bcca", "text": "Vaga: Business Operations Principal, Lisboa"}], "done": false}, {"id": "helena", "section": "intros", "position": 2, "label": "Helena Martins, Sonae (Continente / Worten)", "ponte": "apresentar-me como um profissional de topo em implementação de AI (as vagas abertas mais próximas que encontrei são Strategy Consultant na MC, em Health & Beauty, e CRM Behaviour Specialist na Worten).", "links": [{"url": "https://pt.linkedin.com/jobs/view/strategy-consultant-at-mc-4484426712", "text": "Vaga: Strategy Consultant, MC"}, {"url": "https://pt.linkedin.com/jobs/view/crm-behaviour-specialist-at-worten-portugal-4482512415", "text": "Vaga: CRM Behaviour Specialist, Worten"}], "done": false}, {"id": "bloop", "section": "intros", "position": 3, "label": "Francisco, Bloop", "ponte": "pedir uma conversa sobre uma função em go-to-market ou operações na expansão para Espanha.", "links": [], "done": false}, {"id": "nuno", "section": "intros", "position": 4, "label": "Nuno Pimenta, Growth Ignition", "ponte": "pedir um café para explorar uma parceria: ele trabalha o crescimento dos clientes, eu implemento a AI e a automação.", "links": [], "done": false}, {"id": "tiago", "section": "intros", "position": 5, "label": "Tiago Vaz Serra", "ponte": "pedir que me apresente a startups em que investiu que precisem de alguém em go-to-market, operações ou AI.", "links": [], "done": false}, {"id": "miguel", "section": "intros", "position": 6, "label": "Miguel Pina Martins, Science4you", "ponte": "pedir uma conversa sobre onde a AI pode ajudar o e-commerce e as operações, num projeto pela BytArc ou numa função.", "links": [], "done": false}, {"id": "bruno", "section": "intros", "position": 7, "label": "Bruno Gouveia", "ponte": "pedir uma conversa de 20 minutos sobre oportunidades em AI e automação na empresa dele.", "links": [], "done": false}, {"id": "ref-incubeta-madrid", "section": "incubeta", "position": 1, "label": "Referral: Data & Analytics Consultant, Madrid", "ponte": "referral interno: apresentar-me como um profissional de topo em implementação de AI (esta é a vaga aberta mais próxima que encontrei).", "links": [{"url": "https://incubeta-global.breezy.hr/p/13835c83d3ab01-data-analytics-consultant", "text": "Ver a vaga"}], "done": false}, {"id": "ref-incubeta-aeo", "section": "incubeta", "position": 2, "label": "Referral: Director of AEO/GEO, Londres (contrato de 9 meses)", "ponte": "referral interno: apresentar-me como um profissional de topo em implementação de AI (esta é a vaga aberta mais próxima que encontrei).", "links": [{"url": "https://incubeta-global.breezy.hr/p/bab065e4c71e01-uk-director-of-aeo-geo-ftc", "text": "Ver a vaga"}], "done": false}, {"id": "incubeta-lisboa", "section": "incubeta", "position": 3, "label": "Equipa de marketing analytics / PCA / inovação, em Lisboa", "ponte": "ver se há espaço na equipa, em full-time, part-time ou por projeto.", "links": [], "done": false}, {"id": "incubeta-dubai", "section": "incubeta", "position": 4, "label": "Dubai: criatividade + AI, projetos frontier", "ponte": "uma conversa com quem lidera os projetos de AI criativa.", "links": [], "done": false}];
 
 (function () {
-  var boxes = Array.prototype.slice.call(document.querySelectorAll('input[type="checkbox"]'));
-  var statusEl = document.getElementById('status');
-  var shared = !!(SUPABASE_URL && SUPABASE_ANON_KEY);
-  var LOCAL_KEY = 'patricia-checklist';
+  var API = SUPABASE_URL + '/rest/v1/next_steps_checklist';
   var headers = { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY, 'Content-Type': 'application/json' };
+  var items = [];
+  var online = true;
+  var statusEl = document.getElementById('status');
+
+  function setStatus(msg) { statusEl.textContent = msg; }
+  function el(tag, cls, text) { var n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; }
+  function fmt(ts) { try { return new Date(ts).toLocaleString('pt-PT', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }); } catch (e) { return ''; } }
+  function api(method, query, body, prefer) {
+    var h = Object.assign({}, headers); if (prefer) h['Prefer'] = prefer;
+    return fetch(API + query, { method: method, headers: h, body: body ? JSON.stringify(body) : undefined })
+      .then(function (r) { if (!r.ok) throw new Error(r.status); return r.status === 204 ? null : r.json(); });
+  }
+
+  function renderProgress() {
+    var done = items.filter(function (i) { return i.done; }).length;
+    document.getElementById('count').textContent = done + ' de ' + items.length;
+    document.getElementById('bar').style.width = (items.length ? 100 * done / items.length : 0) + '%';
+    var latest = items.filter(function (i) { return i.done; }).map(function (i) { return i.updated_at || ''; }).sort().pop();
+    if (online && latest) setStatus('Última atualização: ' + fmt(latest));
+  }
+
+  function itemNode(it) {
+    var li = el('li'); li.dataset.id = it.id;
+    var label = el('label'); label.htmlFor = 'c-' + it.id;
+    var box = el('input'); box.type = 'checkbox'; box.id = 'c-' + it.id; box.checked = !!it.done; box.disabled = !online;
+    var span = el('span', 'item');
+    span.appendChild(el('strong', null, it.label));
+    if (it.ponte) { var pt = el('span', 'ponte'); pt.appendChild(el('b', null, 'Ponte:')); pt.appendChild(document.createTextNode(' ' + it.ponte)); span.appendChild(pt); }
+    label.appendChild(box); label.appendChild(span); li.appendChild(label);
+    (it.links || []).forEach(function (l) {
+      if (!l || typeof l.url !== 'string' || l.url.indexOf('https://') !== 0) return;
+      var a = el('a', 'job', (l.text || 'Ver') + ' ↗'); a.href = l.url; a.target = '_blank'; a.rel = 'noopener'; li.appendChild(a);
+    });
+    if (online) {
+      var tools = el('div', 'tools'); var edit = el('button', 'linkbtn', 'Editar'); edit.type = 'button';
+      edit.addEventListener('click', function () { openEditor(li, it); });
+      tools.appendChild(edit); li.appendChild(tools);
+    }
+    li.classList.toggle('is-done', !!it.done);
+    box.addEventListener('change', function () {
+      it.done = box.checked; it.updated_at = new Date().toISOString(); li.classList.toggle('is-done', it.done); renderProgress();
+      setStatus('A guardar…');
+      api('PATCH', '?id=eq.' + encodeURIComponent(it.id), { done: it.done, updated_at: it.updated_at }, 'return=minimal')
+        .then(function () { setStatus('Guardado.'); })
+        .catch(function () { it.done = !it.done; box.checked = it.done; li.classList.toggle('is-done', it.done); renderProgress(); setStatus('Não ficou guardado. Verifica a ligação e tenta outra vez.'); });
+    });
+    return li;
+  }
+
+  function editorNode(titleVal, ponteVal, saveText, onSave, onCancel) {
+    var f = el('form', 'editor');
+    var t = el('input'); t.type = 'text'; t.value = titleVal; t.placeholder = 'Nome ou título'; t.maxLength = 200; t.setAttribute('aria-label', 'Título');
+    var p = el('textarea'); p.rows = 3; p.value = ponteVal; p.placeholder = 'Ponte: o que pedir por mim'; p.maxLength = 600; p.setAttribute('aria-label', 'Ponte');
+    var row = el('div', 'row'); var save = el('button', null, saveText); save.type = 'submit';
+    var cancel = el('button', 'secondary', 'Cancelar'); cancel.type = 'button'; cancel.addEventListener('click', onCancel);
+    row.appendChild(save); row.appendChild(cancel); f.appendChild(t); f.appendChild(p); f.appendChild(row);
+    f.addEventListener('submit', function (ev) {
+      ev.preventDefault(); var title = t.value.trim(); if (!title) { t.focus(); return; }
+      save.disabled = true; onSave(title, p.value.trim()).catch(function () { save.disabled = false; setStatus('Não ficou guardado. Tenta outra vez.'); });
+    });
+    setTimeout(function () { t.focus(); }, 0);
+    return f;
+  }
+
+  function openEditor(li, it) {
+    var form = editorNode(it.label, it.ponte || '', 'Guardar', function (title, ponte) {
+      setStatus('A guardar…');
+      return api('PATCH', '?id=eq.' + encodeURIComponent(it.id), { label: title, ponte: ponte || null }, 'return=minimal')
+        .then(function () { it.label = title; it.ponte = ponte; render(); setStatus('Guardado.'); });
+    }, function () { render(); });
+    li.replaceChildren(form);
+  }
+
+  function openAdd(btn) {
+    var section = btn.dataset.section; btn.hidden = true;
+    var form = editorNode('', '', 'Adicionar', function (title, ponte) {
+      var pos = items.filter(function (i) { return i.section === section; }).reduce(function (m, i) { return Math.max(m, i.position || 0); }, 0) + 1;
+      var row = { id: 'p-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6), label: title, ponte: ponte || null, section: section, position: pos, done: false, updated_at: new Date().toISOString() };
+      setStatus('A guardar…');
+      return api('POST', '', row, 'return=minimal').then(function () { row.links = []; items.push(row); form.remove(); btn.hidden = false; render(); setStatus('Adicionado.'); });
+    }, function () { form.remove(); btn.hidden = false; });
+    btn.parentNode.insertBefore(form, btn);
+  }
 
   function render() {
-    var done = boxes.filter(function (b) { return b.checked; }).length;
-    boxes.forEach(function (b) { b.closest('li').classList.toggle('is-done', b.checked); });
-    document.getElementById('count').textContent = done + ' de ' + boxes.length;
-    document.getElementById('bar').style.width = (100 * done / boxes.length) + '%';
-  }
-  function fmt(ts) {
-    try { return new Date(ts).toLocaleString('pt-PT', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }); } catch (e) { return ''; }
-  }
-  function load() {
-    if (!shared) {
-      var saved = {};
-      try { saved = JSON.parse(localStorage.getItem(LOCAL_KEY) || '{}'); } catch (e) {}
-      boxes.forEach(function (b) { b.checked = !!saved[b.id]; });
-      statusEl.textContent = 'Pré-visualização: as marcações ficam só neste browser.';
-      render();
-      return;
-    }
-    fetch(SUPABASE_URL + '/rest/v1/next_steps_checklist?select=id,done,updated_at', { headers: headers })
-      .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
-      .then(function (rows) {
-        var latest = '';
-        rows.forEach(function (row) {
-          var b = document.getElementById(row.id);
-          if (b) b.checked = !!row.done;
-          if (row.done && row.updated_at > latest) latest = row.updated_at;
-        });
-        statusEl.textContent = latest ? 'Última atualização: ' + fmt(latest) : '';
-        render();
-      })
-      .catch(function () { statusEl.textContent = 'Não consegui carregar o estado. Tenta recarregar a página.'; render(); });
-  }
-  function save(b) {
-    if (!shared) {
-      var saved = {};
-      boxes.forEach(function (x) { saved[x.id] = x.checked; });
-      try { localStorage.setItem(LOCAL_KEY, JSON.stringify(saved)); } catch (e) {}
-      return;
-    }
-    statusEl.textContent = 'A guardar…';
-    fetch(SUPABASE_URL + '/rest/v1/next_steps_checklist?id=eq.' + encodeURIComponent(b.id), {
-      method: 'PATCH', headers: Object.assign({ 'Prefer': 'return=minimal' }, headers),
-      body: JSON.stringify({ done: b.checked, updated_at: new Date().toISOString() })
-    }).then(function (r) {
-      if (!r.ok) throw new Error(r.status);
-      statusEl.textContent = 'Guardado.';
-    }).catch(function () {
-      b.checked = !b.checked; render();
-      statusEl.textContent = 'Não ficou guardado. Verifica a ligação e tenta outra vez.';
+    ['intros', 'incubeta'].forEach(function (s) {
+      var ul = document.getElementById('list-' + s);
+      ul.replaceChildren.apply(ul, items.filter(function (i) { return i.section === s; })
+        .sort(function (a, b) { return (a.position || 0) - (b.position || 0); }).map(itemNode));
     });
+    document.querySelectorAll('.add').forEach(function (b) { b.hidden = !online; });
+    renderProgress();
   }
-  boxes.forEach(function (b) { b.addEventListener('change', function () { render(); save(b); }); });
-  load();
+
+  document.querySelectorAll('.add').forEach(function (b) { b.addEventListener('click', function () { openAdd(b); }); });
+  api('GET', '?select=id,label,ponte,links,section,position,done,updated_at', null)
+    .then(function (rows) { items = rows || []; render(); })
+    .catch(function () { online = false; items = FALLBACK; render(); setStatus('Não consegui ligar à base de dados: a lista está só para leitura. Tenta recarregar a página.'); });
 
   document.getElementById('copy').addEventListener('click', function () {
     var text = document.getElementById('blurb').value.trim();
     var out = document.getElementById('copied');
     if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(text).then(function () { out.textContent = 'Copiado.'; },
-        function () { out.textContent = 'Seleciona o texto acima para copiar.'; });
+      navigator.clipboard.writeText(text).then(function () { out.textContent = 'Copiado.'; }, function () { out.textContent = 'Seleciona o texto acima para copiar.'; });
     } else { out.textContent = 'Seleciona o texto acima para copiar.'; }
   });
 })();
