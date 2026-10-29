@@ -132,7 +132,7 @@ var FALLBACK = [{"id": "farfetch", "section": "intros", "position": 1, "label": 
   function api(method, query, body, prefer) {
     var h = Object.assign({}, headers); if (prefer) h['Prefer'] = prefer;
     return fetch(API + query, { method: method, headers: h, body: body ? JSON.stringify(body) : undefined })
-      .then(function (r) { if (!r.ok) throw new Error(r.status); return r.status === 204 ? null : r.json(); });
+      .then(function (r) { if (!r.ok) throw new Error(r.status); return r.text().then(function (s) { return s ? JSON.parse(s) : null; }); });
   }
 
   function renderProgress() {
