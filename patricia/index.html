@@ -44,7 +44,8 @@ p { margin: 0; }
 .bar span { display: block; height: 100%; width: 0; background: var(--accent); transition: width .25s ease; }
 section { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 18px; display: grid; gap: 10px; }
 ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
-li label { display: grid; grid-template-columns: 24px 1fr; gap: 12px; align-items: start; padding: 11px 8px; border-radius: 8px; cursor: pointer; }
+ul > li { position: relative; }
+li label { display: grid; grid-template-columns: 24px 1fr; gap: 12px; align-items: start; padding: 11px 36px 11px 8px; border-radius: 8px; cursor: pointer; }
 li label:hover { background: var(--accent-soft); }
 input[type="checkbox"] { width: 22px; height: 22px; margin: 1px 0 0; accent-color: var(--accent); cursor: pointer; }
 input[type="checkbox"]:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
@@ -75,6 +76,10 @@ footer a { color: var(--accent); }
 .tools { margin: -2px 0 6px 44px; display: flex; gap: 12px; }
 .linkbtn { background: none; border: 0; padding: 0; color: var(--accent); font: 500 0.88rem var(--body); cursor: pointer; text-decoration: underline; }
 .linkbtn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.del { position: absolute; top: 6px; right: 2px; width: 30px; height: 30px; padding: 0; background: none; color: var(--muted); font-size: 1.15rem; line-height: 1; border-radius: 6px; }
+.del:hover { color: var(--ink); background: var(--accent-soft); }
+.del:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+li.removed { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px; padding: 8px; font-size: 0.92rem; color: var(--muted); }
 .add { justify-self: start; background: none; color: var(--accent); border: 1px dashed var(--accent); padding: 8px 14px; }
 @media (prefers-color-scheme: dark) { .add { color: var(--accent); } }
 .editor { display: grid; gap: 8px; margin: 6px 0 10px 44px; }
@@ -114,7 +119,8 @@ section > .editor { margin-left: 0; }
 </main>
 <script>
 // Items live in a Supabase table (next_steps_checklist). The page may read every row, tick/untick, edit the
-// title and "ponte" text, and add rows; it cannot delete rows or change links. Everything is rendered as text.
+// title and "ponte" text, add rows, and hide rows with the × (sets deleted = true; rows are never removed from the
+// table, so anything can be restored). It cannot change links. Everything is rendered as text.
 var SUPABASE_URL = 'https://pjokdgxjfzigkzfstiky.supabase.co';
 var SUPABASE_ANON_KEY = 'sb_publishable_YlbnFHODef_rM2CTgXdgjQ_82xO-u9x'; // publishable key; the table rules above limit what it can do
 var FALLBACK = [{"id": "farfetch", "section": "intros", "position": 1, "label": "Diretora de IT da Farfetch", "ponte": "Uma conversa curta com a equipa (vaga mais próxima: Business Operations Principal, Lisboa).", "links": [{"url": "https://jobs.lever.co/farfetch/8f9080a7-1c17-40ad-a03a-083495b2bcca", "text": "Vaga: Business Operations Principal, Lisboa"}], "done": false}, {"id": "helena", "section": "intros", "position": 2, "label": "Helena Martins, Sonae (Continente / Worten)", "ponte": "Uma conversa curta (vagas mais próximas: Strategy Consultant na MC e CRM Behaviour Specialist na Worten).", "links": [{"url": "https://pt.linkedin.com/jobs/view/strategy-consultant-at-mc-4484426712", "text": "Vaga: Strategy Consultant, MC"}, {"url": "https://pt.linkedin.com/jobs/view/crm-behaviour-specialist-at-worten-portugal-4482512415", "text": "Vaga: CRM Behaviour Specialist, Worten"}], "done": false}, {"id": "bloop", "section": "intros", "position": 3, "label": "Francisco, Bloop", "ponte": "Ajudar na expansão para Espanha (go-to-market ou operações).", "links": [], "done": false}, {"id": "nuno", "section": "intros", "position": 4, "label": "Nuno Pimenta, Growth Ignition", "ponte": "Uma possível parceria (ele no crescimento, eu na AI e automação).", "links": [], "done": false}, {"id": "tiago", "section": "intros", "position": 5, "label": "Tiago Vaz Serra", "ponte": "Startups dele que precisem de ajuda (go-to-market, operações ou AI).", "links": [], "done": false}, {"id": "miguel", "section": "intros", "position": 6, "label": "Miguel Pina Martins, Science4you", "ponte": "AI no e-commerce e nas operações (projeto ou função).", "links": [], "done": false}, {"id": "bruno", "section": "intros", "position": 7, "label": "Bruno Gouveia", "ponte": "Uma conversa curta sobre AI e automação.", "links": [], "done": false}, {"id": "ref-incubeta-madrid", "section": "incubeta", "position": 1, "label": "Referral: Data & Analytics Consultant, Madrid", "ponte": "A vaga mais próxima do meu perfil.", "links": [{"url": "https://incubeta-global.breezy.hr/p/13835c83d3ab01-data-analytics-consultant", "text": "Ver a vaga"}], "done": false}, {"id": "ref-incubeta-aeo", "section": "incubeta", "position": 2, "label": "Referral: Director of AEO/GEO, Londres (contrato de 9 meses)", "ponte": "A vaga mais próxima do meu perfil.", "links": [{"url": "https://incubeta-global.breezy.hr/p/bab065e4c71e01-uk-director-of-aeo-geo-ftc", "text": "Ver a vaga"}], "done": false}, {"id": "incubeta-lisboa", "section": "incubeta", "position": 3, "label": "Marketing analytics / PCA / inovação (Lisboa) e AI criativa (Dubai)", "ponte": "O que achas que devo fazer? Não vi vagas publicitadas nestas equipas, mas fiquei curioso: pode ser que saibas de alguma que venha a aparecer.", "links": [], "done": false}];
@@ -136,14 +142,31 @@ var FALLBACK = [{"id": "farfetch", "section": "intros", "position": 1, "label": 
   }
 
   function renderProgress() {
-    var done = items.filter(function (i) { return i.done; }).length;
-    document.getElementById('count').textContent = done + ' de ' + items.length;
-    document.getElementById('bar').style.width = (items.length ? 100 * done / items.length : 0) + '%';
-    var latest = items.filter(function (i) { return i.done; }).map(function (i) { return i.updated_at || ''; }).sort().pop();
+    var shown = items.filter(function (i) { return !i.deleted; });
+    var done = shown.filter(function (i) { return i.done; }).length;
+    document.getElementById('count').textContent = done + ' de ' + shown.length;
+    document.getElementById('bar').style.width = (shown.length ? 100 * done / shown.length : 0) + '%';
+    var latest = shown.filter(function (i) { return i.done; }).map(function (i) { return i.updated_at || ''; }).sort().pop();
     if (online && latest) setStatus('Última atualização: ' + fmt(latest));
   }
 
+  function setDeleted(it, value) {
+    setStatus(value ? 'A apagar…' : 'A repor…');
+    api('PATCH', '?id=eq.' + encodeURIComponent(it.id), { deleted: value }, 'return=minimal')
+      .then(function () { it.deleted = value; render(); setStatus(value ? 'Apagado.' : 'Reposto.'); })
+      .catch(function () { setStatus('Não ficou guardado. Tenta outra vez.'); });
+  }
+
+  function removedNode(it) {
+    var li = el('li', 'removed'); li.appendChild(el('span', null, 'Apagado: ' + it.label));
+    var undo = el('button', 'linkbtn', 'Desfazer'); undo.type = 'button';
+    undo.addEventListener('click', function () { setDeleted(it, false); });
+    li.appendChild(undo);
+    return li;
+  }
+
   function itemNode(it) {
+    if (it.deleted) return removedNode(it);
     var li = el('li'); li.dataset.id = it.id;
     var label = el('label'); label.htmlFor = 'c-' + it.id;
     var box = el('input'); box.type = 'checkbox'; box.id = 'c-' + it.id; box.checked = !!it.done; box.disabled = !online;
@@ -159,6 +182,9 @@ var FALLBACK = [{"id": "farfetch", "section": "intros", "position": 1, "label": 
       var tools = el('div', 'tools'); var edit = el('button', 'linkbtn', 'Editar'); edit.type = 'button';
       edit.addEventListener('click', function () { openEditor(li, it); });
       tools.appendChild(edit); li.appendChild(tools);
+      var del = el('button', 'del', '×'); del.type = 'button'; del.title = 'Apagar'; del.setAttribute('aria-label', 'Apagar: ' + it.label);
+      del.addEventListener('click', function () { setDeleted(it, true); });
+      li.appendChild(del);
     }
     li.classList.toggle('is-done', !!it.done);
     box.addEventListener('change', function () {
@@ -174,7 +200,7 @@ var FALLBACK = [{"id": "farfetch", "section": "intros", "position": 1, "label": 
   function editorNode(titleVal, ponteVal, saveText, onSave, onCancel) {
     var f = el('form', 'editor');
     var t = el('input'); t.type = 'text'; t.value = titleVal; t.placeholder = 'Nome ou título'; t.maxLength = 200; t.setAttribute('aria-label', 'Título');
-    var p = el('textarea'); p.rows = 3; p.value = ponteVal; p.placeholder = 'Ponte: o que pedir por mim'; p.maxLength = 600; p.setAttribute('aria-label', 'Ponte');
+    var p = el('textarea'); p.rows = 3; p.value = ponteVal; p.placeholder = 'Ponte: onde pode haver encaixe'; p.maxLength = 600; p.setAttribute('aria-label', 'Ponte');
     var row = el('div', 'row'); var save = el('button', null, saveText); save.type = 'submit';
     var cancel = el('button', 'secondary', 'Cancelar'); cancel.type = 'button'; cancel.addEventListener('click', onCancel);
     row.appendChild(save); row.appendChild(cancel); f.appendChild(t); f.appendChild(p); f.appendChild(row);
@@ -217,7 +243,7 @@ var FALLBACK = [{"id": "farfetch", "section": "intros", "position": 1, "label": 
   }
 
   document.querySelectorAll('.add').forEach(function (b) { b.addEventListener('click', function () { openAdd(b); }); });
-  api('GET', '?select=id,label,ponte,links,section,position,done,updated_at', null)
+  api('GET', '?select=id,label,ponte,links,section,position,done,updated_at&deleted=is.false', null)
     .then(function (rows) { items = rows || []; render(); })
     .catch(function () { online = false; items = FALLBACK; render(); setStatus('Não consegui ligar à base de dados: a lista está só para leitura. Tenta recarregar a página.'); });
 
