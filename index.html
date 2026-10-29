@@ -255,7 +255,8 @@ button.node:hover{transform:translateY(-3px);box-shadow:0 38px 70px -32px rgba(0
 @media (max-width:560px){.org-row.r6,.org-row.r5{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .founder{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:64px;align-items:center;margin-top:120px}
 @media (max-width:900px){.founder{grid-template-columns:1fr;gap:36px;margin-top:80px}}
-.portrait{position:relative;justify-self:center;width:100%;max-width:440px;aspect-ratio:4/5}
+.portrait{position:relative;justify-self:center;width:100%;max-width:300px;aspect-ratio:4/5}
+.founder-avatar{display:none}
 .portrait img,.portrait .pix{position:absolute;left:50%;bottom:0;width:106%;height:auto;max-width:none;translate:-50% 0;transform-origin:50% 100%;-webkit-mask-image:linear-gradient(#000 80%,transparent);mask-image:linear-gradient(#000 80%,transparent)}
 .portrait .pix{opacity:0;pointer-events:none;image-rendering:pixelated}
 .founder-text h2{font-size:clamp(28px,3.4vw,44px)}
@@ -397,7 +398,8 @@ html.scenes:not(.compact) .hive{left:69%}
 html.scenes:not(.compact) .hive-wrap .grid-head .kicker{visibility:hidden}
 .scene .wrap .wrap{padding-inline:0}
 .scene .founder{margin-top:0}
-.scene .portrait{width:auto;max-width:100%;height:min(66vh,560px)}
+.scene .founder{align-items:start}
+.scene .portrait{width:auto;max-width:100%;height:min(48vh,375px);margin-top:30px}   /* 300x375, its top level with the name */
 .scene .founder-text p{font-size:15px}
 .scene .foot{margin-top:28px}
 /* products as an Apple Watch honeycomb: round bubbles placed around the centre of the scene */
@@ -452,9 +454,10 @@ html.compact .scene-dots,html.compact .scroll-cue{display:none}   /* phones: the
 html.compact .grid-head{flex-direction:column;align-items:flex-start;gap:6px}
 html.compact .hive-wrap{height:calc(100vh - 92px);height:calc(100svh - 92px)}
 html.compact .bub-n{font-size:16px;top:calc(100% + 7px)}   /* scaled with the bubble: about 12px at the lens */
-html.compact .scene .portrait{height:min(40vh,340px);height:min(40svh,340px)}
+html.compact .scene .portrait{display:none}   /* phones: a small round photo beside the name instead */
+html.compact .founder-head{display:flex;align-items:center;gap:14px}
+html.compact .founder-avatar{display:block;flex:none;width:72px;height:72px;border-radius:50%;object-fit:cover;object-position:50% 28%}
 html.compact .scene .founder{gap:22px}
-html.compact .scene .founder-text{position:relative;z-index:1}   /* the story passes over the pinned photo */
 html.compact .scene .founder-text p{font-size:14.5px}
 html.compact .scene .org-head{margin-bottom:8px}
 html.compact .scene .org-sub{font-size:15px}
@@ -820,6 +823,7 @@ html.compact .nav.scrolled{background:rgba(2,2,3,.92);-webkit-backdrop-filter:no
         if (need) measure();
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, H);
         if (lx >= .995) return;                                        // the brain has gone with Legacy: rest until the page scrolls back up
+        if (hx >= 1 && matchMedia("(max-width: 900px)").matches) return;   // phones have no brain: once the digits have faded, rest
         const t = now / 1000, r = g.getBoundingClientRect();
         S = r.width / MW || S;
         mx += (tmx - mx) * .05; my += (tmy - my) * .05;
@@ -858,7 +862,7 @@ html.compact .nav.scrolled{background:rgba(2,2,3,.92);-webkit-backdrop-filter:no
           list.sort((A, B) => A[0] - B[0]).forEach(([, i, R, P, v]) => block(Sl.w[i] * v, Sl.h[i] * v, R, P, sc, hz * v, solid, base));
         }
         if (hx >= SPLIT) {
-          // the brain: side on, on the right of the Legacy scene (behind the text on phones); it holds still while its digits
+          // the brain: side on, on the right of the Legacy scene (desktop only); it holds still while its digits
           // flow round it, a little faster while it forms
           const side = !matchMedia("(max-width: 900px)").matches, BS = side ? min(.17 * W, .38 * H) : min(.36 * W, .25 * H);
           const B0 = [(side ? .73 : .5) * W - W / 2, (side ? .5 : .66) * H - H / 2, 0];
@@ -890,7 +894,7 @@ html.compact .nav.scrolled{background:rgba(2,2,3,.92);-webkit-backdrop-filter:no
               X = a1 * Sx + a2 * (Sx + d.bx * W) + a3 * Ex; Y = a1 * Sy + a2 * (Sy + d.by * H) + a3 * Ey; Zz = a1 * Sz + a2 * (Sz + d.bz) + a3 * Ez;
             }
             // solid while it is part of the picture; in the brain nearer is brighter and the far side is dim
-            const a = gone * (1 - u + u * clamp(.25 + .75 * (Zz + BS) / (2 * BS)) * (side ? 1 : .28)) * clamp((F - Zz - 60) / (F * .35));   // phones: faint, it sits behind the text
+            const a = gone * (1 - u + u * clamp(.25 + .75 * (Zz + BS) / (2 * BS)) * (side ? 1 : 0)) * clamp((F - Zz - 60) / (F * .35));   // phones: no brain, the digits fade as they fly
             const lv = round(a * LV); if (lv < 1) continue;
             // its shape: the tile (seams opening, corners rounding) turning into the glyph
             const tw = d.tw * sc, th = d.th * sc, ts = min(tw, th), gap = .16 * ts * open, rt = .22 * ts * open, gh = ts + (Hg - ts) * u;
@@ -1193,14 +1197,14 @@ html.compact .nav.scrolled{background:rgba(2,2,3,.92);-webkit-backdrop-filter:no
     </div>
 
     <div id="founderScene" class="founder">
-      <div class="portrait"><img src="assets/tomas-cutout.png" alt="Tomás Batalha, founder of BytArc" width="820" height="830"></div>
+      <div class="portrait"><img src="assets/tomas-cutout-bw.png" alt="Tomás Batalha, founder of BytArc" width="820" height="830"></div>
       <div class="founder-text">
-        <div class="kicker only-scenes" data-en="Team" data-pt="Equipa">Team</div>
-        <h2 data-en="Tomás Batalha, Founder" data-pt="Tomás Batalha, Fundador">Tomás Batalha, Founder</h2>
+        <div class="kicker only-scenes" data-en="Founder" data-pt="Fundador">Founder</div>
+        <div class="founder-head"><img class="founder-avatar" src="assets/tomas-bw.jpg" alt="" width="72" height="72"><h2 data-en="Tomás Batalha, Founder" data-pt="Tomás Batalha, Fundador">Tomás Batalha, Founder</h2></div>
         <p class="bio" data-en="Tomás Batalha is the Founder of BytArc. Former Google business analyst and Amazon business development lead. Co-founded a B2B SaaS startup where he built a €147K enterprise pipeline from zero and closed 23 enterprise deals, including Fortune 500 and Big 4 firms. MSc in Strategic Management from Rotterdam School of Management, BSc in Management from Nova SBE, additional studies at the National University of Singapore. At BytArc, Tomás personally designs, builds and ships every product. 15+ shipped in under 4 months." data-pt="Tomás Batalha é o Fundador da BytArc. Ex-analista de negócio na Google, ex-líder de desenvolvimento de negócio na Amazon. Co-fundou uma startup B2B SaaS onde construiu um pipeline empresarial de €147K do zero e fechou 23 contratos empresariais, incluindo Fortune 500 e Big 4. MSc em Gestão Estratégica pela Rotterdam School of Management, Licenciatura em Gestão pela Nova SBE, estudos adicionais na National University of Singapore. Na BytArc, o Tomás desenha, constrói e lança pessoalmente cada produto. Mais de 15 lançados em menos de 4 meses.">Tomás Batalha is the Founder of BytArc. Former Google business analyst and Amazon business development lead. Co-founded a B2B SaaS startup where he built a €147K enterprise pipeline from zero and closed 23 enterprise deals, including Fortune 500 and Big 4 firms. MSc in Strategic Management from Rotterdam School of Management, BSc in Management from Nova SBE, additional studies at the National University of Singapore. At BytArc, Tomás personally designs, builds and ships every product. 15+ shipped in under 4 months.</p>
         <div class="kicker label" data-en="ABOUT BYTARC" data-pt="SOBRE A BYTARC">ABOUT BYTARC</div>
         <p class="more" data-en="BytArc is a founder-led AI studio that also builds its own ventures. The company runs 11 AI agents that handle everything from strategic planning to marketing to code reviews, creating a fully autonomous AI-powered organization. Each agent has a defined role, decision authority, and escalation protocol." data-pt="A BytArc é um estúdio de IA liderado pelo fundador que também cria as suas próprias ventures. A empresa opera 11 agentes de IA que tratam de tudo, desde planeamento estratégico a marketing e revisões de código, criando uma organização totalmente autónoma movida a IA. Cada agente tem um papel definido, autoridade de decisão e protocolo de escalação.">BytArc is a founder-led AI studio that also builds its own ventures. The company runs 11 AI agents that handle everything from strategic planning to marketing to code reviews, creating a fully autonomous AI-powered organization. Each agent has a defined role, decision authority, and escalation protocol.</p>
-        <p class="more" data-en="Each agent has a specific role, personality, and set of tools. They communicate through structured workflows and escalation protocols. The org chart on the left shows the current team structure." data-pt="Cada agente tem um papel específico, personalidade e conjunto de ferramentas. Comunicam através de workflows estruturados e protocolos de escalação. O organigrama à esquerda mostra a estrutura atual da equipa.">Each agent has a specific role, personality, and set of tools. They communicate through structured workflows and escalation protocols. The org chart on the left shows the current team structure.</p>
+        <p class="more" data-en="Each agent has a specific role, personality, and set of tools. They communicate through structured workflows and escalation protocols." data-pt="Cada agente tem um papel específico, personalidade e conjunto de ferramentas. Comunicam através de workflows estruturados e protocolos de escalação.">Each agent has a specific role, personality, and set of tools. They communicate through structured workflows and escalation protocols.</p>
       </div>
     </div>
   </div></section>
@@ -2461,7 +2465,7 @@ window.pixelReveal = (() => {
   // ---------- 8. Founder: the portrait arrives as colour pixels that resolve as you scroll. The scene holds long after its
   // text is in, so the photo keeps resolving (and drifting and settling against its frame) the whole way down
   const fo = $("#founderScene"), portrait = $(".portrait", fo), pimg = $("img", portrait), ft = $(".founder-text", fo);
-  const foA = { kick: $(".kicker", ft), h2: $("h2", ft), bio: $(".bio", ft), label: $(".label", ft), ps: $$(".more", ft) };
+  const foA = { kick: $(".kicker", ft), h2: $("h2", ft), av: $(".founder-avatar", ft), bio: $(".bio", ft), label: $(".label", ft), ps: $$(".more", ft) };
   const foType = typer(foA.kick), foLight = lighter(foA.h2), foLabel = typer(foA.label);
   const px = window.pixelReveal, pix = px && px.pix;                  // the colour-pixel reveal
   // the founder is the page's one slide in negative: a white band opens from a line and the text turns dark
@@ -2488,6 +2492,7 @@ window.pixelReveal = (() => {
       const h = seg(r, 0.18, 0.42, outExpo);
       set(foA.kick, { y: -X(0) * 60, o: 1 - X(0) });
       set(foA.h2, { y: (1 - h) * 24 - X(1) * 60, o: h * (1 - X(1)) });
+      set(foA.av, { y: (1 - h) * 24 - X(1) * 60, o: h * (1 - X(1)) });
       wipe(foA.bio, seg(r, 0.32, 0.56, inOut)); set(foA.bio, { y: -X(2) * 60, o: 1 - X(2) });
       foLabel(seg(r, 0.54, 0.64, lin)); set(foA.label, { y: -X(3) * 60, o: 1 - X(3) });
       foA.ps.forEach((p, i) => { const a = 0.62 + i * 0.14; wipe(p, seg(r, a, a + 0.2, inOut)); set(p, { y: -X(4 + i) * 60, o: 1 - X(4 + i) }); });
@@ -2588,6 +2593,8 @@ window.pixelReveal = (() => {
   const landAt = sc => Math.max(0, sc.tIn + (sc.land || 0) * (sc.tOut - sc.tIn));   // where a jump to the scene stops
   [...dots.children].forEach((b, i) => b.addEventListener("click", () => scrollTo({ top: landAt(scenes[i]), behavior: "smooth" })));
 
+  const ABOUT_I = scenes.findIndex(s => s.id === "about");
+  let pastAbout = false;
   const frame = () => {
     const y = Math.max(0, scrollY), vh = VH();                        // iOS bounces past the top: hold the first scene
     let cur = 0;
@@ -2606,6 +2613,7 @@ window.pixelReveal = (() => {
       }
       sc.fx.apply(r, x, p);
     });
+    if (window.BM && (cur > ABOUT_I) !== pastAbout) { pastAbout = cur > ABOUT_I; if (pastAbout) BM.legacy(1); }   // a jump straight past About (it never came on): the brain has gone
     [...dots.children].forEach((d, k) => d.classList.toggle("on", k === cur));
     const navCur = NAV_OF[scenes[cur].id] || "";
     navLinks.forEach(a => a.classList.toggle("cur", a.getAttribute("href") === navCur));
