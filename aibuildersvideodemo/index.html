@@ -29,11 +29,22 @@ footer a { color: inherit; }
 <body>
 <main>
   <h1>AI Builders demo</h1>
-  <video controls playsinline preload="metadata">
-    <source src="demo.mp4" type="video/mp4">
-    Your browser can't play this video. <a href="demo.mp4">Download it instead.</a>
-  </video>
+  <video id="v" controls playsinline preload="metadata"></video>
   <footer><a href="https://bytarc.com">BytArc</a>, AI studio in Lisbon</footer>
 </main>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.17/dist/hls.min.js"></script>
+<script>
+// Full-quality stream (hls/index.m3u8, many small segments) when it exists, else the single demo.mp4.
+(function () {
+  var v = document.getElementById("v"), src = "hls/index.m3u8";
+  function mp4() { v.src = "demo.mp4"; }
+  fetch(src, { method: "HEAD" }).then(function (r) {
+    if (!r.ok) return mp4();
+    if (v.canPlayType("application/vnd.apple.mpegurl")) { v.src = src; return; }
+    if (window.Hls && Hls.isSupported()) { var h = new Hls(); h.loadSource(src); h.attachMedia(v); return; }
+    mp4();
+  }).catch(mp4);
+})();
+</script>
 </body>
 </html>
