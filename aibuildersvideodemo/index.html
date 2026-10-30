@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>AI Builders Demo | BytArc</title>
+<meta name="description" content="Demo video from BytArc for AI Builders Lisbon.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<style>
+:root {
+  --bg: #f4f5f7; --ink: #15181d; --muted: #5b6573; --frame: #000;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #0f1115; --ink: #eef1f5; --muted: #9aa3b2; color-scheme: dark; }
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--bg); color: var(--ink); font: 16px/1.5 -apple-system, "Segoe UI", Roboto, Inter, sans-serif; min-height: 100vh; display: grid; place-items: center; }
+main { width: min(1200px, 100%); padding: 24px 16px 40px; display: grid; gap: 16px; }
+h1 { margin: 0; font-size: clamp(1.3rem, 3vw, 1.8rem); font-weight: 700; letter-spacing: -0.01em; }
+video { display: block; width: 100%; max-height: 80vh; background: var(--frame); border-radius: 12px; }
+footer { color: var(--muted); font-size: 0.9rem; }
+footer a { color: inherit; }
+</style>
+</head>
+<body>
+<main>
+  <h1>AI Builders demo</h1>
+  <video controls playsinline preload="metadata">
+    <source src="demo.mp4" type="video/mp4">
+    Your browser can't play this video. <a href="demo.mp4">Download it instead.</a>
+  </video>
+  <footer><a href="https://bytarc.com">BytArc</a>, AI studio in Lisbon</footer>
+</main>
+</body>
+</html>
