@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Slides by Tomás Batalha (BytArc). Icons: Lucide, lucide.dev, ISC License, Copyright (c) Lucide Contributors. -->
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>Self-hosted n8n in the cloud · Tomás Batalha · AI Builders Lisbon</title>
+<meta name="description" content="Why I run my AI agents on self-hosted n8n in the cloud, and the 3 tips that helped me most. Tomás Batalha, BytArc, AI Builders Lisbon, 18 Nov 2026.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Self-hosted n8n in the cloud · Tomás Batalha">
+<meta property="og:description" content="Why I run my AI agents there, and the 3 tips that helped me most. AI Builders Lisbon, 18 Nov 2026.">
+<meta property="og:image" content="https://bytarc.com/aibuilderslides/og.png">
+<meta property="og:url" content="https://bytarc.com/aibuilderslides/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#090D12; --panel:#10171F; --panel2:#141D27; --line:#22303F; --line2:#2C3D50;
+  --ink:#EEF2F6; --soft:#C9D2DD; --muted:#93A0B1; --dim:#5D6A7B;
+  --teal:#3FD0B5; --amber:#FFB547; --coral:#FF6B6B; --violet:#A394FF; --blue:#5CB4FF; --green:#4ADE80;
+  --head:'Space Grotesk',ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;
+  --body:'DM Sans',ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#05080B;overflow:hidden}
+body{font-family:var(--body);color:var(--ink);-webkit-font-smoothing:antialiased}
+#stage{position:fixed;inset:0;overflow:hidden}
+#deck{position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform:translate(-50%,-50%);transform-origin:center center;overflow:hidden;
+  background:
+    radial-gradient(900px 600px at 88% -10%, rgba(63,208,181,.10), transparent 60%),
+    radial-gradient(800px 600px at -5% 110%, rgba(163,148,255,.10), transparent 60%),
+    radial-gradient(rgba(255,255,255,.045) 1.2px, transparent 1.2px) 0 0/32px 32px,
+    var(--bg);
+  border-radius:4px}
+.slide{position:absolute;inset:0;padding:80px 120px 104px;display:flex;flex-direction:column;gap:28px;
+  opacity:0;visibility:hidden;transition:opacity .35s ease,visibility 0s linear .35s}
+.slide.active{opacity:1;visibility:visible;transition:opacity .35s ease}
+.slide aside.notes{display:none}
+.rise{opacity:0;transform:translateY(18px)}
+.slide.active .rise{animation:rise .55s cubic-bezier(.2,.7,.2,1) forwards;animation-delay:calc(var(--d,0) * 90ms)}
+@keyframes rise{to{opacity:1;transform:none}}
+.ic{width:1em;height:1em;flex:none;display:inline-block;vertical-align:-0.14em}
+
+/* type */
+.kicker{font-family:var(--mono);font-size:24px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--amber);display:flex;align-items:center;gap:14px}
+.kicker .ic{font-size:28px}
+h1,h2,h3{font-family:var(--head);font-weight:700;letter-spacing:-.02em}
+.h-hero{font-size:118px;line-height:1.0}
+.h-title{font-size:62px;line-height:1.08;max-width:1600px}
+.h-sub{font-size:44px;line-height:1.2;font-weight:500;color:var(--teal);font-family:var(--head);letter-spacing:-.01em}
+.lead{font-size:32px;line-height:1.45;color:var(--soft);max-width:1500px}
+p{font-size:28px;line-height:1.45;color:var(--soft)}
+b,strong{color:var(--ink);font-weight:700}
+code,.mono{font-family:var(--mono)}
+code,pre,.mono,.chip,.kicker,#foot{font-variant-ligatures:none;font-feature-settings:'liga' 0,'calt' 0}
+p code,li code,.inline-code{font-size:.86em;background:rgba(255,255,255,.07);border:1px solid var(--line);padding:2px 10px;border-radius:8px;color:var(--ink)}
+.grad{background:linear-gradient(90deg,var(--teal),var(--blue) 55%,var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}
+.grad-warm{background:linear-gradient(90deg,var(--amber),var(--coral));-webkit-background-clip:text;background-clip:text;color:transparent}
+
+/* building blocks */
+.row{display:flex;gap:32px}
+.col{display:flex;flex-direction:column;gap:24px}
+.grow{flex:1;min-width:0}
+.card{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:28px;padding:30px 36px;display:flex;flex-direction:column;gap:16px;position:relative;min-width:0}
+.card h3{font-size:34px;line-height:1.2}
+.card .tag{font-family:var(--mono);font-size:20px;letter-spacing:.14em;text-transform:uppercase;display:flex;align-items:center;gap:10px}
+.card.bug{border-color:rgba(255,107,107,.35);box-shadow:0 0 0 1px rgba(255,107,107,.08),0 30px 80px -40px rgba(255,107,107,.35)}
+.card.bug .tag{color:var(--coral)}
+.card.fix{border-color:rgba(63,208,181,.45);background:linear-gradient(180deg,#10241F,#0E1A18);box-shadow:0 30px 80px -40px rgba(63,208,181,.45)}
+.card.fix .tag{color:var(--teal)}
+.card.ai{border-color:rgba(163,148,255,.4);background:linear-gradient(180deg,#17152A,#121020)}
+.card.ai .tag{color:var(--violet)}
+.card.warn{border-color:rgba(255,181,71,.45);background:linear-gradient(180deg,#221A0E,#17120A)}
+.card.warn .tag{color:var(--amber)}
+.tile{width:84px;height:84px;border-radius:22px;display:grid;place-items:center;font-size:42px;color:#fff;flex:none;
+  background:linear-gradient(135deg,var(--c1,#2a3b4f),var(--c2,#1a2533));box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 18px 40px -18px var(--c1,#000)}
+.tile.sm{width:64px;height:64px;border-radius:18px;font-size:32px}
+.tile.teal{--c1:#2BB89E;--c2:#16695C}.tile.coral{--c1:#FF6B6B;--c2:#B23A4A}.tile.violet{--c1:#8D7BFF;--c2:#4B3BB0}
+.tile.amber{--c1:#FFB547;--c2:#C2721A}.tile.blue{--c1:#4BA8FF;--c2:#2061B8}.tile.green{--c1:#3CCB74;--c2:#1C7A44}
+.chip{display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:22px;padding:8px 18px;border-radius:999px;border:1px solid var(--line2);background:rgba(255,255,255,.04);color:var(--soft);white-space:nowrap}
+.chip.ok{color:var(--green);border-color:rgba(74,222,128,.35);background:rgba(74,222,128,.07)}
+.chip.bad{color:var(--coral);border-color:rgba(255,107,107,.4);background:rgba(255,107,107,.08)}
+.chip.ai{color:var(--violet);border-color:rgba(163,148,255,.4);background:rgba(163,148,255,.08)}
+.chip.amb{color:var(--amber);border-color:rgba(255,181,71,.4);background:rgba(255,181,71,.08)}
+.dot{width:12px;height:12px;border-radius:50%;background:currentColor;box-shadow:0 0 12px currentColor}
+.pulse{animation:pulse 1.6s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.35}}
+ul.ticks{list-style:none;display:flex;flex-direction:column;gap:16px}
+ul.ticks li{font-size:28px;line-height:1.4;color:var(--soft);display:flex;gap:16px;align-items:flex-start}
+ul.ticks li .ic{font-size:30px;color:var(--teal);margin-top:4px}
+.takeaway{margin-top:auto;display:flex;align-items:center;gap:20px;font-family:var(--head);font-size:34px;font-weight:600;color:var(--ink);
+  padding:22px 30px;border-radius:20px;background:linear-gradient(90deg,rgba(255,181,71,.14),rgba(255,181,71,.02));border:1px solid rgba(255,181,71,.3)}
+.takeaway .ic{font-size:38px;color:var(--amber)}
+
+/* code window */
+.win{min-width:0;background:#0B1016;border:1px solid var(--line2);border-radius:22px;overflow:hidden;box-shadow:0 40px 90px -50px rgba(0,0,0,.9)}
+.win .bar{display:flex;align-items:center;gap:10px;padding:14px 20px;border-bottom:1px solid var(--line);background:#0F161E;font-family:var(--mono);font-size:19px;color:var(--dim)}
+.win .bar i{width:13px;height:13px;border-radius:50%;background:#FF5F57;display:inline-block}
+.win .bar i:nth-child(2){background:#FEBC2E}.win .bar i:nth-child(3){background:#28C840}
+.win .bar span{margin-left:12px}
+.win pre{font-family:var(--mono);font-size:22px;line-height:1.5;padding:18px 24px;color:#D6DEE8;white-space:pre;overflow:hidden}
+.k{color:#C792EA}.s{color:#C3E88D}.n{color:#F78C6C}.c{color:#5F6F83}.p{color:#82AAFF}.r{color:var(--coral)}.g{color:var(--green)}
+.del{background:rgba(255,107,107,.13);display:block;margin:0 -26px;padding:0 26px;color:#FFB0B0;text-decoration:line-through;text-decoration-color:rgba(255,107,107,.6)}
+.add{background:rgba(74,222,128,.12);display:block;margin:0 -26px;padding:0 26px;color:#B6F5C9}
+
+/* n8n-ish nodes */
+.nd{display:flex;align-items:center;gap:16px;background:#1A222C;border:2px solid #34475C;border-radius:18px;padding:16px 22px;font-size:25px;font-weight:600;color:var(--ink);white-space:nowrap}
+.nd .tile{width:52px;height:52px;border-radius:14px;font-size:28px}
+.nd.ghost{opacity:.38;border-style:dashed}
+.nd.hot{border-color:var(--coral)}
+.nd.good{border-color:var(--teal)}
+.wire{flex:none;width:60px;height:3px;background:repeating-linear-gradient(90deg,#4A5E75 0 10px,transparent 10px 16px);position:relative}
+.wire.solid{background:#4A5E75}
+.wire.dead{opacity:.3}
+.wire.hot{background:var(--coral)}
+.wire::after{content:"";position:absolute;right:-2px;top:-6px;border:7.5px solid transparent;border-left:10px solid #4A5E75;border-right:0}
+.wire.hot::after{border-left-color:var(--coral)}
+.items{font-family:var(--mono);font-size:20px;color:var(--muted);padding:4px 12px;border-radius:8px;background:rgba(255,255,255,.05)}
+.items.hot{color:var(--coral);background:rgba(255,107,107,.1)}
+
+/* footer HUD (inside the deck, scales with it) */
+#foot{position:absolute;left:120px;right:120px;bottom:32px;display:flex;align-items:center;gap:24px;font-family:var(--mono);font-size:20px;color:var(--dim);z-index:5;pointer-events:none;transition:opacity .3s}
+#foot .brand{display:flex;align-items:center;gap:10px;color:var(--muted)}
+#foot .brand img{height:16px;width:auto;opacity:.8}
+#foot .track{flex:1;display:flex;gap:10px;justify-content:center}
+#foot .track span{display:flex;align-items:center;gap:8px;padding:4px 12px;border-radius:999px;border:1px solid transparent}
+#foot .track span.on{color:var(--amber);border-color:rgba(255,181,71,.35);background:rgba(255,181,71,.07)}
+#foot .num{color:var(--muted)}
+#bar{position:absolute;left:0;bottom:0;height:5px;background:linear-gradient(90deg,var(--teal),var(--violet));transition:width .35s ease;z-index:6}
+#deck.nofoot #foot{opacity:0}
+#hint{position:fixed;right:18px;bottom:14px;font:13px/1.4 var(--mono);color:#4B5768;z-index:9;transition:opacity .6s}
+
+/* section openers */
+.opener{justify-content:center;gap:28px}
+.opener .num{font-family:var(--head);font-size:300px;line-height:.8;font-weight:700;letter-spacing:-.06em}
+.opener .h-title{font-size:92px}
+.opener .lead{font-size:38px}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.stat{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:28px;padding:34px 38px;display:flex;flex-direction:column;gap:10px}
+.stat .v{font-family:var(--head);font-size:104px;line-height:1;font-weight:700;letter-spacing:-.04em}
+.stat .l{font-size:27px;color:var(--soft);line-height:1.35}
+.stat .tile{margin-bottom:6px}
+
+/* print: one slide per page, for a PDF backup */
+@page{size:1920px 1080px;margin:0}
+@media print{
+  html,body{overflow:visible;height:auto;background:var(--bg)}
+  #stage{position:static;display:block}
+  #deck{position:static;transform:none!important;width:1920px;height:auto;overflow:visible;background:none}
+  .slide{position:relative;opacity:1;visibility:visible;height:1080px;page-break-after:always;break-after:page;
+    background:radial-gradient(rgba(255,255,255,.045) 1.2px,transparent 1.2px) 0 0/32px 32px,var(--bg)}
+  .rise{opacity:1;transform:none;animation:none!important}
+  #foot,#bar,#hint{display:none}
+}
+
+/* speaker view */
+body.notes-view{overflow:auto;background:#0B0F14}
+#nv{display:none}
+body.notes-view #stage{display:none}
+body.notes-view #nv{display:grid;grid-template-columns:1fr 420px;gap:28px;padding:28px;min-height:100vh;color:var(--ink);font-family:var(--body)}
+#nv .now{font:600 22px var(--mono);color:var(--amber);margin-bottom:12px}
+#nv .text{font-size:30px;line-height:1.55;color:#E6ECF2}
+#nv .text p{font-size:30px;margin-bottom:18px;color:#E6ECF2}
+#nv .side{display:flex;flex-direction:column;gap:18px}
+#nv .box{background:#121A23;border:1px solid #22303F;border-radius:16px;padding:18px 20px}
+#nv .clock{font:700 64px var(--mono)}
+#nv .next{font-size:22px;color:#93A0B1}
+#nv button{font:600 20px var(--mono);padding:14px;border-radius:12px;border:1px solid #2C3D50;background:#16202B;color:#EEF2F6;cursor:pointer}
+</style>
+</head>
+<body>
+<div id="stage"><div id="deck">
+
+<!-- ============ 1 · COVER ============ -->
+<section class="slide" data-title="Cover" data-tip="0" style="flex-direction:row;align-items:center;gap:80px;padding:100px 120px">
+  <div class="col grow" style="gap:30px">
+    <div class="kicker rise"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M16.247 7.761a6 6 0 0 1 0 8.478" /><path d="M19.075 4.933a10 10 0 0 1 0 14.134" /><path d="M4.925 19.067a10 10 0 0 1 0-14.134" /><path d="M7.753 16.239a6 6 0 0 1 0-8.478" /><circle cx="12" cy="12" r="2" /></svg> AI Builders Lisbon · 18 Nov 2026 · Builder Demo</div>
+    <h1 class="h-hero rise" style="--d:1">Self-hosted <span class="grad">n8n</span><br>in the cloud</h1>
+    <div class="h-sub rise" style="--d:2">Why I run my AI agents there,<br>and the 3 tips that helped me most</div>
+    <div class="row rise" style="--d:3;gap:12px;margin-top:10px;flex-wrap:nowrap;font-size:20px">
+      <span class="chip ok"><span class="dot pulse"></span> running right now</span>
+      <span class="chip"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><rect width="20" height="8" x="2" y="2" rx="2" ry="2" /><rect width="20" height="8" x="2" y="14" rx="2" ry="2" /><line x1="6" x2="6.01" y1="6" y2="6" /><line x1="6" x2="6.01" y1="18" y2="18" /></svg> n8n 2.8.4 on AWS</span>
+      <span class="chip"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><rect width="8" height="8" x="3" y="3" rx="2" /><path d="M7 11v4a2 2 0 0 0 2 2h4" /><rect width="8" height="8" x="13" y="13" rx="2" /></svg> 7 workflows</span>
+      <span class="chip ai"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z" /><path d="M20 2v4" /><path d="M22 4h-4" /><circle cx="4" cy="20" r="2" /></svg> gpt-4o-mini</span>
+    </div>
+    <div class="row rise" style="--d:4;align-items:center;gap:22px;margin-top:26px">
+      <div style="font-family:var(--head);font-size:42px;font-weight:700">Tomás Batalha</div>
+      <div style="font-size:30px;color:var(--muted)">Founder, BytArc · AI projects, Lisbon</div>
+    </div>
+  </div>
+  <div class="rise" style="--d:2;position:relative;width:560px;height:620px;flex:none">
+    <div style="position:absolute;inset:0 40px 60px 0;border-radius:50%;padding:8px;background:conic-gradient(from 200deg,var(--teal),var(--blue),var(--violet),var(--amber),var(--teal))">
+      <div style="width:100%;height:100%;border-radius:50%;overflow:hidden;background:radial-gradient(circle at 50% 35%,#1E2B3A,#0E141B)">
+        <img src="../assets/tomas-cutout.png" alt="Tomás Batalha" style="width:100%;height:100%;object-fit:cover;object-position:50% 15%">
+      </div>
+    </div>
+    <div class="card" style="position:absolute;right:0;bottom:0;width:250px;padding:18px;gap:10px;align-items:center;background:#F3F1EC;border:0;border-radius:24px;box-shadow:0 30px 60px -20px rgba(0,0,0,.7)">
+      <img src="qr-linkedin.png" alt="QR code to Tomás Batalha's LinkedIn" style="width:210px;height:210px;image-rendering:pixelated">
+      <div style="font:600 21px var(--mono);color:#11151C;display:flex;gap:8px;align-items:center"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M3 7V5a2 2 0 0 1 2-2h2" /><path d="M17 3h2a2 2 0 0 1 2 2v2" /><path d="M21 17v2a2 2 0 0 1-2 2h-2" /><path d="M7 21H5a2 2 0 0 1-2-2v-2" /><path d="M7 12h10" /></svg> LinkedIn</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Hi, I'm Tomás, founder of BytArc, an AI projects agency here in Lisbon.</p>
+    <p>For the next ten minutes: the n8n server that works for me around the clock, a live look at it, and the three tips that saved me the most time.</p>
+    <p>The QR is my LinkedIn. The slides are at bytarc.com/aibuilderslides, so no need to photograph anything.</p>
+  </aside>
+</section>
+
+<!-- ============ 2 · WHY ============ -->
+<section class="slide" data-title="The why" data-tip="0">
+  <div class="kicker rise"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><circle cx="12" cy="12" r="10" /><path d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z" /></svg> The why</div>
+  <h2 class="h-title rise" style="--d:1">My agents run every 30 minutes.<br>They need a home that <span class="grad">never sleeps</span>.</h2>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:26px">
+    <div class="card rise" style="--d:2;flex-direction:row;gap:26px;align-items:flex-start">
+      <div class="tile teal"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><rect width="20" height="8" x="2" y="2" rx="2" ry="2" /><rect width="20" height="8" x="2" y="14" rx="2" ry="2" /><line x1="6" x2="6.01" y1="6" y2="6" /><line x1="6" x2="6.01" y1="18" y2="18" /></svg></div>
+      <div class="col" style="gap:8px"><h3>Always on</h3><p>About 1,000 runs a week on one small AWS server, live since September</p></div>
+    </div>
+    <div class="card rise" style="--d:3;flex-direction:row;gap:26px;align-items:flex-start">
+      <div class="tile blue"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M6 16c5 0 7-8 12-8a4 4 0 0 1 0 8c-5 0-7-8-12-8a4 4 0 1 0 0 8" /></svg></div>
+      <div class="col" style="gap:8px"><h3>No per-run pricing</h3><p>Self-hosted n8n has no execution limit, so every 30 minutes costs the same as once a day</p></div>
+    </div>
+    <div class="card rise" style="--d:4;flex-direction:row;gap:26px;align-items:flex-start">
+      <div class="tile violet"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /><path d="M3 3v5h5" /><path d="M12 7v5l4 2" /></svg></div>
+      <div class="col" style="gap:8px"><h3>Every run on record</h3><p>The execution history is how I caught a filter quietly dropping interview emails</p></div>
+    </div>
+    <div class="card rise" style="--d:5;flex-direction:row;gap:26px;align-items:flex-start">
+      <div class="tile green"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z" /><circle cx="16.5" cy="7.5" r=".5" fill="currentColor" /></svg></div>
+      <div class="col" style="gap:8px"><h3>My server, my keys</h3><p>Credentials and run data live on infrastructure I control</p></div>
+    </div>
+  </div>
+  <div class="takeaway rise" style="--d:6"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.106-3.105c.32-.322.863-.22.983.218a6 6 0 0 1-8.259 7.057l-7.91 7.91a1 1 0 0 1-2.999-3l7.91-7.91a6 6 0 0 1 7.057-8.259c.438.12.54.662.219.984z" /></svg> The tradeoff: I maintain it myself. That is exactly where the three tips come from.</div>
+  <aside class="notes">
+    <p>Why self-hosted, in under a minute.</p>
+    <p>My workflows run every 30 minutes. Hosted plans meter executions; my own n8n doesn't, so running every 30 minutes costs the same as once a day.</p>
+    <p>I get every run on record. That history is how I found a filter that was quietly dropping interview emails.</p>
+    <p>The price: I maintain it myself. And that's where the three tips come from.</p>
+  </aside>
+</section>
+
+<!-- ============ 3 · NUMBERS ============ -->
+<section class="slide" data-title="In numbers" data-tip="0">
+  <div class="row rise" style="justify-content:space-between;align-items:center"><div class="kicker"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2" /></svg> The system in numbers</div><div class="mono" style="font-size:20px;color:var(--dim)">source: n8n execution log, 7 days to 4 Nov 2026</div></div>
+  <h2 class="h-title rise" style="--d:1">Small server, boring model, <span class="grad">lots of runs</span></h2>
+  <div class="stats">
+    <div class="stat rise" style="--d:2"><div class="tile sm teal"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="m17 2 4 4-4 4" /><path d="M3 11v-1a4 4 0 0 1 4-4h14" /><path d="m7 22-4-4 4-4" /><path d="M21 13v1a4 4 0 0 1-4 4H3" /></svg></div><div class="v grad">~1,000</div><div class="l">runs a week, three workflows on a 30-minute schedule</div></div>
+    <div class="stat rise" style="--d:3"><div class="tile sm green"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M21.801 10A10 10 0 1 1 17 3.335" /><path d="m9 11 3 3L22 4" /></svg></div><div class="v" style="color:var(--green)">0.1%</div><div class="l">failed: 1 of 1,009 scheduled runs in the last 7 days</div></div>
+    <div class="stat rise" style="--d:4"><div class="tile sm blue"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><rect width="8" height="8" x="3" y="3" rx="2" /><path d="M7 11v4a2 2 0 0 0 2 2h4" /><rect width="8" height="8" x="13" y="13" rx="2" /></svg></div><div class="v">7 <span style="font-size:52px;color:var(--muted)">/ 132</span></div><div class="l">workflows / nodes, including an MCP server</div></div>
+    <div class="stat rise" style="--d:5"><div class="tile sm violet"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z" /><path d="M20 2v4" /><path d="M22 4h-4" /><circle cx="4" cy="20" r="2" /></svg></div><div class="v" style="color:var(--violet)">0</div><div class="l">temperature. gpt-4o-mini, JSON out, one batched call</div></div>
+    <div class="stat rise" style="--d:6"><div class="tile sm amber"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M17 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 1-1.732" /><path d="m22 5.5-6.419 4.179a2 2 0 0 1-2.162 0L7 5.5" /><rect x="7" y="3" width="15" height="12" rx="2" /></svg></div><div class="v grad-warm">60</div><div class="l">emails max per AI call, the rest wait for the next run</div></div>
+    <div class="stat rise" style="--d:7"><div class="tile sm coral"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M12 20v2" /><path d="M12 2v2" /><path d="M17 20v2" /><path d="M17 2v2" /><path d="M2 12h2" /><path d="M2 17h2" /><path d="M2 7h2" /><path d="M20 12h2" /><path d="M20 17h2" /><path d="M20 7h2" /><path d="M7 20v2" /><path d="M7 2v2" /><rect x="4" y="4" width="16" height="16" rx="2" /><rect x="8" y="8" width="8" height="8" rx="1" /></svg></div><div class="v">2 <span style="font-size:52px;color:var(--muted)">GB</span></div><div class="l">of RAM: an AWS t3.small runs all of it</div></div>
+  </div>
+  <aside class="notes">
+    <p>Fifteen seconds on numbers, straight from n8n's own log.</p>
+    <p>About a thousand runs a week, one failure in the last seven days. Seven workflows. One cheap model at temperature zero. All on a t3.small with two gigs of RAM.</p>
+    <p>(Skip this slide if you're behind; the demo shows the same numbers live.)</p>
+  </aside>
+</section>
+
+<!-- ============ 4 · MAP ============ -->
+<section class="slide" data-title="How it fits" data-tip="0" style="gap:30px">
+  <div class="kicker rise"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><rect x="16" y="16" width="6" height="6" rx="1" /><rect x="2" y="16" width="6" height="6" rx="1" /><rect x="9" y="2" width="6" height="6" rx="1" /><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3" /><path d="M12 12V8" /></svg> Architecture</div>
+  <h2 class="h-title rise" style="--d:1">n8n does the mechanics. The AI only <span class="grad">judges</span>.</h2>
+  <div style="display:grid;grid-template-columns:330px 70px 1fr 70px 430px;align-items:center;flex:1">
+    <div class="col" style="gap:24px">
+      <div class="card rise" style="--d:2;padding:24px 26px;gap:10px"><div class="row" style="gap:16px;align-items:center"><div class="tile sm blue"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><polyline points="22 12 16 12 14 15 10 15 8 12 2 12" /><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" /></svg></div><h3 style="font-size:28px">Gmail inbox</h3></div><p style="font-size:23px">checked every 30 minutes</p></div>
+      <div class="card rise" style="--d:3;padding:24px 26px;gap:10px"><div class="row" style="gap:16px;align-items:center"><div class="tile sm blue"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M19.07 4.93A10 10 0 0 0 6.99 3.34" /><path d="M4 6h.01" /><path d="M2.29 9.62A10 10 0 1 0 21.31 8.35" /><path d="M16.24 7.76A6 6 0 1 0 8.23 16.67" /><path d="M12 18h.01" /><path d="M17.99 11.66A6 6 0 0 1 15.77 16.67" /><circle cx="12" cy="12" r="2" /><path d="m13.41 10.59 5.66-5.66" /></svg></div><h3 style="font-size:28px">Job boards</h3></div><p style="font-size:23px">swept once a week</p></div>
+    </div>
+    <div style="display:grid;place-items:center;font-size:46px;color:#4A5E75"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="m6 17 5-5-5-5" /><path d="m13 17 5-5-5-5" /></svg></div>
+    <div class="card fix rise" style="--d:3;padding:30px 34px;gap:16px">
+      <div class="row" style="justify-content:space-between;align-items:center"><h3 style="font-size:34px">n8n on my own AWS server</h3><span class="chip ok"><span class="dot pulse"></span> live</span></div>
+      <div class="nd" style="font-size:24px"><div class="tile teal"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49" /><path d="M14.084 14.158a3 3 0 0 1-4.242-4.242" /><path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143" /><path d="m2 2 20 20" /></svg></div><div class="col" style="gap:2px"><span>1 · Skip what it has already seen</span><span style="font:400 20px var(--body);color:var(--muted)">seen-items cache: nothing is paid for twice</span></div></div>
+      <div class="nd" style="font-size:24px;border-color:rgba(163,148,255,.6)"><div class="tile violet"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M12 18V5" /><path d="M15 13a4.17 4.17 0 01-3-4 4.17 4.17 0 01-3 4" /><path d="M17.707 6.294A3 3 0 1012 5a3 3 0 10-5.707 1.294" /><path d="M17.996 5.125a4 4 0 012.526 5.77" /><path d="M18 18a4 4 0 002-7.465" /><path d="M19.967 17.482a4 4 0 11-7.967.517 4 4 0 11-7.967-.517" /><path d="M6 18a4 4 0 01-2-7.465" /><path d="M6.004 5.125a4 4 0 00-2.526 5.77" /></svg></div><div class="col" style="gap:2px"><span>2 · One batched call to a cheap model</span><span style="font:400 20px var(--body);color:var(--muted)">sorts every new email at once, in any language</span></div></div>
+      <div class="nd" style="font-size:24px;border-color:rgba(255,181,71,.7)"><div class="tile amber"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /><path d="m9 12 2 2 4-4" /></svg></div><div class="col" style="gap:2px"><span>3 · AI guard: can block, never send</span><span style="font:400 20px var(--body);color:var(--muted)">checks every outgoing email and fails closed</span></div></div>
+    </div>
+    <div style="display:grid;place-items:center;font-size:46px;color:#4A5E75"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="m6 17 5-5-5-5" /><path d="m13 17 5-5-5-5" /></svg></div>
+    <div class="col" style="gap:16px">
+      <div class="card rise" style="--d:4;padding:18px 24px;gap:6px;flex-direction:row;align-items:center"><div class="tile sm green"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><rect width="18" height="18" x="3" y="3" rx="2" ry="2" /><line x1="3" x2="21" y1="9" y2="9" /><line x1="3" x2="21" y1="15" y2="15" /><line x1="9" x2="9" y1="9" y2="21" /><line x1="15" x2="15" y1="9" y2="21" /></svg></div><div class="col" style="gap:0"><h3 style="font-size:26px">Sheet tracker</h3><p style="font-size:21px">every lead and reply</p></div></div>
+      <div class="card rise" style="--d:5;padding:18px 24px;gap:6px;flex-direction:row;align-items:center"><div class="tile sm amber"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M12 2v8" /><path d="m4.93 10.93 1.41 1.41" /><path d="M2 18h2" /><path d="M20 18h2" /><path d="m19.07 10.93-1.41 1.41" /><path d="M22 22H2" /><path d="m8 6 4-4 4 4" /><path d="M16 18a4 4 0 0 0-8 0" /></svg></div><div class="col" style="gap:0"><h3 style="font-size:26px">Morning digest</h3><p style="font-size:21px">what needs me, and what it cost</p></div></div>
+      <div class="card rise" style="--d:6;padding:18px 24px;gap:6px;flex-direction:row;align-items:center"><div class="tile sm coral"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z" /><path d="m21.854 2.147-10.94 10.939" /></svg></div><div class="col" style="gap:0"><h3 style="font-size:26px">Follow-up emails</h3><p style="font-size:21px">only after my OK on the row</p></div></div>
+      <div class="card rise" style="--d:7;padding:18px 24px;gap:6px;flex-direction:row;align-items:center"><div class="tile sm violet"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M12 22v-5" /><path d="M15 8V2" /><path d="M17 8a1 1 0 0 1 1 1v4a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1z" /><path d="M9 8V2" /></svg></div><div class="col" style="gap:0"><h3 style="font-size:26px">MCP server</h3><p style="font-size:21px">+ ChatGPT Actions: ask it from any AI chat</p></div></div>
+    </div>
+  </div>
+  <div class="card warn rise" style="--d:8;flex-direction:row;align-items:center;gap:22px;padding:20px 30px">
+    <div class="tile sm amber"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M7 18v-6a5 5 0 1 1 10 0v6" /><path d="M5 21a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-1a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2z" /><path d="M21 12h1" /><path d="M18.5 4.5 18 5" /><path d="M2 12h1" /><path d="M12 2v1" /><path d="m4.929 4.929.707.707" /><path d="M12 12v6" /></svg></div>
+    <p style="font-size:26px"><b>It alerts me itself</b>, at most once a day: the OpenAI key runs dry · the send gate fails its self-test · a sync finds zero emails</p>
+  </div>
+  <aside class="notes">
+    <p>The whole thing on one slide. Email comes in every 30 minutes, job boards once a week.</p>
+    <p>Inside n8n there are only three ideas: skip what you've seen, one batched call to a cheap model, and a guard that can block but never send.</p>
+    <p>Out the other side: a tracker, a morning digest with its own cost line, follow-ups that only go out after I approve the row, and an MCP server so I can ask it things from any AI chat.</p>
+  </aside>
+</section>
+
+<!-- ============ 5 · DEMO ============ -->
+<section class="slide" data-title="Live demo" data-tip="0" style="flex-direction:row;align-items:center;gap:70px;
+  background:radial-gradient(900px 700px at 20% 50%,rgba(63,208,181,.16),transparent 65%)">
+  <div class="col grow" style="gap:30px">
+    <div class="kicker rise"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M15.033 9.44a.647.647 0 0 1 0 1.12l-4.065 2.352a.645.645 0 0 1-.968-.56V7.648a.645.645 0 0 1 .967-.56z" /><path d="M12 17v4" /><path d="M8 21h8" /><rect x="2" y="3" width="20" height="14" rx="2" /></svg> Live demo</div>
+    <h1 class="h-hero rise" style="--d:1;font-size:120px">It's running<br><span class="grad">right now</span></h1>
+    <div class="col rise" style="--d:2;gap:18px;margin-top:6px">
+      <div class="row" style="gap:18px;align-items:center"><div class="tile sm teal"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M13 5h8" /><path d="M13 12h8" /><path d="M13 19h8" /><path d="m3 17 2 2 4-4" /><path d="m3 7 2 2 4-4" /></svg></div><p style="font-size:30px">The server and its last runs</p></div>
+      <div class="row" style="gap:18px;align-items:center"><div class="tile sm violet"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7" /><rect x="2" y="4" width="20" height="16" rx="2" /></svg></div><p style="font-size:30px">One email sync, node by node</p></div>
+      <div class="row" style="gap:18px;align-items:center"><div class="tile sm amber"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M16 7h.01" /><path d="M3.4 18H12a8 8 0 0 0 8-8V7a4 4 0 0 0-7.28-2.3L2 20" /><path d="m20 7 2 .5-2 .5" /><path d="M10 18v3" /><path d="M14 17.75V21" /><path d="M7 18a6 6 0 0 0 3.84-10.61" /></svg></div><p style="font-size:30px">The send gate testing itself</p></div>
+    </div>
+  </div>
+  <div class="win rise" style="--d:2;width:860px;flex:none">
+    <div class="bar"><i></i><i></i><i></i><span>n8n · Overview · backup screenshot</span></div>
+    <img src="n8n-overview.webp" alt="n8n overview: 1,021 production executions, 1 failed, 0.1% failure rate, 11.71 seconds average run time" style="display:block;width:100%">
+  </div>
+  <aside class="notes">
+    <p>Switch to the n8n tab now. (If the wifi dies, talk over this screenshot.)</p>
+    <p>1) Overview: production executions and the failure rate for the last 7 days.</p>
+    <p>2) Executions: the runs from the last hour, all on a 30-minute beat. Open one Email sync run and walk the canvas: fetch, skip seen, one AI call, write.</p>
+    <p>3) Open the Follow-up sender, click "Due to send": two test rows go through the real gate on every run. Then come back to the slides.</p>
+    <p>Never open a node's output table on stage: it has real names and emails.</p>
+  </aside>
+</section>
+
+<!-- ============ 6 · TIP 1 OPENER ============ -->
+<section class="slide opener" data-title="Tip 1" data-tip="1">
+  <div class="row" style="align-items:flex-end;gap:48px">
+    <div class="num grad-warm rise">1</div>
+    <div class="col rise" style="--d:1;gap:18px;padding-bottom:14px">
+      <div class="kicker"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2" /><path d="M6.453 15h11.094" /><path d="M8.5 2h7" /></svg> Tip 1 of 3</div>
+      <h2 class="h-title">Test every gate with<br>a case that must fail</h2>
+    </div>
+  </div>
+  <p class="lead rise" style="--d:2">A green run can still have done nothing. Every bug that cost me something showed up as a <span class="chip ok" style="font-size:26px"><span class="dot"></span> Success</span></p>
+  <div class="row rise" style="--d:3;gap:20px;margin-top:10px">
+    <span class="chip"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><rect width="18" height="18" x="3" y="3" rx="2" ry="2" /><line x1="3" x2="21" y1="9" y2="9" /><line x1="3" x2="21" y1="15" y2="15" /><line x1="9" x2="9" y1="9" y2="21" /><line x1="15" x2="15" y1="9" y2="21" /></svg> 1.1 the header row</span><span class="chip"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M16 3h5v5" /><path d="M8 3H3v5" /><path d="M12 22v-8.3a4 4 0 0 0-1.172-2.872L3 3" /><path d="m15 9 6-6" /></svg> 1.2 the IF node</span><span class="chip"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="m2 2 20 20" /><path d="M8.35 2.69A10 10 0 0 1 21.3 15.65" /><path d="M19.08 19.08A10 10 0 1 1 4.92 4.92" /></svg> 1.3 zero items</span><span class="chip amb"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M16 7h.01" /><path d="M3.4 18H12a8 8 0 0 0 8-8V7a4 4 0 0 0-7.28-2.3L2 20" /><path d="m20 7 2 .5-2 .5" /><path d="M10 18v3" /><path d="M14 17.75V21" /><path d="M7 18a6 6 0 0 0 3.84-10.61" /></svg> 1.4 the fix</span>
+  </div>
+  <aside class="notes">
+    <p>Tip one. The scary bugs never turn red. They turn green and do nothing. Three of them, then what I run now.</p>
+  </aside>
+</section>
+
+<!-- ============ 7 · 1.1 HEADER ROW ============ -->
+<section class="slide" data-title="1.1 Header row" data-tip="1">
+  <div class="kicker rise"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><rect width="18" height="18" x="3" y="3" rx="2" ry="2" /><line x1="3" x2="21" y1="9" y2="9" /><line x1="3" x2="21" y1="15" y2="15" /><line x1="9" x2="9" y1="9" y2="21" /><line x1="15" x2="15" y1="9" y2="21" /></svg> Tip 1 · Challenge 1</div>
+  <h2 class="h-title rise" style="--d:1">The header row that skipped <span class="grad-warm">every send</span></h2>
+  <div class="row grow" style="gap:32px">
+    <div class="card bug grow rise" style="--d:2">
+      <div class="tag"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M12 20v-9" /><path d="M14 7a4 4 0 0 1 4 4v3a6 6 0 0 1-12 0v-3a4 4 0 0 1 4-4z" /><path d="M14.12 3.88 16 2" /><path d="M21 21a4 4 0 0 0-3.81-4" /><path d="M21 5a4 4 0 0 1-3.55 3.97" /><path d="M22 13h-4" /><path d="M3 21a4 4 0 0 1 3.81-4" /><path d="M3 5a4 4 0 0 0 3.55 3.97" /><path d="M6 13H2" /><path d="m8 2 1.88 1.88" /><path d="M9 7.13V6a3 3 0 1 1 6 0v1.13" /></svg> What happened</div>
+      <p>The Sheets node took <b>row 1</b> as the header. Row 1 was a banner. Every key came out wrong, so the send gate never saw a <code>Status</code> and skipped every row.</p>
+      <div class="win" style="margin-top:6px">
+        <div class="bar"><i></i><i></i><i></i><span>Follow-ups tab</span></div>
+        <div style="font-family:var(--mono);font-size:21px">
+          <div style="display:grid;grid-template-columns:70px 1fr;border-bottom:1px solid var(--line)"><span style="padding:10px 14px;color:var(--dim)">1</span><span style="padding:10px 14px;color:var(--coral);background:rgba(255,107,107,.08)">a banner row &nbsp;← n8n took this as the header</span></div>
+          <div style="display:grid;grid-template-columns:70px 1fr 1fr 1fr;border-bottom:1px solid var(--line)"><span style="padding:10px 14px;color:var(--dim)">2</span><span style="padding:10px 14px">Company</span><span style="padding:10px 14px">Status</span><span style="padding:10px 14px">Send OK</span></div>
+          <div style="display:grid;grid-template-columns:70px 1fr 1fr 1fr"><span style="padding:10px 14px;color:var(--dim)">3</span><span style="padding:10px 14px;color:var(--muted)">Acme</span><span style="padding:10px 14px;color:var(--muted)">DUE</span><span style="padding:10px 14px;color:var(--muted)">✓</span></div>
+        </div>
+      </div>
+      <div class="row" style="gap:14px;align-items:center;margin-top:auto"><span class="chip">j.Status → <span class="r">undefined</span></span><span class="chip bad">0 sent</span><span class="chip ok"><span class="dot"></span> Success</span></div>
+    </div>
+    <div class="card fix rise" style="--d:3;width:760px;flex:none">
+      <div class="tag"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M21.801 10A10 10 0 1 1 17 3.335" /><path d="m9 11 3 3L22 4" /></svg> What I do now</div>
+      <p>Every Sheets read pins its header row and first data row.</p>
+      <div class="win"><div class="bar"><i></i><i></i><i></i><span>Read Follow-ups · options</span></div>
+<pre><span class="p">dataLocationOnSheet</span>: {
+  <span class="p">rangeDefinition</span>: <span class="s">'specifyRange'</span>,
+  <span class="p">headerRow</span>: <span class="n">2</span>,
+  <span class="p">firstDataRow</span>: <span class="n">3</span>,
+  <span class="p">range</span>: <span class="s">'A2:Y300'</span>
+}</pre></div>
+      <p>And the gate checks its own columns on every run. Missing <code>Status</code>? Nothing sends and I get an email.</p>
+    </div>
+  </div>
+  <div class="takeaway rise" style="--d:4"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" /><path d="M9 18h6" /><path d="M10 22h4" /></svg> If a read can return the wrong shape, check the shape.</div>
+  <aside class="notes">
+    <p>First one. The Sheets node defaults to row one as the header. My row one was a banner. So every key was wrong, the gate looked for Status, found nothing, and skipped every single row.</p>
+    <p>Nothing errored. Zero emails sent. Green.</p>
+    <p>Now every read pins headerRow and firstDataRow, and the gate checks its own columns on every run.</p>
+  </aside>
+</section>
+
+<!-- ============ 8 · 1.2 IF NODE ============ -->
+<section class="slide" data-title="1.2 IF node" data-tip="1">
+  <div class="kicker rise"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M16 3h5v5" /><path d="M8 3H3v5" /><path d="M12 22v-8.3a4 4 0 0 0-1.172-2.872L3 3" /><path d="m15 9 6-6" /></svg> Tip 1 · Challenge 2</div>
+  <h2 class="h-title rise" style="--d:1">The IF node that was <span class="grad-warm">always false</span></h2>
+  <div class="card bug rise" style="--d:2;gap:20px">
+    <div class="tag"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M12 20v-9" /><path d="M14 7a4 4 0 0 1 4 4v3a6 6 0 0 1-12 0v-3a4 4 0 0 1 4-4z" /><path d="M14.12 3.88 16 2" /><path d="M21 21a4 4 0 0 0-3.81-4" /><path d="M21 5a4 4 0 0 1-3.55 3.97" /><path d="M22 13h-4" /><path d="M3 21a4 4 0 0 1 3.81-4" /><path d="M3 5a4 4 0 0 0 3.55 3.97" /><path d="M6 13H2" /><path d="m8 2 1.88 1.88" /><path d="M9 7.13V6a3 3 0 1 1 6 0v1.13" /></svg> What happened</div>
+    <p>I used an operator my n8n version didn't know. n8n didn't fail: it logged a warning and sent every row down the false branch. New rows never reached my tracker, and every run was green.</p>
+    <div class="row" style="align-items:center;gap:0">
+      <div class="nd"><div class="tile blue"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="m17 2 4 4-4 4" /><path d="M3 11v-1a4 4 0 0 1 4-4h14" /><path d="m7 22-4-4 4-4" /><path d="M21 13v1a4 4 0 0 1-4 4H3" /></svg></div>Every 30 min</div>
+      <div class="wire solid"></div>
+      <div class="nd hot"><div class="tile amber"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M16 3h5v5" /><path d="M8 3H3v5" /><path d="M12 22v-8.3a4 4 0 0 0-1.172-2.872L3 3" /><path d="m15 9 6-6" /></svg></div><div class="col" style="gap:4px"><span>Anything new?</span><span class="mono" style="font-size:20px;color:var(--coral)">boolean:notTrue</span></div></div>
+      <div class="col" style="gap:22px;margin-left:0">
+        <div class="row" style="align-items:center;gap:0"><div class="wire dead" style="width:70px"></div><span class="items">true · 0 items</span><div class="wire dead"></div><div class="nd ghost"><div class="tile green"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M12 3v18" /><rect width="18" height="18" x="3" y="3" rx="2" /><path d="M3 9h18" /><path d="M3 15h18" /></svg></div>Append to table · never ran</div></div>
+        <div class="row" style="align-items:center;gap:0"><div class="wire hot" style="width:70px"></div><span class="items hot">false · 17 rows held back</span><div class="wire hot"></div><div class="nd"><div class="tile"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg></div>next step</div></div>
+      </div>
+    </div>
+    <div class="win"><div class="bar"><i></i><i></i><i></i><span>journalctl -u n8n</span></div>
+<pre><span class="c">Nov 04 16:30:05</span> n8n: <span class="r">Unknown filter parameter operator "boolean:notTrue"</span>  <span class="c"># ×17, every run</span></pre></div>
+  </div>
+  <div class="row rise" style="--d:3;gap:28px">
+    <div class="card fix grow" style="flex-direction:row;gap:22px;align-items:center;padding:20px 28px"><div class="tile sm teal"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="m18 16 4-4-4-4" /><path d="m6 8-4 4 4 4" /><path d="m14.5 4-5 16" /></svg></div><div class="col" style="gap:8px"><p style="font-size:24px">The fix: a condition this version knows</p><code class="inline-code" style="font-size:21px;white-space:nowrap;align-self:flex-start">{{ $json._nothing !== true }} · is true</code></div></div>
+    <div class="card fix grow" style="flex-direction:row;gap:22px;align-items:center;padding:20px 28px"><div class="tile sm teal"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M3 7V5a2 2 0 0 1 2-2h2" /><path d="M17 3h2a2 2 0 0 1 2 2v2" /><path d="M21 17v2a2 2 0 0 1-2 2h-2" /><path d="M7 21H5a2 2 0 0 1-2-2v-2" /><circle cx="12" cy="12" r="3" /><path d="m16 16-1.9-1.9" /></svg></div><div class="col" style="gap:8px"><p style="font-size:24px">After any IF edit, search the server log</p><code class="inline-code" style="font-size:21px;white-space:nowrap;align-self:flex-start">journalctl -u n8n | grep "Unknown filter"</code></div></div>
+  </div>
+  <aside class="notes">
+    <p>Second one. I used an IF operator, boolean notTrue, that my n8n version didn't know.</p>
+    <p>n8n doesn't fail on that. It logs a warning and sends everything to the false branch. So "Append to table" never ran. 17 rows held back. Green every 30 minutes.</p>
+    <p>The only trace was this log line. Green means it ran. It doesn't mean every branch ran.</p>
+  </aside>
+</section>
+
+<!-- ============ 9 · 1.3 ZERO ITEMS ============ -->
+<section class="slide" data-title="1.3 Zero items" data-tip="1">
+  <div class="kicker rise"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="m2 2 20 20" /><path d="M8.35 2.69A10 10 0 0 1 21.3 15.65" /><path d="M19.08 19.08A10 10 0 1 1 4.92 4.92" /></svg> Tip 1 · Challenge 3</div>
+  <h2 class="h-title rise" style="--d:1">Zero items stop the chain, <span class="grad-warm">without an error</span></h2>
+  <div class="card bug rise" style="--d:2;gap:26px">
+    <div class="tag"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M12 20v-9" /><path d="M14 7a4 4 0 0 1 4 4v3a6 6 0 0 1-12 0v-3a4 4 0 0 1 4-4z" /><path d="M14.12 3.88 16 2" /><path d="M21 21a4 4 0 0 0-3.81-4" /><path d="M21 5a4 4 0 0 1-3.55 3.97" /><path d="M22 13h-4" /><path d="M3 21a4 4 0 0 1 3.81-4" /><path d="M3 5a4 4 0 0 0 3.55 3.97" /><path d="M6 13H2" /><path d="m8 2 1.88 1.88" /><path d="M9 7.13V6a3 3 0 1 1 6 0v1.13" /></svg> What happened</div>
+    <p>In n8n, a node that outputs nothing quietly ends its branch. Someone sorted a sheet, a banner landed in row 1, my company list came out empty, and the email step simply never ran.</p>
+    <div class="row" style="align-items:center;gap:0">
+      <div class="nd good"><div class="tile green"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><rect width="18" height="18" x="3" y="3" rx="2" ry="2" /><line x1="3" x2="21" y1="9" y2="9" /><line x1="3" x2="21" y1="15" y2="15" /><line x1="9" x2="9" y1="9" y2="21" /><line x1="15" x2="15" y1="9" y2="21" /></svg></div>Read sheet</div>
+      <div class="wire solid"></div>
+      <div class="nd hot"><div class="tile"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5c0 1.1.9 2 2 2h1" /><path d="M16 21h1a2 2 0 0 0 2-2v-5c0-1.1.9-2 2-2a2 2 0 0 1-2-2V5a2 2 0 0 0-2-2h-1" /></svg></div><div class="col" style="gap:4px"><span>Prep companies</span><span class="items hot">0 items</span></div></div>
+      <div class="wire dead"></div>
+      <div class="nd ghost"><div class="tile coral"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7" /><rect x="2" y="4" width="20" height="16" rx="2" /></svg></div>Fetch Gmail · never ran</div>
+      <div class="wire dead"></div>
+      <div class="nd ghost"><div class="tile violet"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M12 18V5" /><path d="M15 13a4.17 4.17 0 01-3-4 4.17 4.17 0 01-3 4" /><path d="M17.707 6.294A3 3 0 1012 5a3 3 0 10-5.707 1.294" /><path d="M17.996 5.125a4 4 0 012.526 5.77" /><path d="M18 18a4 4 0 002-7.465" /><path d="M19.967 17.482a4 4 0 11-7.967.517 4 4 0 11-7.967-.517" /><path d="M6 18a4 4 0 01-2-7.465" /><path d="M6.004 5.125a4 4 0 00-2.526 5.77" /></svg></div>AI triage</div>
+      <span class="chip ok" style="margin-left:34px"><span class="dot"></span> Success</span>
+    </div>
+  </div>
+  <div class="row rise" style="--d:3;gap:28px">
+    <div class="card fix grow">
+      <div class="tag"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M21.801 10A10 10 0 1 1 17 3.335" /><path d="m9 11 3 3L22 4" /></svg> What I do now</div>
+      <ul class="ticks">
+        <li><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><circle cx="15" cy="12" r="3" /><rect width="20" height="14" x="2" y="5" rx="7" /></svg><span><b>Always Output Data</b> on nodes where zero is possible, so the chain keeps going</span></li>
+        <li><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M7 18v-6a5 5 0 1 1 10 0v6" /><path d="M5 21a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-1a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2z" /><path d="M21 12h1" /><path d="M18.5 4.5 18 5" /><path d="M2 12h1" /><path d="M12 2v1" /><path d="m4.929 4.929.707.707" /><path d="M12 12v6" /></svg><span><b>A zero-output alert:</b> if the email sync finds no email in 3 days, it emails me</span></li>
+      </ul>
+    </div>
+    <div class="card warn" style="width:620px;flex:none;justify-content:center">
+      <div class="tag"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" /><path d="M9 18h6" /><path d="M10 22h4" /></svg> Rule</div>
+      <p style="font-size:32px;color:var(--ink);font-family:var(--head);font-weight:600;line-height:1.3">Count what a run produced, not whether it ran.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Third one. In n8n, if a node outputs zero items, the branch just ends. No error.</p>
+    <p>Someone sorted a sheet, a banner row landed on top, my company list came out empty, and the Gmail step never ran. Green.</p>
+    <p>So: Always Output Data wherever zero is possible, and an alert when a run that should produce something produces zero.</p>
+    <p>(Skip this slide if you're behind.)</p>
+  </aside>
+</section>
+
+<!-- ============ 10 · 1.4 THE GATE TESTS ITSELF ============ -->
+<section class="slide" data-title="1.4 Canary rows" data-tip="1">
+  <div class="kicker rise"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M16 7h.01" /><path d="M3.4 18H12a8 8 0 0 0 8-8V7a4 4 0 0 0-7.28-2.3L2 20" /><path d="m20 7 2 .5-2 .5" /><path d="M10 18v3" /><path d="M14 17.75V21" /><path d="M7 18a6 6 0 0 0 3.84-10.61" /></svg> Tip 1 · What I run now</div>
+  <h2 class="h-title rise" style="--d:1">Now the send gate <span class="grad">tests itself</span>, every run</h2>
+  <div class="row grow" style="gap:32px">
+    <div class="col grow" style="gap:22px">
+      <div class="card rise" style="--d:2;gap:20px">
+        <div class="row" style="align-items:center;gap:0">
+          <div class="nd"><div class="tile green"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><rect width="18" height="18" x="3" y="3" rx="2" ry="2" /><line x1="3" x2="21" y1="9" y2="9" /><line x1="3" x2="21" y1="15" y2="15" /><line x1="9" x2="9" y1="9" y2="21" /><line x1="15" x2="15" y1="9" y2="21" /></svg></div><div class="col" style="gap:2px"><span>Read rows</span><span class="items">124 real rows</span></div></div>
+          <div class="wire solid"></div>
+          <div class="nd" style="border-color:var(--amber)"><div class="tile amber"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /><path d="m9 12 2 2 4-4" /></svg></div><div class="col" style="gap:2px"><span>gate( )</span><span class="items">same function</span></div></div>
+        </div>
+        <div class="row" style="gap:16px;align-items:stretch">
+          <div class="card fix" style="padding:18px 22px;gap:6px;flex:1"><div class="row" style="gap:12px;align-items:center;font-size:26px;font-weight:700"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M16 7h.01" /><path d="M3.4 18H12a8 8 0 0 0 8-8V7a4 4 0 0 0-7.28-2.3L2 20" /><path d="m20 7 2 .5-2 .5" /><path d="M10 18v3" /><path d="M14 17.75V21" /><path d="M7 18a6 6 0 0 0 3.84-10.61" /></svg> Canary A</div><p style="font-size:22px">every rule met: <b style="color:var(--green)">must pass</b></p></div>
+          <div class="card bug" style="padding:18px 22px;gap:6px;flex:1"><div class="row" style="gap:12px;align-items:center;font-size:26px;font-weight:700"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M16 7h.01" /><path d="M3.4 18H12a8 8 0 0 0 8-8V7a4 4 0 0 0-7.28-2.3L2 20" /><path d="m20 7 2 .5-2 .5" /><path d="M10 18v3" /><path d="M14 17.75V21" /><path d="M7 18a6 6 0 0 0 3.84-10.61" /></svg> Canary B</div><p style="font-size:22px">same row, Send OK unticked: <b style="color:var(--coral)">must stop</b></p></div>
+        </div>
+        <p style="font-size:24px">Plus: rows came back, the columns exist, the lead links came back. <b>Any check fails: nothing is sent, and I get one email that day.</b> The canaries never leave the node.</p>
+      </div>
+      <div class="row rise" style="--d:4;gap:14px;flex-wrap:wrap">
+        <span class="chip ok"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><rect width="12" height="12" x="2" y="10" rx="2" ry="2" /><path d="m17.92 14 3.5-3.5a2.24 2.24 0 0 0 0-3l-5-4.92a2.24 2.24 0 0 0-3 0L10 6" /><path d="M6 18h.01" /><path d="M10 14h.01" /><path d="M15 6h.01" /><path d="M18 9h.01" /></svg> 3,000 randomised runs: same decisions as the old gate</span>
+        <span class="chip ok"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="m15 12-9.373 9.373a1 1 0 0 1-3.001-3L12 9" /><path d="m18 15 4-4" /><path d="m21.5 11.5-1.914-1.914A2 2 0 0 1 19 8.172v-.344a2 2 0 0 0-.586-1.414l-1.657-1.657A6 6 0 0 0 12.516 3H9l1.243 1.243A6 6 0 0 1 12 8.485V10l2 2h1.172a2 2 0 0 1 1.414.586L18.5 14.5" /></svg> broken on purpose, both ways: caught</span>
+        <span class="chip amb"><span class="dot pulse"></span> live since 4 Nov</span>
+      </div>
+    </div>
+    <div class="win rise" style="--d:3;width:820px;flex:none">
+      <div class="bar"><i></i><i></i><i></i><span>Due to send · simplified</span></div>
+<pre><span class="k">const</span> mustPass = { <span class="p">Status</span>: <span class="s">'DUE'</span>, <span class="p">Mode</span>: <span class="s">'AUTO SEND'</span>,
+  <span class="s">'Send OK'</span>: <span class="k">true</span>, <span class="p">Due</span>: yesterday, ... };
+<span class="k">const</span> mustStop = { ...mustPass,
+  <span class="s">'Send OK'</span>: <span class="k">false</span> };
+
+<span class="k">if</span> (!gate(mustPass))
+  problems.push(<span class="s">'gate blocks everything'</span>);
+<span class="k">if</span> (gate(mustStop))
+  problems.push(<span class="s">'gate sends unapproved rows'</span>);
+
+<span class="k">if</span> (problems.length)
+  <span class="k">return</span> failClosed(problems); <span class="c">// send nothing</span>
+<span class="k">return</span> realRows.map(gate).filter(Boolean);</pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>So here's what runs now. The real rows and two fake rows, I call them canaries, go through the same gate function on every run.</p>
+    <p>Canary A meets every rule and must pass. Canary B is the same row with Send OK unticked and must stop. If A gets blocked, the gate is blocking everything. If B gets through, it could send things I never approved. Either way: nothing sends, and I get one email.</p>
+    <p>Before shipping it I ran 3,000 randomised runs to prove it makes the same decisions as the old gate, and broke it on purpose both ways to prove it catches both.</p>
+  </aside>
+</section>
+
+<!-- ============ 11 · TIP 2 OPENER ============ -->
+<section class="slide opener" data-title="Tip 2" data-tip="2">
+  <div class="row" style="align-items:flex-end;gap:48px">
+    <div class="num grad rise">2</div>
+    <div class="col rise" style="--d:1;gap:18px;padding-bottom:14px">
+      <div class="kicker"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z" /><circle cx="16.5" cy="7.5" r=".5" fill="currentColor" /></svg> Tip 2 of 3</div>
+      <h2 class="h-title">Your credentials are<br>part of the deploy</h2>
+    </div>
+  </div>
+  <p class="lead rise" style="--d:2">Self-hosting means everything outside the workflow is yours too: the credentials, the OAuth app, and which version is actually running.</p>
+  <div class="row rise" style="--d:3;gap:20px;margin-top:10px">
+    <span class="chip"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M14 22h4a2 2 0 0 0 2-2V8a2.4 2.4 0 0 0-.706-1.706l-3.588-3.588A2.4 2.4 0 0 0 14 2H6a2 2 0 0 0-2 2v6" /><path d="M14 2v5a1 1 0 0 0 1 1h5" /><path d="M5 14a1 1 0 0 0-1 1v2a1 1 0 0 1-1 1 1 1 0 0 1 1 1v2a1 1 0 0 0 1 1" /><path d="M9 22a1 1 0 0 0 1-1v-2a1 1 0 0 1 1-1 1 1 0 0 1-1-1v-2a1 1 0 0 0-1-1" /></svg> 2.1 the re-import</span><span class="chip"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M8 2v3" /><path d="M16 2v3" /><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M3 9h18" /><path d="m14 13-4 4" /><path d="m10 13 4 4" /></svg> 2.2 day 7</span><span class="chip"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><circle cx="18" cy="18" r="3" /><circle cx="6" cy="6" r="3" /><path d="M13 6h3a2 2 0 0 1 2 2v7" /><path d="M11 18H8a2 2 0 0 1-2-2V9" /></svg> 2.3 draft vs published</span>
+  </div>
+  <aside class="notes"><p>Tip two. When you self-host, the setup around the workflow is part of your deploy. Three ways it bit me.</p></aside>
+</section>
+
+<!-- ============ 12 · 2.1 RE-IMPORT ============ -->
+<section class="slide" data-title="2.1 Re-import" data-tip="2">
+  <div class="kicker rise"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M14 22h4a2 2 0 0 0 2-2V8a2.4 2.4 0 0 0-.706-1.706l-3.588-3.588A2.4 2.4 0 0 0 14 2H6a2 2 0 0 0-2 2v6" /><path d="M14 2v5a1 1 0 0 0 1 1h5" /><path d="M5 14a1 1 0 0 0-1 1v2a1 1 0 0 1-1 1 1 1 0 0 1 1 1v2a1 1 0 0 0 1 1" /><path d="M9 22a1 1 0 0 0 1-1v-2a1 1 0 0 1 1-1 1 1 0 0 1-1-1v-2a1 1 0 0 0-1-1" /></svg> Tip 2 · Challenge 1</div>
+  <h2 class="h-title rise" style="--d:1">The re-import that <span class="grad-warm">stripped my credentials</span></h2>
+  <div class="row grow" style="gap:32px">
+    <div class="card bug grow rise" style="--d:2">
+      <div class="tag"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M12 20v-9" /><path d="M14 7a4 4 0 0 1 4 4v3a6 6 0 0 1-12 0v-3a4 4 0 0 1 4-4z" /><path d="M14.12 3.88 16 2" /><path d="M21 21a4 4 0 0 0-3.81-4" /><path d="M21 5a4 4 0 0 1-3.55 3.97" /><path d="M22 13h-4" /><path d="M3 21a4 4 0 0 1 3.81-4" /><path d="M3 5a4 4 0 0 0 3.55 3.97" /><path d="M6 13H2" /><path d="m8 2 1.88 1.88" /><path d="M9 7.13V6a3 3 0 1 1 6 0v1.13" /></svg> What happened</div>
+      <p>Credentials I attached in the n8n UI lived only on the server. My exported JSON had none on <b>14 nodes</b>. A CLI re-import silently removed them, and that evening's scheduled runs failed.</p>
+      <div class="win" style="margin-top:auto"><div class="bar"><i></i><i></i><i></i><span>exported workflow · one node</span></div>
+<pre>{
+  <span class="p">"name"</span>: <span class="s">"Read tracker"</span>,
+  <span class="p">"type"</span>: <span class="s">"n8n-nodes-base.googleSheets"</span>,
+<span class="del">  "credentials": { ... }      ← not in the file</span>}</pre></div>
+    </div>
+    <div class="card fix rise" style="--d:3;width:820px;flex:none">
+      <div class="tag"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M21.801 10A10 10 0 1 1 17 3.335" /><path d="m9 11 3 3L22 4" /></svg> What I do now</div>
+      <div class="win"><div class="bar"><i></i><i></i><i></i><span>every exported node</span></div>
+<pre><span class="add">  "credentials": {</span><span class="add">    "googleSheetsOAuth2Api": {</span><span class="add">      "id": "…", "name": "Google Sheets account"</span><span class="add">    } }</span></pre></div>
+      <ul class="ticks">
+        <li><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M20 6 9 17l-5-5" /></svg><span>Credentials and stable workflow ids live <b>in the file</b></span></li>
+        <li><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M20 6 9 17l-5-5" /></svg><span>Never import without an id: n8n creates a duplicate</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="takeaway rise" style="--d:4"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" /><path d="M9 18h6" /><path d="M10 22h4" /></svg> Your export is your deploy. If it isn't in the file, it isn't deployed.</div>
+  <aside class="notes">
+    <p>Credentials you attach in the UI live only on the server. My exported JSON didn't have them on 14 nodes. One re-import from the CLI, and they were gone. The scheduled runs that evening failed.</p>
+    <p>Now every node in the file carries its credential id and name, and every workflow keeps a stable id, because importing without one creates a duplicate.</p>
+  </aside>
+</section>
+
+<!-- ============ 13 · 2.2 DAY 7 ============ -->
+<section class="slide" data-title="2.2 OAuth day 7" data-tip="2">
+  <div class="kicker rise"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M8 2v3" /><path d="M16 2v3" /><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M3 9h18" /><path d="m14 13-4 4" /><path d="m10 13 4 4" /></svg> Tip 2 · Challenge 2</div>
+  <h2 class="h-title rise" style="--d:1">Day 7: the OAuth app was <span class="grad-warm">still in Testing</span></h2>
+  <div class="card bug rise" style="--d:2;gap:24px">
+    <div class="tag"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M12 20v-9" /><path d="M14 7a4 4 0 0 1 4 4v3a6 6 0 0 1-12 0v-3a4 4 0 0 1 4-4z" /><path d="M14.12 3.88 16 2" /><path d="M21 21a4 4 0 0 0-3.81-4" /><path d="M21 5a4 4 0 0 1-3.55 3.97" /><path d="M22 13h-4" /><path d="M3 21a4 4 0 0 1 3.81-4" /><path d="M3 5a4 4 0 0 0 3.55 3.97" /><path d="M6 13H2" /><path d="m8 2 1.88 1.88" /><path d="M9 7.13V6a3 3 0 1 1 6 0v1.13" /></svg> What happened</div>
+    <p>A Google OAuth app in <b>Testing</b> mode issues refresh tokens that expire after 7 days. Gmail and Sheets worked perfectly for exactly one week.</p>
+    <div style="display:grid;grid-template-columns:repeat(8,1fr);gap:14px">
+      <div class="card fix" style="padding:18px;gap:4px;align-items:center"><span class="mono" style="font-size:19px;color:var(--muted)">Wed</span><b style="font-size:40px;font-family:var(--head)">9</b><span style="font-size:19px;color:var(--teal)">connected</span></div>
+      <div class="card" style="padding:18px;gap:4px;align-items:center"><span class="mono" style="font-size:19px;color:var(--muted)">Thu</span><b style="font-size:40px;font-family:var(--head)">10</b><span class="dot" style="color:var(--green)"></span></div>
+      <div class="card" style="padding:18px;gap:4px;align-items:center"><span class="mono" style="font-size:19px;color:var(--muted)">Fri</span><b style="font-size:40px;font-family:var(--head)">11</b><span class="dot" style="color:var(--green)"></span></div>
+      <div class="card" style="padding:18px;gap:4px;align-items:center"><span class="mono" style="font-size:19px;color:var(--muted)">Sat</span><b style="font-size:40px;font-family:var(--head)">12</b><span class="dot" style="color:var(--green)"></span></div>
+      <div class="card" style="padding:18px;gap:4px;align-items:center"><span class="mono" style="font-size:19px;color:var(--muted)">Sun</span><b style="font-size:40px;font-family:var(--head)">13</b><span class="dot" style="color:var(--green)"></span></div>
+      <div class="card" style="padding:18px;gap:4px;align-items:center"><span class="mono" style="font-size:19px;color:var(--muted)">Mon</span><b style="font-size:40px;font-family:var(--head)">14</b><span class="dot" style="color:var(--green)"></span></div>
+      <div class="card" style="padding:18px;gap:4px;align-items:center"><span class="mono" style="font-size:19px;color:var(--muted)">Tue</span><b style="font-size:40px;font-family:var(--head)">15</b><span class="dot" style="color:var(--green)"></span></div>
+      <div class="card bug" style="padding:18px;gap:4px;align-items:center;background:linear-gradient(180deg,#2A1418,#1A0F12)"><span class="mono" style="font-size:19px;color:var(--coral)">Wed</span><b style="font-size:40px;font-family:var(--head);color:var(--coral)">16</b><span style="font-size:30px;color:var(--coral)"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="m12.5 17-.5-1-.5 1h1z" /><path d="M15 22a1 1 0 0 0 1-1v-1a2 2 0 0 0 1.56-3.25 8 8 0 1 0-11.12 0A2 2 0 0 0 8 20v1a1 1 0 0 0 1 1z" /><circle cx="15" cy="12" r="1" /><circle cx="9" cy="12" r="1" /></svg></span></div>
+    </div>
+    <div class="row" style="align-items:center;gap:18px"><span class="chip bad"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="m15 9-6 6" /><path d="M2.586 16.726A2 2 0 0 1 2 15.312V8.688a2 2 0 0 1 .586-1.414l4.688-4.688A2 2 0 0 1 8.688 2h6.624a2 2 0 0 1 1.414.586l4.688 4.688A2 2 0 0 1 22 8.688v6.624a2 2 0 0 1-.586 1.414l-4.688 4.688a2 2 0 0 1-1.414.586H8.688a2 2 0 0 1-1.414-.586z" /><path d="m9 9 6 6" /></svg> tokens expired</span><span class="v" style="font-family:var(--head);font-size:64px;font-weight:700;color:var(--coral)">106</span><span style="font-size:28px;color:var(--soft)">failed runs</span></div>
+  </div>
+  <div class="row rise" style="--d:3;gap:28px">
+    <div class="card fix grow" style="flex-direction:row;gap:22px;align-items:center;padding:24px 30px"><div class="tile sm teal"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" /><path d="m16 9-5.5 5.5L8 12" /></svg></div><p style="font-size:26px">Publish the consent screen to <b>Production</b>, then reconnect Gmail and Sheets</p></div>
+    <div class="card fix grow" style="flex-direction:row;gap:22px;align-items:center;padding:24px 30px"><div class="tile sm teal"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M10.268 21a2 2 0 0 0 3.464 0" /><path d="M22 8c0-2.3-.8-4.3-2-6" /><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326" /><path d="M4 2C2.8 3.7 2 5.7 2 8" /></svg></div><p style="font-size:26px">A daily email if the OpenAI key runs dry</p></div>
+  </div>
+  <aside class="notes">
+    <p>If you connect Google to a self-hosted n8n, this one's for you. An OAuth app left in Testing mode gets refresh tokens that die after seven days.</p>
+    <p>Connected on the 9th of September, dead on the 16th. 106 failed runs.</p>
+    <p>Fix: publish the consent screen to production and reconnect. Check yours tonight.</p>
+  </aside>
+</section>
+
+<!-- ============ 14 · 2.3 DRAFT VS PUBLISHED ============ -->
+<section class="slide" data-title="2.3 Draft vs published" data-tip="2">
+  <div class="kicker rise"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><circle cx="18" cy="18" r="3" /><circle cx="6" cy="6" r="3" /><path d="M13 6h3a2 2 0 0 1 2 2v7" /><path d="M11 18H8a2 2 0 0 1-2-2V9" /></svg> Tip 2 · Challenge 3</div>
+  <h2 class="h-title rise" style="--d:1">Saved is not live: <span class="grad-warm">draft vs published</span></h2>
+  <div class="row grow" style="gap:32px">
+    <div class="card bug grow rise" style="--d:2">
+      <div class="tag"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M12 20v-9" /><path d="M14 7a4 4 0 0 1 4 4v3a6 6 0 0 1-12 0v-3a4 4 0 0 1 4-4z" /><path d="M14.12 3.88 16 2" /><path d="M21 21a4 4 0 0 0-3.81-4" /><path d="M21 5a4 4 0 0 1-3.55 3.97" /><path d="M22 13h-4" /><path d="M3 21a4 4 0 0 1 3.81-4" /><path d="M3 5a4 4 0 0 0 3.55 3.97" /><path d="M6 13H2" /><path d="m8 2 1.88 1.88" /><path d="M9 7.13V6a3 3 0 1 1 6 0v1.13" /></svg> What happened</div>
+      <p>In n8n 2.x, editing a workflow changes the <b>draft</b>. Scheduled runs keep using the <b>published</b> version until you publish. A fix I wrote stayed a draft while the old version kept running.</p>
+      <div class="row" style="gap:20px;margin-top:auto">
+        <div class="card" style="flex:1;padding:22px 26px;gap:10px;border-style:dashed"><div class="row" style="justify-content:space-between;align-items:center"><b style="font-size:28px">Draft</b><span class="chip ok">fixed</span></div><p style="font-size:23px">edited and saved</p><span class="chip"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><rect x="14" y="3" width="5" height="18" rx="1" /><rect x="5" y="3" width="5" height="18" rx="1" /></svg> not running</span></div>
+        <div class="card" style="flex:1;padding:22px 26px;gap:10px;border-color:var(--coral)"><div class="row" style="justify-content:space-between;align-items:center"><b style="font-size:28px">Published</b><span class="chip bad">old</span></div><p style="font-size:23px">what every scheduled run uses</p><span class="chip ok"><span class="dot pulse"></span> every 30 min</span></div>
+      </div>
+    </div>
+    <div class="card fix rise" style="--d:3;width:820px;flex:none">
+      <div class="tag"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M21.801 10A10 10 0 1 1 17 3.335" /><path d="m9 11 3 3L22 4" /></svg> What I do now</div>
+      <p>Publishing is a deploy step, and so is checking it.</p>
+      <div class="win"><div class="bar"><i></i><i></i><i></i><span>on the server</span></div>
+<pre><span class="g">$</span> n8n publish:workflow \
+    --id=<span class="s">&lt;workflow&gt;</span> --versionId=<span class="s">&lt;tested&gt;</span>
+<span class="g">$</span> sudo systemctl restart n8n
+<span class="c"># then: which version did the next run use?</span></pre></div>
+    </div>
+  </div>
+  <div class="takeaway rise" style="--d:4"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" /><path d="M9 18h6" /><path d="M10 22h4" /></svg> Deployed means published, then verified on the next run.</div>
+  <aside class="notes">
+    <p>n8n 2 split drafts from published versions. Your edit is saved, your manual test passes, and the schedule keeps running the old version.</p>
+    <p>A fix of mine sat as a draft while the old one kept running. Now publishing is part of the deploy, by version id, and I check which version the next run actually used.</p>
+    <p>(Skip this slide if you're behind.)</p>
+  </aside>
+</section>
+
+<!-- ============ 15 · TIP 3 OPENER ============ -->
+<section class="slide opener" data-title="Tip 3" data-tip="3">
+  <div class="row" style="align-items:flex-end;gap:48px">
+    <div class="num rise" style="background:linear-gradient(90deg,var(--violet),var(--blue));-webkit-background-clip:text;background-clip:text;color:transparent">3</div>
+    <div class="col rise" style="--d:1;gap:18px;padding-bottom:14px">
+      <div class="kicker"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="m14 13-8.381 8.38a1 1 0 0 1-3.001-3l8.384-8.381" /><path d="m16 16 6-6" /><path d="m21.5 10.5-8-8" /><path d="m8 8 6-6" /><path d="m8.5 7.5 8 8" /></svg> Tip 3 of 3</div>
+      <h2 class="h-title">Let the AI judge,<br>never act</h2>
+    </div>
+  </div>
+  <p class="lead rise" style="--d:2">n8n does the mechanics. The model only makes the judgement calls, and it can never take an action on its own.</p>
+  <div class="row rise" style="--d:3;gap:20px;margin-top:10px">
+    <span class="chip ai"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z" /><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12" /><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17" /></svg> 3.1 one batched call</span><span class="chip ai"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="m18 14 4 4-4 4" /><path d="m18 2 4 4-4 4" /><path d="M2 18h1.973a4 4 0 0 0 3.3-1.7l5.454-8.6a4 4 0 0 1 3.3-1.7H22" /><path d="M2 6h1.972a4 4 0 0 1 3.6 2.2" /><path d="M22 18h-6.041a4 4 0 0 1-3.3-1.8l-.359-.45" /></svg> 3.2 swapped ids</span><span class="chip ai"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><ellipse cx="12" cy="5" rx="9" ry="3" /><path d="M3 5V19A9 3 0 0 0 21 19V5" /><path d="M3 12A9 3 0 0 0 21 12" /></svg> 3.3 never pay twice</span><span class="chip amb"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /><path d="m9 12 2 2 4-4" /></svg> 3.4 block, never send</span>
+  </div>
+  <aside class="notes"><p>Tip three, the AI part. The model gets the judgement calls and nothing else.</p></aside>
+</section>
+
+<!-- ============ 16 · 3.1 BATCHED CALL ============ -->
+<section class="slide" data-title="3.1 Batched call" data-tip="3">
+  <div class="kicker rise" style="color:var(--violet)"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z" /><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12" /><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17" /></svg> Tip 3 · Challenge 1</div>
+  <h2 class="h-title rise" style="--d:1">One batched call, <span class="grad">sized to fit</span></h2>
+  <div class="row grow" style="gap:32px">
+    <div class="card bug grow rise" style="--d:2">
+      <div class="tag"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M12 20v-9" /><path d="M14 7a4 4 0 0 1 4 4v3a6 6 0 0 1-12 0v-3a4 4 0 0 1 4-4z" /><path d="M14.12 3.88 16 2" /><path d="M21 21a4 4 0 0 0-3.81-4" /><path d="M21 5a4 4 0 0 1-3.55 3.97" /><path d="M22 13h-4" /><path d="M3 21a4 4 0 0 1 3.81-4" /><path d="M3 5a4 4 0 0 0 3.55 3.97" /><path d="M6 13H2" /><path d="m8 2 1.88 1.88" /><path d="M9 7.13V6a3 3 0 1 1 6 0v1.13" /></svg> What happened</div>
+      <p>Every new email goes to the model in <b>one call</b>. Then one run with 200 emails failed outright, and pulling 500 at once hit Gmail's per-minute quota.</p>
+      <div class="col" style="gap:14px;margin-top:auto">
+        <div class="row" style="gap:12px;align-items:center"><span class="mono" style="font-size:21px;color:var(--muted);width:150px">before</span><div style="flex:1;height:54px;border-radius:12px;background:repeating-linear-gradient(90deg,rgba(255,107,107,.55) 0 6px,rgba(255,107,107,.25) 6px 9px);display:grid;place-items:center;font:600 22px var(--mono)">200 emails, 1 call · failed</div></div>
+        <div class="row" style="gap:12px;align-items:center"><span class="mono" style="font-size:21px;color:var(--muted);width:150px">now</span>
+          <div style="flex:60;height:54px;border-radius:12px;background:rgba(163,148,255,.5);display:grid;place-items:center;font:600 21px var(--mono)">60</div>
+          <div style="flex:60;height:54px;border-radius:12px;background:rgba(163,148,255,.38);display:grid;place-items:center;font:600 21px var(--mono)">60</div>
+          <div style="flex:60;height:54px;border-radius:12px;background:rgba(163,148,255,.28);display:grid;place-items:center;font:600 21px var(--mono)">60</div>
+          <div style="flex:20;height:54px;border-radius:12px;background:rgba(163,148,255,.2);display:grid;place-items:center;font:600 21px var(--mono)">20</div></div>
+        <div class="row" style="gap:12px"><span style="width:150px"></span><span class="mono" style="font-size:20px;color:var(--dim)">one call per run, 30 minutes apart</span></div>
+      </div>
+    </div>
+    <div class="card ai rise" style="--d:3;width:760px;flex:none">
+      <div class="tag"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z" /><path d="M20 2v4" /><path d="M22 4h-4" /><circle cx="4" cy="20" r="2" /></svg> The call</div>
+      <div class="win"><div class="bar"><i></i><i></i><i></i><span>Prep AI input</span></div>
+<pre>mails.splice(<span class="n">60</span>); <span class="c">// at most 60 per call</span>
+body: {
+  <span class="p">model</span>: <span class="s">'gpt-4o-mini'</span>,
+  <span class="p">temperature</span>: <span class="n">0</span>,
+  <span class="p">response_format</span>: { <span class="p">type</span>: <span class="s">'json_object'</span> }
+}</pre></div>
+      <ul class="ticks">
+        <li><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M20 6 9 17l-5-5" /></svg><span>Acts only at confidence <b>0.7+</b>; unclear ones get a second check</span></li>
+        <li><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M20 6 9 17l-5-5" /></svg><span>Gmail pulls capped at 120 to 200 a run</span></li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>All new email goes to the model in one batched call. Cheap model, temperature zero, JSON out.</p>
+    <p>Then a 200-email call failed outright, and a 500-message pull hit Gmail's quota. So: at most 60 per call, the rest wait for the next run 30 minutes later. It acts only above 0.7 confidence, and unclear items get a second, deeper check.</p>
+  </aside>
+</section>
+
+<!-- ============ 17 · 3.2 SWAPPED IDS ============ -->
+<section class="slide" data-title="3.2 Swapped ids" data-tip="3">
+  <div class="kicker rise" style="color:var(--violet)"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="m18 14 4 4-4 4" /><path d="m18 2 4 4-4 4" /><path d="M2 18h1.973a4 4 0 0 0 3.3-1.7l5.454-8.6a4 4 0 0 1 3.3-1.7H22" /><path d="M2 6h1.972a4 4 0 0 1 3.6 2.2" /><path d="M22 18h-6.041a4 4 0 0 1-3.3-1.8l-.359-.45" /></svg> Tip 3 · Challenge 2</div>
+  <h2 class="h-title rise" style="--d:1">The model <span class="grad-warm">swapped my email ids</span></h2>
+  <div class="row grow" style="gap:32px">
+    <div class="card bug grow rise" style="--d:2">
+      <div class="tag"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M12 20v-9" /><path d="M14 7a4 4 0 0 1 4 4v3a6 6 0 0 1-12 0v-3a4 4 0 0 1 4-4z" /><path d="M14.12 3.88 16 2" /><path d="M21 21a4 4 0 0 0-3.81-4" /><path d="M21 5a4 4 0 0 1-3.55 3.97" /><path d="M22 13h-4" /><path d="M3 21a4 4 0 0 1 3.81-4" /><path d="M3 5a4 4 0 0 0 3.55 3.97" /><path d="M6 13H2" /><path d="m8 2 1.88 1.88" /><path d="M9 7.13V6a3 3 0 1 1 6 0v1.13" /></svg> What happened</div>
+      <p>I sent raw Gmail ids. Now and then the model put a verdict on the wrong id, and a newsletter got pinned to a company I'd applied to.</p>
+      <div class="row" style="gap:22px;align-items:center;margin-top:auto">
+        <div class="win" style="flex:1"><div class="bar"><i></i><i></i><i></i><span>in</span></div>
+<pre style="font-size:20px"><span class="s">"19a3f…"</span> <span class="c">application</span>
+<span class="s">"19a40…"</span> <span class="c">newsletter</span></pre></div>
+        <div style="font-size:54px;color:var(--coral)"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="m18 14 4 4-4 4" /><path d="m18 2 4 4-4 4" /><path d="M2 18h1.973a4 4 0 0 0 3.3-1.7l5.454-8.6a4 4 0 0 1 3.3-1.7H22" /><path d="M2 6h1.972a4 4 0 0 1 3.6 2.2" /><path d="M22 18h-6.041a4 4 0 0 1-3.3-1.8l-.359-.45" /></svg></div>
+        <div class="win" style="flex:1"><div class="bar"><i></i><i></i><i></i><span>out</span></div>
+<pre style="font-size:20px"><span class="r">"19a40…"</span> → <span class="s">rejection</span>
+<span class="r">"19a3f…"</span> → <span class="s">newsletter</span></pre></div>
+      </div>
+    </div>
+    <div class="card fix rise" style="--d:3;width:700px;flex:none">
+      <div class="tag"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M21.801 10A10 10 0 1 1 17 3.335" /><path d="m9 11 3 3L22 4" /></svg> What I do now</div>
+      <p>Number the emails 1 to 60 and make the model <b>echo each subject</b>. If the echo doesn't match, confidence drops to <b>0.5</b> and nothing acts on it.</p>
+      <div class="win"><div class="bar"><i></i><i></i><i></i><span>one verdict · simplified</span></div>
+<pre>{ <span class="p">"n"</span>: <span class="n">7</span>,
+  <span class="p">"subject"</span>: <span class="s">"Your application"</span>,
+  <span class="p">"kind"</span>: <span class="s">"rejection"</span>,
+  <span class="p">"confidence"</span>: <span class="n">0.9</span> }</pre></div>
+    </div>
+  </div>
+  <div class="takeaway rise" style="--d:4"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" /><path d="M9 18h6" /><path d="M10 22h4" /></svg> Give the model keys it can't mix up, and check its echo.</div>
+  <aside class="notes">
+    <p>My favourite one. I passed raw Gmail ids, long random strings. Sometimes the model attached a verdict to the wrong id, so a newsletter got pinned to a company.</p>
+    <p>Now the emails are numbered 1 to 60, and the model has to echo each subject back. If the echo doesn't match, confidence drops to 0.5, and nothing acts on it.</p>
+  </aside>
+</section>
+
+<!-- ============ 18 · 3.3 NEVER PAY TWICE ============ -->
+<section class="slide" data-title="3.3 Never pay twice" data-tip="3">
+  <div class="kicker rise" style="color:var(--violet)"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><ellipse cx="12" cy="5" rx="9" ry="3" /><path d="M3 5V19A9 3 0 0 0 21 19V5" /><path d="M3 12A9 3 0 0 0 21 12" /></svg> Tip 3 · Challenge 3</div>
+  <h2 class="h-title rise" style="--d:1">Never pay twice, <span class="grad">never write twice</span></h2>
+  <div class="row grow" style="gap:32px">
+    <div class="card bug grow rise" style="--d:2">
+      <div class="tag"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M12 20v-9" /><path d="M14 7a4 4 0 0 1 4 4v3a6 6 0 0 1-12 0v-3a4 4 0 0 1 4-4z" /><path d="M14.12 3.88 16 2" /><path d="M21 21a4 4 0 0 0-3.81-4" /><path d="M21 5a4 4 0 0 1-3.55 3.97" /><path d="M22 13h-4" /><path d="M3 21a4 4 0 0 1 3.81-4" /><path d="M3 5a4 4 0 0 0 3.55 3.97" /><path d="M6 13H2" /><path d="m8 2 1.88 1.88" /><path d="M9 7.13V6a3 3 0 1 1 6 0v1.13" /></svg> What happened</div>
+      <p>A seen-items cache in the workflow's static data means only new emails reach the AI. But n8n doesn't save static data on manual test runs, so every test judged the same 60 emails again.</p>
+      <div class="row" style="gap:20px;margin-top:auto">
+        <div class="card" style="flex:1;padding:22px 26px;gap:10px"><b style="font-size:27px">Scheduled run</b><span class="chip ok"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M20 6 9 17l-5-5" /></svg> cache saved</span></div>
+        <div class="card" style="flex:1;padding:22px 26px;gap:10px;border-color:var(--coral)"><b style="font-size:27px">Manual test run</b><span class="chip bad"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg> cache not saved</span></div>
+      </div>
+    </div>
+    <div class="card fix rise" style="--d:3;width:780px;flex:none">
+      <div class="tag"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M21.801 10A10 10 0 1 1 17 3.335" /><path d="m9 11 3 3L22 4" /></svg> What I do now</div>
+      <ul class="ticks">
+        <li><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M11 17h3v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-3a3.16 3.16 0 0 0 2-2h1a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1h-1a5 5 0 0 0-2-4V3a4 4 0 0 0-3.2 1.6l-.3.4H11a6 6 0 0 0-6 6v1a5 5 0 0 0 2 4v3a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1z" /><path d="M16 10h.01" /><path d="M2 8v1a2 2 0 0 0 2 2h1" /></svg><span>Keep the cache: it's what keeps the AI bill tiny</span></li>
+        <li><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M12 10a2 2 0 0 0-2 2c0 1.02-.1 2.51-.26 4" /><path d="M14 13.12c0 2.38 0 6.38-1 8.88" /><path d="M17.29 21.02c.12-.6.43-2.3.5-3.02" /><path d="M2 12a10 10 0 0 1 18-6" /><path d="M2 16h.01" /><path d="M21.8 16c.2-2 .131-5.354 0-6" /><path d="M5 19.5C5.5 18 6 15 6 12a6 6 0 0 1 .34-2" /><path d="M8.65 22c.21-.66.45-1.32.57-2" /><path d="M9 6.8a6 6 0 0 1 9 5.2v2" /></svg><span>Make every write <b>idempotent</b>: dedupe on what's already in the sheet, never on the cache</span></li>
+        <li><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M12 17V7" /><path d="M16 8h-6a2 2 0 0 0 0 4h4a2 2 0 0 1 0 4H8" /><path d="M4 3a1 1 0 0 1 1-1 1.3 1.3 0 0 1 .7.2l.933.6a1.3 1.3 0 0 0 1.4 0l.934-.6a1.3 1.3 0 0 1 1.4 0l.933.6a1.3 1.3 0 0 0 1.4 0l.933-.6a1.3 1.3 0 0 1 1.4 0l.934.6a1.3 1.3 0 0 0 1.4 0l.933-.6A1.3 1.3 0 0 1 19 2a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1 1.3 1.3 0 0 1-.7-.2l-.933-.6a1.3 1.3 0 0 0-1.4 0l-.934.6a1.3 1.3 0 0 1-1.4 0l-.933-.6a1.3 1.3 0 0 0-1.4 0l-.933.6a1.3 1.3 0 0 1-1.4 0l-.934-.6a1.3 1.3 0 0 0-1.4 0l-.933.6a1.3 1.3 0 0 1-.7.2 1 1 0 0 1-1-1z" /></svg><span>The morning digest prints what the AI spent</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="takeaway rise" style="--d:4"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" /><path d="M9 18h6" /><path d="M10 22h4" /></svg> A cache saves money. Idempotent writes save you.</div>
+  <aside class="notes">
+    <p>The seen-items cache is why this costs almost nothing: only new emails ever reach the model.</p>
+    <p>Catch: n8n doesn't persist static data on manual runs, so every test re-judged the same emails. So the cache is for cost, and every write is idempotent, deduped on what's already in the sheet.</p>
+    <p>(Skip this slide if you're behind.)</p>
+  </aside>
+</section>
+
+<!-- ============ 19 · 3.4 BLOCK NEVER SEND ============ -->
+<section class="slide" data-title="3.4 Block, never send" data-tip="3">
+  <div class="kicker rise" style="color:var(--amber)"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /><path d="m9 12 2 2 4-4" /></svg> Tip 3 · What I run now</div>
+  <h2 class="h-title rise" style="--d:1">The AI can say no. <span class="grad">Only I can say yes.</span></h2>
+  <div class="row rise" style="--d:2;align-items:stretch;gap:0">
+    <div class="card" style="flex:1;padding:26px;gap:10px"><div class="tile sm blue"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M13 5h8" /><path d="M13 12h8" /><path d="M13 19h8" /><path d="m3 17 2 2 4-4" /><path d="m3 7 2 2 4-4" /></svg></div><b style="font-size:27px">The gate</b><p style="font-size:22px">my Send OK, a final email, due date passed, a real address</p></div>
+    <div style="display:grid;place-items:center;width:56px;font-size:38px;color:#4A5E75"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="m9 18 6-6-6-6" /></svg></div>
+    <div class="card" style="flex:1;padding:26px;gap:10px"><div class="tile sm teal"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /><path d="M3 3v5h5" /><path d="M12 7v5l4 2" /></svg></div><b style="font-size:27px">Send-time check</b><p style="font-size:22px">did they write since? did I already email them?</p></div>
+    <div style="display:grid;place-items:center;width:56px;font-size:38px;color:#4A5E75"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="m9 18 6-6-6-6" /></svg></div>
+    <div class="card ai" style="flex:1;padding:26px;gap:10px"><div class="tile sm violet"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="m14 13-8.381 8.38a1 1 0 0 1-3.001-3l8.384-8.381" /><path d="m16 16 6-6" /><path d="m21.5 10.5-8-8" /><path d="m8 8 6-6" /><path d="m8.5 7.5 8 8" /></svg></div><b style="font-size:27px">AI guard</b><p style="font-size:22px">already answered? rejected? tone off? <b>can only block</b></p></div>
+    <div style="display:grid;place-items:center;width:56px;font-size:38px;color:#4A5E75"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="m9 18 6-6-6-6" /></svg></div>
+    <div class="card fix" style="flex:1;padding:26px;gap:10px"><div class="tile sm green"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z" /><path d="m21.854 2.147-10.94 10.939" /></svg></div><b style="font-size:27px">Gmail</b><p style="font-size:22px">sends, marks the row done</p></div>
+  </div>
+  <div class="row rise" style="--d:3;gap:28px">
+    <div class="card warn grow" style="flex-direction:row;gap:22px;align-items:center;padding:26px 30px"><div class="tile sm amber"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><rect width="18" height="11" x="3" y="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg></div><p style="font-size:26px"><b>Fails closed:</b> if the AI call errors or the key is dry, every send is held, the row gets a red flag, and I get an email</p></div>
+    <div class="card fix grow" style="flex-direction:row;gap:22px;align-items:center;padding:26px 30px"><div class="tile sm teal"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M18 11V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2" /><path d="M14 10V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v2" /><path d="M10 10.5V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2v8" /><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15" /></svg></div><p style="font-size:26px"><b>Human yes:</b> nothing goes out without my tick on that exact row; the agents can draft, never approve</p></div>
+  </div>
+  <div class="takeaway rise" style="--d:4"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" /><path d="M9 18h6" /><path d="M10 22h4" /></svg> Give the workflow the work, and the AI only the judgement.</div>
+  <aside class="notes">
+    <p>Last one, the one that lets me sleep. A follow-up email has to pass four things: my own tick and a final text, a send-time check against my real inbox, then the AI guard.</p>
+    <p>The AI guard can block. It can never send. If the AI call fails, every send is held and flagged: it fails closed. And nothing goes out without my tick on that row.</p>
+  </aside>
+</section>
+
+<!-- ============ 20 · CLOSE ============ -->
+<section class="slide" data-title="Your turn" data-tip="0" style="flex-direction:row;align-items:center;gap:80px;padding:100px 120px">
+  <div class="col grow" style="gap:30px">
+    <div class="kicker rise"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" /><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09" /><path d="M9 12a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.4 22.4 0 0 1-4 2z" /><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 .05 5 .05" /></svg> Your turn</div>
+    <h1 class="h-hero rise" style="--d:1;font-size:88px;line-height:1.05">Give the workflow the work,<br>and the AI only <span class="grad">the judgement</span></h1>
+    <div class="card warn rise" style="--d:2;flex-direction:row;gap:24px;align-items:center;padding:26px 32px">
+      <div class="tile amber"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M16 7h.01" /><path d="M3.4 18H12a8 8 0 0 0 8-8V7a4 4 0 0 0-7.28-2.3L2 20" /><path d="m20 7 2 .5-2 .5" /><path d="M10 18v3" /><path d="M14 17.75V21" /><path d="M7 18a6 6 0 0 0 3.84-10.61" /></svg></div>
+      <p style="font-size:32px;color:var(--ink)"><b>This week:</b> pick one gate in your own workflows and give it a row that must fail. Then tell me what you found.</p>
+    </div>
+    <div class="row rise" style="--d:3;gap:18px;align-items:center;font-size:30px;color:var(--soft)">Running n8n in production? Let's compare notes.</div>
+  </div>
+  <div class="col rise" style="--d:2;gap:26px;flex:none">
+    <div class="card" style="width:330px;padding:20px;gap:12px;align-items:center;background:#F3F1EC;border:0">
+      <img src="qr-linkedin.png" alt="QR code to Tomás Batalha's LinkedIn" style="width:280px;height:280px;image-rendering:pixelated">
+      <div style="font:600 21px var(--mono);color:#11151C">LinkedIn</div>
+    </div>
+    <div class="card" style="width:330px;padding:20px;gap:12px;align-items:center;background:#F3F1EC;border:0">
+      <img src="qr-slides.svg" alt="QR code to these slides" style="width:200px;height:200px">
+      <div style="font:600 18px var(--mono);color:#11151C;white-space:nowrap">bytarc.com/aibuilderslides</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>So: give the workflow the work, and the AI only the judgement.</p>
+    <p>The challenge: this week, pick one gate in your own workflows and give it a row that must fail. Then come and tell me what you found.</p>
+    <p>If you run n8n in production, let's compare notes. Thank you.</p>
+  </aside>
+</section>
+
+<div id="foot"><div class="brand"><img src="../assets/bytarc-mark-white.svg" alt="BytArc">bytarc.com/aibuilderslides</div><div class="track"><span data-t="1">1 · gates</span><span data-t="2">2 · deploy</span><span data-t="3">3 · AI judges</span></div><div class="num" id="num">1 / 20</div></div>
+<div id="bar"></div>
+</div></div>
+
+<div id="nv">
+  <div><div class="now" id="nv-now"></div><div class="text" id="nv-text"></div></div>
+  <div class="side">
+    <div class="box"><div class="next">Elapsed</div><div class="clock" id="nv-clock">00:00</div><button id="nv-reset">Reset timer</button></div>
+    <div class="box"><div class="next">Next slide</div><div style="font-size:26px;font-weight:700;margin-top:6px" id="nv-next"></div></div>
+    <div class="box" style="display:flex;gap:12px"><button id="nv-prev" style="flex:1">← Prev</button><button id="nv-nxt" style="flex:1">Next →</button></div>
+    <div class="box next">Keys: → / Space / PageDown next · ← / PageUp back · F fullscreen · S speaker notes · Home / End</div>
+  </div>
+</div>
+<div id="hint">→ next · F fullscreen · S notes</div>
+
+<script>
+(function(){
+  var slides=[].slice.call(document.querySelectorAll('.slide'));
+  var N=slides.length, cur=0, deck=document.getElementById('deck');
+  var chan=('BroadcastChannel' in window)?new BroadcastChannel('aib-deck'):null;
+  var notesMode=/[?&]notes\b/.test(location.search);
+  function fit(){var s=Math.min(innerWidth/1920,innerHeight/1080);deck.style.transform='translate(-50%,-50%) scale('+s+')';}
+  function fromHash(){var m=location.hash.match(/(\d+)/);return m?Math.min(N,Math.max(1,+m[1]))-1:0;}
+  function show(i,silent){
+    i=Math.max(0,Math.min(N-1,i)); cur=i;
+    slides.forEach(function(s,k){s.classList.toggle('active',k===i);});
+    var t=slides[i].getAttribute('data-tip');
+    deck.classList.toggle('nofoot',i===0||i===N-1);
+    document.querySelectorAll('#foot .track span').forEach(function(sp){sp.classList.toggle('on',sp.getAttribute('data-t')===t);});
+    document.getElementById('num').textContent=(i+1)+' / '+N;
+    document.getElementById('bar').style.width=((i+1)/N*100)+'%';
+    if(location.hash!=='#'+(i+1))history.replaceState(null,'','#'+(i+1));
+    if(notesMode)renderNotes();
+    if(chan&&!silent)chan.postMessage({i:i});
+  }
+  function renderNotes(){
+    var s=slides[cur],a=s.querySelector('aside.notes');
+    document.getElementById('nv-now').textContent=(cur+1)+' / '+N+' · '+s.getAttribute('data-title');
+    document.getElementById('nv-text').innerHTML=a?a.innerHTML:'';
+    var nx=slides[cur+1];document.getElementById('nv-next').textContent=nx?nx.getAttribute('data-title'):'(end)';
+  }
+  function next(){show(cur+1);} function prev(){show(cur-1);}
+  addEventListener('keydown',function(e){
+    if(e.metaKey||e.ctrlKey||e.altKey)return;
+    var k=e.key;
+    if(k==='ArrowRight'||k==='ArrowDown'||k===' '||k==='PageDown'||k==='Enter'){e.preventDefault();next();}
+    else if(k==='ArrowLeft'||k==='ArrowUp'||k==='PageUp'||k==='Backspace'){e.preventDefault();prev();}
+    else if(k==='Home'){show(0);} else if(k==='End'){show(N-1);}
+    else if(k==='f'||k==='F'){if(!document.fullscreenElement)document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen();else document.exitFullscreen();}
+    else if(k==='s'||k==='S'){window.open(location.pathname+'?notes#'+(cur+1),'aib-notes','width=1100,height=760');}
+  });
+  if(!notesMode){
+    document.getElementById('stage').addEventListener('click',function(e){if(e.target.closest('a'))return;(e.clientX<innerWidth*0.3)?prev():next();});
+    var x0=null;addEventListener('touchstart',function(e){x0=e.touches[0].clientX;},{passive:true});
+    addEventListener('touchend',function(e){if(x0===null)return;var dx=e.changedTouches[0].clientX-x0;if(Math.abs(dx)>40)(dx<0?next:prev)();x0=null;},{passive:true});
+    setTimeout(function(){var h=document.getElementById('hint');if(h)h.style.opacity=0;},4000);
+  } else {
+    document.body.classList.add('notes-view');document.getElementById('hint').style.display='none';
+    var t0=Date.now();setInterval(function(){var s=Math.floor((Date.now()-t0)/1000);document.getElementById('nv-clock').textContent=String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');},500);
+    document.getElementById('nv-reset').onclick=function(){t0=Date.now();};
+    document.getElementById('nv-prev').onclick=prev;document.getElementById('nv-nxt').onclick=next;
+  }
+  if(chan)chan.onmessage=function(m){if(m.data&&typeof m.data.i==='number'&&m.data.i!==cur)show(m.data.i,true);};
+  addEventListener('resize',fit);addEventListener('hashchange',function(){var i=fromHash();if(i!==cur)show(i);});
+  fit();show(fromHash(),true);
+})();
+</script>
+</body>
+</html>
