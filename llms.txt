@@ -5,7 +5,7 @@
 ## What BytArc does
 
 - AI process automation and consulting: finds repetitive work in growing companies (sales and outreach, customer feedback, documents and applications, operations and reporting) and automates it with AI agents, workflow automation and custom AI tools; also strategy, go-to-market and AI adoption for founders and executive teams.
-- AI products built in house: JobPilot AI, TopResume.ai, VendasIA, BytArc Education, CasePreper, Company Brain, OpenClaw (an agent framework for AI business automation) and more. BytArc runs its own operations on 11 AI agents.
+- AI products built in house: JobAlfred, TopResume.ai, VendasIA, BytArc Education, CasePreper, Company Brain, OpenClaw (an agent framework for AI business automation) and more. BytArc runs its own operations on 11 AI agents.
 
 ## Who runs it
 
