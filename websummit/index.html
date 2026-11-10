@@ -12,6 +12,7 @@
 <style>
 :root{--bg:#020203;--panel:#0A0A0D;--panel2:#0C0C10;--ink:#F5F5F7;--muted:#A3A3AD;--muted2:#86868F;--line:rgba(255,255,255,.08);--line2:rgba(255,255,255,.12);--accent:#F5F5F7;--accent2:#10b981;--warn:#f59e0b;--chip:rgba(255,255,255,.06);--g2:#8E8E96;--g3:#D4D4D8;--g4:#FFFFFF;--font:"Geist",ui-sans-serif,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;--mono:"Geist Mono",ui-monospace,"SF Mono",Menlo,monospace;color-scheme:dark}
 *{box-sizing:border-box}
+html,body{overflow-x:hidden}
 body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 var(--font);-webkit-font-smoothing:antialiased}
 header,main,footer{max-width:1200px;margin:0 auto;padding:18px 20px}
 header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--line)}
@@ -51,6 +52,19 @@ button.ghost{background:var(--chip);color:var(--ink);border:1px solid var(--line
 .note{font-size:12px;color:var(--muted2);margin-top:10px}
 label.muted input{accent-color:var(--accent2)}
 footer{font-size:12px;color:var(--muted2);font-family:var(--mono);letter-spacing:.03em}
+.badge.sta{background:rgba(139,92,246,.12);border-color:rgba(139,92,246,.35);color:#8b5cf6}
+.badge.spk{background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.35);color:#f59e0b}
+.badge.par{background:rgba(59,130,246,.12);border-color:rgba(59,130,246,.35);color:#3b82f6}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;vertical-align:1px;background:var(--g2)}
+.dot.inv{background:#10b981}.dot.sta{background:#8b5cf6}.dot.spk{background:#f59e0b}.dot.par{background:#3b82f6}
+option{background:#0C0C10;color:#F5F5F7}
+::selection{background:rgba(255,255,255,.18)}
+#aiOut>p{color:var(--g3)}
+#count,#aiStatus{color:var(--muted2)}
+.card h3{color:var(--ink)}
+.card>div{color:var(--g3)}
+.card>.muted{color:var(--muted2)}
+::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:#1a1a20;border-radius:999px}
 </style>
 </head>
 <body>
@@ -118,7 +132,7 @@ async function decrypt(pw) {
   const buf = new Uint8Array(await (await fetch("data.bin", {cache: "no-store"})).arrayBuffer());
   if (String.fromCharCode(buf[0], buf[1], buf[2]) !== "WS1") throw new Error("Data file not found");
   const salt = buf.slice(3, 19), iv = buf.slice(19, 31), ct = buf.slice(31);
-  const base = await crypto.subtle.importKey("raw", new TextEncoder().encode(pw), "PBKDF2", false, ["deriveKey"]);
+  const base = await crypto.subtle.importKey("raw", new TextEncoder().encode(String(pw).trim().toLowerCase()), "PBKDF2", false, ["deriveKey"]);
   const key = await crypto.subtle.deriveKey({name: "PBKDF2", salt, iterations: ITER, hash: "SHA-256"}, base, {name: "AES-GCM", length: 256}, false, ["decrypt"]);
   let gz;
   try { gz = await crypto.subtle.decrypt({name: "AES-GCM", iv}, key, ct); }
@@ -143,12 +157,19 @@ function prepare() {
     const x = TYPE_ORDER.indexOf(D.types[a]), y = TYPE_ORDER.indexOf(D.types[b]);
     return (x < 0 ? 99 : x) - (y < 0 ? 99 : y);
   });
-  $("#types").innerHTML = order.map(i => `<span class="chip" data-t="${i}">${esc(D.types[i])} <span class="muted">${counts[i] || 0}</span></span>`).join("");
+  $("#types").innerHTML = order.map(i => `<span class="chip" data-t="${i}"><span class="dot ${typeClass(D.types[i])}"></span>${esc(D.types[i])} <span class="muted">${counts[i] || 0}</span></span>`).join("");
   const opt = (arr) => arr.map((v, i) => [v, i]).filter(x => x[0]).sort((a, b) => a[0].localeCompare(b[0])).map(([v, i]) => `<option value="${i}">${esc(v)}</option>`).join("");
   $("#country").insertAdjacentHTML("beforeend", opt(D.countries));
   $("#industry").insertAdjacentHTML("beforeend", opt(D.industries));
 }
 
+function typeClass(t) {
+  if (/investor/i.test(t)) return "inv";
+  if (/^(Growth|Alpha|Beta|Startup)/i.test(t)) return "sta";
+  if (/speaker|chair|vip/i.test(t)) return "spk";
+  if (/partner|staff|media|scholar|volunteer/i.test(t)) return "par";
+  return "";
+}
 function typeRank(i) { const x = TYPE_ORDER.indexOf(D.types[i]); return x < 0 ? 99 : x; }
 
 function search() {
@@ -172,7 +193,7 @@ function search() {
 
 function card(i, extra = "") {
   const p = D.people[i], r = D.research[i], t = D.types[p[1]];
-  const inv = /investor/i.test(t);
+  const cls = typeClass(t);
   const meta = [D.industries[p[4]], D.countries[p[5]]].filter(Boolean).join(" · ");
   let res = "";
   if (r) {
@@ -187,7 +208,7 @@ function card(i, extra = "") {
     if (r.plat) bits.push(esc(r.plat));
     res = `<div class="res">${bits.join("<br>")}</div>`;
   }
-  return `<div class="card"><h3>${esc(p[0])}<span class="badge${inv ? " inv" : ""}">${esc(t)}</span></h3>
+  return `<div class="card"><h3>${esc(p[0])}<span class="badge ${cls}">${esc(t)}</span></h3>
     <div>${esc([p[2], p[3]].filter(Boolean).join(" at "))}</div>
     <div class="muted">${esc(meta)}${p[6] ? " · " + esc(p[6]) : ""}</div>${res}${extra}
     <div class="muted"><a href="${PROFILE}${esc(p[7])}" target="_blank" rel="noopener">Web Summit profile</a></div></div>`;
