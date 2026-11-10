@@ -15,46 +15,45 @@
 html,body{overflow-x:hidden}
 body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 var(--font);-webkit-font-smoothing:antialiased}
 header,main,footer{max-width:1200px;margin:0 auto;padding:18px 20px}
-header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--line)}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
 h1{font-size:24px;font-weight:600;letter-spacing:-.02em;margin:0;background:linear-gradient(120deg,var(--g2) 0%,var(--g3) 50%,var(--g4) 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
 h1 .muted{display:block;-webkit-text-fill-color:var(--muted2);font-family:var(--mono);font-size:11.5px!important;letter-spacing:.06em;text-transform:uppercase;margin:4px 0 0}
 h2{font-size:13px;font-weight:500;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:0 0 12px}
 a{color:var(--g3);text-decoration:underline;text-decoration-color:var(--line2);text-underline-offset:3px}
 a:hover{color:var(--g4)}
 .by{font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--muted2);text-decoration:none}
-.box{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:18px}
+.box{background:var(--panel);border:0;border-radius:20px;padding:18px;box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 18px 48px rgba(0,0,0,.6),0 2px 8px rgba(0,0,0,.4)}
 #lock{max-width:440px;margin:56px auto}
-input[type=text],input[type=password],select,textarea{width:100%;font:inherit;color:var(--ink);background:var(--panel2);border:1px solid var(--line2);border-radius:12px;padding:10px 12px;outline:none}
-input:focus,select:focus,textarea:focus{border-color:rgba(255,255,255,.28)}
+input[type=text],input[type=password],select,textarea{width:100%;font:inherit;color:var(--ink);background:#17171C;border:0;border-radius:12px;padding:11px 13px;outline:none;transition:background .15s,box-shadow .15s}
+input::placeholder,textarea::placeholder{color:#6E6E78}
+input:focus,select:focus,textarea:focus{background:#1E1E25;box-shadow:0 0 0 3px rgba(255,255,255,.06)}
 textarea{min-height:84px;resize:vertical}
 button{font:inherit;font-weight:600;border:0;border-radius:999px;padding:10px 18px;background:var(--accent);color:var(--bg);cursor:pointer}
 button[disabled]{opacity:.45;cursor:default}
-button.ghost{background:var(--chip);color:var(--ink);border:1px solid var(--line2)}
+button.ghost{background:#17171C;color:var(--ink);border:0}
 .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:10px 0}
 .row>select{flex:1 1 180px;width:auto}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}
-.chip{font-size:12.5px;padding:5px 11px;border-radius:999px;background:var(--chip);border:1px solid var(--line);cursor:pointer;user-select:none;color:var(--g3)}
-.chip.on{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+.chip{font-size:12.5px;padding:6px 12px;border-radius:999px;background:#17171C;border:0;cursor:pointer;user-select:none;color:var(--g3)}
+.chip.on{background:var(--accent);color:var(--bg)}
 .chip.on .muted{color:#3a3a42}
 .grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:16px;align-items:start}
 @media (max-width:860px){.grid{grid-template-columns:1fr}}
 .muted{color:var(--muted2);font-size:13px}
-.card{border-top:1px solid var(--line);padding:12px 0}
-.card:first-child{border-top:0}
+.card{background:#0F0F13;border-radius:14px;padding:12px 14px;margin:8px 0;box-shadow:0 1px 0 rgba(255,255,255,.03) inset}
 .card h3{font-size:15px;font-weight:600;margin:0}
-.badge{display:inline-block;font-family:var(--mono);font-size:10.5px;font-weight:500;text-transform:uppercase;letter-spacing:.05em;padding:2px 8px;border-radius:999px;background:var(--chip);border:1px solid var(--line);color:var(--muted);margin-left:8px;vertical-align:2px}
-.badge.inv{background:rgba(16,185,129,.12);border-color:rgba(16,185,129,.35);color:var(--accent2)}
-.res{margin-top:8px;font-size:13px;border-left:2px solid var(--accent2);padding-left:10px;color:var(--g3)}
+.badge{display:inline-block;font-family:var(--mono);font-size:10.5px;font-weight:500;text-transform:uppercase;letter-spacing:.05em;padding:2px 8px;border-radius:999px;background:#1A1A20;border:0;color:var(--muted);margin-left:8px;vertical-align:2px}
+.badge.inv{background:rgba(16,185,129,.14);color:var(--accent2)}
+.res{margin-top:8px;font-size:13px;background:rgba(16,185,129,.06);border-radius:10px;padding:8px 10px;color:var(--g3)}
 .res b{color:var(--accent2);font-weight:600}
-.pick{border-top:1px solid var(--line);padding:10px 0}
-.pick:first-child{border-top:0}
+.pick .card{background:#121217}
 .err{color:var(--warn)}
 .note{font-size:12px;color:var(--muted2);margin-top:10px}
 label.muted input{accent-color:var(--accent2)}
 footer{font-size:12px;color:var(--muted2);font-family:var(--mono);letter-spacing:.03em}
-.badge.sta{background:rgba(139,92,246,.12);border-color:rgba(139,92,246,.35);color:#8b5cf6}
-.badge.spk{background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.35);color:#f59e0b}
-.badge.par{background:rgba(59,130,246,.12);border-color:rgba(59,130,246,.35);color:#3b82f6}
+.badge.sta{background:rgba(139,92,246,.14);color:#8b5cf6}
+.badge.spk{background:rgba(245,158,11,.14);color:#f59e0b}
+.badge.par{background:rgba(59,130,246,.14);color:#3b82f6}
 .dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;vertical-align:1px;background:var(--g2)}
 .dot.inv{background:#10b981}.dot.sta{background:#8b5cf6}.dot.spk{background:#f59e0b}.dot.par{background:#3b82f6}
 option{background:#0C0C10;color:#F5F5F7}
@@ -91,7 +90,7 @@ option{background:#0C0C10;color:#F5F5F7}
         <select id="country"><option value="">Any country</option></select>
         <select id="industry"><option value="">Any industry</option></select>
       </div>
-      <label class="muted"><input type="checkbox" id="onlyRes"> Only people we already researched (investor ranking and background checks)</label>
+      <label class="muted"><input type="checkbox" id="onlyRes"> Only people with a background check</label>
       <p id="count" class="muted"></p>
       <div id="results"></div>
       <div class="row"><button id="more" class="ghost" hidden>Show more</button></div>
@@ -99,19 +98,28 @@ option{background:#0C0C10;color:#F5F5F7}
 
     <section class="box">
       <h2>Ask AI with your own key</h2>
-      <input id="key" type="password" placeholder="Anthropic API key (sk-ant-...)" autocomplete="off">
+      <input id="key" type="password" placeholder="API key: Anthropic, OpenAI, Gemini, OpenRouter, Groq, xAI…" autocomplete="off">
       <label class="muted"><input type="checkbox" id="remember"> Remember the key on this device</label>
       <div class="row">
-        <select id="model">
-          <option value="claude-opus-5-5">Claude Opus 5.5 (best)</option>
-          <option value="claude-sonnet-5-5">Claude Sonnet 5.5 (cheaper)</option>
-          <option value="claude-haiku-5-5">Claude Haiku 5.5 (cheapest)</option>
+        <select id="provider">
+          <option value="auto">Detect provider from the key</option>
+          <option value="anthropic">Anthropic (Claude)</option>
+          <option value="openai">OpenAI</option>
+          <option value="gemini">Google Gemini</option>
+          <option value="openrouter">OpenRouter</option>
+          <option value="groq">Groq</option>
+          <option value="xai">xAI (Grok)</option>
+          <option value="other">Other (OpenAI-compatible)</option>
         </select>
+        <input id="model" type="text" list="models" placeholder="Model" autocomplete="off" spellcheck="false" style="flex:1 1 180px;width:auto">
+        <datalist id="models"></datalist>
       </div>
-      <textarea id="ask" placeholder="e.g. Platinum investors who back HR tech or marketplaces at pre-seed, ideally in Portugal. Who should I meet first?"></textarea>
+      <div class="row" id="baseRow" hidden><input id="base" type="text" placeholder="Base URL, e.g. https://api.mistral.ai/v1" autocomplete="off" spellcheck="false"></div>
+      <div id="provHint" class="muted"></div>
+      <textarea id="ask" placeholder="e.g. Investors who back climate tech at seed stage in Europe. Who should I meet first?"></textarea>
       <div class="row"><button id="askBtn">Ask</button><span id="aiStatus" class="muted"></span></div>
       <div id="aiOut"></div>
-      <p class="note">How it stays cheap: a short first call turns your question into filters and keywords; the full list is searched here in your browser; only the best 60 matches are sent for ranking. Your key is sent only to api.anthropic.com.</p>
+      <p class="note">How it stays cheap: a short first call turns your question into filters and keywords; the full list is searched here in your browser; only the best 60 matches are sent for ranking. Your key stays in this browser and goes only to the provider you use.</p>
     </section>
   </div>
 </main>
@@ -143,13 +151,13 @@ async function decrypt(pw) {
 
 function resText(r) {
   if (!r) return "";
-  return [r.score && "fit score " + r.score, r.why, r.verdict, r.likelihood && "invest: " + r.likelihood, r.ticket, r.pay && "pay: " + r.pay, r.plat, r.tip].filter(Boolean).join("; ");
+  return [r.does, r.check, r.legit, r.raised && "raised: " + r.raised, r.team && "team: " + r.team, r.ticket && "ticket: " + r.ticket].filter(Boolean).join("; ");
 }
 
 function prepare() {
   const P = D.people;
   HAY = P.map((p, i) => norm([p[0], p[2], p[3], p[6], D.industries[p[4]], D.countries[p[5]], D.types[p[1]], resText(D.research[i])].join(" | ")));
-  RS = P.map((p, i) => { const r = D.research[i]; return r ? (Number(r.score) || 0) + (r.verdict ? 30 : 0) + 10 : 0; });
+  RS = P.map((p, i) => D.research[i] ? 1 : 0);
   $("#total").textContent = "(" + P.length.toLocaleString() + " people)";
   const counts = {};
   P.forEach(p => counts[p[1]] = (counts[p[1]] || 0) + 1);
@@ -184,7 +192,7 @@ function search() {
     if (terms.length && !terms.every(t => HAY[i].includes(t))) return;
     out.push(i);
   });
-  out.sort((a, b) => (RS[b] - RS[a]) || (typeRank(D.people[a][1]) - typeRank(D.people[b][1])));
+  out.sort((a, b) => (typeRank(D.people[a][1]) - typeRank(D.people[b][1])) || (RS[b] - RS[a]));
   lastList = out; shown = 0;
   $("#results").innerHTML = "";
   $("#count").textContent = out.length.toLocaleString() + " match" + (out.length === 1 ? "" : "es");
@@ -198,14 +206,12 @@ function card(i, extra = "") {
   let res = "";
   if (r) {
     const bits = [];
-    if (r.score) bits.push(`<b>Fit ${esc(r.score)}</b>`);
-    if (r.why) bits.push(esc(r.why));
-    if (r.verdict) bits.push(`<b>Check:</b> ${esc(r.verdict)}`);
-    if (r.likelihood) bits.push(`<b>Chance to invest:</b> ${esc(r.likelihood)}`);
-    if (r.ticket) bits.push(`<b>Ticket:</b> ${esc(r.ticket)}`);
-    if (r.pay) bits.push(`<b>Pay:</b> ${esc(r.pay)}`);
-    if (r.tip) bits.push(`<b>Tip:</b> ${esc(r.tip)}`);
-    if (r.plat) bits.push(esc(r.plat));
+    if (r.does) bits.push(`<b>What they do:</b> ${esc(r.does)}`);
+    if (r.check) bits.push(`<b>Background check:</b> ${esc(r.check)}`);
+    if (r.legit) bits.push(`<b>Track record:</b> ${esc(r.legit)}`);
+    if (r.raised) bits.push(`<b>Raised:</b> ${esc(r.raised)}`);
+    if (r.team) bits.push(`<b>Team:</b> ${esc(r.team)}`);
+    if (r.ticket) bits.push(`<b>Ticket and stage:</b> ${esc(r.ticket)}`);
     res = `<div class="res">${bits.join("<br>")}</div>`;
   }
   return `<div class="card"><h3>${esc(p[0])}<span class="badge ${cls}">${esc(t)}</span></h3>
@@ -221,33 +227,144 @@ function more() {
   $("#more").hidden = shown >= lastList.length;
 }
 
-// ---------- AI (bring your own key) ----------
+// ---------- AI (bring your own key, any provider) ----------
 let usage = {in: 0, out: 0};
+const PROVIDERS = {
+  anthropic: {label: "Anthropic (Claude)", models: ["claude-opus-5-5", "claude-sonnet-5-5", "claude-haiku-5-5"]},
+  openai: {label: "OpenAI", base: "https://api.openai.com/v1", prefer: [/^gpt-5(\.\d+)?$/, /^gpt-5/, /^gpt-4\.1$/, /^gpt-4o$/]},
+  gemini: {label: "Google Gemini", prefer: [/^gemini-[\d.]+-pro$/, /pro/, /flash/]},
+  openrouter: {label: "OpenRouter", base: "https://openrouter.ai/api/v1", prefer: [/^anthropic\/claude-opus/, /^anthropic\/claude-sonnet/, /^openai\/gpt-5/, /^google\/gemini/]},
+  groq: {label: "Groq", base: "https://api.groq.com/openai/v1", prefer: [/llama.*70b/, /llama/]},
+  xai: {label: "xAI (Grok)", base: "https://api.x.ai/v1", prefer: [/^grok-\d/, /^grok/]},
+  other: {label: "Other (OpenAI-compatible)", base: ""}
+};
+function detectProvider(key) {
+  if (/^sk-ant-/.test(key)) return "anthropic";
+  if (/^sk-or-/.test(key)) return "openrouter";
+  if (/^AIza/.test(key)) return "gemini";
+  if (/^gsk_/.test(key)) return "groq";
+  if (/^xai-/.test(key)) return "xai";
+  if (/^sk-/.test(key)) return "openai";
+  return "other";
+}
+function currentProvider() { const v = $("#provider").value; return v === "auto" ? detectProvider($("#key").value.trim()) : v; }
+function baseURL(p) { return p === "other" ? $("#base").value.trim().replace(/\/+$/, "") : PROVIDERS[p].base; }
+
+async function listModels(p, key) {
+  if (p === "anthropic") return PROVIDERS.anthropic.models;
+  if (p === "gemini") {
+    const r = await fetch("https://generativelanguage.googleapis.com/v1beta/models?pageSize=200", {headers: {"x-goog-api-key": key}});
+    if (!r.ok) throw new Error("status " + r.status);
+    const j = await r.json();
+    return (j.models || []).filter(m => (m.supportedGenerationMethods || []).includes("generateContent")).map(m => m.name.replace(/^models\//, ""));
+  }
+  const base = baseURL(p);
+  if (!base) return [];
+  const r = await fetch(base + "/models", {headers: {Authorization: "Bearer " + key}});
+  if (!r.ok) throw new Error("status " + r.status);
+  const j = await r.json();
+  let ids = (j.data || j.models || []).map(m => m.id || m.name).filter(Boolean);
+  if (p === "openai") ids = ids.filter(id => /^(gpt|o\d|chatgpt)/.test(id) && !/embedding|tts|whisper|dall|image|audio|realtime|transcribe|search|moderation|instruct/.test(id));
+  return ids;
+}
+function pickDefault(p, ids) {
+  if (p === "anthropic") return "claude-opus-5-5";
+  const sorted = [...ids].filter(id => !id.includes(":")).sort().reverse();
+  for (const re of (PROVIDERS[p].prefer || [])) { const m = sorted.find(id => re.test(id)); if (m) return m; }
+  return sorted[0] || "";
+}
+let modelsFor = "", lastProv = "";
+async function refreshModels() {
+  const key = $("#key").value.trim(), p = currentProvider();
+  $("#baseRow").hidden = p !== "other";
+  if (p !== lastProv) { if (lastProv) $("#model").value = ""; $("#models").innerHTML = ""; lastProv = p; }
+  if (!key) { $("#provHint").textContent = ""; return; }
+  if (p === "other" && !baseURL(p)) { $("#provHint").textContent = "Provider: " + PROVIDERS[p].label + " · add its base URL"; return; }
+  const sig = p + "|" + key.slice(0, 14) + "|" + baseURL(p);
+  if (sig === modelsFor) return;
+  modelsFor = sig;
+  $("#provHint").textContent = "Provider: " + PROVIDERS[p].label + " · loading models…";
+  try {
+    const ids = await listModels(p, key);
+    if (modelsFor !== sig) return; // the key or provider changed meanwhile
+    $("#models").innerHTML = ids.map(id => `<option value="${esc(id)}"></option>`).join("");
+    const cur = $("#model").value.trim();
+    if (!cur || (ids.length && !ids.includes(cur))) $("#model").value = pickDefault(p, ids);
+    $("#provHint").textContent = "Provider: " + PROVIDERS[p].label + (ids.length ? " · " + ids.length + " models available" : "");
+  } catch (e) {
+    if (modelsFor !== sig) return;
+    modelsFor = "";
+    $("#provHint").innerHTML = `Provider: ${esc(PROVIDERS[p].label)} · <span class="err">couldn't list models (${esc(e.message)}); check the key or type a model name</span>`;
+  }
+}
 
 function parseJSON(text) {
   try { return JSON.parse(text); } catch {}
   const a = text.indexOf("{"), b = text.lastIndexOf("}");
   if (a >= 0 && b > a) { try { return JSON.parse(text.slice(a, b + 1)); } catch {} }
-  throw new Error("The model did not return valid JSON");
+  throw new Error("The model did not return valid JSON. Try another model.");
 }
 
-async function callClaude(client, model, effort, system, user, schema, maxTokens) {
+let claudeClient = null, claudeKey = "";
+async function callClaude(key, model, effort, system, user, schema, maxTokens) {
+  if (!claudeClient || claudeKey !== key) {
+    const {default: Anthropic} = await import("https://esm.sh/@anthropic-ai/sdk");
+    claudeClient = new Anthropic({apiKey: key, dangerouslyAllowBrowser: true});
+    claudeKey = key;
+  }
   const body = {model, max_tokens: maxTokens, system, messages: [{role: "user", content: user}]};
-  if (model !== "claude-haiku-5-5") { body.betas = ["server-side-fallback-2026-07-01"]; body.fallbacks = "default"; }
+  const withFallback = /^claude-(opus-5|sonnet-5-5|fable-5)/.test(model) ? {betas: ["server-side-fallback-2026-07-01"], fallbacks: "default"} : {};
   let res;
   try {
-    res = await client.beta.messages.create({...body, output_config: {effort, format: {type: "json_schema", schema}}});
+    res = await claudeClient.beta.messages.create({...body, ...withFallback, output_config: {effort, format: {type: "json_schema", schema}}});
   } catch (e) {
     if (e && e.status === 400) {
-      // Retry without structured output; the prompt still asks for JSON.
-      res = await client.beta.messages.create({...body, output_config: {effort}});
+      // Retry plainly; the prompt still asks for JSON.
+      res = await claudeClient.beta.messages.create(body);
     } else throw e;
   }
   usage.in += res.usage?.input_tokens || 0;
   usage.out += res.usage?.output_tokens || 0;
   if (res.stop_reason === "refusal") throw new Error("The model declined this request.");
-  const text = (res.content || []).filter(b => b.type === "text").map(b => b.text).join("");
+  return parseJSON((res.content || []).filter(b => b.type === "text").map(b => b.text).join(""));
+}
+
+async function callGemini(key, model, system, user, maxTokens) {
+  const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, {
+    method: "POST", headers: {"Content-Type": "application/json", "x-goog-api-key": key},
+    body: JSON.stringify({systemInstruction: {parts: [{text: system}]}, contents: [{role: "user", parts: [{text: user}]}],
+      generationConfig: {responseMimeType: "application/json", maxOutputTokens: maxTokens}})});
+  if (!r.ok) throw new Error("Gemini error " + r.status + ": " + (await r.text()).slice(0, 200));
+  const j = await r.json();
+  const u = j.usageMetadata || {};
+  usage.in += u.promptTokenCount || 0;
+  usage.out += (u.candidatesTokenCount || 0) + (u.thoughtsTokenCount || 0);
+  const text = (j.candidates?.[0]?.content?.parts || []).map(x => x.text || "").join("");
+  if (!text) throw new Error("Gemini returned no text" + (j.candidates?.[0]?.finishReason ? " (" + j.candidates[0].finishReason + ")" : ""));
   return parseJSON(text);
+}
+
+async function callOpenAICompat(p, key, model, system, user, maxTokens) {
+  const base = baseURL(p);
+  if (!base) throw new Error("Add the provider's base URL, e.g. https://api.mistral.ai/v1");
+  const headers = {"Content-Type": "application/json", Authorization: "Bearer " + key};
+  if (p === "openrouter") { headers["HTTP-Referer"] = location.origin; headers["X-Title"] = "Web Summit people search"; }
+  const body = {model, messages: [{role: "system", content: system}, {role: "user", content: user}], response_format: {type: "json_object"}};
+  body[p === "openai" ? "max_completion_tokens" : "max_tokens"] = maxTokens;
+  const send = () => fetch(base + "/chat/completions", {method: "POST", headers, body: JSON.stringify(body)});
+  let r = await send();
+  if (r.status === 400) { delete body.response_format; r = await send(); }
+  if (!r.ok) throw new Error(PROVIDERS[p].label + " error " + r.status + ": " + (await r.text()).slice(0, 200));
+  const j = await r.json();
+  usage.in += j.usage?.prompt_tokens || 0;
+  usage.out += j.usage?.completion_tokens || 0;
+  return parseJSON(j.choices?.[0]?.message?.content || "");
+}
+
+function callModel(p, key, model, effort, system, user, schema, maxTokens) {
+  if (p === "anthropic") return callClaude(key, model, effort, system, user, schema, maxTokens);
+  if (p === "gemini") return callGemini(key, model, system, user, maxTokens * 2);
+  return callOpenAICompat(p, key, model, system, user, maxTokens * 2);
 }
 
 const PLAN_SCHEMA = {type: "object", additionalProperties: false,
@@ -276,7 +393,7 @@ function shortlist(plan, max = 60) {
       let s = 0;
       for (const k of kws) if (HAY[i].includes(k)) s += strong.includes(k) ? 2 : 1;
       if (kws.length && s === 0 && !(I.size && useI)) return;
-      out.push([i, s + RS[i] / 100]);
+      out.push([i, s + RS[i] * 0.5 - typeRank(p[1]) * 0.01]);
     });
     return out;
   };
@@ -288,49 +405,51 @@ function shortlist(plan, max = 60) {
 
 function line(i, n) {
   const p = D.people[i];
-  const r = resText(D.research[i]);
-  return [n, p[0], D.types[p[1]], p[2], p[3], D.industries[p[4]], D.countries[p[5]], p[6], r.slice(0, 260)].join(" | ");
+  return [n, p[0], D.types[p[1]], p[2], p[3], D.industries[p[4]], D.countries[p[5]], p[6], resText(D.research[i]).slice(0, 260)].join(" | ");
 }
 
 async function ask() {
-  const key = $("#key").value.trim(), question = $("#ask").value.trim(), model = $("#model").value;
-  if (!key) { $("#aiStatus").textContent = "Add your Anthropic API key first."; return; }
+  const key = $("#key").value.trim(), question = $("#ask").value.trim(), p = currentProvider();
+  const model = $("#model").value.trim() || pickDefault(p, []);
+  if (!key) { $("#aiStatus").textContent = "Add your API key first."; return; }
+  if (!model) { $("#aiStatus").textContent = "Pick or type a model."; return; }
   if (!question) { $("#aiStatus").textContent = "Type a question."; return; }
-  (($("#remember").checked) ? localStorage : sessionStorage).setItem("ws_key", key);
+  const store = $("#remember").checked ? localStorage : sessionStorage;
+  store.setItem("ws_key", key);
   if (!$("#remember").checked) localStorage.removeItem("ws_key");
+  localStorage.setItem("ws_prefs", JSON.stringify({provider: $("#provider").value, model, base: $("#base").value.trim()}));
   $("#askBtn").disabled = true; $("#aiOut").innerHTML = ""; usage = {in: 0, out: 0};
   try {
-    $("#aiStatus").textContent = "Loading the Claude SDK…";
-    const {default: Anthropic} = await import("https://esm.sh/@anthropic-ai/sdk");
-    const client = new Anthropic({apiKey: key, dangerouslyAllowBrowser: true});
     $("#aiStatus").textContent = "Step 1 of 2: turning your question into filters…";
     const sys1 = "You turn a question about Web Summit Lisbon 2026 attendees into search filters for a local database. " +
       "Use only these exact attendee types: " + JSON.stringify(D.types.filter(Boolean)) + ". " +
       "Use only these exact industries: " + JSON.stringify(D.industries.filter(Boolean)) + ". " +
       "Countries must be exact names from this list: " + JSON.stringify(D.countries.filter(Boolean)) + ". " +
-      "Leave a list empty when the question doesn't restrict it. keywords: 4 to 15 short lowercase words or phrases likely to appear in a person's job title, company name, headline or research notes, including synonyms and Portuguese or Spanish equivalents where useful. " +
-      "Set research_only to true only if the user asks for people already researched or ranked. Reply with JSON only.";
-    const plan = await callClaude(client, model, "low", sys1, question, PLAN_SCHEMA, 4000);
+      "Leave a list empty when the question doesn't restrict it. keywords: 4 to 15 short lowercase words or phrases likely to appear in a person's job title, company name or headline, including synonyms and Portuguese or Spanish equivalents where useful. " +
+      "Set research_only to true only if the user asks for people with a background check. " +
+      'Reply with JSON only, exactly in this shape: {"types":[],"countries":[],"industries":[],"keywords":[],"research_only":false}';
+    const plan = await callModel(p, key, model, "low", sys1, question, PLAN_SCHEMA, 4000);
     const ids = shortlist(plan, 60);
     if (!ids.length) { $("#aiStatus").textContent = "No one matched those filters. Try a broader question."; return; }
     $("#aiStatus").textContent = `Step 2 of 2: ranking the best ${ids.length} matches…`;
-    const sys2 = "You help a Lisbon founder decide whom to meet at Web Summit Lisbon 2026 (10 to 12 November). " +
+    const sys2 = "You help the user decide whom to meet or contact at Web Summit Lisbon 2026 (10 to 12 November), based on their question. " +
       "Use only the candidates provided and only the facts in their lines; never invent people, companies or facts. " +
-      "Pick the best matches for the user's question, at most 15, best first. For each give the candidate number as id, one sentence on why they fit, and a short, specific opening line for a message or a chat at their booth. " +
-      "If only a few candidates really fit, return fewer and say so in the summary. Reply with JSON only.";
-    const user2 = "Question: " + question + "\n\nCandidates (number | name | type | title | company | industry | country | headline | research notes):\n" +
+      "Pick the best matches, at most 15, best first. For each give the candidate number as id, one sentence on why they fit the question, and a short, specific opening line the user could use in a message or in person. " +
+      "If only a few candidates really fit, return fewer and say so in the summary. " +
+      'Reply with JSON only, exactly in this shape: {"summary":"...","picks":[{"id":1,"why":"...","opener":"..."}]}';
+    const user2 = "Question: " + question + "\n\nCandidates (number | name | type | title | company | industry | country | headline | background notes):\n" +
       ids.map((i, n) => line(i, n + 1)).join("\n");
-    const out = await callClaude(client, model, "medium", sys2, user2, PICK_SCHEMA, 16000);
-    const picks = (out.picks || []).filter(p => p.id >= 1 && p.id <= ids.length);
-    const price = PRICES[model] || [0, 0];
-    const cost = (usage.in * price[0] + usage.out * price[1]) / 1e6;
-    $("#aiOut").innerHTML = `<p>${esc(out.summary || "")}</p>` + picks.map(p => {
-      const i = ids[p.id - 1];
-      return `<div class="pick">${card(i, `<div class="res"><b>Why:</b> ${esc(p.why)}<br><b>Opener:</b> ${esc(p.opener)}</div>`)}</div>`;
+    const out = await callModel(p, key, model, "medium", sys2, user2, PICK_SCHEMA, 16000);
+    const picks = (out.picks || []).filter(x => x.id >= 1 && x.id <= ids.length);
+    $("#aiOut").innerHTML = `<p>${esc(out.summary || "")}</p>` + picks.map(x => {
+      const i = ids[x.id - 1];
+      return `<div class="pick">${card(i, `<div class="res"><b>Why:</b> ${esc(x.why)}<br><b>Opener:</b> ${esc(x.opener)}</div>`)}</div>`;
     }).join("");
     const f = plan;
-    $("#aiStatus").textContent = `Done. Filters: ${[(f.types || []).join(", "), (f.countries || []).join(", "), (f.industries || []).join(", "), (f.keywords || []).join(", ")].filter(Boolean).join(" | ")}. ` +
-      `Tokens: ${usage.in.toLocaleString()} in, ${usage.out.toLocaleString()} out (about $${cost.toFixed(3)}).`;
+    const price = p === "anthropic" ? PRICES[model] : null;
+    const cost = price ? ` (about $${((usage.in * price[0] + usage.out * price[1]) / 1e6).toFixed(3)})` : "";
+    $("#aiStatus").textContent = `Done with ${PROVIDERS[p].label}, ${model}. Filters: ${[(f.types || []).join(", "), (f.countries || []).join(", "), (f.industries || []).join(", "), (f.keywords || []).join(", ")].filter(Boolean).join(" | ")}. ` +
+      `Tokens: ${usage.in.toLocaleString()} in, ${usage.out.toLocaleString()} out${cost}.`;
   } catch (e) {
     $("#aiStatus").innerHTML = `<span class="err">${esc(e && e.message ? e.message : String(e))}</span>`;
   } finally {
@@ -369,8 +488,14 @@ $("#types").addEventListener("click", e => {
 });
 $("#more").addEventListener("click", more);
 $("#askBtn").addEventListener("click", ask);
+try { const pr = JSON.parse(localStorage.getItem("ws_prefs") || "{}"); if (pr.provider) $("#provider").value = pr.provider; if (pr.model) $("#model").value = pr.model; if (pr.base) $("#base").value = pr.base; } catch {}
 const savedKey = localStorage.getItem("ws_key") || sessionStorage.getItem("ws_key");
 if (savedKey) { $("#key").value = savedKey; $("#remember").checked = !!localStorage.getItem("ws_key"); }
+let kt = null;
+$("#key").addEventListener("input", () => { clearTimeout(kt); kt = setTimeout(refreshModels, 500); });
+$("#provider").addEventListener("change", () => { modelsFor = ""; refreshModels(); });
+$("#base").addEventListener("change", () => { modelsFor = ""; refreshModels(); });
+refreshModels();
 const savedPw = sessionStorage.getItem("ws_pw");
 if (savedPw) open(savedPw);
 </script>
