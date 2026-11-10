@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Web Summit 2026 people search · by BytArc</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<style>
+:root{--bg:#f5f6f8;--panel:#fff;--ink:#121726;--muted:#5d6577;--line:#dde1e9;--accent:#1d4ed8;--accent2:#0f766e;--warn:#b45309;--chip:#eef1f6}
+@media (prefers-color-scheme:dark){:root{--bg:#0e121c;--panel:#161c2b;--ink:#e9ecf4;--muted:#9aa3b6;--line:#283149;--accent:#7aa2ff;--accent2:#5eead4;--warn:#fbbf24;--chip:#1f2740}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+header,main,footer{max-width:1100px;margin:0 auto;padding:16px}
+header{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+h1{font-size:22px;margin:0}
+h2{font-size:17px;margin:0 0 10px}
+a{color:var(--accent)}
+.by{font-size:13px;color:var(--muted);text-decoration:none}
+.box{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px}
+#lock{max-width:420px;margin:40px auto}
+input[type=text],input[type=password],select,textarea{width:100%;font:inherit;color:inherit;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:9px 10px}
+textarea{min-height:78px;resize:vertical}
+button{font:inherit;font-weight:600;border:0;border-radius:8px;padding:9px 14px;background:var(--accent);color:#fff;cursor:pointer}
+button[disabled]{opacity:.5;cursor:default}
+button.ghost{background:var(--chip);color:var(--ink)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:8px 0}
+.row>select{flex:1 1 180px;width:auto}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.chip{font-size:13px;padding:4px 10px;border-radius:999px;background:var(--chip);border:1px solid var(--line);cursor:pointer;user-select:none}
+.chip.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:14px;align-items:start}
+@media (max-width:860px){.grid{grid-template-columns:1fr}}
+.muted{color:var(--muted);font-size:13px}
+.card{border-top:1px solid var(--line);padding:10px 0}
+.card:first-child{border-top:0}
+.card h3{font-size:15px;margin:0}
+.badge{display:inline-block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;padding:1px 7px;border-radius:999px;background:var(--chip);color:var(--muted);margin-left:6px;vertical-align:1px}
+.badge.inv{background:var(--accent);color:#fff}
+.res{margin-top:6px;font-size:13px;border-left:3px solid var(--accent2);padding-left:8px}
+.res b{color:var(--accent2)}
+.pick{border-top:1px solid var(--line);padding:10px 0}
+.pick:first-child{border-top:0}
+.err{color:var(--warn)}
+.note{font-size:12px;color:var(--muted);margin-top:8px}
+footer{font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<header>
+  <h1>Web Summit Lisbon 2026: people search</h1>
+  <a class="by" href="https://bytarc.com" rel="noopener">by BytArc</a>
+</header>
+
+<section id="lock" class="box">
+  <h2>Private: enter the password</h2>
+  <form id="lockForm" class="row" autocomplete="off">
+    <input id="pw" type="password" placeholder="Password" autocomplete="current-password" style="flex:1 1 200px;width:auto">
+    <button id="unlockBtn" type="submit">Unlock</button>
+  </form>
+  <div id="lockMsg" class="muted">The list is encrypted. It is decrypted only in your browser.</div>
+</section>
+
+<main id="app" hidden>
+  <div class="grid">
+    <section class="box">
+      <h2>Search <span id="total" class="muted"></span></h2>
+      <input id="q" type="text" placeholder="Keywords, e.g. angel HR tech pre-seed" autocomplete="off">
+      <div class="chips" id="types"></div>
+      <div class="row">
+        <select id="country"><option value="">Any country</option></select>
+        <select id="industry"><option value="">Any industry</option></select>
+      </div>
+      <label class="muted"><input type="checkbox" id="onlyRes"> Only people we already researched (investor ranking and background checks)</label>
+      <p id="count" class="muted"></p>
+      <div id="results"></div>
+      <div class="row"><button id="more" class="ghost" hidden>Show more</button></div>
+    </section>
+
+    <section class="box">
+      <h2>Ask AI with your own key</h2>
+      <input id="key" type="password" placeholder="Anthropic API key (sk-ant-...)" autocomplete="off">
+      <label class="muted"><input type="checkbox" id="remember"> Remember the key on this device</label>
+      <div class="row">
+        <select id="model">
+          <option value="claude-opus-5-5">Claude Opus 5.5 (best)</option>
+          <option value="claude-sonnet-5-5">Claude Sonnet 5.5 (cheaper)</option>
+          <option value="claude-haiku-5-5">Claude Haiku 5.5 (cheapest)</option>
+        </select>
+      </div>
+      <textarea id="ask" placeholder="e.g. Platinum investors who back HR tech or marketplaces at pre-seed, ideally in Portugal. Who should I meet first?"></textarea>
+      <div class="row"><button id="askBtn">Ask</button><span id="aiStatus" class="muted"></span></div>
+      <div id="aiOut"></div>
+      <p class="note">How it stays cheap: a short first call turns your question into filters and keywords; the full list is searched here in your browser; only the best 60 matches are sent for ranking. Your key is sent only to api.anthropic.com.</p>
+    </section>
+  </div>
+</main>
+<footer><p>Built by <a href="https://bytarc.com">BytArc</a>. Private tool: please don't share the password.</p></footer>
+
+<script type="module">
+const ITER = 310000;
+const PROFILE = "https://attend.websummit.com/lis26/profiles/";
+const PRICES = {"claude-opus-5-5": [4, 20], "claude-sonnet-5-5": [2, 10], "claude-haiku-5-5": [0.1, 0.5]};
+const TYPE_ORDER = ["Platinum investor", "Investor", "Growth", "Speaker", "Chairperson", "Vip", "Beta", "Alpha", "Partner", "Speaker guest", "Women in tech", "Attendee", "Media", "Staff", "Scholar", "Volunteer"];
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[c]));
+const norm = s => String(s ?? "").normalize("NFKD").replace(/[̀-ͯ]/g, "").toLowerCase();
+
+let D = null, HAY = [], RS = [], selTypes = new Set(), shown = 0, lastList = [];
+
+async function decrypt(pw) {
+  const buf = new Uint8Array(await (await fetch("data.bin", {cache: "no-store"})).arrayBuffer());
+  if (String.fromCharCode(buf[0], buf[1], buf[2]) !== "WS1") throw new Error("Data file not found");
+  const salt = buf.slice(3, 19), iv = buf.slice(19, 31), ct = buf.slice(31);
+  const base = await crypto.subtle.importKey("raw", new TextEncoder().encode(pw), "PBKDF2", false, ["deriveKey"]);
+  const key = await crypto.subtle.deriveKey({name: "PBKDF2", salt, iterations: ITER, hash: "SHA-256"}, base, {name: "AES-GCM", length: 256}, false, ["decrypt"]);
+  let gz;
+  try { gz = await crypto.subtle.decrypt({name: "AES-GCM", iv}, key, ct); }
+  catch { throw new Error("Wrong password"); }
+  const stream = new Blob([gz]).stream().pipeThrough(new DecompressionStream("gzip"));
+  return JSON.parse(await new Response(stream).text());
+}
+
+function resText(r) {
+  if (!r) return "";
+  return [r.score && "fit score " + r.score, r.why, r.verdict, r.likelihood && "invest: " + r.likelihood, r.ticket, r.pay && "pay: " + r.pay, r.plat, r.tip].filter(Boolean).join("; ");
+}
+
+function prepare() {
+  const P = D.people;
+  HAY = P.map((p, i) => norm([p[0], p[2], p[3], p[6], D.industries[p[4]], D.countries[p[5]], D.types[p[1]], resText(D.research[i])].join(" | ")));
+  RS = P.map((p, i) => { const r = D.research[i]; return r ? (Number(r.score) || 0) + (r.verdict ? 30 : 0) + 10 : 0; });
+  $("#total").textContent = "(" + P.length.toLocaleString() + " people)";
+  const counts = {};
+  P.forEach(p => counts[p[1]] = (counts[p[1]] || 0) + 1);
+  const order = D.types.map((t, i) => i).filter(i => D.types[i]).sort((a, b) => {
+    const x = TYPE_ORDER.indexOf(D.types[a]), y = TYPE_ORDER.indexOf(D.types[b]);
+    return (x < 0 ? 99 : x) - (y < 0 ? 99 : y);
+  });
+  $("#types").innerHTML = order.map(i => `<span class="chip" data-t="${i}">${esc(D.types[i])} <span class="muted">${counts[i] || 0}</span></span>`).join("");
+  const opt = (arr) => arr.map((v, i) => [v, i]).filter(x => x[0]).sort((a, b) => a[0].localeCompare(b[0])).map(([v, i]) => `<option value="${i}">${esc(v)}</option>`).join("");
+  $("#country").insertAdjacentHTML("beforeend", opt(D.countries));
+  $("#industry").insertAdjacentHTML("beforeend", opt(D.industries));
+}
+
+function typeRank(i) { const x = TYPE_ORDER.indexOf(D.types[i]); return x < 0 ? 99 : x; }
+
+function search() {
+  const terms = norm($("#q").value).split(/\s+/).filter(t => t.length > 1);
+  const c = $("#country").value, ind = $("#industry").value, only = $("#onlyRes").checked;
+  const out = [];
+  D.people.forEach((p, i) => {
+    if (selTypes.size && !selTypes.has(p[1])) return;
+    if (c !== "" && p[5] !== +c) return;
+    if (ind !== "" && p[4] !== +ind) return;
+    if (only && !D.research[i]) return;
+    if (terms.length && !terms.every(t => HAY[i].includes(t))) return;
+    out.push(i);
+  });
+  out.sort((a, b) => (RS[b] - RS[a]) || (typeRank(D.people[a][1]) - typeRank(D.people[b][1])));
+  lastList = out; shown = 0;
+  $("#results").innerHTML = "";
+  $("#count").textContent = out.length.toLocaleString() + " match" + (out.length === 1 ? "" : "es");
+  more();
+}
+
+function card(i, extra = "") {
+  const p = D.people[i], r = D.research[i], t = D.types[p[1]];
+  const inv = /investor/i.test(t);
+  const meta = [D.industries[p[4]], D.countries[p[5]]].filter(Boolean).join(" · ");
+  let res = "";
+  if (r) {
+    const bits = [];
+    if (r.score) bits.push(`<b>Fit ${esc(r.score)}</b>`);
+    if (r.why) bits.push(esc(r.why));
+    if (r.verdict) bits.push(`<b>Check:</b> ${esc(r.verdict)}`);
+    if (r.likelihood) bits.push(`<b>Chance to invest:</b> ${esc(r.likelihood)}`);
+    if (r.ticket) bits.push(`<b>Ticket:</b> ${esc(r.ticket)}`);
+    if (r.pay) bits.push(`<b>Pay:</b> ${esc(r.pay)}`);
+    if (r.tip) bits.push(`<b>Tip:</b> ${esc(r.tip)}`);
+    if (r.plat) bits.push(esc(r.plat));
+    res = `<div class="res">${bits.join("<br>")}</div>`;
+  }
+  return `<div class="card"><h3>${esc(p[0])}<span class="badge${inv ? " inv" : ""}">${esc(t)}</span></h3>
+    <div>${esc([p[2], p[3]].filter(Boolean).join(" at "))}</div>
+    <div class="muted">${esc(meta)}${p[6] ? " · " + esc(p[6]) : ""}</div>${res}${extra}
+    <div class="muted"><a href="${PROFILE}${esc(p[7])}" target="_blank" rel="noopener">Web Summit profile</a></div></div>`;
+}
+
+function more() {
+  const next = lastList.slice(shown, shown + 50);
+  $("#results").insertAdjacentHTML("beforeend", next.map(i => card(i)).join(""));
+  shown += next.length;
+  $("#more").hidden = shown >= lastList.length;
+}
+
+// ---------- AI (bring your own key) ----------
+let usage = {in: 0, out: 0};
+
+function parseJSON(text) {
+  try { return JSON.parse(text); } catch {}
+  const a = text.indexOf("{"), b = text.lastIndexOf("}");
+  if (a >= 0 && b > a) { try { return JSON.parse(text.slice(a, b + 1)); } catch {} }
+  throw new Error("The model did not return valid JSON");
+}
+
+async function callClaude(client, model, effort, system, user, schema, maxTokens) {
+  const body = {model, max_tokens: maxTokens, system, messages: [{role: "user", content: user}]};
+  if (model !== "claude-haiku-5-5") { body.betas = ["server-side-fallback-2026-07-01"]; body.fallbacks = "default"; }
+  let res;
+  try {
+    res = await client.beta.messages.create({...body, output_config: {effort, format: {type: "json_schema", schema}}});
+  } catch (e) {
+    if (e && e.status === 400) {
+      // Retry without structured output; the prompt still asks for JSON.
+      res = await client.beta.messages.create({...body, output_config: {effort}});
+    } else throw e;
+  }
+  usage.in += res.usage?.input_tokens || 0;
+  usage.out += res.usage?.output_tokens || 0;
+  if (res.stop_reason === "refusal") throw new Error("The model declined this request.");
+  const text = (res.content || []).filter(b => b.type === "text").map(b => b.text).join("");
+  return parseJSON(text);
+}
+
+const PLAN_SCHEMA = {type: "object", additionalProperties: false,
+  required: ["types", "countries", "industries", "keywords", "research_only"],
+  properties: {types: {type: "array", items: {type: "string"}}, countries: {type: "array", items: {type: "string"}},
+    industries: {type: "array", items: {type: "string"}}, keywords: {type: "array", items: {type: "string"}},
+    research_only: {type: "boolean"}}};
+
+const PICK_SCHEMA = {type: "object", additionalProperties: false, required: ["summary", "picks"],
+  properties: {summary: {type: "string"}, picks: {type: "array", items: {type: "object", additionalProperties: false,
+    required: ["id", "why", "opener"], properties: {id: {type: "integer"}, why: {type: "string"}, opener: {type: "string"}}}}}};
+
+function shortlist(plan, max = 60) {
+  const T = new Set((plan.types || []).map(t => D.types.indexOf(t)).filter(x => x >= 0));
+  const C = new Set((plan.countries || []).map(t => D.countries.indexOf(t)).filter(x => x >= 0));
+  const I = new Set((plan.industries || []).map(t => D.industries.indexOf(t)).filter(x => x >= 0));
+  const kws = [...new Set((plan.keywords || []).map(norm).filter(k => k.length > 1))];
+  const run = (useC, useI) => {
+    const out = [];
+    D.people.forEach((p, i) => {
+      if (T.size && !T.has(p[1])) return;
+      if (useC && C.size && !C.has(p[5])) return;
+      if (useI && I.size && !I.has(p[4])) return;
+      if (plan.research_only && !D.research[i]) return;
+      const strong = norm(p[2] + " " + p[3]);
+      let s = 0;
+      for (const k of kws) if (HAY[i].includes(k)) s += strong.includes(k) ? 2 : 1;
+      if (kws.length && s === 0 && !(I.size && useI)) return;
+      out.push([i, s + RS[i] / 100]);
+    });
+    return out;
+  };
+  let res = run(true, true);
+  if (res.length < 15) res = run(false, true);
+  if (res.length < 15) res = run(false, false);
+  return res.sort((a, b) => b[1] - a[1]).slice(0, max).map(x => x[0]);
+}
+
+function line(i, n) {
+  const p = D.people[i];
+  const r = resText(D.research[i]);
+  return [n, p[0], D.types[p[1]], p[2], p[3], D.industries[p[4]], D.countries[p[5]], p[6], r.slice(0, 260)].join(" | ");
+}
+
+async function ask() {
+  const key = $("#key").value.trim(), question = $("#ask").value.trim(), model = $("#model").value;
+  if (!key) { $("#aiStatus").textContent = "Add your Anthropic API key first."; return; }
+  if (!question) { $("#aiStatus").textContent = "Type a question."; return; }
+  (($("#remember").checked) ? localStorage : sessionStorage).setItem("ws_key", key);
+  if (!$("#remember").checked) localStorage.removeItem("ws_key");
+  $("#askBtn").disabled = true; $("#aiOut").innerHTML = ""; usage = {in: 0, out: 0};
+  try {
+    $("#aiStatus").textContent = "Loading the Claude SDK…";
+    const {default: Anthropic} = await import("https://esm.sh/@anthropic-ai/sdk");
+    const client = new Anthropic({apiKey: key, dangerouslyAllowBrowser: true});
+    $("#aiStatus").textContent = "Step 1 of 2: turning your question into filters…";
+    const sys1 = "You turn a question about Web Summit Lisbon 2026 attendees into search filters for a local database. " +
+      "Use only these exact attendee types: " + JSON.stringify(D.types.filter(Boolean)) + ". " +
+      "Use only these exact industries: " + JSON.stringify(D.industries.filter(Boolean)) + ". " +
+      "Countries must be exact names from this list: " + JSON.stringify(D.countries.filter(Boolean)) + ". " +
+      "Leave a list empty when the question doesn't restrict it. keywords: 4 to 15 short lowercase words or phrases likely to appear in a person's job title, company name, headline or research notes, including synonyms and Portuguese or Spanish equivalents where useful. " +
+      "Set research_only to true only if the user asks for people already researched or ranked. Reply with JSON only.";
+    const plan = await callClaude(client, model, "low", sys1, question, PLAN_SCHEMA, 4000);
+    const ids = shortlist(plan, 60);
+    if (!ids.length) { $("#aiStatus").textContent = "No one matched those filters. Try a broader question."; return; }
+    $("#aiStatus").textContent = `Step 2 of 2: ranking the best ${ids.length} matches…`;
+    const sys2 = "You help a Lisbon founder decide whom to meet at Web Summit Lisbon 2026 (10 to 12 November). " +
+      "Use only the candidates provided and only the facts in their lines; never invent people, companies or facts. " +
+      "Pick the best matches for the user's question, at most 15, best first. For each give the candidate number as id, one sentence on why they fit, and a short, specific opening line for a message or a chat at their booth. " +
+      "If only a few candidates really fit, return fewer and say so in the summary. Reply with JSON only.";
+    const user2 = "Question: " + question + "\n\nCandidates (number | name | type | title | company | industry | country | headline | research notes):\n" +
+      ids.map((i, n) => line(i, n + 1)).join("\n");
+    const out = await callClaude(client, model, "medium", sys2, user2, PICK_SCHEMA, 16000);
+    const picks = (out.picks || []).filter(p => p.id >= 1 && p.id <= ids.length);
+    const price = PRICES[model] || [0, 0];
+    const cost = (usage.in * price[0] + usage.out * price[1]) / 1e6;
+    $("#aiOut").innerHTML = `<p>${esc(out.summary || "")}</p>` + picks.map(p => {
+      const i = ids[p.id - 1];
+      return `<div class="pick">${card(i, `<div class="res"><b>Why:</b> ${esc(p.why)}<br><b>Opener:</b> ${esc(p.opener)}</div>`)}</div>`;
+    }).join("");
+    const f = plan;
+    $("#aiStatus").textContent = `Done. Filters: ${[(f.types || []).join(", "), (f.countries || []).join(", "), (f.industries || []).join(", "), (f.keywords || []).join(", ")].filter(Boolean).join(" | ")}. ` +
+      `Tokens: ${usage.in.toLocaleString()} in, ${usage.out.toLocaleString()} out (about $${cost.toFixed(3)}).`;
+  } catch (e) {
+    $("#aiStatus").innerHTML = `<span class="err">${esc(e && e.message ? e.message : String(e))}</span>`;
+  } finally {
+    $("#askBtn").disabled = false;
+  }
+}
+
+// ---------- wiring ----------
+async function open(pw) {
+  $("#unlockBtn").disabled = true;
+  $("#lockMsg").textContent = "Decrypting…";
+  try {
+    D = await decrypt(pw);
+    sessionStorage.setItem("ws_pw", pw);
+    prepare();
+    $("#lock").hidden = true; $("#app").hidden = false;
+    search();
+  } catch (e) {
+    $("#lockMsg").innerHTML = `<span class="err">${esc(e.message)}</span>`;
+    sessionStorage.removeItem("ws_pw");
+  } finally {
+    $("#unlockBtn").disabled = false;
+  }
+}
+$("#lockForm").addEventListener("submit", e => { e.preventDefault(); open($("#pw").value); });
+let t = null;
+$("#q").addEventListener("input", () => { clearTimeout(t); t = setTimeout(search, 180); });
+["#country", "#industry", "#onlyRes"].forEach(s => $(s).addEventListener("change", search));
+$("#types").addEventListener("click", e => {
+  const c = e.target.closest(".chip"); if (!c) return;
+  const i = +c.dataset.t;
+  selTypes.has(i) ? selTypes.delete(i) : selTypes.add(i);
+  c.classList.toggle("on");
+  search();
+});
+$("#more").addEventListener("click", more);
+$("#askBtn").addEventListener("click", ask);
+const savedKey = localStorage.getItem("ws_key") || sessionStorage.getItem("ws_key");
+if (savedKey) { $("#key").value = savedKey; $("#remember").checked = !!localStorage.getItem("ws_key"); }
+const savedPw = sessionStorage.getItem("ws_pw");
+if (savedPw) open(savedPw);
+</script>
+</body>
+</html>
