@@ -3,62 +3,68 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#020203">
 <meta name="robots" content="noindex, nofollow">
 <title>Web Summit 2026 people search · by BytArc</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f5f6f8;--panel:#fff;--ink:#121726;--muted:#5d6577;--line:#dde1e9;--accent:#1d4ed8;--accent2:#0f766e;--warn:#b45309;--chip:#eef1f6}
-@media (prefers-color-scheme:dark){:root{--bg:#0e121c;--panel:#161c2b;--ink:#e9ecf4;--muted:#9aa3b6;--line:#283149;--accent:#7aa2ff;--accent2:#5eead4;--warn:#fbbf24;--chip:#1f2740}}
+:root{--bg:#020203;--panel:#0A0A0D;--panel2:#0C0C10;--ink:#F5F5F7;--muted:#A3A3AD;--muted2:#86868F;--line:rgba(255,255,255,.08);--line2:rgba(255,255,255,.12);--accent:#F5F5F7;--accent2:#10b981;--warn:#f59e0b;--chip:rgba(255,255,255,.06);--g2:#8E8E96;--g3:#D4D4D8;--g4:#FFFFFF;--font:"Geist",ui-sans-serif,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;--mono:"Geist Mono",ui-monospace,"SF Mono",Menlo,monospace;color-scheme:dark}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
-header,main,footer{max-width:1100px;margin:0 auto;padding:16px}
-header{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
-h1{font-size:22px;margin:0}
-h2{font-size:17px;margin:0 0 10px}
-a{color:var(--accent)}
-.by{font-size:13px;color:var(--muted);text-decoration:none}
-.box{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px}
-#lock{max-width:420px;margin:40px auto}
-input[type=text],input[type=password],select,textarea{width:100%;font:inherit;color:inherit;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:9px 10px}
-textarea{min-height:78px;resize:vertical}
-button{font:inherit;font-weight:600;border:0;border-radius:8px;padding:9px 14px;background:var(--accent);color:#fff;cursor:pointer}
-button[disabled]{opacity:.5;cursor:default}
-button.ghost{background:var(--chip);color:var(--ink)}
-.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:8px 0}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 var(--font);-webkit-font-smoothing:antialiased}
+header,main,footer{max-width:1200px;margin:0 auto;padding:18px 20px}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--line)}
+h1{font-size:24px;font-weight:600;letter-spacing:-.02em;margin:0;background:linear-gradient(120deg,var(--g2) 0%,var(--g3) 50%,var(--g4) 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+h1 .muted{display:block;-webkit-text-fill-color:var(--muted2);font-family:var(--mono);font-size:11.5px!important;letter-spacing:.06em;text-transform:uppercase;margin:4px 0 0}
+h2{font-size:13px;font-weight:500;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:0 0 12px}
+a{color:var(--g3);text-decoration:underline;text-decoration-color:var(--line2);text-underline-offset:3px}
+a:hover{color:var(--g4)}
+.by{font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--muted2);text-decoration:none}
+.box{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:18px}
+#lock{max-width:440px;margin:56px auto}
+input[type=text],input[type=password],select,textarea{width:100%;font:inherit;color:var(--ink);background:var(--panel2);border:1px solid var(--line2);border-radius:12px;padding:10px 12px;outline:none}
+input:focus,select:focus,textarea:focus{border-color:rgba(255,255,255,.28)}
+textarea{min-height:84px;resize:vertical}
+button{font:inherit;font-weight:600;border:0;border-radius:999px;padding:10px 18px;background:var(--accent);color:var(--bg);cursor:pointer}
+button[disabled]{opacity:.45;cursor:default}
+button.ghost{background:var(--chip);color:var(--ink);border:1px solid var(--line2)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:10px 0}
 .row>select{flex:1 1 180px;width:auto}
-.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
-.chip{font-size:13px;padding:4px 10px;border-radius:999px;background:var(--chip);border:1px solid var(--line);cursor:pointer;user-select:none}
-.chip.on{background:var(--accent);color:#fff;border-color:var(--accent)}
-.grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:14px;align-items:start}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}
+.chip{font-size:12.5px;padding:5px 11px;border-radius:999px;background:var(--chip);border:1px solid var(--line);cursor:pointer;user-select:none;color:var(--g3)}
+.chip.on{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+.chip.on .muted{color:#3a3a42}
+.grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:16px;align-items:start}
 @media (max-width:860px){.grid{grid-template-columns:1fr}}
-.muted{color:var(--muted);font-size:13px}
-.card{border-top:1px solid var(--line);padding:10px 0}
+.muted{color:var(--muted2);font-size:13px}
+.card{border-top:1px solid var(--line);padding:12px 0}
 .card:first-child{border-top:0}
-.card h3{font-size:15px;margin:0}
-.badge{display:inline-block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;padding:1px 7px;border-radius:999px;background:var(--chip);color:var(--muted);margin-left:6px;vertical-align:1px}
-.badge.inv{background:var(--accent);color:#fff}
-.res{margin-top:6px;font-size:13px;border-left:3px solid var(--accent2);padding-left:8px}
-.res b{color:var(--accent2)}
+.card h3{font-size:15px;font-weight:600;margin:0}
+.badge{display:inline-block;font-family:var(--mono);font-size:10.5px;font-weight:500;text-transform:uppercase;letter-spacing:.05em;padding:2px 8px;border-radius:999px;background:var(--chip);border:1px solid var(--line);color:var(--muted);margin-left:8px;vertical-align:2px}
+.badge.inv{background:rgba(16,185,129,.12);border-color:rgba(16,185,129,.35);color:var(--accent2)}
+.res{margin-top:8px;font-size:13px;border-left:2px solid var(--accent2);padding-left:10px;color:var(--g3)}
+.res b{color:var(--accent2);font-weight:600}
 .pick{border-top:1px solid var(--line);padding:10px 0}
 .pick:first-child{border-top:0}
 .err{color:var(--warn)}
-.note{font-size:12px;color:var(--muted);margin-top:8px}
-footer{font-size:13px;color:var(--muted)}
+.note{font-size:12px;color:var(--muted2);margin-top:10px}
+label.muted input{accent-color:var(--accent2)}
+footer{font-size:12px;color:var(--muted2);font-family:var(--mono);letter-spacing:.03em}
 </style>
 </head>
 <body>
 <header>
-  <h1>Web Summit Lisbon 2026: people search</h1>
+  <h1>Web Summit people search <span class="muted" style="font-size:14px;font-weight:400">Lisbon 2026</span></h1>
   <a class="by" href="https://bytarc.com" rel="noopener">by BytArc</a>
 </header>
 
 <section id="lock" class="box">
-  <h2>Private: enter the password</h2>
-  <form id="lockForm" class="row" autocomplete="off">
-    <input id="pw" type="password" placeholder="Password" autocomplete="current-password" style="flex:1 1 200px;width:auto">
-    <button id="unlockBtn" type="submit">Unlock</button>
-  </form>
-  <div id="lockMsg" class="muted">The list is encrypted. It is decrypted only in your browser.</div>
+  <div class="row">
+    <input id="pw" type="password" placeholder="Password" autocomplete="off" autocapitalize="off" spellcheck="false" style="flex:1 1 200px;width:auto">
+    <button id="unlockBtn" type="button">Enter</button>
+  </div>
+  <div id="lockMsg" class="muted"></div>
 </section>
 
 <main id="app" hidden>
@@ -95,7 +101,7 @@ footer{font-size:13px;color:var(--muted)}
     </section>
   </div>
 </main>
-<footer><p>Built by <a href="https://bytarc.com">BytArc</a>. Private tool: please don't share the password.</p></footer>
+<footer><p>Built by <a href="https://bytarc.com">BytArc</a>.</p></footer>
 
 <script type="module">
 const ITER = 310000;
@@ -328,7 +334,8 @@ async function open(pw) {
     $("#unlockBtn").disabled = false;
   }
 }
-$("#lockForm").addEventListener("submit", e => { e.preventDefault(); open($("#pw").value); });
+$("#unlockBtn").addEventListener("click", () => open($("#pw").value));
+$("#pw").addEventListener("keydown", e => { if (e.key === "Enter") open($("#pw").value); });
 let t = null;
 $("#q").addEventListener("input", () => { clearTimeout(t); t = setTimeout(search, 180); });
 ["#country", "#industry", "#onlyRes"].forEach(s => $(s).addEventListener("change", search));
