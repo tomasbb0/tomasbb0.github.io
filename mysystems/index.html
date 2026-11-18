@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Systems built by Tomás Batalha · BytArc</title>
+<meta name="description" content="Every system Tomás Batalha has built at BytArc: goal, architecture and real results for each, from agentic automations to the JobAlfred platform.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#020203">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png?v=5">
+<link rel="icon" href="/favicon.ico?v=5" sizes="48x48">
+<link rel="icon" href="/favicon.svg?v=6" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="/assets/pages.css">
+<style>
+.wrap{max-width:1080px}
+.stats{display:flex;flex-wrap:wrap;gap:10px 28px;margin:26px 0 8px;font:500 13px/1.4 var(--mono);color:var(--text-3)}
+.stats b{display:block;font:600 28px/1.1 var(--font);color:var(--text);letter-spacing:-.02em}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:34px 0 6px;position:sticky;top:0;padding:12px 0;background:var(--bg);z-index:2}
+.filters button{font:500 13px var(--font);color:var(--text-2);background:#111115;border:0;border-radius:999px;padding:8px 14px;cursor:pointer}
+.filters button[aria-pressed=true]{background:#F5F5F7;color:#0A0A0D}
+section h2{margin-top:48px}
+section h2 small{font:500 12px var(--mono);color:var(--text-3);letter-spacing:.08em;margin-left:10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,470px),1fr));gap:16px}
+.card{background:#0B0B0E;border-radius:18px;padding:20px 22px;box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 14px 40px rgba(0,0,0,.45)}
+.card header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px}
+.card h3{margin:0;font-size:18px;letter-spacing:-.02em;line-height:1.3}
+.badge{flex:none;font:500 10.5px/1 var(--mono);text-transform:uppercase;letter-spacing:.08em;padding:6px 9px;border-radius:999px;background:#18181D;color:var(--text-2)}
+.badge.live{background:rgba(16,185,129,.14);color:#34d399}
+.card dl{margin:0;display:grid;gap:10px}
+.card dt{font:500 11px/1 var(--mono);text-transform:uppercase;letter-spacing:.1em;color:var(--text-3);margin-bottom:4px}
+.card dd{margin:0;font-size:14.5px;line-height:1.55;color:var(--text-2)}
+.card dd.res{color:var(--text)}
+.card ul{margin:0;padding-left:18px}
+.card li{margin:2px 0;color:inherit}
+.links{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.links a{font-size:13px;text-decoration:none;color:var(--text);background:#18181D;border-radius:999px;padding:6px 12px}
+.links a:hover{background:#222228}
+.links span{font-size:12.5px;color:var(--text-3);padding:6px 0}
+.note{font-size:13px;color:var(--text-3);margin-top:40px}
+@media (max-width:640px){.card{padding:18px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <a class="brand" href="/"><img src="/assets/bytarc-mark-white.svg" alt="BytArc logo" width="28" height="18">BytArc</a>
+  <nav aria-label="Pages"><a href="/">Home</a><a href="/about/">About</a><a href="/products/">Products</a><a href="/tomas-batalha/">Founder</a><a href="/mysystems/" aria-current="page">Systems</a></nav>
+</header>
+<main>
+<p class="kicker">Systems</p>
+<h1>Every system I've built</h1>
+<p class="lead">Agentic automations, data pipelines, AI products and internal tools, built by me at BytArc. Each card gives the goal, how it is built, and the results I can actually show.</p>
+<div class="stats" id="stats"></div>
+<div class="filters" id="filters" role="group" aria-label="Filter by category"></div>
+<div id="list"></div>
+<p class="note">Results only list numbers I can show from the systems themselves (logs, counters, test runs). Client systems are described without the client's name. Some systems are private or password-protected; ask me for a walkthrough.</p>
+</main>
+<footer>
+  <span>&copy; 2026 BytArc Labs &middot; Lisbon</span>
+  <nav aria-label="More"><a href="/">bytarc.com</a><a href="/tomas-batalha/">Tomás Batalha</a><a href="https://www.linkedin.com/in/tomasmbatalha">LinkedIn</a></nav>
+</footer>
+</div>
+<script>
+const CATS=[
+ ["agents","Agents & automation"],
+ ["jobalfred","JobAlfred platform"],
+ ["products","AI products"],
+ ["data","Data & analysis"],
+ ["client","Client systems"],
+ ["tools","Tools & internal"]
+];
+const S=[
+// ---------- Agents & automation
+{c:"agents",n:"JobMachine: agentic job-search automation",s:"live",
+ g:"Runs my whole job search on autopilot: reads Gmail every 30 minutes to update the application tracker, sweeps job boards weekly, finds contacts, drafts follow-ups and only sends them after I approve.",
+ a:"Self-hosted n8n on one small AWS server (t3.small, 2 GB). 7 workflows and 132 nodes: Gmail sync, weekly sweep with liveness checks, tracker enrichment (Hunter.io), follow-up sender, plus an MCP server and GPT Actions API so I can query and drive it from ChatGPT or any AI chat. gpt-4o-mini at temperature 0 with JSON output, acting only above 0.7 confidence. Google Sheets as the ledger, with a self-testing send gate and zero-output alerts.",
+ r:["1,006 production runs in the 7 days to 18 Nov 2026, 1 failed (0.1%), 11.2 s average run","In production since September 2026","New send gate checked against 3,000 randomised runs: same decisions as the old one"],
+ l:[["Click-through demo","/demo/"],["Talk slides (AI Builders Lisbon)","/aibuilderslides/"],["Demo video","/aibuildersvideodemo/"]]},
+{c:"agents",n:"Web Summit 2026 people search",s:"live",
+ g:"Find the right people to meet at Web Summit Lisbon 2026: search attendees and investor research, then let AI rank who matters for a given goal.",
+ a:"Static page with the whole dataset AES-256-GCM encrypted in the browser bundle (PBKDF2, 310k iterations), built by a Python script so raw data never leaves my Mac. Search runs locally; \"Ask AI\" works with any provider key (Anthropic, OpenAI, Gemini, OpenRouter, Groq, xAI, Mistral): one call turns the question into filters, then the top 60 matches are ranked.",
+ r:["Built and shipped in 2 days for Web Summit 2026"],
+ l:[["Open (password protected)","/websummit/"]]},
+{c:"agents",n:"OpenClaw agents and Mission Control",s:"prototype",
+ g:"A team of AI agents that run parts of BytArc's operations, with one dashboard to see what each is doing.",
+ a:"Next.js dashboard on Supabase showing agents, tasks, automations, activity and health, polling each agent's status. Agents include Sandra, an executive-assistant agent that takes and makes real phone calls (SignalWire telephony + Gemini Live API), and Bruno, a research agent; both auto-improve through a Codex worker that pushes code.",
+ r:[],
+ l:[["Code","https://github.com/tomasbb0/openclaw-mission-control"]]},
+{c:"agents",n:"Nova SBE Alumni NY with an AI networker",s:"live",
+ g:"A community platform for Nova SBE alumni in New York, with an always-on agent that proposes who should meet whom.",
+ a:"Next.js 16 static export with Supabase (profiles, connections, events), Cloudflare Pages Functions for an onboarding chat, and a scheduled agent (GitHub Actions cron, optional VPS timer) that reads profiles and writes proposed connections. Landing, RSVP, survey, directory, jobs and events.",
+ r:[],
+ l:[["Open","https://demo.bytarc.com/"]]},
+{c:"agents",n:"VendasIA: autonomous SDR agent",s:"prototype",
+ g:"Write personalised B2B outreach in European Portuguese at scale for Portuguese companies.",
+ a:"Python pipeline using Gemini 2.0 Flash for message writing, with Groq, Tavily research and Gmail SMTP, a Make.com blueprint and CSV tracking. Ships with an M&A deal CRM built as a Google Sheets add-on.",
+ r:[], l:[]},
+{c:"agents",n:"Company Brain",s:"prototype",
+ g:"An AI interviewer that maps how a company really works, starting from the CEO and cascading down reporting lines, so AI can be implemented on top of real workflows.",
+ a:"Static front end calling a Cloudflare Worker API; builds an \"operating graph\" of people, workflows and platforms, with an evidence and AI-governance view.",
+ r:[], l:[["Open","/company-brain/"]]},
+{c:"agents",n:"FounderOS Contextualizer",s:"prototype",
+ g:"Interview a founder through 18 structured sections and turn the conversation into a PDF dossier.",
+ a:"Two builds: a Node/Express server (OpenAI, PDFKit, Nodemailer) and a static version on bytarc.com whose chat runs through a Google Apps Script proxy that holds the key. Voice input and in-browser PDF generation.",
+ r:[], l:[["Open (password protected)","/founderos/"]]},
+{c:"agents",n:"Browser Agent",s:"prototype",
+ g:"Control a real, visible Chrome window with plain-language instructions, for example searching job sites.",
+ a:"Node Express + WebSocket chat UI driving headed Playwright, with GPT-4.1-mini choosing each action.",
+ r:[], l:[]},
+// ---------- JobAlfred
+{c:"jobalfred",n:"JobAlfred Chrome extension (formerly JobPilot AI)",s:"live",
+ g:"Fill job applications on any applicant-tracking system from your CV, write cover letters and answers with AI, and track everything. The user checks every answer and presses Submit.",
+ a:"Manifest V3 extension in plain JavaScript: field detection and filling engine, a dedicated Workday module, cover-letter generator, job scraper and tracker, Google OAuth with Drive sync. AI on the user's own OpenAI, Anthropic or Google key. v4 adds signed site-rule bundles, a community personalities store and Find Jobs on the JobAlfred index.",
+ r:["5.0 rating from 8 Chrome Web Store reviews","€0 spent on marketing"],
+ l:[["Chrome Web Store","https://chromewebstore.google.com/detail/kbmpbhhhdojgjnpfpnoehafmllfejgll"],["jobalfred.com","https://jobalfred.com"]]},
+{c:"jobalfred",n:"JobAlfred job index",s:"live",
+ g:"A free, daily index of open jobs taken straight from employers' own hiring systems, so job seekers don't depend on aggregators.",
+ a:"Python crawler with adapters for about 15 applicant-tracking systems (Greenhouse, Lever, Ashby, Workday, Workable, Recruitee…) plus big-company and open feeds. Finds employers through Common Crawl, certificate logs and VC portfolio pages. Respects robots.txt as JobAlfredBot, writes gzip JSON shards per country, runs nightly on GitHub Actions and labels industry, seniority and funding.",
+ r:["1,568,009 open roles indexed (6 Nov 2026)","European VC-backed set: 25,859 roles from 2,096 companies; role counts match the live boards 93.0% (Europe) and 97.2% (world)","76.9% job-weighted coverage on a 200-company sample"],
+ l:[["Bot page","https://jobalfred.com/bot"]]},
+{c:"jobalfred",n:"JobAlfred public job lists",s:"live",
+ g:"Free, daily-refreshed lists of open roles (Portugal, Remote EU, EU visa sponsorship, India roles at global companies), as a public good and an acquisition channel.",
+ a:"Python job reading only the official Greenhouse, Lever and Ashby APIs, with a classifier per list; GitHub Actions refresh writes Markdown tables and JSON. Code MIT, data CC BY 4.0.",
+ r:["18 Nov 2026: 1,081 India roles, 1,012 Remote EU, 321 Portugal, 35 EU with visa sponsorship"],
+ l:[["GitHub","https://github.com/BytArc/jobalfred-jobs"]]},
+{c:"jobalfred",n:"JobAlfred accounts and credits server",s:"pre-launch",
+ g:"An optional paid tier: autofill stays free, paying users get server-side AI (screening answers, tailored CVs, job matching) without bringing their own key.",
+ a:"TypeScript Cloudflare Worker with D1 and Durable Objects for credit wallets, Google sign-in, Stripe checkout and webhooks, Claude via AWS Bedrock EU or the Anthropic API plus Gemma on Workers AI. Tested with Vitest.",
+ r:[], l:[]},
+{c:"jobalfred",n:"JobAlfred community server",s:"live",
+ g:"Backend for the extension's community store (publish, browse, upvote, report), remote config, signed site rules and a free AI answer endpoint.",
+ a:"Cloudflare Worker with D1 in the EU jurisdiction, ported from Deno Deploy. Installs are identified only by a salted hash of a random ID; free AI on Workers AI with moderation.",
+ r:[], l:[]},
+{c:"jobalfred",n:"JobAlfred for ChatGPT (MCP server)",s:"prototype",
+ g:"Let ChatGPT users search, verify and read real job postings, and point them to the extension.",
+ a:"Read-only MCP server on the official TypeScript SDK over Streamable HTTP, with find_jobs, verify_job and job_details tools. Runs on Deno Deploy; a Cloudflare Workers port reads the job index from KV.",
+ r:[], l:[]},
+{c:"jobalfred",n:"ATS fields open dataset",s:"prototype",
+ g:"An open map of what job application forms ask on each applicant-tracking system, for builders and researchers.",
+ a:"JSON and CSV data with Python tools to build, validate and explore it, derived from the extension's rules and saved public form pages with employer data stripped.",
+ r:["77 hiring systems mapped from 175 saved form pages"], l:[]},
+{c:"jobalfred",n:"Alfred Rounds: fair matching engine",s:"prototype",
+ g:"Test bench for a two-sided matching engine that proposes fair, explainable candidate-to-role matches each week.",
+ a:"Dependency-free TypeScript pipeline: hard filters, blinding of personal attributes, retrieval (bge-m3 or TF-IDF), a rubric whose quotes are checked verbatim, scoring, capped allocation and Bayesian learning, with Gemma on Workers AI. 18 tests including a name-swap fairness test.",
+ r:[], l:[]},
+// ---------- AI products
+{c:"products",n:"TopResume.ai",s:"live",
+ g:"Write, edit and tailor a CV with live AI help and export a one-page A4 PDF.",
+ a:"Single-page app with Firebase auth and storage and a multi-provider AI layer (local Ollama, Groq, Cerebras, OpenRouter, Gemini, OpenAI, Claude) with an agent mode that applies edits directly.",
+ r:[], l:[["Open","/cv-platform/"]]},
+{c:"products",n:"CasePreper",s:"live",
+ g:"Consulting case-interview preparation: frameworks, drills, a case generator, firm research and application tracking.",
+ a:"Static web app with Firebase Google sign-in and per-user storage, deployed through GitHub Pages.",
+ r:[], l:[["Open","/CasePreper/"]]},
+{c:"products",n:"BytArc Education",s:"live",
+ g:"A tutoring platform for my own students: teacher dashboard, per-student lesson pages and learning games.",
+ a:"Static HTML/JS on Firebase (Auth, Firestore with security rules, Hosting), 12 interactive games sharing one game engine, and per-student setup scripts. A hardening branch migrates logins to Firebase Auth with lockdown rules.",
+ r:["In real use with my tutoring students"], l:[["Open","/bytarclabs-site/"]]},
+{c:"products",n:"MindMatch",s:"prototype",
+ g:"Match patients with psychologists in Lisbon through an AI conversation instead of endless directories.",
+ a:"Clickable PWA prototype (13 screens) with a simulated AI-matching chat and a waitlist wired to Google Sheets through Apps Script; full product, architecture and go-to-market docs.",
+ r:["Won €300 from Nova SBE's ERA Chair Prototyping Fund"], l:[["Open","/mindmatch/"]]},
+{c:"products",n:"MBA Coach",s:"prototype",
+ g:"An affordable AI admissions coach for international MBA applicants priced out of human consultants.",
+ a:"Python FastAPI backend with a retrieval-based coaching engine over a schools and coaching knowledge base, static front end, Render/Railway deploy configs.",
+ r:[], l:[]},
+{c:"products",n:"Diário de Sono",s:"live",
+ g:"A phone app that replaces a psychologist's paper sleep diary, so patients log every morning and export it.",
+ a:"Installable PWA with Firebase Auth and Firestore, daily unlock at 4:30, streaks, and a Python .docx export.",
+ r:[], l:[["Open","/sleep-diary/"]]},
+{c:"products",n:"Tia Pitucha (ChatGPT persona)",s:"live",
+ g:"A comedy persona for ChatGPT: a posh Lisbon aunt who answers in theatrical European Portuguese.",
+ a:"Custom GPT with its own website, support, privacy and terms pages for the store listing.",
+ r:[], l:[["Open","/tia-pitucha/"]]},
+{c:"products",n:"EmCasa",s:"live",
+ g:"Home concerts in Lisbon: one house, one artist, one night a month.",
+ a:"Static landing page plus a QR ticket check-in scanner with manual code entry.",
+ r:[], l:[["Open","/emcasa/"]]},
+// ---------- Data
+{c:"data",n:"Runway: market-entry copilot",s:"live",
+ g:"Turn a messy case pack of documents into a validated dataset, an evidence report, a ranked market recommendation, a five-year Excel model and a deck.",
+ a:"Seven-stage Python pipeline: PDF, Excel, HTML and CSV readers, rule-based extraction with a schema-validated, cached LLM fallback (Anthropic, temperature 0), deduplication, reconciliation and arithmetic checks. Local web app, Docker deploy and a public showcase with a grounded chat.",
+ r:["13 files in 4 formats processed in under one second","28/28 on its extraction test set","3,236 raw records deduplicated to 228 real units, with 0 LLM calls (€0)"],
+ l:[["Open","/market-runway/"],["Code","https://github.com/tomasbb0/market-runway"]]},
+{c:"data",n:"Founder Decision OS",s:"prototype",
+ g:"A decision model for founders: which business to start, and when to stay or pivot.",
+ a:"Python model that runs OpenAI Deep Research searches, caches them, and feeds a weighted formula with gates and evidence scores to write decision reports.",
+ r:["Ranked 23 business ideas in a first round, then sized 50 niches in a second"], l:[]},
+{c:"data",n:"Revolut Business product map",s:"live",
+ g:"An independent interactive map of Revolut Business plans, products, workflows and the business pains each one solves (EN/PT).",
+ a:"Static JS-rendered SVG diagram with clickable categories and workflow panels.",
+ r:[], l:[["Open","https://tomasbb0-revolut-business-map.netlify.app/"]]},
+// ---------- Client
+{c:"client",n:"Expense and investor settlement system (music management agency)",s:"live",
+ g:"Log expenses per artist and project, settle them between the agency and outside investors, and export to Excel and PDF.",
+ a:"Web app in vanilla JS with Google Apps Script syncing into one Google Sheet per artist. Requirements gathered from the client's voice notes, transcribed with Whisper.",
+ r:["Delivered and in use by the client"], l:[]},
+{c:"client",n:"Brand review aggregator (ALLREV.AI)",s:"prototype",
+ g:"Type a brand, find all its physical stores and merge every Google review into one view for retail analysis.",
+ a:"React 19 + Vite front end with Gemini and Maps grounding, Node backend on Render using the Google Places API and a headless Chromium scraper.",
+ r:[], l:[]},
+// ---------- Tools
+{c:"tools",n:"Notes",s:"live",
+ g:"Always-on-top floating notes for macOS that never steal focus, with tasks, groups and tear-out tabs, synced live with a web version on my phone.",
+ a:"Electron app using non-activating panels, plus a web build from the same source. Sync through a GitHub Gist polled every 4 seconds with ETags, merged per tab; notes to tasks with OpenAI; iOS widget.",
+ r:[], l:[["Open the web version","/notes-app/"]]},
+{c:"tools",n:"TaskSync",s:"prototype",
+ g:"Run several AI coding agents in parallel, each with its own terminal, task queue and autopilot loop.",
+ a:"Electron + Vite + TypeScript desktop app with node-pty terminals and a global hotkey, plus two VS Code extensions linked through shared state and a URL scheme.",
+ r:[], l:[]},
+{c:"tools",n:"bytarc.com build toolchain",s:"live",
+ g:"Ship pages fast without leaking data.",
+ a:"Python scripts that encrypt private datasets into static pages, sanitise a live n8n export into a public demo (and assert no emails or sheet IDs remain), build slide decks and brand assets, and check links.",
+ r:[], l:[]},
+{c:"tools",n:"Pairwire GTM toolkit",s:"archived",
+ g:"Run Pairwire's outbound from Google Sheets.",
+ a:"Google Apps Script: a cold-email sender with timing filters and open/click tracking, a campaign launcher that clones a template sheet per campaign, and an in-Sheets AI code editor.",
+ r:[], l:[]},
+{c:"tools",n:"Project Launcher",s:"archived",
+ g:"Pick and open any local project in VS Code from one visual launcher.",
+ a:"Electron app reading VS Code's recent-projects database.",
+ r:[], l:[]},
+{c:"tools",n:"MemoryCleaner",s:"archived",
+ g:"Free memory on a Mac by swiping through suggestions of what to close.",
+ a:"Python menu-bar app (rumps, psutil, pyobjc) with local AI tips from Ollama.",
+ r:[], l:[]}
+];
+const esc=t=>t.replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]));
+const live=S.filter(x=>x.s==="live").length;
+document.getElementById("stats").innerHTML=`<span><b>${S.length}</b>systems</span><span><b>${live}</b>live</span><span><b>${CATS.length}</b>areas</span>`;
+let cur="all";
+const F=document.getElementById("filters");
+[["all","All"],...CATS].forEach(([k,v])=>{const b=document.createElement("button");b.textContent=v;b.dataset.k=k;b.setAttribute("aria-pressed",k===cur);b.onclick=()=>{cur=k;render()};F.appendChild(b)});
+function card(x){
+ const res=x.r.length?`<div><dt>Results</dt><dd class="res"><ul>${x.r.map(r=>`<li>${esc(r)}</li>`).join("")}</ul></dd></div>`:"";
+ const links=x.l.length?`<div class="links">${x.l.map(([t,u])=>`<a href="${u}"${u.startsWith("http")?' target="_blank" rel="noopener"':""}>${esc(t)} ↗</a>`).join("")}</div>`:`<div class="links"><span>Private · walkthrough on request</span></div>`;
+ return `<article class="card"><header><h3>${esc(x.n)}</h3><span class="badge${x.s==="live"?" live":""}">${x.s}</span></header><dl><div><dt>Goal</dt><dd>${esc(x.g)}</dd></div><div><dt>Architecture</dt><dd>${esc(x.a)}</dd></div>${res}</dl>${links}</article>`;
+}
+function render(){
+ F.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.k===cur));
+ document.getElementById("list").innerHTML=CATS.filter(([k])=>cur==="all"||cur===k).map(([k,v])=>{const xs=S.filter(x=>x.c===k);return `<section><h2>${v}<small>${xs.length}</small></h2><div class="grid">${xs.map(card).join("")}</div></section>`}).join("");
+}
+render();
+</script>
+</body>
+</html>
