@@ -656,14 +656,15 @@ body: {
   <span class="p">response_format</span>: { <span class="p">type</span>: <span class="s">'json_object'</span> }
 }</pre></div>
       <ul class="ticks">
-        <li><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M20 6 9 17l-5-5" /></svg><span>Acts only at confidence <b>0.7+</b>; unclear ones get a second check</span></li>
+        <li><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M20 6 9 17l-5-5" /></svg><span>Unsure, under <b>0.55</b>: I check it myself</span></li>
+        <li><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M20 6 9 17l-5-5" /></svg><span>New company: second check, needs <b>0.7+</b></span></li>
         <li><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M20 6 9 17l-5-5" /></svg><span>Gmail pulls capped at 120 to 200 a run</span></li>
       </ul>
     </div>
   </div>
   <aside class="notes">
     <p>All new email goes to the model in one batched call. Cheap model, temperature zero, JSON out.</p>
-    <p>Then a 200-email call failed outright, and a 500-message pull hit Gmail's quota. So: at most 60 per call, the rest wait for the next run 30 minutes later. It acts only above 0.7 confidence, and unclear items get a second, deeper check.</p>
+    <p>Then a 200-email call failed outright, and a 500-message pull hit Gmail's quota. So: at most 60 per call, the rest wait for the next run 30 minutes later. When it's unsure, under 0.55, it does nothing and the email goes into my morning digest for me to check. When an email comes from a company it doesn't know, a second check reads the related emails too, and it's added only at 0.7 or more.</p>
   </aside>
 </section>
 
