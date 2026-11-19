@@ -1,0 +1,132 @@
+/* Squares lab: the page keeps every element, scene and animation of the live site. Only the background and the icons
+   change: the background becomes a square grid with a black mosaic, and the icons are redrawn as white and grey cells
+   that sit on that grid. html.sq-on is the experiment; without it the page is the live site, for comparison. */
+
+/* the experiment's own layers */
+#sqField{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+#sqIcons{position:fixed;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;mix-blend-mode:difference}
+#sqCursor{position:fixed;inset:0;width:100%;height:100%;z-index:2147483000;pointer-events:none;mix-blend-mode:difference}
+/* the white squares are the pointer: no system cursor while the experiment is on (mouse and trackpad only) */
+html.sq-on.sq-cur,html.sq-on.sq-cur *{cursor:none!important}
+html:not(.sq-on) #sqCursor{display:none}
+.sq-markbox{position:relative}
+.sq-mark{position:absolute;pointer-events:none}
+html:not(.sq-on) #sqField,html:not(.sq-on) #sqIcons,html:not(.sq-on) .sq-mark{display:none}
+
+/* the originals stay in the page (same size, same place, same motion) but are not painted: the cells stand in for them */
+html.sq-on #heroWave{visibility:hidden}
+html.sq-on #bmCanvas{opacity:0!important}
+html.sq-on .node:not(.sq-real) .ic svg{opacity:0}   /* the agents' icons: cells until they have resolved into the real ones */
+html.sq-on .sq-markbox>svg{opacity:0}
+html.sq-on.sq-still #bigmark{opacity:0!important}
+/* the org chart's cards are black cells of the grid */
+html.sq-on .node{background:transparent!important;box-shadow:none!important}
+html.sq-on .node::after{display:none}
+
+/* the finer textures: the hero's typing bar and full stop are cells (the bar keeps its pulse, read from the page) */
+html.sq-on.sq-type .hero h1 .caret{background:transparent!important}
+html.sq-on.sq-type .sq-stop{visibility:hidden}
+/* watch tiles in cells: the real tiles step aside, their names stay */
+#sqWatch,#sqShapes{position:fixed;inset:0;width:100%;height:100%;pointer-events:none}
+#sqNavShapes{position:absolute;left:0;top:0;z-index:-1;pointer-events:none}
+#sqNavBar{position:absolute;left:0;top:0;z-index:-2;pointer-events:none}
+html:not(.sq-on) #sqNavBar{display:none}
+/* the nav's bar is cells too: it keeps its colour on the page (clipped to its text) for the cells to read, without the frost */
+html.sq-on .nav{-webkit-background-clip:text!important;background-clip:text!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;box-shadow:none!important}
+html:not(.sq-on) #sqWatch,html:not(.sq-on) #sqShapes,html:not(.sq-on) #sqNavShapes{display:none}
+html.sq-on.sq-watch .bub-c{background:transparent!important;box-shadow:none!important}
+html.sq-on.sq-watch:not(.sq-watch-bg) .bub-c img{opacity:0!important}   /* background only: the real tile shows its mark alone */
+/* shapes in cells: each keeps its colour on the page (clipped to its own text, so it is never seen) for the cells to read */
+html.sq-on.sq-shapes :is(.m-panel,.btn,.nav-pill,.lang-btn.active,.nav-links a.cur,.badge,.chips li,.tag,.scene-dots button,.modal-tag){-webkit-background-clip:text!important;background-clip:text!important;box-shadow:none!important}
+/* the stat boxes, cards and the closing card never change colour and hold gradient text: their colour is read once, then they are hidden plainly */
+html.sq-on.sq-shapes :is(.stat,.card,.cta){background:transparent!important;box-shadow:none!important}
+html.sq-on.sq-shapes .cta::before{display:none}
+/* text on a shape in cells sits on a solid plate of the shape's colour (drawn by the script), so it always reads */
+
+/* the hero's two buttons and the closing card's two: dark faces (two tones), white text, and a 3D edge on the right and
+   the bottom (on the page: lighter grey on Graphite and Black, darker on Ash; on the dark closing card: lighter grey);
+   pressing pushes the button into its edge and the edge goes */
+html.sq-on .cta .hero-ctas{--sq-btn1:#2c2c33;--sq-btn2:#1b1b20;--sq-edge-c:#55555e}
+html.sq-on :is(.hero,.cta) .hero-ctas .btn{color:#fff!important;box-shadow:var(--sq-edge,4px) var(--sq-edge,4px) 0 0 var(--sq-edge-c)!important;transition:translate .06s ease,box-shadow .06s ease,background-color .2s}
+html.sq-on :is(.hero,.cta) .hero-ctas .btn-white{background-color:var(--sq-btn1)!important}
+html.sq-on :is(.hero,.cta) .hero-ctas .btn-ghost{background-color:var(--sq-btn2)!important}
+html.sq-on :is(.hero,.cta) .hero-ctas .btn:active{translate:var(--sq-edge,4px) var(--sq-edge,4px)!important;transform:none;box-shadow:0 0 0 0 var(--sq-edge-c)!important}
+html.sq-on.sq-shapes :is(.hero,.cta) .hero-ctas .btn{box-shadow:none!important}   /* in cells, the edge is drawn by the script */
+
+/* the honeycomb's hint, centred on the honeycomb (which sits at 69% across) */
+html.sq-on.scenes:not(.compact) .hive-wrap .hive-hint{position:absolute;left:69%;top:0;translate:-50% 0;white-space:nowrap}
+
+/* the white last page: the footer under the closing card turns dark to read on white */
+body.invert .foot{color:#55555E}
+body.invert .foot a:hover{color:#0A0A0D}
+
+/* the top menu: the language switch, GitHub and Book a call look like the section links (About and the rest): plain
+   text, no pill; the language in use is highlighted the way the section you are in is */
+html.sq-on .nav .nav-right{gap:4px}
+html.sq-on .nav .nav-right :is(.nav-pill,.btn){height:auto;background-color:transparent!important;background-image:none!important;box-shadow:none!important}
+html.sq-on .nav .nav-right .btn{padding:8px 12px;font-size:14px;font-weight:400;color:var(--text-2);transition:color .2s}
+html.sq-on .nav .nav-right .btn:hover{color:var(--text)}
+html.sq-on .nav .lang{padding:0;gap:4px}
+html.sq-on .nav .lang-btn{height:auto;padding:8px 12px;font-size:14px;font-weight:400;letter-spacing:0;color:var(--text-2)}
+html.sq-on .nav .lang-btn:hover{color:var(--text)}
+html.sq-on .nav .lang-btn.active{color:var(--text);background-color:rgba(255,255,255,.08)!important}
+
+/* the honeycomb: no dark shading behind the names inside the tiles */
+html.sq-on.tiles .bub-t{background:none!important}
+
+/* big squares: the nav's logo is the arch in eight of the grid's own 12px squares, so its box grows to fit and the name
+   moves right to make room */
+html.sq-on.sq-bigmark .nav .brand svg{width:72px;height:48px}
+
+/* Button style: Pixel. Square dark boxes, uppercase monospace with wide spacing, and a hard black shadow down and to
+   the right; pressing pushes the box onto its shadow. The main button, the section you are in and the language in use
+   are the same box in white */
+html.sq-on.sq-pixbtn :is(.hero,.cta) .hero-ctas .btn,
+html.sq-on.sq-pixbtn .nav .nav-links a,
+html.sq-on.sq-pixbtn .nav .nav-right .btn,
+html.sq-on.sq-pixbtn .nav .lang-btn{border-radius:0!important;font-family:var(--mono)!important;font-weight:500!important;text-transform:uppercase;
+  letter-spacing:.14em!important;color:#e8e8ec!important;background:#19191e!important;-webkit-background-clip:border-box!important;background-clip:border-box!important;
+  box-shadow:var(--px-sh,4px) var(--px-sh,4px) 0 0 var(--px-sc,#000)!important;transition:translate .06s ease,box-shadow .06s ease,background-color .15s!important}
+html.sq-on.sq-pixbtn :is(.hero,.cta) .hero-ctas .btn{--px-sh:6px;padding:15px 22px!important;font-size:13px!important}
+html.sq-on.sq-pixbtn .cta .hero-ctas .btn{--px-sc:#34343b}   /* on the dark closing card the shadow is a lighter dark, so it shows */
+html.sq-on.sq-pixbtn .nav .nav-links{gap:10px}
+html.sq-on.sq-pixbtn .nav .nav-right,html.sq-on.sq-pixbtn .nav .lang{gap:10px}
+html.sq-on.sq-pixbtn .nav .lang{padding:0;background:none!important;box-shadow:none!important}
+html.sq-on.sq-pixbtn .nav .nav-links a,html.sq-on.sq-pixbtn .nav .nav-right .btn,html.sq-on.sq-pixbtn .nav .lang-btn{display:inline-flex;align-items:center;height:34px!important;padding:0 12px!important;font-size:11.5px!important}
+html.sq-on.sq-pixbtn :is(.hero,.cta) .hero-ctas .btn:hover,html.sq-on.sq-pixbtn .nav :is(.nav-links a,.nav-right .btn,.lang-btn):hover{background:#24242a!important;color:#fff!important}
+/* the main button, the section you are in and the language in use: the same box, simply white with dark text */
+html.sq-on.sq-pixbtn :is(.hero,.cta) .hero-ctas .btn-white,
+html.sq-on.sq-pixbtn .nav .nav-links a.cur,
+html.sq-on.sq-pixbtn .nav .lang-btn.active{background:#fff!important;color:#0a0a0d!important}
+html.sq-on.sq-pixbtn :is(.hero,.cta) .hero-ctas .btn-white:hover,
+html.sq-on.sq-pixbtn .nav .nav-links a.cur:hover,
+html.sq-on.sq-pixbtn .nav .lang-btn.active:hover{background:#e6e6ea!important;color:#0a0a0d!important}
+html.sq-on.sq-pixbtn :is(.hero,.cta) .hero-ctas .btn:active,
+html.sq-on.sq-pixbtn .nav :is(.nav-links a,.nav-right .btn,.lang-btn):active{translate:var(--px-sh,4px) var(--px-sh,4px)!important;box-shadow:none!important}
+
+/* Pixel buttons on small screens: the menu button gets the same box, and GitHub and Book a call step aside where the
+   page already hides them, so the bar never runs off the screen */
+html.sq-on.sq-pixbtn .nav .menu-btn{height:34px!important;padding:0 12px!important;border-radius:0!important;font:500 11.5px/1 var(--mono)!important;text-transform:uppercase;
+  letter-spacing:.14em;color:#e8e8ec!important;background:#19191e!important;box-shadow:4px 4px 0 0 #000!important}
+html.sq-on.sq-pixbtn .nav .menu-btn:active{translate:4px 4px;box-shadow:none!important}
+@media (max-width:560px){html.sq-on.sq-pixbtn .nav .btn-github{display:none!important}}
+@media (max-width:470px){html.sq-on.sq-pixbtn .nav .btn-connect{display:none!important}}
+@media (max-width:420px){html.sq-on.sq-pixbtn .nav .nav-right,html.sq-on.sq-pixbtn .nav .lang{gap:8px}}
+
+/* the lab panel */
+#sqPanel{position:fixed;right:40px;bottom:14px;z-index:10000;width:330px;padding:12px 12px 10px;border-radius:14px;
+  background:rgba(12,12,14,.9);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+  box-shadow:0 0 0 1px rgba(255,255,255,.08),0 18px 40px -16px rgba(0,0,0,.9);
+  font:500 11.5px/1.35 "Geist Mono",ui-monospace,Menlo,monospace;color:#d4d4d8;letter-spacing:.01em}
+#sqPanel.min{width:auto;padding:8px 12px}
+#sqPanel.min .sq-body{display:none}
+#sqPanel .sq-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+#sqPanel .sq-top b{font-weight:600;color:#fff;letter-spacing:.06em;text-transform:uppercase;font-size:11px}
+#sqPanel .sq-top button{border:0;background:none;color:#86868f;font:inherit;cursor:pointer;padding:0}
+#sqPanel .sq-row{margin-top:10px}
+#sqPanel .sq-row>span{display:block;margin-bottom:5px;color:#86868f;text-transform:uppercase;letter-spacing:.1em;font-size:10px}
+#sqPanel .sq-seg{display:flex;gap:4px}
+#sqPanel .sq-seg button{flex:1;min-height:26px;padding:3px 4px;border:0;border-radius:7px;background:rgba(255,255,255,.06);color:#a3a3ad;font:inherit;font-size:10.5px;line-height:1.15;cursor:pointer}
+#sqPanel .sq-seg button:hover{color:#fff}
+#sqPanel .sq-seg button.on{background:#fff;color:#0a0a0d}
+#sqPanel .sq-code{margin-top:10px;color:#6e6e78;font-size:10.5px}

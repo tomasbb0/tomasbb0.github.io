@@ -13,6 +13,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <script>if (!/[?&]round\b/.test(location.search)) document.documentElement.classList.add("tiles");   // trial: square product tiles with the name inside (?round: the bubbles)</script>
 <!-- after the viewport tag: before it, a phone reports a 980px desktop width and got the desktop scenes -->
+<script>window.SQ_WHITE = new URLSearchParams(location.search).get("white") === "founder" ? "founder" : "last";   /* squares lab: which page is the white one (the lab moves it to the last page) */</script>
 <script>window.SCENES_COMPACT = innerWidth < 900; window.SCENES_OK = !matchMedia('(prefers-reduced-motion: reduce)').matches && (window.SCENES_COMPACT ? innerHeight >= 500 && innerHeight > innerWidth : innerHeight >= 600); window.SCENES = window.SCENES_OK;</script>
 <title>BytArc | AI Consulting &amp; Product Development</title>
 <meta name="description" content="BytArc is an independent, founder-led AI studio in Lisbon. We automate business processes for growing companies with AI and build our own AI products. Founded by Tomás Batalha (ex-Google, ex-Amazon).">
@@ -492,6 +493,7 @@ html.compact .scene{bottom:auto;height:100vh;height:100svh}
 html.compact .org-floor{display:none}   /* a 3200px plane turned in 3D is more than a phone can composite: it flickers */
 html.compact .nav.scrolled{background:rgba(2,2,3,.92);-webkit-backdrop-filter:none;backdrop-filter:none}   /* a blur over moving scenes flickers on iOS */
 </style>
+<link rel="stylesheet" href="/assets/squares.css?v=1">
 </head>
 <body>
 <canvas class="bg-canvas" id="heroWave" aria-hidden="true"></canvas>
@@ -597,7 +599,7 @@ html.compact .nav.scrolled{background:rgba(2,2,3,.92);-webkit-backdrop-filter:no
       svg.style.visibility = "hidden";                                  // the canvas draws from here on (the SVG still sets the picture's place)
       const { sin, cos, min, max, PI, hypot, round } = Math, clamp = v => min(1, max(0, v));
       const easeInOut = u => (u < .5 ? 4 * u * u * u : 1 - (2 - 2 * u) ** 3 / 2), smooth = u => u * u * (3 - 2 * u);
-      const MW = 275, MD = 1100, DUR = .45;                            // the logo's width in its units; ms per change of picture; each digit's flight, in hero-exit units
+      const MW = 275, DUR = .45; let MD = 1100;   /* squares lab: MD becomes 1 in the Flicker transition, so the picture swaps at once and the lab's cells flicker it in */                            // the logo's width in its units; ms per change of picture; each digit's flight, in hero-exit units
 
       // ---- the pictures, on a grid of GW x GH cells (a quarter of the logo's 25-unit grid): each is drawn with simple shapes
       // and every cell whose centre falls inside becomes a block
@@ -952,6 +954,7 @@ html.compact .nav.scrolled{background:rgba(2,2,3,.92);-webkit-backdrop-filter:no
         word: i => {                                                   // the headline typed word i: its picture, from wherever the blocks are now
           if (hx > 0) { from = to = SLOTS[i] || SLOTS[0]; m0 = -1e9; sample(to); startPic = to; wake(); return; }   // scrolled away: the digits come back as this word's picture
           const now = performance.now(), mid = stateAt(now);
+          MD = window.SQ_FLICKER ? 1 : 1100;
           from = mid || to; to = SLOTS[i] || SLOTS[0]; m0 = now; wake();
         },
       };
@@ -1814,6 +1817,7 @@ html.compact .nav.scrolled{background:rgba(2,2,3,.92);-webkit-backdrop-filter:no
     cols = Math.ceil(W / SP) + 2; rows = Math.ceil(H / SP) + 2;
   }
   function draw() {
+    if (document.documentElement.classList.contains("sq-on")) { requestAnimationFrame(draw); return; }   /* squares lab: this dot field rests while the grid stands in */
     ctx.clearRect(0, 0, W, H);
     time += 0.025;
     for (let i = bursts.length - 1; i >= 0; i--) { bursts[i].life -= 0.015; if (bursts[i].life <= 0) bursts.splice(i, 1); }
@@ -2455,9 +2459,9 @@ window.pixelReveal = (() => {
     ogP.tx = (e.clientX / innerWidth) * 2 - 1; ogP.ty = (e.clientY / innerHeight) * 2 - 1;
   }, { passive: true });
   const ORG = {
-    off() { ogOn = false; cancelAnimationFrame(ogRaf); ogRaf = 0; ogHov = null; },
+    off() { ogOn = false; cancelAnimationFrame(ogRaf); ogRaf = 0; ogHov = null; window.SQ_ORGP = scrollY > 0 && window.SQ_ORGP > .5 ? 1 : 0; },
     apply(r, x, p) {
-      ogR = r; ogX = x;
+      ogR = r; ogX = x; window.SQ_ORGP = p;                           // squares lab: the agents' icons resolve from cells as this runs
       if (COMPACT) ogQ = seg(p, 0.16, 0.94, lin);
       // phones have no pointer to follow and no floor to stream, so the scene is drawn by scroll alone, not every frame
       if (!ogOn) { ogOn = true; if (!COMPACT) ogRaf = requestAnimationFrame(ogTick); }
@@ -2479,13 +2483,15 @@ window.pixelReveal = (() => {
   const px = window.pixelReveal, pix = px && px.pix;                  // the colour-pixel reveal
   // the founder is the page's one slide in negative: a white band opens from a line and the text turns dark
   const FOUNDER = {
-    off() { panel.style.visibility = "hidden"; document.body.classList.remove("invert"); fo.classList.remove("inv"); nav.classList.remove("solid"); },
+    off() { if (window.SQ_WHITE === "last") return; panel.style.visibility = "hidden"; document.body.classList.remove("invert"); fo.classList.remove("inv"); nav.classList.remove("solid"); },
     apply(r, x, p) {                                                 // p runs 0 to 1 from the founder arriving to it leaving
-      const open = seg(r, 0, 0.3, outExpo) * (1 - seg(x, 0.35, 0.9, inOut));
-      panel.style.visibility = open > 0.001 ? "visible" : "hidden";
-      panel.style.clipPath = `inset(${((1 - open) * 50).toFixed(2)}% 0)`;
-      const inv = open > 0.5; document.body.classList.toggle("invert", inv); fo.classList.toggle("inv", inv);
-      nav.classList.toggle("solid", open > 0.01);                     // solid black bar over the white
+      if (window.SQ_WHITE !== "last") {                               // squares lab: with the white page last, the founder stays dark
+        const open = seg(r, 0, 0.3, outExpo) * (1 - seg(x, 0.35, 0.9, inOut));
+        panel.style.visibility = open > 0.001 ? "visible" : "hidden";
+        panel.style.clipPath = `inset(${((1 - open) * 50).toFixed(2)}% 0)`;
+        const inv = open > 0.5; document.body.classList.toggle("invert", inv); fo.classList.toggle("inv", inv);
+        nav.classList.toggle("solid", open > 0.01);                   // solid black bar over the white
+      }
       const xk = seg(x, 0, 0.7, inCubic);
       portrait.style.clipPath = xk > 0 ? `inset(0 0 ${(xk * 100).toFixed(2)}% 0 round 20px)` : "";
       if (COMPACT) {                                                  // phones: the photo stays put while the story scrolls up over it
@@ -2542,7 +2548,14 @@ window.pixelReveal = (() => {
   const ctA = { h2: $("h2", cta), p: $("p", cta), btns: $$(".btn", cta) };
   const ctLight = lighter(ctA.h2, 0.12);
   const CONTACT = {
+    off() { if (window.SQ_WHITE !== "last") return; panel.style.visibility = "hidden"; document.body.classList.remove("invert"); nav.classList.remove("solid"); },
     apply(r) {
+      if (window.SQ_WHITE === "last") {                               // squares lab: the last page is the white one; the closing card stays dark on it
+        const w = seg(r, 0, 0.3, outExpo);
+        panel.style.visibility = w > 0.001 ? "visible" : "hidden";
+        panel.style.clipPath = `inset(${((1 - w) * 50).toFixed(2)}% 0)`;
+        document.body.classList.toggle("invert", w > 0.5); nav.classList.toggle("solid", w > 0.01);
+      }
       const open = seg(r, 0, 0.3, outExpo);
       cta.style.clipPath = open < 1 ? `inset(${((1 - open) * 50).toFixed(2)}% 0 ${((1 - open) * 50).toFixed(2)}% 0 round 28px)` : "";
       cta.style.opacity = open > 0 ? "" : "0";
@@ -2646,5 +2659,7 @@ window.pixelReveal = (() => {
   if (location.hash) setTimeout(goHash, 0);
 })();
 </script>
+<script>window.SQ_SITE = { grid: "small", bg: "b", ic: "small", watch: "off", wpart: "bg", shape: "small", btn: "pixel", trans: "fly" };   /* the squares design: small squares on black, pixel buttons (lab: _site-experiments/squares; the site before it: /clean/) */</script>
+<script src="/assets/squares.js?v=1"></script>
 </body>
 </html>
