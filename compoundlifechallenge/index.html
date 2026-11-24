@@ -101,6 +101,18 @@ footer{color:var(--mut);font-size:12px;margin-top:30px}
       <span class="sync" id="sync"></span>
     </div>
     <div class="hint">Qualified = at least 30 people physically in the office per day (total headcount alone doesn't count) and a need for better food that the person stated themselves.</div>
+    <h2>Targets near the Work Café</h2>
+    <div class="card-script" style="background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:14px">
+      <b>At every door:</b> "Bom dia! Pergunta rápida: quantas pessoas estão cá no escritório num dia normal?" 30+ → continue, otherwise thank them and go.<br>
+      <b>Then:</b> "Sou o Tomás, da Compound Life. Pomos quiosques de comida saudável em escritórios: uma tomada, 24 horas, a reposição é nossa. Quem é a pessoa que trata do escritório e das coisas da equipa?"<br>
+      <b>Need:</b> "Onde almoçaram hoje? Quanto tempo demorou?" Let them say the problem.<br>
+      <b>Close:</b> "Consegue 15 minutos esta semana? Quinta às 10h ou sexta às 15h?" Get email or phone, log it here before you walk away.<br>
+      <b>If blocked at reception:</b> be honest and direct: "Tenho 30 minutos para encontrar empresas com 30+ pessoas que querem melhor comida no escritório. Pode ligar 1 minuto a quem trata disso?" Never claim a meeting you don't have.
+    </div>
+    <div class="bar"><a class="btn p" id="route" style="text-decoration:none" target="_blank" rel="noopener">Walking route in Google Maps</a></div>
+    <div class="chips" id="bands"><button type="button" class="on" data-band="all">All</button><button type="button" data-band="m">30 to 100</button><button type="button" data-band="l">100+</button><button type="button" data-band="unk">Size unknown</button><button type="button" data-band="s">Under 30</button></div>
+    <div id="targets" style="margin-top:10px"></div>
+    <h2>Leads logged</h2>
     <div id="list"></div>
     <footer>Private page: only people with the link can see these leads. Built for the Compound Life business challenge, 24 Nov 2026. <a href="https://bytarc.com" target="_blank" rel="noopener">by BytArc</a></footer>
   </div>
@@ -203,7 +215,7 @@ async function load(quiet){
     $("role").textContent=ROLE==="edit"?"Edit":"View only";$("role").className="role "+ROLE;
     $("add").hidden=ROLE!=="edit";
     const t="Updated "+new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"});$("sync").dataset.t=t;showSync(t);
-    render();
+    render();renderTargets();
   }catch(e){
     if(e.auth){$("app").hidden=true;$("add").hidden=true;$("gate").hidden=false;return}
     if(!quiet)toast("No connection. Showing what this phone has.");showSync();
@@ -298,6 +310,44 @@ $("keyGo").onclick=()=>{KEY=$("keyIn").value.trim();LS.set("cl_key",KEY);$("gate
 async function start(){if(!KEY){$("gate").hidden=false;return}$("app").hidden=false;await load();flush()}
 addEventListener("online",flush);setInterval(()=>{if(!document.hidden&&!$("sheet").classList.contains("on")){flush();load(true)}},20000);
 document.addEventListener("visibilitychange",()=>{if(!document.hidden)load(true)});
+/* ---------- targets near the Work Café ---------- */
+const T=[
+ {n:"Celadonsoft",q:"Celadonsoft Avenida Engenheiro Duarte Pacheco 19 Lisboa",d:"Av. Eng. Duarte Pacheco 19 (next to the Work Café)",emp:120,src:"50 to 249 total (Clutch), ~120-150 (Built In); Lisbon office size unknown",who:"Office manager or HR",hook:"Software team at desks all day."},
+ {n:"Opensoft",q:"Opensoft Rua Carlos Alberto da Mota Pinto 17 Lisboa",d:"Amoreiras Square, R. C. A. Mota Pinto 17, 7º B",emp:100,src:"100+ staff (CEO to Lusa, Mar 2026)",who:"People / office manager",hook:"Grew headcount 15% in 2025: more people, same lunch options?"},
+ {n:"MAP Group",q:"MAP Group Rua Carlos Alberto da Mota Pinto 17 Lisboa",d:"Amoreiras Square, 8º B (same lobby)",emp:33,src:"21-50 / 33 (estimates, conflicting)",who:"Office manager",hook:""},
+ {n:"CBRE",q:"CBRE Amoreiras Square Lisboa",d:"Amoreiras Square, 8º A (same lobby)",emp:null,src:"size unknown, ask at the door",who:"Office manager",hook:"Also a partner: they advise companies on offices."},
+ {n:"Regus Amoreiras",q:"Regus Amoreiras Square Lisboa",d:"Amoreiras Square, 3º A (same lobby)",emp:null,src:"many small companies, building-level lead",who:"Centre manager",hook:"One kiosk for every company in the centre."},
+ {n:"Rockbuilding",q:"Rockbuilding Soluções Imobiliárias Rua Carlos Alberto da Mota Pinto Lisboa",d:"R. C. A. Mota Pinto (Amoreiras Square area)",emp:null,src:"likely small to mid",who:"Office manager",hook:""},
+ {n:"BBDO Portugal",q:"BBDO Portugal Avenida Engenheiro Duarte Pacheco 26 Lisboa",d:"Av. Eng. Duarte Pacheco 26",emp:120,src:"1,500 m² (Savills), estimate",who:"People & Culture / office manager",hook:"Agencies care about culture and perks."},
+ {n:"Openbook Group",q:"Openbook Avenida Conselheiro Fernando de Sousa 19 Lisboa",d:"Av. Cons. Fernando de Sousa 19, 8º",emp:100,src:"100+ (group self-profile); one database says 30",who:"Office manager",hook:""},
+ {n:"Morais Leitão",q:"Morais Leitão Rua Castilho 165 Lisboa",d:"Rua Castilho 165",emp:250,src:"large law firm (estimate)",who:"Office manager or HR (Recursos Humanos)",hook:"Lawyers work late: open 24/7, healthy, pay with meal card."},
+ {n:"LLYC Lisboa",q:"LLYC Rua Castilho Lisboa",d:"Rua Castilho",emp:45,src:"~45 people (Eco, May 2026)",who:"Office manager / People",hook:"New office since May 2026: how did lunch work out for the team?"},
+ {n:"SRS Legal",q:"SRS Legal Rua Dom Francisco Manuel de Melo 21 Lisboa",d:"R. D. Francisco Manuel de Melo 21",emp:150,src:"mid-size law firm (estimate)",who:"Office manager or HR",hook:"Just moved back into the renovated HQ."},
+ {n:"Castilho 2 (Swiss Post, Leonteq)",q:"Rua Castilho 2 Lisboa",d:"Rua Castilho 2 (far end)",emp:50,src:"Swiss Post ~50 at 2023 start (C&W)",who:"Office manager",hook:"Tech hubs growing toward 100 to 150."},
+ {n:"SotySolar Portugal",q:"SotySolar Rua Joshua Benoliel Lisboa",d:"Rua Joshua Benoliel",emp:null,src:"probably a small Lisbon office",who:"Office manager",hook:""},
+ {n:"LX Capital",q:"LX Capital Lisboa",d:"Near the Work Café",emp:null,src:"unknown",who:"Office manager",hook:""},
+ {n:"Stream Plan",q:"Stream Plan Lisboa",d:"Near the Work Café",emp:null,src:"unknown",who:"Office manager",hook:""}
+];
+const mapsQ=q=>"https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(q);
+const ROUTE=["Celadonsoft Avenida Engenheiro Duarte Pacheco 19 Lisboa","Amoreiras Square Rua Carlos Alberto da Mota Pinto 17 Lisboa","BBDO Portugal Avenida Engenheiro Duarte Pacheco 26 Lisboa","Morais Leitão Rua Castilho 165 Lisboa","LLYC Rua Castilho Lisboa"];
+const routeURL=()=>"https://www.google.com/maps/dir/?api=1&origin="+encodeURIComponent("Work Café Santander Amoreiras Lisboa")+"&destination="+encodeURIComponent(ROUTE[ROUTE.length-1])+"&waypoints="+ROUTE.slice(0,-1).map(encodeURIComponent).join("%7C")+"&travelmode=walking";
+let BAND="all";
+const band=e=>e==null?"unk":e<30?"s":e<=100?"m":"l";
+function renderTargets(){
+ const box=$("targets");if(!box)return;
+ const list=T.filter(t=>BAND==="all"||band(t.emp)===BAND);
+ box.innerHTML=list.map((t,i)=>`<div class="lead"><div class="top"><div><div class="co">${esc(t.n)}</div><div class="loc">${esc(t.d)}</div></div><span class="pill ${t.emp==null?"":t.emp>=30?"g":"a"}">${t.emp==null?"size ?":"~"+t.emp+" people"}</span></div>
+ ${t.src?`<div class="hint">${esc(t.src)}</div>`:""}
+ <div class="row"><span class="k">Ask for</span>${esc(t.who)}</div>
+ ${t.hook?`<div class="row"><span class="k">Hook</span>${esc(t.hook)}</div>`:""}
+ <div class="acts"><a class="btn p" style="text-decoration:none" href="${mapsQ(t.q)}" target="_blank" rel="noopener">Open in Maps</a>${ROLE==="edit"?`<button class="btn" data-log="${T.indexOf(t)}">Log lead</button>`:""}</div></div>`).join("")||`<div class="empty">No targets in this size band.</div>`;
+}
+document.addEventListener("click",e=>{
+ const b=e.target.closest("[data-band]");if(b){BAND=b.dataset.band;document.querySelectorAll("[data-band]").forEach(x=>x.classList.toggle("on",x===b));renderTargets()}
+ const lg=e.target.closest("[data-log]");if(lg){const t=T[+lg.dataset.log];openForm();$("company").value=t.n;$("location").value=t.d}
+});
+
+$("route").href=routeURL();
 readKey();start();
 </script>
 </body>
