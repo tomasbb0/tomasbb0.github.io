@@ -109,7 +109,8 @@ footer{color:var(--mut);font-size:12px;margin-top:30px}
       <b>Close:</b> "Consegue 15 minutos esta semana? Quinta às 10h ou sexta às 15h?" Get email or phone, log it here before you walk away.<br>
       <b>If blocked at reception:</b> be honest and direct: "Tenho 30 minutos para encontrar empresas com 30+ pessoas que querem melhor comida no escritório. Pode ligar 1 minuto a quem trata disso?" Never claim a meeting you don't have.
     </div>
-    <div class="bar"><a class="btn p" id="route" style="text-decoration:none" target="_blank" rel="noopener">Walking route in Google Maps</a></div>
+    <div class="bar"><button class="btn p" id="routesBtn">View possible walking routes</button></div>
+    <div id="routes" hidden></div>
     <div class="chips" id="bands"><button type="button" class="on" data-band="all">All</button><button type="button" data-band="m">30 to 100</button><button type="button" data-band="l">100+</button><button type="button" data-band="unk">Size unknown</button><button type="button" data-band="s">Under 30</button></div>
     <div id="targets" style="margin-top:10px"></div>
     <h2>Leads logged</h2>
@@ -347,7 +348,25 @@ document.addEventListener("click",e=>{
  const lg=e.target.closest("[data-log]");if(lg){const t=T[+lg.dataset.log];openForm();$("company").value=t.n;$("location").value=t.d}
 });
 
-$("route").href=routeURL();
+
+const START="Work Café Santander Amoreiras Lisboa";
+const ROUTES=[
+ {name:"A · One lobby, five targets",mins:"about 5 min walking",why:"Fastest. Amoreiras Square has Opensoft (100+), MAP Group, CBRE, Regus and ECIJA behind one door.",stops:["Celadonsoft","Opensoft","MAP Group","CBRE","Regus Amoreiras","Rockbuilding"]},
+ {name:"B · The avenue",mins:"about 10 min walking",why:"Route A plus BBDO (about 120 people, culture-driven agency) further along Duarte Pacheco.",stops:["Celadonsoft","Opensoft","MAP Group","CBRE","BBDO Portugal"]},
+ {name:"C · Rua Castilho law firms and agencies",mins:"about 15 min walking",why:"Bigger offices where people stay late: Morais Leitão, SRS Legal (just moved back in), LLYC (about 45, new office).",stops:["Morais Leitão","SRS Legal","LLYC Lisboa"]},
+ {name:"D · North: Openbook",mins:"about 10 min walking",why:"One mid-size group (100+ claimed, one database says 30). Use only if A is done early.",stops:["Openbook Group"]}
+];
+const tOf=n=>T.find(t=>t.n===n);
+const dirURL=r=>{const q=r.stops.map(n=>tOf(n).q);return "https://www.google.com/maps/dir/?api=1&origin="+encodeURIComponent(START)+"&destination="+encodeURIComponent(q[q.length-1])+(q.length>1?"&waypoints="+q.slice(0,-1).map(encodeURIComponent).join("%7C"):"")+"&travelmode=walking"};
+function renderRoutes(){
+ $("routes").innerHTML=ROUTES.map((r,i)=>`<div class="lead qualified"><div class="top"><div><div class="co">${esc(r.name)}</div><div class="loc">${esc(r.mins)} (estimate, Maps shows the real time)</div></div></div>
+ <div class="row">${esc(r.why)}</div>
+ <div class="acts"><a class="btn p" style="text-decoration:none" href="${dirURL(r)}" target="_blank" rel="noopener">Open this route in Maps</a><button class="btn" data-rt="${i}">Show stops</button></div>
+ <div id="rt${i}" hidden>${r.stops.map((n,k)=>{const t=tOf(n);return `<div class="row" style="border-top:1px solid var(--line);padding-top:8px;margin-top:8px"><b>${k+1}. ${esc(t.n)}</b> <span class="pill ${t.emp==null?"":t.emp>=30?"g":"a"}">${t.emp==null?"size ?":"~"+t.emp+" people"}</span><br><span class="mut">${esc(t.d)}</span>${t.src?`<br><span class="k">Signal</span>${esc(t.src)}`:""}<br><span class="k">Ask for</span>${esc(t.who)}${t.hook?`<br><span class="k">Hook</span>${esc(t.hook)}`:""}<br><a href="${mapsQ(t.q)}" target="_blank" rel="noopener">Open in Maps</a></div>`}).join("")}</div></div>`).join("");
+}
+$("routesBtn").onclick=()=>{const r=$("routes");r.hidden=!r.hidden;if(!r.hidden)renderRoutes()};
+$("routes").addEventListener("click",e=>{const b=e.target.closest("[data-rt]");if(b){const d=$("rt"+b.dataset.rt);d.hidden=!d.hidden;b.textContent=d.hidden?"Show stops":"Hide stops"}});
+
 readKey();start();
 </script>
 </body>
