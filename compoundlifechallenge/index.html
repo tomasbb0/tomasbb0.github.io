@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#1f7a4d">
+<title>Field Leads · by BytArc</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<style>
+:root{--bg:#f5f6f2;--card:#fff;--ink:#16201b;--mut:#66706a;--line:#e1e5de;--acc:#1f7a4d;--acc2:#e6f2ea;--amb:#b7791f;--amb2:#fdf3e1;--red:#b3412e;--red2:#fbe9e5;--grey2:#eceee9}
+@media (prefers-color-scheme:dark){:root{--bg:#111513;--card:#1a201d;--ink:#e9eee9;--mut:#9aa59e;--line:#2c3530;--acc:#4cc38a;--acc2:#1d3328;--amb:#e3a64a;--amb2:#352b19;--red:#ef8a76;--red2:#3a221d;--grey2:#262d29}}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif;-webkit-text-size-adjust:100%}
+a{color:var(--acc)}
+.wrap{max-width:760px;margin:0 auto;padding:16px 16px 110px}
+header h1{font-size:20px;margin:0;letter-spacing:-.2px}
+header .sub{color:var(--mut);font-size:13px;margin-top:2px}
+.credit{font-size:12px;color:var(--mut);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:1px 8px;margin-left:6px;white-space:nowrap}
+.role{display:inline-block;font-size:11px;font-weight:700;border-radius:99px;padding:2px 8px;margin-left:6px;vertical-align:2px}
+.role.edit{background:var(--acc2);color:var(--acc)}.role.view{background:var(--grey2);color:var(--mut)}
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:14px 0 8px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 12px;font-size:13px;color:var(--mut)}
+.stat b{display:block;font-size:20px;color:var(--ink)}
+.stat.q b{color:var(--acc)}.stat.p b{color:var(--amb)}
+.btn{font:inherit;font-size:14px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:8px 12px;cursor:pointer;min-height:40px}
+.btn.p{background:var(--acc);border-color:var(--acc);color:#fff;font-weight:600}
+.btn.d{color:var(--red)}
+.btn:active{transform:translateY(1px)}
+.sync{font-size:12px;color:var(--mut)}
+.sync.warn{color:var(--amb);font-weight:600}
+h2{font-size:13px;text-transform:uppercase;letter-spacing:.5px;color:var(--mut);margin:22px 0 8px}
+.lead{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:10px}
+.lead.qualified{border-left-color:var(--acc)}.lead.promising{border-left-color:var(--amb)}.lead.notfit{border-left-color:var(--mut);opacity:.85}
+.lead .top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.lead .co{font-weight:700;font-size:16px}
+.lead .loc{font-size:13px;color:var(--mut)}
+.pill{display:inline-block;font-size:12px;border-radius:99px;padding:2px 9px;margin:6px 6px 0 0;background:var(--grey2);color:var(--mut)}
+.pill.g{background:var(--acc2);color:var(--acc);font-weight:600}.pill.a{background:var(--amb2);color:var(--amb);font-weight:600}
+.row{font-size:14px;margin-top:6px}
+.row .k{color:var(--mut);font-size:12px;display:block}
+.quote{font-style:italic}
+.unv{background:var(--amb2);color:var(--amb);border-radius:8px;padding:6px 8px;font-size:13px;margin-top:8px}
+.acts{display:flex;gap:8px;margin-top:10px}
+.empty{color:var(--mut);background:var(--card);border:1px dashed var(--line);border-radius:12px;padding:16px;text-align:center;font-size:14px}
+.fab{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom));z-index:5;font-size:16px;padding:14px 22px;border-radius:99px;box-shadow:0 8px 24px rgba(0,0,0,.18)}
+.sheet{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:10;display:none;overflow-y:auto}
+.sheet.on{display:block}
+.panel{background:var(--bg);max-width:760px;margin:0 auto;min-height:100%;padding:16px 16px 120px}
+.panel h3{margin:4px 0 12px;font-size:18px}
+label.f{display:block;margin:12px 0 0;font-size:13px;color:var(--mut);font-weight:600}
+input,textarea,select{font:inherit;font-size:16px;width:100%;margin-top:5px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink)}
+textarea{min-height:76px;resize:vertical}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:420px){.two{grid-template-columns:1fr}}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:6px}
+.seg button,.chips button{font:inherit;font-size:14px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:9px 6px;cursor:pointer}
+.seg button.on[data-v=qualified]{background:var(--acc);border-color:var(--acc);color:#fff}
+.seg button.on[data-v=promising]{background:var(--amb);border-color:var(--amb);color:#fff}
+.seg button.on[data-v=notfit]{background:var(--mut);border-color:var(--mut);color:#fff}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.chips button{padding:7px 11px;border-radius:99px}
+.chips button.on{background:var(--acc2);border-color:var(--acc);color:var(--acc);font-weight:600}
+.hint{font-size:12px;color:var(--mut);margin-top:4px}
+.check{margin-top:10px;font-size:13px;border-radius:10px;padding:8px 10px}
+.check.ok{background:var(--acc2);color:var(--acc)}.check.no{background:var(--amb2);color:var(--amb)}
+.savebar{position:fixed;left:0;right:0;bottom:0;background:var(--bg);border-top:1px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom));z-index:11;display:none}
+.savebar.on{display:block}
+.savebar .in{max-width:760px;margin:0 auto;display:flex;gap:8px}
+.savebar .btn{flex:1;min-height:48px;font-size:16px}
+.gate{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-top:16px}
+.toast{position:fixed;top:12px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 14px;border-radius:10px;font-size:14px;z-index:20;display:none}
+footer{color:var(--mut);font-size:12px;margin-top:30px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Compound Life · field leads <span class="role" id="role"></span></h1>
+    <div class="sub">Business challenge, Amoreiras, Lisbon · logged live by Tomás Batalha <a class="credit" href="https://bytarc.com" target="_blank" rel="noopener">by BytArc</a></div>
+  </header>
+
+  <div id="gate" class="gate" hidden>
+    <b>This page needs its private link.</b>
+    <div class="hint" style="margin-top:6px">Open the link you were sent (it ends with #k=…), or paste the access key here.</div>
+    <input id="keyIn" placeholder="Access key" autocomplete="off">
+    <button class="btn p" id="keyGo" style="margin-top:8px">Open</button>
+  </div>
+
+  <div id="app" hidden>
+    <div class="bar">
+      <div class="stat q"><b id="nQ">0</b>qualified</div>
+      <div class="stat p"><b id="nP">0</b>promising, not qualified</div>
+      <div class="stat"><b id="nN">0</b>not a fit</div>
+    </div>
+    <div class="bar">
+      <button class="btn" id="refresh">Refresh</button>
+      <button class="btn" id="copy">Copy summary</button>
+      <button class="btn" id="csv">Export CSV</button>
+      <span class="sync" id="sync"></span>
+    </div>
+    <div class="hint">Qualified = at least 30 people physically in the office per day (total headcount alone doesn't count) and a need for better food that the person stated themselves.</div>
+    <div id="list"></div>
+    <footer>Private page: only people with the link can see these leads. Built for the Compound Life business challenge, 24 Nov 2026. <a href="https://bytarc.com" target="_blank" rel="noopener">by BytArc</a></footer>
+  </div>
+</div>
+
+<button class="btn p fab" id="add" hidden>+ New lead</button>
+
+<div class="sheet" id="sheet">
+  <div class="panel">
+    <h3 id="fTitle">New lead</h3>
+    <label class="f">Status</label>
+    <div class="seg" id="fStatus">
+      <button type="button" data-v="qualified">Qualified</button>
+      <button type="button" data-v="promising">Promising, not qualified</button>
+      <button type="button" data-v="notfit">Not a fit</button>
+    </div>
+    <div id="fCheck" class="check" hidden></div>
+
+    <label class="f">Company *</label>
+    <input id="company" autocomplete="off" placeholder="Company name">
+    <label class="f">Location</label>
+    <input id="location" autocomplete="off" placeholder="Street, number, floor">
+
+    <label class="f">People physically in the office per day</label>
+    <div class="two">
+      <input id="attendance" type="number" inputmode="numeric" min="0" placeholder="e.g. 45">
+      <select id="attendance_source">
+        <option value="">Source of this number…</option>
+        <option>Confirmed by the person I spoke to</option>
+        <option>Receptionist or security said</option>
+        <option>My estimate (not verified)</option>
+      </select>
+    </div>
+
+    <label class="f">Current food setup</label>
+    <div class="chips" id="foodChips">
+      <button type="button">Nothing on site</button><button type="button">Canteen</button><button type="button">Food court / restaurants nearby</button>
+      <button type="button">Delivery apps</button><button type="button">Catered or paid lunch</button><button type="button">Snacks or vending</button><button type="button">Coffee only</button>
+    </div>
+    <input id="food_extra" autocomplete="off" placeholder="Details (optional)">
+
+    <label class="f">Stated need (their words)</label>
+    <textarea id="stated_need" placeholder="What they said about food today, in their words"></textarea>
+
+    <label class="f">Who I spoke to</label>
+    <div class="two"><input id="spoke_to_name" placeholder="Name" autocomplete="off"><input id="spoke_to_role" placeholder="Role" autocomplete="off"></div>
+
+    <label class="f">Contact for the next step</label>
+    <div class="two"><input id="contact_name" placeholder="Name" autocomplete="off"><input id="contact_role" placeholder="Role (office manager, HR…)" autocomplete="off"></div>
+    <div class="two"><input id="contact_email" type="email" inputmode="email" placeholder="Email" autocomplete="off"><input id="contact_phone" type="tel" inputmode="tel" placeholder="Phone" autocomplete="off"></div>
+
+    <label class="f">Agreed next step</label>
+    <input id="next_step" autocomplete="off" placeholder="e.g. 15-min call with the office manager">
+    <input id="next_step_date" type="datetime-local">
+
+    <label class="f">Could not verify</label>
+    <textarea id="unverified" placeholder="Anything you were told but couldn't confirm"></textarea>
+    <label class="f">Notes</label>
+    <textarea id="notes" placeholder="Anything else"></textarea>
+  </div>
+</div>
+<div class="savebar" id="savebar"><div class="in"><button class="btn" id="cancel">Cancel</button><button class="btn p" id="save">Save lead</button></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const API="https://bytarc-compoundlife-leads.tomas-b-batalha.workers.dev";
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const LS={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+const FIELDS=["status","company","location","attendance","attendance_source","food_setup","stated_need","spoke_to_name","spoke_to_role","contact_name","contact_role","contact_email","contact_phone","next_step","next_step_date","unverified","notes"];
+const STAT={qualified:"Qualified",promising:"Promising, not qualified",notfit:"Not a fit"};
+let KEY="",ROLE="",LEADS=[],EDIT=null,STATUS="promising";
+
+function toast(t){const e=$("toast");e.textContent=t;e.style.display="block";clearTimeout(e._t);e._t=setTimeout(()=>e.style.display="none",2200)}
+function readKey(){
+  const m=location.hash.match(/k=([A-Za-z0-9_-]+)/);
+  if(m){KEY=m[1];LS.set("cl_key",KEY);history.replaceState(null,"",location.pathname)}
+  else KEY=LS.get("cl_key")||"";
+}
+async function api(method,path,body){
+  const r=await fetch(API+path,{method,headers:{"Content-Type":"application/json","X-Key":KEY},body:body?JSON.stringify(body):undefined,cache:"no-store"});
+  if(r.status===401){throw Object.assign(new Error("bad key"),{auth:true})}
+  if(!r.ok)throw new Error("HTTP "+r.status);
+  return r.json();
+}
+/* offline outbox: a save never gets lost on bad signal */
+function outbox(){try{return JSON.parse(LS.get("cl_outbox")||"[]")}catch(e){return[]}}
+function setOutbox(o){LS.set("cl_outbox",JSON.stringify(o));showSync()}
+async function flush(){
+  const o=outbox();if(!o.length)return;
+  const left=[];
+  for(const job of o){try{await api(job.m,job.p,job.b)}catch(e){left.push(job)}}
+  setOutbox(left);if(left.length<o.length)await load(true);
+}
+function showSync(t){const o=outbox(),s=$("sync");if(o.length){s.textContent=o.length+" saved on this phone, waiting for signal";s.className="sync warn"}else{s.textContent=t||s.dataset.t||"";s.className="sync"}}
+
+async function load(quiet){
+  try{
+    const d=await api("GET","/leads");ROLE=d.role;LEADS=d.leads||[];
+    $("role").textContent=ROLE==="edit"?"Edit":"View only";$("role").className="role "+ROLE;
+    $("add").hidden=ROLE!=="edit";
+    const t="Updated "+new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"});$("sync").dataset.t=t;showSync(t);
+    render();
+  }catch(e){
+    if(e.auth){$("app").hidden=true;$("add").hidden=true;$("gate").hidden=false;return}
+    if(!quiet)toast("No connection. Showing what this phone has.");showSync();
+  }
+}
+function attPill(l){if(l.attendance==null||l.attendance==="")return`<span class="pill a">people/day unknown</span>`;const ok=+l.attendance>=30;return`<span class="pill ${ok?"g":"a"}">${esc(l.attendance)} people/day</span>${l.attendance_source?`<span class="pill">${esc(l.attendance_source)}</span>`:""}`}
+function card(l){
+  const c=[l.contact_name,l.contact_role].filter(Boolean).map(esc).join(", ");
+  return`<div class="lead ${esc(l.status)}">
+  <div class="top"><div><div class="co">${esc(l.company)}</div><div class="loc">${esc(l.location||"")}</div></div><span class="pill">${new Date(l.created_at).toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"})}</span></div>
+  <div>${attPill(l)}</div>
+  ${l.food_setup?`<div class="row"><span class="k">Food today</span>${esc(l.food_setup)}</div>`:""}
+  ${l.stated_need?`<div class="row"><span class="k">Stated need</span><span class="quote">"${esc(l.stated_need)}"</span></div>`:""}
+  ${l.spoke_to_name||l.spoke_to_role?`<div class="row"><span class="k">Spoke to</span>${[l.spoke_to_name,l.spoke_to_role].filter(Boolean).map(esc).join(", ")}</div>`:""}
+  ${c||l.contact_email||l.contact_phone?`<div class="row"><span class="k">Contact</span>${c}${l.contact_email?` · <a href="mailto:${esc(l.contact_email)}">${esc(l.contact_email)}</a>`:""}${l.contact_phone?` · <a href="tel:${esc(l.contact_phone)}">${esc(l.contact_phone)}</a>`:""}</div>`:""}
+  ${l.next_step?`<div class="row"><span class="k">Next step</span>${esc(l.next_step)}${l.next_step_date?` · ${esc(new Date(l.next_step_date).toLocaleString("en-GB",{weekday:"short",day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}))}`:""}</div>`:""}
+  ${l.unverified?`<div class="unv"><b>Not verified:</b> ${esc(l.unverified)}</div>`:""}
+  ${l.notes?`<div class="row"><span class="k">Notes</span>${esc(l.notes)}</div>`:""}
+  ${ROLE==="edit"?`<div class="acts"><button class="btn" data-edit="${esc(l.id)}">Edit</button><button class="btn d" data-del="${esc(l.id)}">Delete</button></div>`:""}
+  </div>`;
+}
+function render(){
+  const by=s=>LEADS.filter(l=>l.status===s);
+  $("nQ").textContent=by("qualified").length;$("nP").textContent=by("promising").length;$("nN").textContent=by("notfit").length;
+  if(!LEADS.length){$("list").innerHTML=`<div class="empty" style="margin-top:16px">No leads yet.${ROLE==="edit"?" Tap “+ New lead” after each conversation.":" They appear here as they are logged."}</div>`;return}
+  $("list").innerHTML=["qualified","promising","notfit"].map(s=>by(s).length?`<h2>${STAT[s]} (${by(s).length})</h2>`+by(s).map(card).join(""):"").join("");
+}
+/* form */
+function setStatus(v){STATUS=v;document.querySelectorAll("#fStatus button").forEach(b=>b.classList.toggle("on",b.dataset.v===v));check()}
+function check(){
+  const n=parseInt($("attendance").value,10),need=$("stated_need").value.trim(),e=$("fCheck");
+  const miss=[];if(!(n>=30))miss.push("30+ people in the office per day");if(!need)miss.push("a need they stated");
+  if(STATUS==="qualified"&&miss.length){e.hidden=false;e.className="check no";e.textContent="Missing for qualified: "+miss.join(" and ")+"."}
+  else if(STATUS!=="qualified"&&!miss.length){e.hidden=false;e.className="check ok";e.textContent="This meets both rules: it can be marked Qualified."}
+  else e.hidden=true;
+}
+function openForm(l){
+  EDIT=l||null;$("fTitle").textContent=l?"Edit lead":"New lead";
+  for(const f of FIELDS)if(f!=="status"&&f!=="food_setup"&&$(f))$(f).value=l&&l[f]!=null?l[f]:"";
+  const food=(l&&l.food_setup)||"";const known=[...document.querySelectorAll("#foodChips button")].map(b=>b.textContent);
+  const parts=food.split(" · ");document.querySelectorAll("#foodChips button").forEach(b=>b.classList.toggle("on",parts.includes(b.textContent)));
+  $("food_extra").value=parts.filter(p=>p&&!known.includes(p)).join(" · ");
+  setStatus(l?l.status:"promising");
+  $("sheet").classList.add("on");$("savebar").classList.add("on");$("sheet").scrollTop=0;document.body.style.overflow="hidden";
+  if(!l)setTimeout(()=>$("company").focus(),50);
+}
+function closeForm(){$("sheet").classList.remove("on");$("savebar").classList.remove("on");document.body.style.overflow=""}
+function formData(){
+  const b={status:STATUS};for(const f of FIELDS)if(f!=="status"&&f!=="food_setup"&&$(f))b[f]=$(f).value.trim();
+  const chips=[...document.querySelectorAll("#foodChips button.on")].map(x=>x.textContent);if($("food_extra").value.trim())chips.push($("food_extra").value.trim());
+  b.food_setup=chips.join(" · ");if(b.attendance==="")b.attendance=null;return b;
+}
+async function save(){
+  const b=formData();if(!b.company){toast("Company is required");$("company").focus();return}
+  if(b.status==="qualified"&&(!(+b.attendance>=30)||!b.stated_need)&&!confirm("This doesn't meet both rules for Qualified (30+ people per day and a stated need). Save as Qualified anyway?"))return;
+  const job=EDIT?{m:"PUT",p:"/leads/"+EDIT.id,b}:{m:"POST",p:"/leads",b};
+  $("save").disabled=true;
+  try{await api(job.m,job.p,job.b);closeForm();toast("Saved");await load(true)}
+  catch(e){if(e.auth){toast("This link can't edit");}else{setOutbox([...outbox(),job]);closeForm();toast("No signal: saved on this phone, will sync");if(!EDIT){LEADS.unshift({...b,id:"local"+Date.now(),created_at:new Date().toISOString()});render()}}}
+  finally{$("save").disabled=false}
+}
+/* summary + csv */
+function summary(){
+  const lines=["Compound Life business challenge: leads (Amoreiras, "+new Date().toLocaleDateString("en-GB")+")",""];
+  for(const s of ["qualified","promising","notfit"]){const ls=LEADS.filter(l=>l.status===s);if(!ls.length)continue;lines.push(STAT[s]+" ("+ls.length+")");
+    ls.forEach((l,i)=>{lines.push(`${i+1}. ${l.company}${l.location?", "+l.location:""}`);
+      lines.push(`   People in the office per day: ${l.attendance??"unknown"}${l.attendance_source?" ("+l.attendance_source+")":""}`);
+      if(l.food_setup)lines.push(`   Food today: ${l.food_setup}`);if(l.stated_need)lines.push(`   Stated need: "${l.stated_need}"`);
+      if(l.spoke_to_name||l.spoke_to_role)lines.push(`   Spoke to: ${[l.spoke_to_name,l.spoke_to_role].filter(Boolean).join(", ")}`);
+      const c=[l.contact_name,l.contact_role,l.contact_email,l.contact_phone].filter(Boolean).join(", ");if(c)lines.push(`   Contact: ${c}`);
+      if(l.next_step)lines.push(`   Next step: ${l.next_step}${l.next_step_date?" ("+new Date(l.next_step_date).toLocaleString("en-GB",{weekday:"short",day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})+")":""}`);
+      if(l.unverified)lines.push(`   Not verified: ${l.unverified}`);});lines.push("")}
+  return lines.join("\n");
+}
+function csv(){
+  const H=["created_at",...FIELDS],q=v=>`"${String(v??"").replace(/"/g,'""')}"`;
+  const t=[H.join(",")].concat(LEADS.map(l=>H.map(h=>q(l[h])).join(","))).join("\n");
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([t],{type:"text/csv"}));a.download="compound-life-leads.csv";a.click();
+}
+/* events */
+$("fStatus").onclick=e=>{const b=e.target.closest("button");if(b)setStatus(b.dataset.v)};
+$("foodChips").onclick=e=>{const b=e.target.closest("button");if(b)b.classList.toggle("on")};
+["attendance","stated_need"].forEach(i=>$(i).addEventListener("input",check));
+$("add").onclick=()=>openForm();$("cancel").onclick=closeForm;$("save").onclick=save;
+$("refresh").onclick=()=>load();
+$("copy").onclick=async()=>{const t=summary();try{await navigator.clipboard.writeText(t);toast("Summary copied")}catch(e){prompt("Copy this:",t)}};
+$("csv").onclick=csv;
+$("list").onclick=async e=>{const ed=e.target.closest("[data-edit]"),de=e.target.closest("[data-del]");
+  if(ed)openForm(LEADS.find(l=>l.id===ed.dataset.edit));
+  if(de&&confirm("Delete this lead?")){try{await api("DELETE","/leads/"+de.dataset.del);toast("Deleted");load(true)}catch(err){toast("Couldn't delete, try again")}}};
+$("keyGo").onclick=()=>{KEY=$("keyIn").value.trim();LS.set("cl_key",KEY);$("gate").hidden=true;start()};
+async function start(){if(!KEY){$("gate").hidden=false;return}$("app").hidden=false;await load();flush()}
+addEventListener("online",flush);setInterval(()=>{if(!document.hidden&&!$("sheet").classList.contains("on")){flush();load(true)}},20000);
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)load(true)});
+readKey();start();
+</script>
+</body>
+</html>
