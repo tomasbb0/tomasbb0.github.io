@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>Self-hosting n8n: AI Builders Lisbon talk (earlier cut) | BytArc</title>
+<meta name="description" content="Tomás Batalha at AI Builders Lisbon: running a self-hosted n8n system, with English and Portuguese subtitles.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<style>
+:root { --bg: #f4f5f7; --ink: #15181d; --muted: #5b6573; --line: #d5d9e0; --chip: #fff; color-scheme: light; }
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #0f1115; --ink: #eef1f5; --muted: #9aa3b2; --line: #2a2f38; --chip: #171a20; color-scheme: dark; }
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--bg); color: var(--ink); font: 16px/1.5 -apple-system, "Segoe UI", Roboto, Inter, sans-serif; min-height: 100vh; display: grid; place-items: center; }
+main { width: min(1200px, 100%); padding: 24px 16px 40px; display: grid; gap: 14px; }
+h1 { margin: 0; font-size: clamp(1.3rem, 3vw, 1.8rem); font-weight: 700; letter-spacing: -0.01em; }
+.sub { margin: -6px 0 0; color: var(--muted); }
+video { display: block; width: 100%; max-height: 80vh; background: #000; border-radius: 12px; }
+video::cue { font-size: clamp(15px, 2.2vw, 24px); background: rgba(0,0,0,.72); color: #fff; }
+.bar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.bar span { color: var(--muted); font-size: .9rem; margin-right: 4px; }
+.bar button { font: inherit; font-size: .9rem; padding: 6px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--chip); color: var(--ink); cursor: pointer; }
+.bar button[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+footer { color: var(--muted); font-size: .9rem; }
+footer a { color: inherit; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Running my own n8n server: what it changed</h1>
+  <p class="sub">Tomás Batalha at AI Builders Lisbon, November 2026 · 11 min · English and Portuguese subtitles</p>
+  <video id="v" controls playsinline preload="metadata" poster="poster.jpg" crossorigin="anonymous">
+    <track kind="subtitles" src="en.vtt" srclang="en" label="English" default>
+    <track kind="subtitles" src="pt.vtt" srclang="pt" label="Português">
+  </video>
+  <div class="bar" role="group" aria-label="Subtitles">
+    <span>Subtitles</span>
+    <button type="button" data-lang="en" aria-pressed="true">English</button>
+    <button type="button" data-lang="pt" aria-pressed="false">Português</button>
+    <button type="button" data-lang="off" aria-pressed="false">Off</button>
+  </div>
+  <footer>Earlier cut. Latest version: <a href="/aibuilderstalk/">bytarc.com/aibuilderstalk</a> · Slides: <a href="/aibuilderslides/">AI Builders talk slides</a> · <a href="https://bytarc.com">BytArc</a>, AI studio in Lisbon</footer>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.17/dist/hls.min.js"></script>
+<script>
+(function () {
+  var v = document.getElementById("v"), src = "hls/index.m3u8";
+  if (v.canPlayType("application/vnd.apple.mpegurl")) v.src = src;
+  else if (window.Hls && Hls.isSupported()) { var h = new Hls({ renderTextTracksNatively: true }); h.loadSource(src); h.attachMedia(v); }
+  else v.src = src;
+
+  var btns = document.querySelectorAll(".bar button");
+  function setLang(lang) {
+    for (var i = 0; i < v.textTracks.length; i++) {
+      var t = v.textTracks[i];
+      if (t.kind === "subtitles") t.mode = (t.language === lang) ? "showing" : "disabled";
+    }
+    btns.forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.lang === lang ? "true" : "false"); });
+    try { localStorage.setItem("talkSubs", lang); } catch (e) {}
+  }
+  var start = "en";
+  try { start = localStorage.getItem("talkSubs") || (/^pt/i.test(navigator.language) ? "pt" : "en"); } catch (e) {}
+  btns.forEach(function (b) { b.addEventListener("click", function () { setLang(b.dataset.lang); }); });
+  setLang(start);
+  v.textTracks.addEventListener && v.textTracks.addEventListener("change", function () {
+    var on = "off";
+    for (var i = 0; i < v.textTracks.length; i++) if (v.textTracks[i].mode === "showing") on = v.textTracks[i].language;
+    btns.forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.lang === on ? "true" : "false"); });
+  });
+})();
+</script>
+</body>
+</html>
