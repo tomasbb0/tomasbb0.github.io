@@ -16,591 +16,591 @@ projeto de produto.
 Hoje vou falar sobre como uso o
 meu n8n self-hosted, porque decidi
 
-00:00:16.487 --> 00:00:21.820
+00:00:16.487 --> 00:00:21.220
 montar este sistema e também algumas
 vantagens. Vou guiar-vos rapidamente
 
-00:00:22.080 --> 00:00:27.167
+00:00:21.480 --> 00:00:26.567
 pelo meu próprio sistema, fazer uma demo ao
 vivo muito rápida, em que podem ler um código
 
-00:00:27.247 --> 00:00:30.767
+00:00:26.647 --> 00:00:30.167
 QR e, para acelerar, ver isto
 por vocês próprios quando
 
-00:00:30.807 --> 00:00:35.060
+00:00:30.207 --> 00:00:34.460
 tiverem tempo. E no fim vou passar
 por algumas dicas que usei eu próprio
 
-00:00:35.100 --> 00:00:38.980
+00:00:34.500 --> 00:00:38.380
 para tornar mais eficiente o processo
 de adoção deste novo sistema.
 
-00:00:39.300 --> 00:00:42.927
+00:00:38.700 --> 00:00:42.327
 Só para vos dar contexto sobre o
 porquê de escolher este sistema:
 
-00:00:43.167 --> 00:00:47.593
+00:00:42.567 --> 00:00:46.993
 ter um n8n a correr na cloud,
 no vosso próprio servidor,
 
-00:00:47.753 --> 00:00:51.740
+00:00:47.153 --> 00:00:51.140
 permite tê-lo sempre ligado, como
 se o tivessem no vosso computador,
 
-00:00:51.947 --> 00:00:56.353
+00:00:51.347 --> 00:00:55.753
 não pagam preço por execução e, no geral,
 isto corta cerca de metade dos custos
 
-00:00:56.413 --> 00:01:01.360
+00:00:55.813 --> 00:01:00.760
 face a correr estes modelos
 na cloud do próprio n8n.
 
-00:01:01.593 --> 00:01:05.567
+00:01:00.993 --> 00:01:04.967
 Têm acesso aos registos do
 servidor, algo que não se tem na
 
-00:01:05.687 --> 00:01:09.707
+00:01:05.087 --> 00:01:09.107
 cloud, e isso permite encontrar problemas
 que de outra forma não encontrariam.
 
-00:01:09.940 --> 00:01:13.160
+00:01:09.340 --> 00:01:12.560
 E claro, as vossas chaves e credenciais
 ficam mais protegidas, porque vivem
 
-00:01:13.327 --> 00:01:15.307
+00:01:12.727 --> 00:01:14.707
 numa instância que controlam totalmente.
 
-00:01:15.513 --> 00:01:19.220
+00:01:14.913 --> 00:01:18.620
 É bastante interessante, porque através
 dos registos do servidor podem consultar a
 
-00:01:19.260 --> 00:01:23.760
+00:01:18.660 --> 00:01:23.160
 base de dados diretamente. Ou seja, podem
 fazer troubleshooting com código ao vivo de
 
-00:01:23.820 --> 00:01:28.113
+00:01:23.220 --> 00:01:27.513
 forma extremamente dinâmica e rápida, o
 que não dá numa subscrição cloud normal.
 
-00:01:28.133 --> 00:01:32.627
+00:01:27.533 --> 00:01:32.027
 Isto é só o sistema em
 números, para terem uma ideia.
 
-00:01:32.873 --> 00:01:37.560
+00:01:32.273 --> 00:01:36.960
 Tem cerca de 1000 workflows a correr por
 semana, e há alguns limites que achei
 
-00:01:37.733 --> 00:01:40.573
+00:01:37.133 --> 00:01:39.973
 necessários por causa de
 restrições ao correr o modelo.
 
-00:01:40.780 --> 00:01:43.640
+00:01:40.180 --> 00:01:43.040
 E esta é a arquitetura do
 modelo em termos muito simples.
 
-00:01:43.867 --> 00:01:46.800
+00:01:43.267 --> 00:01:46.200
 O modelo está ligado à minha caixa de
 email e a algumas plataformas de emprego.
 
-00:01:47.040 --> 00:01:51.073
+00:01:46.440 --> 00:01:50.473
 Devia dar-vos um pouco de contexto
 sobre o que fazem estes workflows,
 
-00:01:51.227 --> 00:01:54.987
+00:01:50.627 --> 00:01:54.387
 para perceberem em que contexto
 é que vocês podem aplicar isto.
 
-00:01:55.200 --> 00:01:59.460
+00:01:54.600 --> 00:01:58.860
 No meu caso, testei isto em
 vários tipos de coisas, mas
 
-00:01:59.480 --> 00:02:01.467
+00:01:58.880 --> 00:02:00.867
 este em concreto é um
 localizador de emprego.
 
-00:02:01.627 --> 00:02:06.393
+00:02:01.027 --> 00:02:05.793
 Dou-lhe critérios muito específicos,
 e há vários workflows a correr
 
-00:02:06.493 --> 00:02:11.493
+00:02:05.893 --> 00:02:10.893
 em conjunto que preenchem uma folha com
 diferentes vagas abertas, depois acompanham
 
-00:02:11.667 --> 00:02:16.300
+00:02:11.067 --> 00:02:15.700
 os meus resultados e, com base
 em campos que defini nas folhas,
 
-00:02:16.360 --> 00:02:21.527
+00:02:15.760 --> 00:02:20.927
 por exemplo, se se podem ou não enviar
 emails de follow-up, enviam esses emails
 
-00:02:21.587 --> 00:02:24.087
+00:02:20.987 --> 00:02:23.487
 por mim e também preparam toda
 uma estratégia de follow-up.
 
-00:02:24.187 --> 00:02:28.353
+00:02:23.587 --> 00:02:27.753
 Workflows diferentes tratam de partes
 diferentes deste sistema complexo,
 
-00:02:28.553 --> 00:02:32.700
+00:02:27.953 --> 00:02:32.100
 e em termos muito simples, esta é a
 arquitetura: lê a minha caixa de email e as
 
-00:02:32.780 --> 00:02:37.040
+00:02:32.180 --> 00:02:36.440
 plataformas de emprego uma vez por semana,
 para extrair o máximo de vagas possível e
 
-00:02:37.120 --> 00:02:39.867
+00:02:36.520 --> 00:02:39.267
 perceber como estou a ir em cada processo.
 
-00:02:40.080 --> 00:02:42.480
+00:02:39.480 --> 00:02:41.880
 E depois executa três ações diferentes.
 
-00:02:42.560 --> 00:02:46.320
+00:02:41.960 --> 00:02:45.720
 Para poupar tokens, ignora
 certas coisas, por exemplo
 
-00:02:46.380 --> 00:02:47.700
+00:02:45.780 --> 00:02:47.100
 nos emails. Ou seja, há uma memória.
 
-00:02:47.933 --> 00:02:49.073
+00:02:47.333 --> 00:02:48.473
 Falo sobre isso mais à frente.
 
-00:02:49.233 --> 00:02:50.233
+00:02:48.633 --> 00:02:49.633
 Por isso vou saltar este slide.
 
-00:02:50.413 --> 00:02:54.160
+00:02:49.813 --> 00:02:53.560
 No fim, também podem ver os slides se
 quiserem ver a arquitetura com mais
 
-00:02:54.240 --> 00:02:59.300
+00:02:53.640 --> 00:02:58.700
 detalhe. E se quiserem ver os workflows
 a funcionar ao vivo, leiam este código QR
 
-00:02:59.473 --> 00:03:03.559
+00:02:58.873 --> 00:03:02.959
 e levará a uma cópia do
 meu próprio setup de n8n
 
-00:03:03.739 --> 00:03:06.806
+00:03:03.139 --> 00:03:06.206
 que vive no meu domínio.
 Podem experimentar à vontade.
 
-00:03:06.926 --> 00:03:10.619
+00:03:06.326 --> 00:03:10.019
 Podem ver os diferentes
 diagramas e perceber basicamente
 
-00:03:10.699 --> 00:03:12.099
+00:03:10.099 --> 00:03:11.499
 o cérebro por trás deste workflow.
 
-00:03:12.333 --> 00:03:16.353
+00:03:11.733 --> 00:03:15.753
 Passando agora às dicas, que são a
 terceira parte da minha apresentação.
 
-00:03:16.573 --> 00:03:21.600
+00:03:15.973 --> 00:03:21.000
 A primeira dica que percebi ser extremamente
 necessária ao testar o meu servidor
 
-00:03:21.760 --> 00:03:26.360
+00:03:21.160 --> 00:03:25.760
 na cloud é garantir que testam
 cada gate com casos que
 
-00:03:26.420 --> 00:03:31.320
+00:03:25.820 --> 00:03:30.720
 falham. Enviem-nos de propósito em cada execução,
 porque estão constantemente a alterar os vossos
 
-00:03:31.380 --> 00:03:33.833
+00:03:30.780 --> 00:03:33.233
 workflows, por exemplo, com vibe coding.
 
-00:03:33.933 --> 00:03:35.807
+00:03:33.333 --> 00:03:35.207
 Como é que isto se vê na prática?
 
-00:03:36.040 --> 00:03:40.213
+00:03:35.440 --> 00:03:39.613
 Estão a conversar com o Claude e dizem:
 quero acrescentar esta funcionalidade ao
 
-00:03:40.253 --> 00:03:41.833
+00:03:39.653 --> 00:03:41.233
 workflow, quero
 acrescentar isto ou aquilo.
 
-00:03:42.033 --> 00:03:44.067
+00:03:41.433 --> 00:03:43.467
 E o Claude altera os workflows.
 
-00:03:44.227 --> 00:03:48.540
+00:03:43.627 --> 00:03:47.940
 Como medida de segurança, se em cada execução
 tiverem esta verificação de gate que
 
-00:03:48.700 --> 00:03:53.440
+00:03:48.100 --> 00:03:52.840
 envia de propósito uma linha que tem de
 falhar e outra que tem de passar, se houver
 
-00:03:53.580 --> 00:03:58.147
+00:03:52.980 --> 00:03:57.547
 alguma alteração ao gate que faça bloquear
 as duas linhas ou deixar passar as duas,
 
-00:03:58.360 --> 00:04:01.813
+00:03:57.760 --> 00:04:01.213
 o sistema bloqueia e envia-vos um email
 para saberem que algo está errado.
 
-00:04:01.853 --> 00:04:06.593
+00:04:01.253 --> 00:04:05.993
 Por isso têm de montar este gate para
 garantir que o vosso sistema não vos
 
-00:04:06.653 --> 00:04:10.066
+00:04:06.053 --> 00:04:09.466
 prejudica de forma alguma nem faz algo que
 não esteja de acordo com o que esperam.
 
-00:04:10.293 --> 00:04:13.699
+00:04:09.693 --> 00:04:13.099
 Tenho alguns exemplos rápidos
 que vou passar muito depressa.
 
-00:04:13.879 --> 00:04:16.086
+00:04:13.279 --> 00:04:15.486
 Podem vê-los mais tarde, se quiserem.
 
-00:04:16.286 --> 00:04:18.553
+00:04:15.686 --> 00:04:17.953
 Na apresentação, vai haver um código QR.
 
-00:04:18.759 --> 00:04:23.100
+00:04:18.159 --> 00:04:22.500
 Por exemplo, reordenei a lista das
 minhas folhas e de repente a linha do
 
-00:04:23.100 --> 00:04:25.987
+00:04:22.500 --> 00:04:25.387
 banner, que ele considerava ser
 a primeira linha, ficou vazia.
 
-00:04:26.107 --> 00:04:31.307
+00:04:25.507 --> 00:04:30.707
 E por isso ele marcou a
 execução como um sucesso.
 
-00:04:31.540 --> 00:04:36.620
+00:04:30.940 --> 00:04:36.020
 E mais uma vez, o problema comum aqui é que
 os problemas mais difíceis de detetar não são
 
-00:04:36.680 --> 00:04:41.240
+00:04:36.080 --> 00:04:40.640
 os que dizem que houve um
 erro, são os que dizem sucesso,
 
-00:04:41.340 --> 00:04:45.173
+00:04:40.740 --> 00:04:44.573
 certo? Tem uma etiqueta de sucesso
 e assumem que está tudo bem.
 
-00:04:45.380 --> 00:04:49.200
+00:04:44.780 --> 00:04:48.600
 Mas muitas vezes o sucesso esconde
 problemas mais profundos que,
 
-00:04:49.367 --> 00:04:52.107
+00:04:48.767 --> 00:04:51.507
 ao terem o vosso próprio servidor n8n,
 
-00:04:52.333 --> 00:04:54.787
+00:04:51.733 --> 00:04:54.187
 como disse antes, podem
 consultar a base de dados e
 
-00:04:54.887 --> 00:04:56.560
+00:04:54.287 --> 00:04:55.960
 detetar de várias formas.
 
-00:04:56.800 --> 00:05:00.107
+00:04:56.200 --> 00:04:59.507
 Este é um dos exemplos; podia
 dizer-vos o que fiz para resolver
 
-00:05:00.247 --> 00:05:03.660
+00:04:59.647 --> 00:05:03.060
 cada um, mas vou saltá-los para acelerar.
 
-00:05:03.887 --> 00:05:07.953
+00:05:03.287 --> 00:05:07.353
 Também tive um problema com um if node,
 que tinha uma fórmula só compatível
 
-00:05:07.993 --> 00:05:12.343
+00:05:07.393 --> 00:05:11.743
 com uma versão mais antiga do n8n e por
 isso assumia que a fórmula também era
 
-00:05:12.403 --> 00:05:16.450
+00:05:11.803 --> 00:05:15.850
 compatível com a versão atual do n8n
 que eu estava a usar e, por isso,
 
-00:05:16.490 --> 00:05:19.563
+00:05:15.890 --> 00:05:18.963
 escolhia simplesmente os gates errados
 e assumia que as regras eram falsas.
 
-00:05:19.803 --> 00:05:23.220
+00:05:19.203 --> 00:05:22.620
 E avançava para o passo seguinte com
 informação que estava simplesmente errada.
 
-00:05:23.420 --> 00:05:28.367
+00:05:22.820 --> 00:05:27.767
 E claro, a execução no fim correu
 normalmente e o passo foi classificado
 
-00:05:28.540 --> 00:05:31.613
+00:05:27.940 --> 00:05:31.013
 como bem-sucedido. Tenho
 ainda outro exemplo, o
 
-00:05:31.767 --> 00:05:36.133
+00:05:31.167 --> 00:05:35.533
 resultado em que havia uma linha de
 banner vazia, que escrevia na folha como
 
-00:05:36.213 --> 00:05:40.067
+00:05:35.613 --> 00:05:39.467
 se não houvesse empresas a separar,
 e por isso o passo seguinte, que era
 
-00:05:40.167 --> 00:05:44.600
+00:05:39.567 --> 00:05:44.000
 ir buscar os emails à coluna de emails, foi
 cancelado automaticamente por causa disso.
 
-00:05:44.813 --> 00:05:49.567
+00:05:44.213 --> 00:05:48.967
 Por isso, mais uma vez, é muito importante
 ler os vossos sucessos e tentar
 
-00:05:49.727 --> 00:05:55.013
+00:05:49.127 --> 00:05:54.413
 criar regras que evitem uma falsa mensagem
 de sucesso no painel de execuções.
 
-00:05:55.213 --> 00:05:59.467
+00:05:54.613 --> 00:05:58.867
 Vão poder ver mais tarde com mais detalhe nos
 slides como resolvi cada um destes problemas,
 
-00:05:59.680 --> 00:06:01.407
+00:05:59.080 --> 00:06:00.807
 mas estou só a passar
 rapidamente pelas dicas.
 
-00:06:01.627 --> 00:06:06.387
+00:06:01.027 --> 00:06:05.787
 No geral, isto é algo de que falei antes,
 por isso criei dois canários, um que
 
-00:06:06.467 --> 00:06:10.747
+00:06:05.867 --> 00:06:10.147
 tem de passar, um que tem de parar, que corre
 em cada execução e, por isso, quando há uma
 
-00:06:10.807 --> 00:06:14.807
+00:06:10.207 --> 00:06:14.207
 pequena alteração ao funcionamento
 dos gates, tenho sempre a certeza
 
-00:06:14.960 --> 00:06:18.820
+00:06:14.360 --> 00:06:18.220
 de que nada que eu não esteja
 à espera vai acontecer.
 
-00:06:18.900 --> 00:06:23.787
+00:06:18.300 --> 00:06:23.187
 Por exemplo, um email enviado a um
 recrutador a quem eu não dei o OK para
 
-00:06:23.847 --> 00:06:24.900
+00:06:23.247 --> 00:06:24.300
 ser enviado.
 
-00:06:24.960 --> 00:06:29.380
+00:06:24.360 --> 00:06:28.780
 Dica número dois: as vossas credenciais
 fazem parte do deploy e, quando alojam
 
-00:06:29.460 --> 00:06:34.260
+00:06:28.860 --> 00:06:33.660
 o vosso próprio servidor n8n, surgem muitos
 problemas e dou-vos só dicas rápidas
 
-00:06:34.380 --> 00:06:36.593
+00:06:33.780 --> 00:06:35.993
 sobre quais são e como os resolvi.
 
-00:06:36.840 --> 00:06:40.853
+00:06:36.240 --> 00:06:40.253
 Quando reimportam seja o que for para o
 vosso n8n, perdem todas as credenciais,
 
-00:06:40.913 --> 00:06:43.153
+00:06:40.313 --> 00:06:42.553
 porque não ficam encriptadas
 na própria cloud.
 
-00:06:43.273 --> 00:06:47.580
+00:06:42.673 --> 00:06:46.980
 Uma solução rápida é simplesmente guardar
 as credenciais num ficheiro vosso.
 
-00:06:47.660 --> 00:06:51.733
+00:06:47.060 --> 00:06:51.133
 A vossa OAuth app na Google
 só funciona quando passa
 
-00:06:51.793 --> 00:06:55.320
+00:06:51.193 --> 00:06:54.720
 a produção. Se não fizerem isso,
 aconteceu-me a mim e só percebi
 
-00:06:55.480 --> 00:06:59.213
+00:06:54.880 --> 00:06:58.613
 ao trabalhar com este modelo: passada uma
 semana, simplesmente deixou de funcionar.
 
-00:06:59.313 --> 00:07:01.187
+00:06:58.713 --> 00:07:00.587
 Começam a ter execuções falhadas.
 
-00:07:01.400 --> 00:07:04.807
+00:07:00.800 --> 00:07:04.207
 Por isso, passem o vosso ecrã
 de consentimento para produção.
 
-00:07:05.013 --> 00:07:08.847
+00:07:04.413 --> 00:07:08.247
 Depois, na segunda versão do n8n,
 isto é muito específico, têm de
 
-00:07:08.947 --> 00:07:12.033
+00:07:08.347 --> 00:07:11.433
 guardar. Guardar não chega,
 têm de publicar as alterações,
 
-00:07:12.173 --> 00:07:14.500
+00:07:11.573 --> 00:07:13.900
 senão pode mesmo dar erros.
 
-00:07:14.567 --> 00:07:17.933
+00:07:13.967 --> 00:07:17.333
 Assumem que a última versão já está
 a correr, quando afinal é a versão
 
-00:07:18.013 --> 00:07:23.013
+00:07:17.413 --> 00:07:22.413
 mais antiga que está a correr. Por isso publiquem sempre
 as alterações. E a última dica: garantam que a IA
 
-00:07:23.093 --> 00:07:27.733
+00:07:22.493 --> 00:07:27.133
 decide, mas que o vosso modelo é forte o bastante
 para tratar da maior parte do trabalho sujo.
 
-00:07:27.953 --> 00:07:31.467
+00:07:27.353 --> 00:07:30.867
 Vou dar-vos alguns exemplos
 de como montei isto.
 
-00:07:31.707 --> 00:07:35.773
+00:07:31.107 --> 00:07:35.173
 Os workflows onde esta
 dica mais se aplicou
 
-00:07:35.873 --> 00:07:39.600
+00:07:35.273 --> 00:07:39.000
 foram os de ir buscar emails
 diferentes e categorizá-los.
 
-00:07:39.833 --> 00:07:44.413
+00:07:39.233 --> 00:07:43.813
 Depois ordenar esses emails e preencher
 as folhas onde acompanho todas as minhas
 
-00:07:44.493 --> 00:07:48.340
+00:07:43.893 --> 00:07:47.740
 candidaturas. E este é um pequeno
 ajuste que tive de fazer para
 
-00:07:48.440 --> 00:07:49.993
+00:07:47.840 --> 00:07:49.393
 o sistema funcionar bem.
 
-00:07:50.073 --> 00:07:54.813
+00:07:49.473 --> 00:07:54.213
 Por exemplo, se eu ia buscar
 200 emails, dava um erro por
 
-00:07:54.947 --> 00:07:58.800
+00:07:54.347 --> 00:07:58.200
 exceder o número máximo de emails
 que a Google permite obter.
 
-00:07:59.040 --> 00:08:00.827
+00:07:58.440 --> 00:08:00.227
 Por isso tive de limitar a 60.
 
-00:08:01.067 --> 00:08:03.333
+00:08:00.467 --> 00:08:02.733
 Reparei também que alguns
 IDs estavam a ser trocados.
 
-00:08:03.393 --> 00:08:06.887
+00:08:02.793 --> 00:08:06.287
 Os emails confundiam-se, sobretudo
 os que tinham IDs muito longos.
 
-00:08:06.987 --> 00:08:11.127
+00:08:06.387 --> 00:08:10.527
 Por isso acrescentei um eco do assunto
 de cada um e numerei-os também.
 
-00:08:11.353 --> 00:08:14.973
+00:08:10.753 --> 00:08:14.373
 Isto é muito específico. É a minha
 experiência e provavelmente algo que
 
-00:08:15.127 --> 00:08:20.380
+00:08:14.527 --> 00:08:19.780
 vos aconteceria a vocês se também
 integrarem um modelo que analisa emails
 
-00:08:20.560 --> 00:08:22.220
+00:08:19.960 --> 00:08:21.620
 e tentarem torná-lo o
 mais eficiente possível.
 
-00:08:22.433 --> 00:08:27.320
+00:08:21.833 --> 00:08:26.720
 Mais uma vez, como disse antes, montei o
 sistema para evitar correr IA em emails
 
-00:08:27.360 --> 00:08:29.000
+00:08:26.760 --> 00:08:28.400
 que já tinham sido tratados antes.
 
-00:08:29.227 --> 00:08:33.220
+00:08:28.627 --> 00:08:32.620
 E basicamente tenho uma memória
 que guarda todos os emails que
 
-00:08:33.320 --> 00:08:35.220
+00:08:32.720 --> 00:08:34.620
 já foram analisados pela IA.
 
-00:08:35.427 --> 00:08:40.080
+00:08:34.827 --> 00:08:39.480
 E isso garante que só os emails novos,
 que não correspondem aos da memória, são
 
-00:08:40.120 --> 00:08:43.480
+00:08:39.520 --> 00:08:42.880
 analisados. É um passo simples que
 tenho a certeza de que a maioria
 
-00:08:43.500 --> 00:08:45.000
+00:08:42.900 --> 00:08:44.400
 já aplica nos vossos processos.
 
-00:08:45.220 --> 00:08:49.740
+00:08:44.620 --> 00:08:49.140
 E, no fim, esta é basicamente a
 estrutura para quando a IA realmente age.
 
-00:08:49.780 --> 00:08:53.747
+00:08:49.180 --> 00:08:53.147
 Há os gates. Estas coisas
 estão nas folhas, onde há uma
 
-00:08:53.893 --> 00:08:57.673
+00:08:53.293 --> 00:08:57.073
 coluna. Posso mostrar-vos depois,
 se quiserem vir ter comigo, as
 
-00:08:57.840 --> 00:09:01.313
+00:08:57.240 --> 00:09:00.713
 folhas com que interajo, têm
 colunas de OK, email final,
 
-00:09:01.373 --> 00:09:02.373
+00:09:00.773 --> 00:09:01.773
 etc. O
 
-00:09:02.507 --> 00:09:06.807
+00:09:01.907 --> 00:09:06.207
 workflow de IA que montei verifica
 se cada linha tem um OK ou
 
-00:09:06.867 --> 00:09:11.187
+00:09:06.267 --> 00:09:10.587
 não tem um OK. Se tiver um OK,
 envia-a para o guarda de IA para
 
-00:09:11.287 --> 00:09:14.133
+00:09:10.687 --> 00:09:13.533
 garantir que está tudo mesmo em ordem.
 
-00:09:14.360 --> 00:09:19.213
+00:09:13.760 --> 00:09:18.613
 Se houver algo com um intervalo
 específico de confiança que
 
-00:09:19.393 --> 00:09:23.440
+00:09:18.793 --> 00:09:22.840
 esteja fora, em termos simples,
 bloqueia o envio do email, ou então, se
 
-00:09:23.480 --> 00:09:26.913
+00:09:22.880 --> 00:09:26.313
 a confiança for superior
 a 70%, envia o email.
 
-00:09:27.127 --> 00:09:29.460
+00:09:26.527 --> 00:09:28.860
 Posso voltar a entrar em
 mais detalhes depois.
 
-00:09:29.707 --> 00:09:35.353
+00:09:29.107 --> 00:09:34.753
 Se quiserem seguir-me no LinkedIn ou
 ver o meu projeto de produto, leiam
 
-00:09:35.513 --> 00:09:40.660
+00:09:34.913 --> 00:09:40.060
 estes códigos QR. Podem também ver o
 repositório completo aqui e os slides.
 
-00:09:40.680 --> 00:09:44.067
+00:09:40.080 --> 00:09:43.467
 Se quiserem ver os slides mais
 tarde, leiam o último código QR.
 
-00:09:44.600 --> 00:09:48.907
+00:09:44.000 --> 00:09:48.307
 Muito obrigado. Façam as vossas
 perguntas à vontade, agora ou mais tarde.
 
-00:09:49.427 --> 00:09:54.133
+00:09:48.827 --> 00:09:53.533
 Também posso mostrar-vos os dashboards
 reais que foram alimentados por estes
 
-00:09:54.153 --> 00:09:56.747
+00:09:53.553 --> 00:09:56.147
 diferentes workflows. Terei
 todo o gosto em conectar.
 
-00:09:57.240 --> 00:09:58.740
+00:09:56.640 --> 00:09:58.140
 É ótimo estar aqui.
