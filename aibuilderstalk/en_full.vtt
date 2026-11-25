@@ -1,0 +1,607 @@
+WEBVTT
+
+00:00:00.073 --> 00:00:03.347
+Hello everyone, my name is
+Tomás, I'm running an AI
+
+00:00:03.467 --> 00:00:08.520
+agency in Lisbon where I do AI
+projects, especially for process
+
+00:00:08.560 --> 00:00:11.500
+automatization and also run
+a small product venture.
+
+00:00:12.213 --> 00:00:17.133
+So today I'm going to talk about how I
+use my self-hosted n8n, why I decided
+
+00:00:17.253 --> 00:00:23.187
+to do such a setup and also some advantages
+I'll show you, I'll guide you quickly
+
+00:00:23.447 --> 00:00:28.667
+through my own system, I'll do a very
+quick live demo that you guys can scan a QR
+
+00:00:28.747 --> 00:00:32.267
+code and actually just like to accelerate,
+you'll just see it on your own when you
+
+00:00:32.307 --> 00:00:36.727
+have the time. And in the end I'll run
+through a few tips that I've used myself in
+
+00:00:36.767 --> 00:00:40.947
+order to make the process of adopting
+this new system more efficient.
+
+00:00:41.267 --> 00:00:46.060
+So just to give you some context on
+the why of choosing this system,
+
+00:00:46.733 --> 00:00:51.793
+having an n8n system running on
+the cloud on your own server
+
+00:00:52.253 --> 00:00:56.873
+allows you to have it first always on as
+if you were to fork it on your computer,
+
+00:00:57.580 --> 00:01:02.620
+you don't pay per-run pricing and overall
+this cuts about half of the costs when it
+
+00:01:02.680 --> 00:01:08.460
+comes to the cloud costs of running
+these models on n8n's own cloud.
+
+00:01:09.160 --> 00:01:14.100
+You have access to the server logs which
+is something that you don't get via the
+
+00:01:14.220 --> 00:01:18.940
+cloud which allows you to find problems
+that you would not find otherwise.
+
+00:01:19.640 --> 00:01:23.293
+And of course your keys and your credentials
+are more protected because they live
+
+00:01:23.893 --> 00:01:26.173
+within an instance that you fully control.
+
+00:01:26.880 --> 00:01:31.687
+It's quite interesting actually because
+via the server logs you can query the
+
+00:01:31.727 --> 00:01:37.227
+database directly. So you can basically
+live code troubleshooting in a way that is
+
+00:01:37.287 --> 00:01:43.213
+extremely dynamic and fast, which you
+can't do once you're using a normal cloud
+
+00:01:43.233 --> 00:01:49.060
+subscription. So this is just a system
+in numbers, so you get a glimpse of it.
+
+00:01:49.440 --> 00:01:55.527
+It has around 1000 workflows running per
+week, and there's a few caps that I found
+
+00:01:55.867 --> 00:01:59.607
+necessary due to constraints
+while running the model.
+
+00:02:00.313 --> 00:02:04.107
+And this is the architecture of
+the model in very simple terms.
+
+00:02:04.367 --> 00:02:07.767
+So the model is connected to my
+email inbox and to some job boards.
+
+00:02:08.473 --> 00:02:14.340
+I actually should give you a bit of context
+on what these specific workflows are
+
+00:02:14.560 --> 00:02:18.320
+doing so that you understand in which type
+of context you can apply this yourself.
+
+00:02:19.000 --> 00:02:24.560
+So for my specific case, I tested these
+on different types of things, but this
+
+00:02:24.580 --> 00:02:26.800
+specific one is a job finder.
+
+00:02:26.960 --> 00:02:33.060
+So I give it very specific criteria, and
+there's several workflows that run in
+
+00:02:33.160 --> 00:02:39.893
+tandem that basically populates a sheet for
+me with different open roles, then track
+
+00:02:40.233 --> 00:02:46.100
+my results, and also based on different
+fields that I set up in the sheets, for
+
+00:02:46.160 --> 00:02:52.260
+example, whether some follow-up emails can
+or not be sent, it will send those emails
+
+00:02:52.320 --> 00:02:55.020
+for me and also draft a
+whole follow-up strategy.
+
+00:02:55.120 --> 00:02:59.920
+So different workflows are responsible for
+different parts of this complex system,
+
+00:03:00.620 --> 00:03:05.733
+and in very simple terms, this is the
+architecture, so it reads my email inbox and
+
+00:03:05.813 --> 00:03:10.673
+job boards once every week in order to
+extract as many roles as possible and to
+
+00:03:10.753 --> 00:03:14.167
+understand how I'm doing in each process.
+
+00:03:14.880 --> 00:03:18.213
+And it afterwards does
+three different actions.
+
+00:03:18.293 --> 00:03:22.987
+So in order to save tokens, it skips
+things in order to solve, like in terms of
+
+00:03:23.047 --> 00:03:24.367
+emails. So there's a memory.
+
+00:03:24.767 --> 00:03:25.907
+I'll talk about that later.
+
+00:03:26.513 --> 00:03:27.513
+So I'm going to skip this slide.
+
+00:03:28.213 --> 00:03:32.927
+Also, in the end, you can see the slides if
+you want to see the architecture in more
+
+00:03:33.007 --> 00:03:38.867
+detail. So if you want to see how the
+workflows work live, you can scan this QR code
+
+00:03:39.507 --> 00:03:45.559
+and it will lead you to a
+copy of my own n8n setup
+
+00:03:45.939 --> 00:03:49.939
+that lives in my domain. So
+you can experiment with it.
+
+00:03:50.059 --> 00:03:54.119
+So you can look into the different diagrams
+and basically understand the brain
+
+00:03:54.199 --> 00:03:55.599
+behind this specific workflow.
+
+00:03:56.300 --> 00:04:00.920
+Now, jumping on to the tips, which is
+the third part of my presentation.
+
+00:04:01.607 --> 00:04:07.367
+The first tip that I realized was extremely
+necessary when testing my own server
+
+00:04:07.960 --> 00:04:14.527
+on the cloud is to make sure you test
+every gate possibly with cases that
+
+00:04:14.587 --> 00:04:20.887
+fail. So send it on purpose on every run,
+because you're currently changing your own
+
+00:04:20.947 --> 00:04:24.367
+workflows. For example, via vibe coding.
+
+00:04:24.467 --> 00:04:26.607
+Basically, how does this look in practice?
+
+00:04:27.007 --> 00:04:31.847
+You're chatting with Claude and you say,
+OK, I want to add this feature to the
+
+00:04:31.887 --> 00:04:33.867
+workflow. I want to add whatever.
+
+00:04:34.067 --> 00:04:36.267
+And Claude will change the workflows.
+
+00:04:36.427 --> 00:04:42.107
+And as a measure of safety, if on every
+run you have this gate check where it
+
+00:04:42.467 --> 00:04:48.107
+purposely sends a row that must fail and
+one that must pass the gate, if there was
+
+00:04:48.247 --> 00:04:53.647
+any alteration to the gate that makes it
+either block both rows or pass both rows,
+
+00:04:54.127 --> 00:04:57.947
+it will block the system and email you
+so that you know something is wrong.
+
+00:04:57.987 --> 00:05:04.327
+So you need to set up this gate in order
+to ensure your whole system won't harm you
+
+00:05:04.387 --> 00:05:08.466
+in any way or do something that is
+not up to your own expectations.
+
+00:05:09.159 --> 00:05:13.366
+I have a few quick examples that I'll
+just skip through quite quickly.
+
+00:05:13.546 --> 00:05:16.386
+You can jump onto them later if you want.
+
+00:05:17.086 --> 00:05:19.586
+On the presentation deck,
+there will be a QR code.
+
+00:05:20.126 --> 00:05:26.667
+So for example, I reordered my sheets
+list and then suddenly the banner
+
+00:05:26.667 --> 00:05:30.287
+row, which he considered to
+be the first row, was empty.
+
+00:05:30.407 --> 00:05:35.907
+And therefore, he flagged
+the execution as a success.
+
+00:05:36.607 --> 00:05:43.320
+And again, the common problem here is most
+of the hardest problems to detect are not
+
+00:05:43.380 --> 00:05:48.840
+the ones that specifically say there was
+an error, are the ones that say success,
+
+00:05:48.940 --> 00:05:53.740
+right? So it has a success tag
+and you assume everything is OK.
+
+00:05:54.280 --> 00:05:59.900
+But a lot of times the success
+hides deeper problems that
+
+00:06:00.467 --> 00:06:05.007
+via having your own n8n server,
+
+00:06:05.467 --> 00:06:08.187
+as I mentioned earlier, you
+can query the database, you can
+
+00:06:08.287 --> 00:06:10.993
+detect in many different ways.
+
+00:06:11.233 --> 00:06:15.507
+So this is one of the examples I
+could tell you what I did to solve
+
+00:06:15.647 --> 00:06:20.527
+each, but I'm going to skip
+those in order to speed up.
+
+00:06:20.987 --> 00:06:25.687
+I also had a problem with an if node that
+was a formula that was only compatible
+
+00:06:25.727 --> 00:06:31.377
+with an older version of n8n and
+therefore it assumed this formula was also
+
+00:06:31.437 --> 00:06:36.217
+compatible with the current n8n version,
+which I was running and therefore it would
+
+00:06:36.257 --> 00:06:40.397
+simply choose the wrong gates
+and assume the rules were false.
+
+00:06:40.937 --> 00:06:45.520
+And proceed to the next step on
+information that was simply wrong.
+
+00:06:45.920 --> 00:06:52.533
+And of course, the execution in the end
+ran as normal and the step was classified
+
+00:06:52.773 --> 00:06:56.980
+as successful. Now I have
+also another example, the
+
+00:06:57.567 --> 00:07:02.467
+output where there was a banner row that
+was empty, basically to write the sheet as
+
+00:07:02.547 --> 00:07:07.400
+if there were no companies to separate,
+and therefore the next step which was to
+
+00:07:07.500 --> 00:07:12.400
+fetch the emails on the emails column was
+automatically called off because of this,
+
+00:07:13.080 --> 00:07:19.867
+therefore it's again quite important to
+make sure, read your successes and try to
+
+00:07:20.460 --> 00:07:27.447
+create rules that prevent a false
+success message in the execution panel.
+
+00:07:28.147 --> 00:07:33.433
+So you can see later in more detail on the
+slides how I solved each of these issues,
+
+00:07:34.013 --> 00:07:35.873
+but I'm just skimming through the tips.
+
+00:07:36.593 --> 00:07:42.153
+Overall, this is a thing I talked about
+earlier, so I made two canaries, one that
+
+00:07:42.233 --> 00:07:48.247
+must pass, one that must stop, which runs
+on every run, and therefore when there's a
+
+00:07:48.307 --> 00:07:54.540
+small change to the way the
+gates function, I'm always sure
+
+00:07:54.860 --> 00:07:59.320
+that nothing that I'm not expecting
+to happen will ever happen.
+
+00:07:59.400 --> 00:08:06.153
+For example, an email that is sent to a
+recruiter that I have not ticked OK to be
+
+00:08:06.213 --> 00:08:07.213
+sent to a recruiter.
+
+00:08:07.393 --> 00:08:12.447
+So tip number two, your credentials are
+part of the deploy and when you're hosting
+
+00:08:12.527 --> 00:08:18.893
+your own n8n server, a lot of issues come
+about and I'm just giving you quick tips
+
+00:08:19.013 --> 00:08:21.293
+on which issues are and how I solve them.
+
+00:08:21.773 --> 00:08:26.153
+So when you re-import anything into your
+n8n, all your credentials are lost so
+
+00:08:26.213 --> 00:08:29.153
+they're not encrypted
+into the cloud itself.
+
+00:08:29.273 --> 00:08:35.580
+So one quick solution is to simply
+put your credentials in your own file.
+
+00:08:35.660 --> 00:08:41.600
+Your OAuth app in Google
+only works when it's sent to
+
+00:08:41.660 --> 00:08:46.453
+production. If you're not doing that,
+it happened to me and I realized it
+
+00:08:46.713 --> 00:08:51.213
+by working with this model after
+one week it simply stopped working.
+
+00:08:51.313 --> 00:08:53.753
+So you start getting failed runs.
+
+00:08:54.333 --> 00:08:57.973
+So make sure you put your
+consent screen to production.
+
+00:08:58.680 --> 00:09:03.013
+Then again, on the second version of
+n8n, this is very specific, you have to
+
+00:09:03.113 --> 00:09:06.700
+actually save. Like saving is not enough,
+you have to publish your changes or
+
+00:09:06.840 --> 00:09:09.633
+otherwise it can really lead to errors.
+
+00:09:09.867 --> 00:09:13.567
+You assume the latest version is already
+running when it's actually the oldest
+
+00:09:13.647 --> 00:09:20.380
+version running. So always publish your
+changes and last tip, make sure AI is
+
+00:09:20.460 --> 00:09:25.900
+judging but your model is strong enough
+to handle most of the dirty work.
+
+00:09:26.620 --> 00:09:30.900
+So I'm giving you a few
+examples of how I set this up.
+
+00:09:31.607 --> 00:09:36.973
+The way or these specific workflows
+where this tip was most applicable was
+
+00:09:37.073 --> 00:09:41.767
+specifically for fetching different
+emails and categorizing them.
+
+00:09:42.267 --> 00:09:47.913
+And then sorting those emails and applying
+the sheets in which I track all of my
+
+00:09:47.993 --> 00:09:52.873
+applications. And so this is a small
+tweak that I had to do in order
+
+00:09:52.973 --> 00:09:54.893
+to make the system work well.
+
+00:09:54.973 --> 00:10:00.913
+So for example, if I was fetching 200
+emails, I was getting an error due to
+
+00:10:01.513 --> 00:10:05.633
+exceeding the maximum amount of
+emails fetchable from Google.
+
+00:10:06.173 --> 00:10:08.293
+So I had to cap it down to 60.
+
+00:10:08.967 --> 00:10:11.367
+I also noticed that some
+IDs were being swapped.
+
+00:10:11.427 --> 00:10:15.787
+So emails were being confused, specific
+emails that had very long IDs.
+
+00:10:15.887 --> 00:10:21.027
+So I basically added an echo for
+each subject and also numbered them.
+
+00:10:21.720 --> 00:10:25.640
+This is very specific. So this is like my
+own experience and probably something that
+
+00:10:25.860 --> 00:10:32.213
+would happen with you if you happen to also
+integrate a model that analyzes emails
+
+00:10:32.393 --> 00:10:34.053
+and try to make it as
+efficient as possible.
+
+00:10:34.733 --> 00:10:41.420
+Again, as I mentioned earlier, I set up
+the system to avoid running AI on emails
+
+00:10:41.460 --> 00:10:43.100
+that had already been sent before.
+
+00:10:43.793 --> 00:10:49.153
+And basically what it does is I have a
+memory that stores all the emails that have
+
+00:10:49.253 --> 00:10:51.353
+already been analyzed by the AI.
+
+00:10:52.093 --> 00:10:57.413
+And that ensures that only new emails that
+don't match the emails in the memory are
+
+00:10:57.453 --> 00:11:01.613
+analyzed. So this is a simple step that
+I'm pretty sure most of you are already
+
+00:11:01.633 --> 00:11:03.133
+applying to your own processes.
+
+00:11:03.853 --> 00:11:09.707
+And in the end, this is basically the
+structure for when the AI actually acts.
+
+00:11:09.747 --> 00:11:15.413
+So there's the gates. These things are
+contained in the sheets where there's a
+
+00:11:15.693 --> 00:11:20.173
+column. I could show them to you later if
+you want to come to me and I'll show you
+
+00:11:20.673 --> 00:11:24.847
+the sheets with which I interact,
+have OK columns, final email,
+
+00:11:24.907 --> 00:11:26.327
+etc. The
+
+00:11:26.907 --> 00:11:33.507
+AI workflow that I set up checks
+whether each row has an OK or
+
+00:11:33.567 --> 00:11:38.987
+does not have an OK. If it does have an
+OK, it sends them to the AI guard to
+
+00:11:39.087 --> 00:11:42.567
+basically make sure that
+everything is actually into place.
+
+00:11:42.827 --> 00:11:49.013
+If there's anything with a specific range,
+a specific interval of confidence that is
+
+00:11:49.193 --> 00:11:54.140
+off, in very simple terms, it blocks
+the sending of the email or otherwise if
+
+00:11:54.180 --> 00:11:58.480
+there's a confidence above
+70% it sends the email.
+
+00:11:59.060 --> 00:12:02.160
+I can again jump into
+more details afterwards.
+
+00:12:02.840 --> 00:12:09.287
+If you want to follow me on LinkedIn or
+check my product venture, feel free to scan
+
+00:12:09.447 --> 00:12:14.827
+these QR codes. You can also look into my
+full repo here and also to the slides.
+
+00:12:14.847 --> 00:12:18.500
+If you want to check the slides
+later, please scan the last QR code.
+
+00:12:19.200 --> 00:12:23.673
+Thank you very much. Please feel free to
+ask me any questions either now or later.
+
+00:12:24.393 --> 00:12:29.433
+I can also jump in and show you the actual
+dashboards that were powered by these
+
+00:12:29.453 --> 00:12:32.280
+different workflows. I'll
+be happy to connect.
+
+00:12:32.973 --> 00:12:34.473
+Great to be here.

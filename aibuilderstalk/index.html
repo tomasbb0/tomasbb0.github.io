@@ -32,12 +32,15 @@ footer a { color: inherit; }
 <body>
 <main>
   <h1>Running my own n8n server: what it changed</h1>
-  <p class="sub">Tomás Batalha at AI Builders Lisbon, November 2026 · 10 min · English and Portuguese subtitles</p>
+  <p class="sub">Tomás Batalha at AI Builders Lisbon, November 2026 · <span id="len">10 min</span> · English and Portuguese subtitles</p>
   <video id="v" controls playsinline preload="metadata" poster="poster.jpg" crossorigin="anonymous">
-    <track kind="subtitles" src="en.vtt" srclang="en" label="English" default>
-    <track kind="subtitles" src="pt.vtt" srclang="pt" label="Português">
   </video>
-  <div class="bar" role="group" aria-label="Subtitles">
+  <div class="bar" role="group" aria-label="Version" id="cut">
+    <span>Version</span>
+    <button type="button" data-cut="short" aria-pressed="true">Short · 10 min</button>
+    <button type="button" data-cut="full" aria-pressed="false">Full · 12½ min</button>
+  </div>
+  <div class="bar" role="group" aria-label="Subtitles" id="subs">
     <span>Subtitles</span>
     <button type="button" data-lang="en" aria-pressed="true">English</button>
     <button type="button" data-lang="pt" aria-pressed="false">Português</button>
@@ -48,24 +51,67 @@ footer a { color: inherit; }
 <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.17/dist/hls.min.js"></script>
 <script>
 (function () {
-  var v = document.getElementById("v"), src = "hls/index.m3u8";
-  if (v.canPlayType("application/vnd.apple.mpegurl")) v.src = src;
-  else if (window.Hls && Hls.isSupported()) { var h = new Hls({ renderTextTracksNatively: true }); h.loadSource(src); h.attachMedia(v); }
-  else v.src = src;
+  var v = document.getElementById("v"), h = null, lang = "en", cut = "short", map = null;
+  var CUTS = {
+    short: { src: "hls/index.m3u8", en: "en.vtt", pt: "pt.vtt", len: "10 min" },
+    full:  { src: "full/index.m3u8", en: "en_full.vtt", pt: "pt_full.vtt", len: "12½ min" }
+  };
+  fetch("cutmap.json").then(function (r) { return r.json(); }).then(function (m) { map = m; }).catch(function () {});
+  // version time -> original recording time, and back, so switching keeps your place
+  function toSource(c, t) {
+    if (!map) return null; var acc = 0, p = map[c];
+    for (var i = 0; i < p.length; i++) { if (t < acc + p[i][1]) return p[i][0] + (t - acc); acc += p[i][1]; }
+    return p[p.length - 1][0] + p[p.length - 1][1];
+  }
+  function fromSource(c, s) {
+    if (!map || s === null) return 0; var acc = 0, p = map[c];
+    for (var i = 0; i < p.length; i++) { if (s < p[i][0]) return acc; if (s < p[i][0] + p[i][1]) return acc + (s - p[i][0]); acc += p[i][1]; }
+    return acc;
+  }
+  function load(src) {
+    if (v.canPlayType("application/vnd.apple.mpegurl")) v.src = src;
+    else if (window.Hls && Hls.isSupported()) { if (!h) { h = new Hls({ renderTextTracksNatively: true }); h.attachMedia(v); } h.loadSource(src); }
+    else v.src = src;
+  }
+  function setTracks(c) {
+    v.querySelectorAll("track").forEach(function (t) { t.remove(); });
+    [["en", "English"], ["pt", "Português"]].forEach(function (x) {
+      var t = document.createElement("track"); t.kind = "subtitles"; t.srclang = x[0]; t.label = x[1]; t.src = CUTS[c][x[0]];
+      t.addEventListener("load", function () { setLang(lang); });
+      v.appendChild(t);
+    });
+    setLang(lang);
+  }
+  var cbtns = document.querySelectorAll("#cut button");
+  function setCut(c, keepPlace) {
+    var src0 = keepPlace ? toSource(cut, v.currentTime) : null, playing = keepPlace && !v.paused;
+    cut = c;
+    cbtns.forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.cut === c ? "true" : "false"); });
+    document.getElementById("len").textContent = CUTS[c].len;
+    load(CUTS[c].src); setTracks(c);
+    if (src0 !== null) v.addEventListener("loadedmetadata", function go() {
+      v.removeEventListener("loadedmetadata", go); v.currentTime = fromSource(c, src0); if (playing) v.play().catch(function () {});
+    });
+    try { localStorage.setItem("talkCut", c); } catch (e) {}
+  }
+  cbtns.forEach(function (b) { b.addEventListener("click", function () { if (b.dataset.cut !== cut) setCut(b.dataset.cut, true); }); });
 
-  var btns = document.querySelectorAll(".bar button");
-  function setLang(lang) {
+  var btns = document.querySelectorAll("#subs button");
+  function setLang(l) {
+    lang = l;
     for (var i = 0; i < v.textTracks.length; i++) {
       var t = v.textTracks[i];
-      if (t.kind === "subtitles") t.mode = (t.language === lang) ? "showing" : "disabled";
+      if (t.kind === "subtitles") t.mode = (t.language === l) ? "showing" : "disabled";
     }
-    btns.forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.lang === lang ? "true" : "false"); });
-    try { localStorage.setItem("talkSubs", lang); } catch (e) {}
+    btns.forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.lang === l ? "true" : "false"); });
+    try { localStorage.setItem("talkSubs", l); } catch (e) {}
   }
   var start = "en";
   try { start = localStorage.getItem("talkSubs") || (/^pt/i.test(navigator.language) ? "pt" : "en"); } catch (e) {}
   btns.forEach(function (b) { b.addEventListener("click", function () { setLang(b.dataset.lang); }); });
-  setLang(start);
+  lang = start;
+  var c0 = "short"; try { c0 = localStorage.getItem("talkCut") === "full" ? "full" : "short"; } catch (e) {}
+  setCut(c0, false);
   v.textTracks.addEventListener && v.textTracks.addEventListener("change", function () {
     var on = "off";
     for (var i = 0; i < v.textTracks.length; i++) if (v.textTracks[i].mode === "showing") on = v.textTracks[i].language;
