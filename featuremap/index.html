@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="referrer" content="no-referrer">
+<title>Feature map · by BytArc</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:light dark;--bg:light-dark(#fff,#0d0d0f);--ink:light-dark(#111113,#f1f1f3);--mute:light-dark(#62646b,#a2a4ab);--card:light-dark(#f5f5f6,#161619);--field:light-dark(#fff,#0d0d0f);--shade:light-dark(rgba(17,17,19,.10),rgba(0,0,0,.55))}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font:16px/1.5 Geist,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.top{display:flex;justify-content:flex-end;padding:18px max(4vw,16px)}
+.by{color:var(--mute);text-decoration:none;font-size:14px}
+.by:hover{color:var(--ink)}
+main{display:grid;place-items:center;min-height:calc(100vh - 140px);padding:0 16px}
+.box{width:min(420px,100%);background:var(--card);border-radius:20px;padding:28px;box-shadow:0 1px 2px var(--shade),0 12px 40px var(--shade)}
+h1{font-weight:300;font-size:30px;line-height:1.1;letter-spacing:-.02em;margin:0 0 6px}
+p{margin:0 0 20px;color:var(--mute)}
+form{display:grid;gap:12px}
+input[type=password]{width:100%;height:48px;border:0;border-radius:12px;background:var(--field);color:var(--ink);padding:0 14px;font:16px Geist,system-ui,sans-serif;box-shadow:inset 0 0 0 1px transparent,0 1px 2px var(--shade)}
+input[type=password]:focus{outline:2px solid var(--ink);outline-offset:2px}
+.keep{display:flex;align-items:center;gap:8px;color:var(--mute);font-size:14px;cursor:pointer}
+.keep input{width:16px;height:16px;accent-color:var(--ink)}
+button{height:48px;border:0;border-radius:12px;background:var(--ink);color:var(--bg);font:500 16px Geist,system-ui,sans-serif;cursor:pointer;box-shadow:0 2px 8px var(--shade)}
+button:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+button:disabled{opacity:.6;cursor:progress}
+.msg{min-height:22px;font-size:14px;color:var(--mute)}
+.msg.bad{color:light-dark(#b42318,#ff8a80)}
+noscript{display:block;margin-top:12px;color:var(--mute)}
+</style></head><body>
+<div class="top"><a class="by" href="https://bytarc.com/" rel="noopener">by BytArc</a></div>
+<main><div class="box">
+<h1>JobAlfred feature map</h1>
+<p>Private. Enter the password to open it.</p>
+<form id="lock" autocomplete="off">
+<input id="pw" type="password" placeholder="Password" aria-label="Password" autocomplete="current-password" autocapitalize="off" autocorrect="off" spellcheck="false" required autofocus>
+<label class="keep"><input id="keep" type="checkbox"> Keep it open on this device</label>
+<button id="go" type="submit">Open</button>
+<div class="msg" id="msg" role="status" aria-live="polite"></div>
+</form>
+<noscript>This page needs JavaScript to open.</noscript>
+</div></main>
+<script>
+(() => {
+  const ITER = 600000, KEY = "bytarc-featuremap-key";
+  const $ = id => document.getElementById(id);
+  const say = (t, bad) => { $("msg").textContent = t; $("msg").className = "msg" + (bad ? " bad" : ""); };
+  const b64 = u => btoa(String.fromCharCode(...new Uint8Array(u)));
+  const unb64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+  let file = null;
+  async function data() {
+    if (file) return file;
+    const r = await fetch("data.bin?" + Date.now(), {cache: "no-store"});
+    if (!r.ok) throw new Error("missing");
+    const buf = new Uint8Array(await r.arrayBuffer());
+    if (String.fromCharCode(buf[0], buf[1], buf[2]) !== "FM1") throw new Error("missing");
+    return (file = {salt: buf.slice(3, 19), iv: buf.slice(19, 31), ct: buf.slice(31)});
+  }
+  async function keyFrom(pw, salt) {
+    const base = await crypto.subtle.importKey("raw", new TextEncoder().encode(pw.trim().toLowerCase()), "PBKDF2", false, ["deriveKey"]);
+    return crypto.subtle.deriveKey({name: "PBKDF2", salt, iterations: ITER, hash: "SHA-256"}, base, {name: "AES-GCM", length: 256}, true, ["decrypt"]);
+  }
+  async function open(key) {
+    const d = await data();
+    const gz = await crypto.subtle.decrypt({name: "AES-GCM", iv: d.iv}, key, d.ct);
+    const html = await new Response(new Blob([gz]).stream().pipeThrough(new DecompressionStream("gzip"))).text();
+    document.open(); document.write(html); document.close();
+  }
+  async function remembered() {
+    let raw = null;
+    try { raw = localStorage.getItem(KEY); } catch (e) {}
+    if (!raw) return;
+    say("Opening");
+    try { await open(await crypto.subtle.importKey("raw", unb64(raw), "AES-GCM", false, ["decrypt"])); }
+    catch (e) { try { localStorage.removeItem(KEY); } catch (x) {} say("The saved password no longer works. Enter it again."); }
+  }
+  $("lock").addEventListener("submit", async e => {
+    e.preventDefault();
+    const pw = $("pw").value;
+    if (!pw.trim()) return;
+    $("go").disabled = true; say("Opening");
+    let key;
+    try { key = await keyFrom(pw, (await data()).salt); }
+    catch (err) { $("go").disabled = false; return say("The map could not be loaded. Try again in a minute.", true); }
+    try {
+      const raw = $("keep").checked ? b64(await crypto.subtle.exportKey("raw", key)) : null;
+      await open(key);
+      try { if (raw) localStorage.setItem(KEY, raw); } catch (x) {}
+    } catch (err) {
+      $("go").disabled = false; $("pw").select(); say("Wrong password.", true);
+    }
+  });
+  if (!window.crypto || !crypto.subtle || !window.DecompressionStream) say("This browser can't open the map. Try a current Chrome, Safari or Firefox.", true);
+  else remembered();
+})();
+</script>
+</body></html>
